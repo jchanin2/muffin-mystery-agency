@@ -13,18 +13,21 @@ function showScreen(screenId) {
 // TYPEWRITER EFFECT
 // ============================================================
 let typeWriterCancel = null;
-function typeWriter(el, text, speed = 18) {
+function typeWriter(el, text, speed = 18, onComplete) {
   if (typeWriterCancel) typeWriterCancel();
   el.textContent = '';
   let i = 0;
   let cancelled = false;
-  typeWriterCancel = () => { cancelled = true; el.textContent = text; };
+  typeWriterCancel = () => { cancelled = true; el.textContent = text; if (onComplete) { onComplete(); onComplete = null; } };
   function tick() {
     if (cancelled) return;
     if (i < text.length) {
       el.textContent += text.charAt(i);
       i++;
       setTimeout(tick, speed);
+    } else if (onComplete) {
+      onComplete();
+      onComplete = null;
     }
   }
   tick();
@@ -233,18 +236,13 @@ function showNode(nodeId) {
     sceneEl.innerHTML = Environments[node.environment]();
   }
 
-  // Show narrative
+  // Show narrative, then show choices/encounter after text finishes
   const narrativeEl = document.getElementById('narrative-text');
-  typeWriter(narrativeEl, node.narrative, 15);
-
-  // Show choices or start encounter
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
 
-  if (node.encounter) {
-    // Let player read the narrative, then click to start encounter
-    const delay = Math.min(node.narrative.length * 15, 2500);
-    setTimeout(() => {
+  typeWriter(narrativeEl, node.narrative, 15, () => {
+    if (node.encounter) {
       const btn = document.createElement('button');
       btn.className = 'btn btn-gold choice-btn';
       btn.innerHTML = '<span class="choice-key">!</span> Ready for battle!';
@@ -253,18 +251,13 @@ function showNode(nodeId) {
         startEncounter(node);
       };
       choicesEl.appendChild(btn);
-    }, delay);
-  } else if (node.shop) {
-    // Show shop + choices
-    showShopAndChoices(node);
-  } else {
-    // Apply rewards if any
-    if (node.reward) applyReward(node.reward);
-
-    // Show choices after a delay
-    const delay = Math.min(node.narrative.length * 12, 1500);
-    setTimeout(() => showChoices(node.choices), delay);
-  }
+    } else if (node.shop) {
+      showShopAndChoices(node);
+    } else {
+      if (node.reward) applyReward(node.reward);
+      showChoices(node.choices);
+    }
+  });
 }
 
 function showChoices(choices) {
@@ -791,6 +784,11 @@ document.addEventListener('DOMContentLoaded', () => {
       <path d="M 40 22 L 50 35 L 58 28 L 52 40 L 58 52 L 47 46 L 40 58 L 33 46 L 22 52 L 28 40 L 22 28 L 30 35 Z" fill="#e8a030"/>
     </svg>
   `;
+
+  // Click narrative to skip typewriter animation
+  document.getElementById('narrative-text').addEventListener('click', () => {
+    if (typeWriterCancel) typeWriterCancel();
+  });
 
   // Save slot helpers
   function refreshSlots() {
