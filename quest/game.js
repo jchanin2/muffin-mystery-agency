@@ -329,6 +329,14 @@ function showCombatUI() {
   const overlay = document.getElementById('combat-overlay');
   overlay.style.display = 'flex';
 
+  // Clean up any leftover Continue buttons from previous encounters
+  overlay.querySelectorAll('.btn-gold:not(#btn-combat-submit)').forEach(b => b.remove());
+  document.querySelector('.answer-area').style.display = '';
+  document.getElementById('combat-answer').disabled = false;
+  document.getElementById('combat-answer').value = '';
+  document.getElementById('btn-combat-submit').disabled = false;
+  document.getElementById('combat-feedback').textContent = '';
+
   // Monster info
   if (Combat.monster) {
     document.getElementById('monster-sprite').innerHTML =
