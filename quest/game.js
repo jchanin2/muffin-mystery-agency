@@ -414,13 +414,19 @@ function submitCombatAnswer() {
   const feedbackEl = document.getElementById('combat-feedback');
 
   if (result.correct) {
-    feedbackEl.textContent = result.message;
-    feedbackEl.className = 'combat-feedback correct';
-
     if (Combat.encounter.type === 'combat') {
+      // Show damage number for combat encounters
+      if (result.critical) {
+        feedbackEl.innerHTML = `<span style="color:#ff6600;font-size:1.2em;">POWER STRIKE!</span> You deal <b>${result.damage}</b> damage!`;
+      } else {
+        feedbackEl.innerHTML = `You deal <b>${result.damage}</b> damage!`;
+      }
+      feedbackEl.className = 'combat-feedback correct';
       Audio.slash();
       updateMonsterHPBar();
     } else {
+      feedbackEl.textContent = result.message;
+      feedbackEl.className = 'combat-feedback correct';
       Audio.correct();
     }
 
@@ -434,6 +440,7 @@ function submitCombatAnswer() {
     if (result.encounterComplete) {
       if (result.monsterDefeated) {
         Audio.treasure();
+        feedbackEl.innerHTML = `You defeated <b>${Combat.monster.name}</b>!`;
       }
 
       // Hide the answer area, show Continue button
@@ -456,7 +463,7 @@ function submitCombatAnswer() {
       };
       feedbackEl.after(continueBtn);
     } else {
-      // Next round — new problem
+      // Next round — new problem after brief delay to read damage
       input.value = '';
       setTimeout(() => {
         showCombatProblem();
@@ -539,12 +546,59 @@ function showLevelUp() {
   const stats = ['strength', 'dexterity', 'intelligence', 'wisdom', 'charisma', 'constitution'];
   const statLabels = { strength: 'STR', dexterity: 'DEX', intelligence: 'INT', wisdom: 'WIS', charisma: 'CHA', constitution: 'CON' };
 
+  // Compute what each stat does at current and +1 values
+  const classData = CLASSES[gameCharacter.class];
+  function statEffect(stat, value) {
+    const mod = Character.modifier(value);
+    switch (stat) {
+      case 'strength':
+        if (classData.primaryStat === 'strength') {
+          return `${Character.attackDamage({ ...gameCharacter, stats: { ...gameCharacter.stats, strength: value } })} damage`;
+        }
+        const strBonus = Math.max(0, Math.floor(mod / 2));
+        return strBonus > 0 ? `+${strBonus} bonus damage` : 'no bonus yet';
+      case 'dexterity':
+        if (gameCharacter.class === 'rogue') {
+          return `${Math.min(45, 15 + mod * 6)}% dodge`;
+        }
+        const dodge = Math.min(15, Math.max(0, mod * 5));
+        return dodge > 0 ? `${dodge}% dodge` : 'no dodge yet';
+      case 'intelligence':
+        const isWiz = gameCharacter.class === 'wizard';
+        const intThreshold = isWiz ? 1 : 2;
+        if (mod >= intThreshold) {
+          const baseRange = isWiz ? 10 : 14;
+          return `hint range \u00b1${Math.max(1, Math.round((baseRange - mod * 2) / 2))}`;
+        }
+        return 'no hints yet';
+      case 'wisdom':
+        const isRanger = gameCharacter.class === 'ranger';
+        if (isRanger) return `${Math.min(100, 30 + mod * 10)}% danger sense`;
+        if (mod >= 2) return `${mod * 8}% danger sense`;
+        return 'no sense yet';
+      case 'charisma':
+        const disc = Math.min(25, Math.max(0, mod * 5));
+        return disc > 0 ? `${disc}% shop discount` : 'no discount yet';
+      case 'constitution':
+        const hpBonus = 5 + Math.max(0, mod);
+        const defBonus = Math.max(0, Math.floor(mod / 2));
+        return `+${hpBonus} HP/level` + (defBonus > 0 ? `, +${defBonus} defense` : '');
+    }
+  }
+
   stats.forEach(stat => {
+    const curVal = gameCharacter.stats[stat];
+    const isPrimary = classData.primaryStat === stat;
+    const curEffect = statEffect(stat, curVal);
+    const newEffect = statEffect(stat, curVal + 1);
+    const improved = curEffect !== newEffect;
+
     const btn = document.createElement('button');
     btn.className = 'stat-choice-btn';
     btn.innerHTML = `
-      <div class="stat-choice-name">${statLabels[stat]}</div>
-      <div class="stat-choice-value">${gameCharacter.stats[stat]} → ${gameCharacter.stats[stat] + 1}</div>
+      <div class="stat-choice-name">${statLabels[stat]}${isPrimary ? ' <span style="color:var(--torch);font-size:0.7em;">\u2605 PRIMARY</span>' : ''}</div>
+      <div class="stat-choice-value">${curVal} \u2192 ${curVal + 1}</div>
+      <div class="stat-choice-effect" style="font-size:0.75em;color:${improved ? 'var(--success)' : 'var(--muted)'};">${improved ? newEffect + ' \u2191' : curEffect}</div>
     `;
     btn.onclick = () => {
       Audio.correct();

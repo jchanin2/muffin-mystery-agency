@@ -121,7 +121,7 @@ const STORY = {
   ch1_chieftain: {
     chapter: 1, environment: 'cave',
     narrative: 'Deep in the cave, you find a larger chamber lit by a fire pit. A goblin bigger than the rest sits on a throne made of stolen furniture. He wears a dented crown and carries an oversized club. "WHO DARES ENTER GRUK\'S DOMAIN?" he bellows. The Goblin Chieftain stands and advances!',
-    encounter: { type: 'combat', monster: { name: 'Gruk the Goblin Chieftain', hp: 30, maxHp: 30, attack: 6, sprite: 'goblin_chief' }, problemTopic: 'whole_by_decimal', difficulty: 'easy', rounds: 2,
+    encounter: { type: 'combat', monster: { name: 'Gruk the Goblin Chieftain', hp: 30, maxHp: 30, attack: 6, sprite: 'goblin_chief' }, problemTopic: 'whole_by_decimal', difficulty: 'easy',
       intro: 'Gruk the Goblin Chieftain swings his massive club!',
       success: 'Your attack connects! Gruk roars in pain!',
       failure: 'Gruk smashes his club down — you barely dodge!' },
@@ -243,7 +243,7 @@ const STORY = {
   ch2_skeleton: {
     chapter: 2, environment: 'dungeon_corridor',
     narrative: 'You reach a vast underground hall. Pillars carved with mathematical symbols line the sides. At the far end, a figure in tattered robes stands motionless — a Skeleton Mage! Its empty eye sockets flare with green fire as it raises a bony hand. "You seek the master? You must prove your worth first!" Bones rattle as skeletal warriors rise from the ground!',
-    encounter: { type: 'combat', monster: { name: 'Skeleton Mage', hp: 35, maxHp: 35, attack: 7, sprite: 'skeleton' }, problemTopic: 'decimal_by_whole', difficulty: 'medium', rounds: 2,
+    encounter: { type: 'combat', monster: { name: 'Skeleton Mage', hp: 35, maxHp: 35, attack: 7, sprite: 'skeleton' }, problemTopic: 'decimal_by_whole', difficulty: 'medium',
       intro: 'The Skeleton Mage hurls a bolt of green fire!',
       success: 'Your attack shatters bone! The Skeleton Mage staggers!',
       failure: 'Green flames sear you as the skeleton cackles!' },
@@ -349,7 +349,7 @@ const STORY = {
   ch3_tower_approach: {
     chapter: 3, environment: 'forest_clearing',
     narrative: 'The forest grows darker and more twisted. Trees bend at unnatural angles, and ghostly lights float between the branches. Then you see it — a tall stone tower wreathed in purple mist. But a spectral guardian blocks the entrance, its form shifting and translucent.',
-    encounter: { type: 'combat', monster: { name: 'Forest Wraith', hp: 28, maxHp: 28, attack: 6, sprite: 'ghost' }, problemTopic: 'decimal_forms', difficulty: 'medium', rounds: 2,
+    encounter: { type: 'combat', monster: { name: 'Forest Wraith', hp: 28, maxHp: 28, attack: 6, sprite: 'ghost' }, problemTopic: 'decimal_forms', difficulty: 'medium',
       intro: 'The Forest Wraith wails and reaches for you with ghostly hands!',
       success: 'Your attack disrupts the wraith\'s form! It shrieks!',
       failure: 'Spectral claws rake through you — ice cold!' },
@@ -422,7 +422,7 @@ const STORY = {
   ch4_fortress: {
     chapter: 4, environment: 'castle',
     narrative: 'The ancient dwarven fortress is magnificent even in ruins. Massive stone doors hang ajar, and inside you see halls carved with intricate geometric patterns. Morvina has been here — you see her magical marks on the walls. But she\'s left a guardian behind: a massive Stone Golem animated by dark mathematics!',
-    encounter: { type: 'combat', monster: { name: 'Stone Golem', hp: 40, maxHp: 40, attack: 8, sprite: 'troll' }, problemTopic: 'decimal_by_decimal', difficulty: 'medium', rounds: 3,
+    encounter: { type: 'combat', monster: { name: 'Stone Golem', hp: 40, maxHp: 40, attack: 8, sprite: 'troll' }, problemTopic: 'decimal_by_decimal', difficulty: 'medium',
       intro: 'The Stone Golem\'s eyes glow red as it swings a massive fist!',
       success: 'Cracks spread across the golem\'s stone body! It\'s weakening!',
       failure: 'The golem\'s fist slams into you like a boulder!' },
@@ -490,7 +490,7 @@ const STORY = {
   ch5_antechamber: {
     chapter: 5, environment: 'dungeon_corridor',
     narrative: 'You enter a grand antechamber. Morvina stands at the far end, the Numeral Crown hovering above her outstretched hands. Purple energy crackles between her and the crown. "Fool!" she hisses. "You\'re too late! With this crown, I can rewrite the rules of mathematics itself — I will control ALL numbers!" She sends a wave of dark energy at you!',
-    encounter: { type: 'combat', monster: { name: 'Morvina the Sorceress', hp: 35, maxHp: 35, attack: 7, sprite: 'ghost' }, problemTopic: 'frac_to_decimal', difficulty: 'hard', rounds: 2,
+    encounter: { type: 'combat', monster: { name: 'Morvina the Sorceress', hp: 35, maxHp: 35, attack: 7, sprite: 'ghost' }, problemTopic: 'frac_to_decimal', difficulty: 'hard',
       intro: 'Morvina hurls bolts of mathematical chaos at you!',
       success: 'Your attack breaks through her shield! She staggers back!',
       failure: 'Dark equations swirl and strike you!' },
@@ -503,7 +503,7 @@ const STORY = {
   ch5_dragon: {
     chapter: 5, environment: 'cave',
     narrative: 'Morvina stumbles backward into the final chamber — a vast cavern filled with gold and gems. And there, coiled atop the treasure hoard, is the dragon: CALCIFEX, the Number Drake! Its scales shimmer with embedded numerals, and mathematical equations float in its breath like embers. Morvina screams and flees as the dragon rises, fixing its ancient eyes on YOU. "Another seeker of the Crown," it rumbles. "Prove your mastery of numbers, or become ash."',
-    encounter: { type: 'combat', monster: { name: 'Calcifex the Number Drake', hp: 60, maxHp: 60, attack: 10, sprite: 'dragon' }, problemTopic: 'decimal_by_decimal', difficulty: 'hard', rounds: 3,
+    encounter: { type: 'combat', monster: { name: 'Calcifex the Number Drake', hp: 60, maxHp: 60, attack: 10, sprite: 'dragon' }, problemTopic: 'decimal_by_decimal', difficulty: 'hard',
       intro: 'Calcifex rears back and breathes a stream of mathematical fire!',
       success: 'Your attack hits the dragon! Numbers scatter from its scales like sparks!',
       failure: 'The dragon\'s tail sweeps you off your feet!' },

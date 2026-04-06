@@ -110,29 +110,44 @@ const Character = {
   },
 
   // Calculate attack damage
+  // Primary stat gives the main bonus; STR gives a small bonus to all classes
   attackDamage(character) {
     const classData = CLASSES[character.class];
     const primaryStat = character.stats[classData.primaryStat];
-    const mod = this.modifier(primaryStat);
+    const primaryMod = this.modifier(primaryStat);
     const weaponBonus = character.equipment.weapon ? character.equipment.weapon.bonus : 0;
-    return Math.max(1, 5 + mod + weaponBonus);
+
+    // STR gives +1 damage per 2 modifier points for non-warrior classes
+    let strBonus = 0;
+    if (classData.primaryStat !== 'strength') {
+      strBonus = Math.max(0, Math.floor(this.modifier(character.stats.strength) / 2));
+    }
+
+    return Math.max(1, 5 + primaryMod + strBonus + weaponBonus);
   },
 
-  // Calculate defense
+  // Calculate defense — armor + CON gives damage reduction
   defense(character) {
     const armorBonus = character.equipment.armor ? character.equipment.armor.bonus : 0;
-    return armorBonus;
+    const conMod = this.modifier(character.stats.constitution);
+    return armorBonus + Math.max(0, Math.floor(conMod / 2));
   },
 
   // Take damage (returns actual damage taken, accounting for dodge)
+  // All classes get a small dodge chance from DEX; rogues get much more
   takeDamage(character, rawDamage) {
-    // Rogue dodge check
+    const dexMod = this.modifier(character.stats.dexterity);
+    let dodgeChance;
     if (character.class === 'rogue') {
-      const dexMod = this.modifier(character.stats.dexterity);
-      const dodgeChance = Math.min(40, 10 + dexMod * 5);
-      if (Math.random() * 100 < dodgeChance) {
-        return 0; // Dodged!
-      }
+      // Rogues: high dodge chance (15-45%)
+      dodgeChance = Math.min(45, 15 + dexMod * 6);
+    } else {
+      // Others: small dodge chance from DEX (0-15%)
+      dodgeChance = Math.min(15, Math.max(0, dexMod * 5));
+    }
+
+    if (dodgeChance > 0 && Math.random() * 100 < dodgeChance) {
+      return 0; // Dodged!
     }
 
     const def = this.defense(character);
@@ -215,26 +230,43 @@ const Character = {
     return true;
   },
 
-  // Get hint based on intelligence (for wizard class)
+  // Get hint based on intelligence
+  // Wizards: always get hints at INT 12+, range narrows with INT
+  // Others: need INT 14+ to get hints, range is wider
   getHint(character, correctAnswer) {
-    if (character.class !== 'wizard') return null;
     const intMod = this.modifier(character.stats.intelligence);
-    if (intMod < 1) return null;
+    const isWizard = character.class === 'wizard';
+    const threshold = isWizard ? 1 : 2; // Wizards need mod 1 (INT 12), others need mod 2 (INT 14)
+    if (intMod < threshold) return null;
 
     const numAnswer = parseFloat(correctAnswer);
     if (isNaN(numAnswer)) return null;
 
-    const range = Math.max(2, 10 - intMod * 2);
+    // Wizards get tighter range
+    const baseRange = isWizard ? 10 : 14;
+    const range = Math.max(2, baseRange - intMod * 2);
     const low = Math.round((numAnswer - range / 2) * 10) / 10;
     const high = Math.round((numAnswer + range / 2) * 10) / 10;
-    return `Your arcane senses tell you the answer is between ${low} and ${high}.`;
+    const flavor = isWizard
+      ? `Your arcane senses tell you the answer is between ${low} and ${high}.`
+      : `You have a hunch the answer is between ${low} and ${high}.`;
+    return flavor;
   },
 
-  // Check if wisdom reveals danger (for ranger class)
+  // Check if wisdom reveals danger in choices
+  // Rangers: high chance, scales with WIS
+  // Others: need WIS 14+ for a small chance
   wisdomReveal(character) {
-    if (character.class !== 'ranger') return false;
     const wisMod = this.modifier(character.stats.wisdom);
-    return Math.random() * 100 < (30 + wisMod * 10);
+    const isRanger = character.class === 'ranger';
+
+    if (isRanger) {
+      return Math.random() * 100 < (30 + wisMod * 10);
+    } else {
+      // Others need WIS modifier of 2+ (WIS 14+)
+      if (wisMod < 2) return false;
+      return Math.random() * 100 < (wisMod * 8);
+    }
   },
 
   // Save to localStorage

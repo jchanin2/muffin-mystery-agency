@@ -7,7 +7,7 @@ const Combat = {
   monsterMaxHp: 0,
   encounter: null,
   currentProblem: null,
-  roundsRemaining: 1,
+  consecutiveCorrect: 0, // Track streak for Warrior Power Strike
   onComplete: null, // callback when combat ends
 
   // Start a combat or puzzle encounter
@@ -15,6 +15,7 @@ const Combat = {
     this.active = true;
     this.encounter = encounter;
     this.onComplete = onComplete;
+    this.consecutiveCorrect = 0;
 
     if (encounter.type === 'combat' && encounter.monster) {
       this.monster = { ...encounter.monster };
@@ -26,7 +27,6 @@ const Combat = {
       this.monsterMaxHp = 0;
     }
 
-    this.roundsRemaining = encounter.rounds || 1;
     this.generateProblem(encounter);
   },
 
@@ -44,6 +44,7 @@ const Combat = {
       correct,
       damage: 0,
       dodged: false,
+      critical: false,
       monsterDefeated: false,
       encounterComplete: false,
       message: ''
@@ -52,26 +53,29 @@ const Combat = {
     if (correct) {
       // Record academic performance
       Academics.record(this.currentProblem.topic, true);
+      this.consecutiveCorrect++;
 
       if (this.encounter.type === 'combat' && this.monster) {
         // Calculate player damage to monster
-        const dmg = Character.attackDamage(character);
+        let dmg = Character.attackDamage(character);
+
+        // Warrior Power Strike: consecutive correct answers trigger critical hits
+        if (character.class === 'warrior' && this.consecutiveCorrect >= 2) {
+          dmg = Math.floor(dmg * 1.5);
+          result.critical = true;
+        }
+
         this.monsterHp = Math.max(0, this.monsterHp - dmg);
         result.damage = dmg;
-        result.message = this.encounter.success || `You deal ${dmg} damage!`;
 
         if (this.monsterHp <= 0) {
           result.monsterDefeated = true;
           result.encounterComplete = true;
           result.message = `You defeated ${this.monster.name}!`;
         } else {
-          this.roundsRemaining--;
-          if (this.roundsRemaining <= 0) {
-            // Ran out of rounds but monster still alive — still counts as win for story flow
-            result.monsterDefeated = true;
-            result.encounterComplete = true;
-            result.message = `You defeated ${this.monster.name}!`;
-          }
+          result.message = result.critical
+            ? `POWER STRIKE! You deal ${dmg} damage!`
+            : `You deal ${dmg} damage!`;
         }
       } else {
         // Puzzle — correct means solved
@@ -81,6 +85,7 @@ const Combat = {
     } else {
       // Wrong answer
       Academics.record(this.currentProblem.topic, false);
+      this.consecutiveCorrect = 0; // Reset streak
 
       if (this.encounter.type === 'combat' && this.monster) {
         // Monster attacks
@@ -92,10 +97,10 @@ const Combat = {
           result.message = 'You dodge the attack! But your answer was wrong — try again!';
         } else {
           result.damage = actualDmg;
-          result.message = this.encounter.failure || `The ${this.monster.name} hits you for ${actualDmg} damage!`;
+          result.message = `The ${this.monster.name} hits you for ${actualDmg} damage!`;
         }
       } else {
-        // Puzzle — wrong means try again, maybe take damage
+        // Puzzle — wrong means try again
         result.message = this.encounter.failure || 'That\'s not right. Try again!';
       }
     }
@@ -105,7 +110,7 @@ const Combat = {
       result.playerDefeated = true;
     }
 
-    // Generate new problem if encounter isn't complete and answer was correct (next round)
+    // Generate new problem if encounter isn't complete
     if (correct && !result.encounterComplete) {
       this.generateProblem(this.encounter);
     }
