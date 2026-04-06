@@ -211,6 +211,99 @@ body {
   text-decoration: none;
 }
 
+/* Save Slots */
+.save-slots {
+  animation: fadeInUp 0.5s ease;
+  z-index: 1;
+}
+.slots-heading {
+  color: var(--parchment-light);
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.slot-grid {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.save-slot-card {
+  position: relative;
+  background: var(--stone);
+  border: 2px solid rgba(232,160,48,0.2);
+  border-radius: 12px;
+  padding: 20px 16px;
+  width: 180px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.save-slot-card:hover {
+  border-color: var(--torch);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(232,160,48,0.2);
+}
+.save-slot-card.empty {
+  opacity: 0.6;
+}
+.save-slot-card.empty:hover {
+  opacity: 1;
+}
+.slot-sprite {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  min-height: 48px;
+  align-items: center;
+}
+.slot-info {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.slot-name {
+  font-size: 1rem;
+  color: var(--parchment-light);
+  font-weight: bold;
+  display: block;
+}
+.slot-detail {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  display: block;
+}
+.slot-chapter {
+  font-size: 0.75rem;
+  color: var(--torch);
+  margin-top: 2px;
+  display: block;
+}
+.btn-delete-slot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 1rem;
+  color: #e74c3c;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+.btn-delete-slot:hover {
+  border-color: #e74c3c;
+  background: rgba(231,76,60,0.1);
+}
+@media (max-width: 700px) {
+  .slot-grid { flex-direction: column; align-items: center; }
+  .save-slot-card { width: 90%; max-width: 260px; }
+}
+
 /* ============================================================
    CHARACTER CREATION
    ============================================================ */

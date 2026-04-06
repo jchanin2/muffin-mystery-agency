@@ -16,8 +16,28 @@
       <h1 class="game-title">Realms of<br>Mathematica</h1>
       <p class="subtitle">A Mathematical Quest Awaits...</p>
       <div class="title-buttons">
-        <button id="btn-new-quest" class="btn btn-gold">New Quest</button>
-        <button id="btn-continue-quest" class="btn btn-gold" style="display:none;">Continue Quest</button>
+        <button id="btn-show-slots" class="btn btn-gold">Play</button>
+      </div>
+      <div id="save-slots" class="save-slots" style="display:none;">
+        <h3 class="slots-heading">Choose a Save Slot</h3>
+        <div class="slot-grid">
+          <div class="save-slot-card" data-slot="1">
+            <div class="slot-sprite" id="slot-sprite-1"></div>
+            <div class="slot-info" id="slot-info-1">Empty Slot</div>
+            <button class="btn-delete-slot" data-slot="1" title="Delete Save" style="display:none;">&times;</button>
+          </div>
+          <div class="save-slot-card" data-slot="2">
+            <div class="slot-sprite" id="slot-sprite-2"></div>
+            <div class="slot-info" id="slot-info-2">Empty Slot</div>
+            <button class="btn-delete-slot" data-slot="2" title="Delete Save" style="display:none;">&times;</button>
+          </div>
+          <div class="save-slot-card" data-slot="3">
+            <div class="slot-sprite" id="slot-sprite-3"></div>
+            <div class="slot-info" id="slot-info-3">Empty Slot</div>
+            <button class="btn-delete-slot" data-slot="3" title="Delete Save" style="display:none;">&times;</button>
+          </div>
+        </div>
+        <button id="btn-back-title" class="btn btn-secondary">Back</button>
       </div>
       <a href="../" class="btn btn-secondary btn-back-hub">&larr; Back to Games</a>
     </div>

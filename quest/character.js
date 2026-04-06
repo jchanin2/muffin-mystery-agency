@@ -1,5 +1,7 @@
 // character.js — Character creation, stats, leveling, equipment
 
+let activeSlot = 1; // 1, 2, or 3
+
 const RACES = {
   human:      { name: 'Human',      bonus: { strength: 1, dexterity: 1, intelligence: 1, wisdom: 1, charisma: 1, constitution: 1 }, desc: 'Versatile and adaptable. +1 to all stats.' },
   elf:        { name: 'Elf',        bonus: { intelligence: 2, wisdom: 1 }, desc: 'Wise and perceptive. +2 INT, +1 WIS.' },
@@ -237,18 +239,24 @@ const Character = {
 
   // Save to localStorage
   save(character) {
-    localStorage.setItem('rom_character', JSON.stringify(character));
+    localStorage.setItem(`rom_character_${activeSlot}`, JSON.stringify(character));
   },
 
   // Load from localStorage
   load() {
-    const data = localStorage.getItem('rom_character');
+    const data = localStorage.getItem(`rom_character_${activeSlot}`);
     return data ? JSON.parse(data) : null;
   },
 
   // Delete save
   deleteSave() {
-    localStorage.removeItem('rom_character');
+    localStorage.removeItem(`rom_character_${activeSlot}`);
+  },
+
+  // Peek at a slot without changing activeSlot
+  peekSlot(slotNum) {
+    const data = localStorage.getItem(`rom_character_${slotNum}`);
+    return data ? JSON.parse(data) : null;
   }
 };
 
@@ -257,12 +265,12 @@ const Character = {
 // ============================================================
 const Academics = {
   load() {
-    const data = localStorage.getItem('rom_academics');
+    const data = localStorage.getItem(`rom_academics_${activeSlot}`);
     return data ? JSON.parse(data) : {};
   },
 
   save(academics) {
-    localStorage.setItem('rom_academics', JSON.stringify(academics));
+    localStorage.setItem(`rom_academics_${activeSlot}`, JSON.stringify(academics));
   },
 
   record(topicId, wasCorrect) {
@@ -294,7 +302,7 @@ const Academics = {
   },
 
   reset() {
-    localStorage.removeItem('rom_academics');
+    localStorage.removeItem(`rom_academics_${activeSlot}`);
   }
 };
 
@@ -303,7 +311,7 @@ const Academics = {
 // ============================================================
 const Progress = {
   load() {
-    const data = localStorage.getItem('rom_progress');
+    const data = localStorage.getItem(`rom_progress_${activeSlot}`);
     return data ? JSON.parse(data) : {
       currentChapter: 1,
       currentNodeId: 'ch1_start',
@@ -314,10 +322,37 @@ const Progress = {
   },
 
   save(progress) {
-    localStorage.setItem('rom_progress', JSON.stringify(progress));
+    localStorage.setItem(`rom_progress_${activeSlot}`, JSON.stringify(progress));
   },
 
   reset() {
-    localStorage.removeItem('rom_progress');
+    localStorage.removeItem(`rom_progress_${activeSlot}`);
+  },
+
+  peekSlot(slotNum) {
+    const data = localStorage.getItem(`rom_progress_${slotNum}`);
+    return data ? JSON.parse(data) : null;
   }
 };
+
+// Delete all data for a specific slot
+function deleteSlot(slotNum) {
+  localStorage.removeItem(`rom_character_${slotNum}`);
+  localStorage.removeItem(`rom_progress_${slotNum}`);
+  localStorage.removeItem(`rom_academics_${slotNum}`);
+}
+
+// One-time migration: move old un-suffixed keys to slot 1
+(function migrateOldSave() {
+  const old = localStorage.getItem('rom_character');
+  if (old && !localStorage.getItem('rom_character_1')) {
+    localStorage.setItem('rom_character_1', old);
+    const prog = localStorage.getItem('rom_progress');
+    if (prog) localStorage.setItem('rom_progress_1', prog);
+    const acad = localStorage.getItem('rom_academics');
+    if (acad) localStorage.setItem('rom_academics_1', acad);
+  }
+  localStorage.removeItem('rom_character');
+  localStorage.removeItem('rom_progress');
+  localStorage.removeItem('rom_academics');
+})();

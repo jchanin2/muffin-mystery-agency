@@ -763,33 +763,92 @@ document.addEventListener('DOMContentLoaded', () => {
     </svg>
   `;
 
-  // Check for existing save
-  const savedChar = Character.load();
-  if (savedChar) {
-    document.getElementById('btn-continue-quest').style.display = '';
+  // Save slot helpers
+  function refreshSlots() {
+    for (let i = 1; i <= 3; i++) {
+      const card = document.querySelector(`.save-slot-card[data-slot="${i}"]`);
+      const spriteEl = document.getElementById(`slot-sprite-${i}`);
+      const infoEl = document.getElementById(`slot-info-${i}`);
+      const delBtn = card.querySelector('.btn-delete-slot');
+      const charData = Character.peekSlot(i);
+      const progData = Progress.peekSlot(i);
+
+      if (charData) {
+        card.classList.remove('empty');
+        spriteEl.innerHTML = Sprites.player(charData.race, charData.class, charData.appearance, 3);
+        const chapterNum = progData ? progData.currentChapter : 1;
+        infoEl.innerHTML = `
+          <span class="slot-name">${charData.name}</span>
+          <span class="slot-detail">${RACES[charData.race].name} ${CLASSES[charData.class].name}</span>
+          <span class="slot-detail">Level ${charData.level}</span>
+          <span class="slot-chapter">Chapter ${chapterNum}</span>
+        `;
+        delBtn.style.display = '';
+      } else {
+        card.classList.add('empty');
+        spriteEl.innerHTML = '<span style="font-size:2rem;opacity:0.3">+</span>';
+        infoEl.innerHTML = 'Empty Slot';
+        delBtn.style.display = 'none';
+      }
+    }
   }
 
-  // New Quest
-  document.getElementById('btn-new-quest').onclick = () => {
-    Character.deleteSave();
-    Progress.reset();
-    Academics.reset();
-    createState.name = '';
-    createState.race = 'human';
-    createState.class = 'warrior';
-    createState.appearance = { skinTone: 0, hairColor: 0, armorColor: 0 };
-    initCharacterCreation();
-    showCreateStep(1);
-    showScreen('create');
-  };
+  function showSlots() {
+    document.querySelector('.title-buttons').style.display = 'none';
+    document.querySelector('.subtitle').style.display = 'none';
+    document.getElementById('save-slots').style.display = '';
+    refreshSlots();
+  }
 
-  // Continue Quest
-  document.getElementById('btn-continue-quest').onclick = () => {
-    gameCharacter = Character.load();
-    gameProgress = Progress.load();
-    updateHUD();
-    showNode(gameProgress.currentNodeId);
-  };
+  function hideSlots() {
+    document.getElementById('save-slots').style.display = 'none';
+    document.querySelector('.title-buttons').style.display = '';
+    document.querySelector('.subtitle').style.display = '';
+  }
+
+  // Play button shows save slots
+  document.getElementById('btn-show-slots').onclick = showSlots;
+  document.getElementById('btn-back-title').onclick = hideSlots;
+
+  // Slot card clicks
+  document.querySelectorAll('.save-slot-card').forEach(card => {
+    card.onclick = (e) => {
+      if (e.target.closest('.btn-delete-slot')) return;
+      const slot = parseInt(card.dataset.slot);
+      activeSlot = slot;
+      const saved = Character.peekSlot(slot);
+      if (saved) {
+        // Continue existing game
+        gameCharacter = Character.load();
+        gameProgress = Progress.load();
+        updateHUD();
+        showNode(gameProgress.currentNodeId);
+      } else {
+        // New game in this slot
+        deleteSlot(slot);
+        createState.name = '';
+        createState.race = 'human';
+        createState.class = 'warrior';
+        createState.appearance = { skinTone: 0, hairColor: 0, armorColor: 0 };
+        initCharacterCreation();
+        showCreateStep(1);
+        showScreen('create');
+      }
+    };
+  });
+
+  // Delete slot buttons
+  document.querySelectorAll('.btn-delete-slot').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const slot = parseInt(btn.dataset.slot);
+      const charData = Character.peekSlot(slot);
+      if (charData && confirm(`Delete ${charData.name}'s save?`)) {
+        deleteSlot(slot);
+        refreshSlots();
+      }
+    };
+  });
 
   // Name chips
   document.querySelectorAll('.name-chip').forEach(chip => {
@@ -857,6 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-back-menu').onclick = () => {
     Character.save(gameCharacter);
     Progress.save(gameProgress);
+    hideSlots();
     showScreen('title');
   };
 
