@@ -41,7 +41,7 @@ const createState = {
   name: '',
   race: 'human',
   class: 'warrior',
-  appearance: { skinTone: 0, hairColor: 0, armorColor: 0 }
+  appearance: { skinTone: '#f5d0a9', hairColor: '#2c1810', armorColor: '#7f8c8d' }
 };
 
 // ============================================================
@@ -120,12 +120,16 @@ function initCharacterCreation() {
 function populateSwatches(containerId, colors, property) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
-  colors.forEach((color, i) => {
+  // Initialize appearance with first color if not already a color string
+  if (!createState.appearance[property] || typeof createState.appearance[property] === 'number') {
+    createState.appearance[property] = colors[0];
+  }
+  colors.forEach((color) => {
     const swatch = document.createElement('div');
-    swatch.className = 'color-swatch' + (createState.appearance[property] === i ? ' selected' : '');
+    swatch.className = 'color-swatch' + (createState.appearance[property] === color ? ' selected' : '');
     swatch.style.background = color;
     swatch.onclick = () => {
-      createState.appearance[property] = i;
+      createState.appearance[property] = color;
       container.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
       swatch.classList.add('selected');
       updateAppearancePreview();
@@ -831,7 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createState.name = '';
         createState.race = 'human';
         createState.class = 'warrior';
-        createState.appearance = { skinTone: 0, hairColor: 0, armorColor: 0 };
+        createState.appearance = { skinTone: '#f5d0a9', hairColor: '#2c1810', armorColor: '#7f8c8d' };
         initCharacterCreation();
         showCreateStep(1);
         showScreen('create');
