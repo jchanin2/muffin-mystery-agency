@@ -245,7 +245,8 @@ function showNode(nodeId) {
     if (node.encounter) {
       const btn = document.createElement('button');
       btn.className = 'btn btn-gold choice-btn';
-      btn.innerHTML = '<span class="choice-key">!</span> Ready for battle!';
+      const label = node.encounter.type === 'combat' ? 'Ready for battle!' : 'Ready!';
+      btn.innerHTML = '<span class="choice-key">!</span> ' + label;
       btn.onclick = () => {
         choicesEl.innerHTML = '';
         startEncounter(node);
