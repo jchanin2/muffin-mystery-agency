@@ -351,6 +351,10 @@ function showCombatUI() {
   document.getElementById('combat-narrative').textContent =
     Combat.encounter.intro || '';
 
+  // Update label based on encounter type
+  document.querySelector('.problem-label').textContent =
+    Combat.encounter.type === 'combat' ? 'SOLVE TO ATTACK:' : 'SOLVE:';
+
   // Problem
   showCombatProblem();
 

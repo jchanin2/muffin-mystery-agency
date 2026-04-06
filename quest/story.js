@@ -30,7 +30,7 @@ const STORY = {
     narrative: 'You examine the wrecked wagon at the edge of town. The wood is scratched by small claws, and you spot tiny footprints in the mud — definitely goblins, and lots of them. Among the debris, you find a torn piece of parchment with strange markings. It looks like a supply manifest, but some numbers are smudged.',
     encounter: { type: 'puzzle', monster: null, problemTopic: 'decimal_by_whole', difficulty: 'easy',
       intro: 'You study the torn manifest to figure out how much was stolen.',
-      success: 'The numbers click into place! You now know exactly what was taken — 24 pounds of grain, split across multiple sacks. This is valuable information.',
+      success: 'The numbers click into place! You now know exactly what was taken. The supplies were split across multiple sacks, but now you have the full picture. This is valuable information.',
       failure: 'The numbers blur together. You\'ll need to try again.' },
     choicesAfter: [
       { id: 'a', text: 'Share what you found with the elder.', next: 'ch1_defend' },
