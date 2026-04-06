@@ -242,10 +242,18 @@ function showNode(nodeId) {
   choicesEl.innerHTML = '';
 
   if (node.encounter) {
-    // Delay showing encounter slightly to let narrative type
+    // Let player read the narrative, then click to start encounter
+    const delay = Math.min(node.narrative.length * 15, 2500);
     setTimeout(() => {
-      startEncounter(node);
-    }, Math.min(node.narrative.length * 15, 2000));
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-gold choice-btn';
+      btn.innerHTML = '<span class="choice-key">!</span> Ready for battle!';
+      btn.onclick = () => {
+        choicesEl.innerHTML = '';
+        startEncounter(node);
+      };
+      choicesEl.appendChild(btn);
+    }, delay);
   } else if (node.shop) {
     // Show shop + choices
     showShopAndChoices(node);
@@ -418,7 +426,7 @@ function submitCombatAnswer() {
     updateHUD();
 
     if (result.encounterComplete) {
-      // Disable input
+      // Disable input, show continue button
       input.disabled = true;
       document.getElementById('btn-combat-submit').disabled = true;
 
@@ -426,12 +434,18 @@ function submitCombatAnswer() {
         Audio.treasure();
       }
 
-      setTimeout(() => {
+      // Show a "Continue" button so player can read the result
+      const continueBtn = document.createElement('button');
+      continueBtn.className = 'btn btn-gold';
+      continueBtn.textContent = 'Continue';
+      continueBtn.style.marginTop = '12px';
+      continueBtn.onclick = () => {
         Combat.end(true);
         if (leveledUp) {
           showLevelUp();
         }
-      }, 1500);
+      };
+      feedbackEl.after(continueBtn);
     } else {
       // Next round — new problem
       input.value = '';
