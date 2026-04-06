@@ -3,145 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Muffin's Mystery Agency</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Math Adventures</title>
+  <link rel="stylesheet" href="hub-style.css">
 </head>
 <body>
-  <!-- ==================== TITLE SCREEN ==================== -->
-  <div id="screen-title" class="screen active">
-    <div class="fog-overlay"></div>
-    <div class="title-content">
-      <div class="muffin-logo" id="title-muffin">
-        <!-- SVG Muffin inserted by game.js -->
-      </div>
-      <h1 class="game-title">Muffin's<br>Mystery Agency</h1>
-      <p class="subtitle">A Decimal Division Detective Game</p>
-      <button id="btn-start" class="btn btn-gold">Start Investigating</button>
-    </div>
-  </div>
-
-  <!-- ==================== CASE SELECT SCREEN ==================== -->
-  <div id="screen-cases" class="screen">
-    <div class="screen-header">
-      <h2>Select a Case</h2>
-      <p class="header-subtitle">Choose wisely, detective. Each case grows more dangerous...</p>
-    </div>
-    <div id="case-list" class="case-list">
-      <!-- Cases populated by game.js -->
-    </div>
-    <button id="btn-back-title" class="btn btn-secondary">Back to Agency</button>
-  </div>
-
-  <!-- ==================== GAMEPLAY SCREEN ==================== -->
-  <div id="screen-game" class="screen">
-    <!-- Top bar: case title + hearts -->
-    <div class="game-top-bar">
-      <div class="case-title-bar">
-        <button id="btn-game-back" class="btn-nav" title="Back to Cases">&larr;</button>
-        <span id="game-case-title"></span>
-      </div>
-      <div class="hearts-container" id="hearts">
-        <span class="heart active" data-index="0">&hearts;</span>
-        <span class="heart active" data-index="1">&hearts;</span>
-        <span class="heart active" data-index="2">&hearts;</span>
-      </div>
-      <div class="progress-indicator">
-        Clue <span id="progress-current">1</span> of <span id="progress-total">5</span>
-      </div>
-    </div>
-
-    <!-- Main gameplay area — storybook layout -->
-    <div class="game-main">
-      <!-- Left: Illustration + Narrative (storybook page) -->
-      <div class="storybook-panel">
-        <div class="scene-illustration" id="scene-illustration">
-          <!-- SVG scene inserted by game.js -->
+  <div class="hub">
+    <h1 class="hub-title">Math Adventures</h1>
+    <p class="hub-subtitle">Choose your quest, adventurer...</p>
+    <div class="game-cards">
+      <a href="muffin/" class="game-card muffin-card">
+        <div class="card-icon">
+          <svg width="80" height="80" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="75" cy="100" rx="45" ry="32" fill="#A0794C"/>
+            <ellipse cx="75" cy="105" rx="30" ry="18" fill="#C4A265"/>
+            <ellipse cx="75" cy="68" rx="30" ry="25" fill="#A0794C"/>
+            <ellipse cx="75" cy="78" rx="18" ry="12" fill="#B8935A"/>
+            <ellipse cx="75" cy="73" rx="8" ry="5" fill="#5C3D1E"/>
+            <circle cx="63" cy="60" r="4" fill="#2C1810"/>
+            <circle cx="87" cy="60" r="4" fill="#2C1810"/>
+            <circle cx="64" cy="59" r="1.5" fill="white"/>
+            <circle cx="88" cy="59" r="1.5" fill="white"/>
+            <path d="M 68 82 Q 75 88 82 82" fill="none" stroke="#5C3D1E" stroke-width="1.5"/>
+            <path d="M 45 52 Q 50 30 75 28 Q 100 30 105 52 L 100 48 Q 75 38 50 48 Z" fill="#7A5C30"/>
+            <rect x="50" y="46" width="50" height="4" rx="2" fill="#3E2712"/>
+          </svg>
         </div>
-        <div class="notebook-page">
-          <div class="notebook-header">Detective's Notebook</div>
-          <div id="narrative-text" class="narrative-text"></div>
+        <h2 class="card-title">Muffin's Mystery Agency</h2>
+        <p class="card-desc">Help Detective Muffin the capybara solve mysteries using decimal division!</p>
+        <span class="card-tag detective">Detective</span>
+      </a>
+      <a href="quest/" class="game-card quest-card">
+        <div class="card-icon">
+          <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+            <!-- Shield -->
+            <path d="M 40 8 L 65 18 L 65 45 Q 65 65 40 75 Q 15 65 15 45 L 15 18 Z" fill="#4a3728" stroke="#e8a030" stroke-width="2"/>
+            <path d="M 40 14 L 59 22 L 59 43 Q 59 60 40 69 Q 21 60 21 43 L 21 22 Z" fill="#5c4033"/>
+            <!-- Dragon emblem -->
+            <path d="M 40 25 L 48 35 L 55 30 L 50 40 L 55 50 L 45 45 L 40 55 L 35 45 L 25 50 L 30 40 L 25 30 L 32 35 Z" fill="#e8a030"/>
+            <!-- Crossed swords behind -->
+            <line x1="10" y1="65" x2="35" y2="15" stroke="#888" stroke-width="3" stroke-linecap="round"/>
+            <line x1="70" y1="65" x2="45" y2="15" stroke="#888" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="10" cy="65" r="4" fill="#e8a030"/>
+            <circle cx="70" cy="65" r="4" fill="#e8a030"/>
+          </svg>
         </div>
-      </div>
-
-      <!-- Right: Problem panel -->
-      <div class="problem-panel">
-        <div class="problem-card">
-          <div class="problem-label">Solve to uncover the clue:</div>
-          <div id="problem-text" class="problem-text"></div>
-          <div class="answer-area">
-            <input type="text" id="answer-input" class="answer-input" placeholder="Your answer..." autocomplete="off">
-            <button id="btn-submit" class="btn btn-gold">Submit</button>
-          </div>
-          <div id="feedback" class="feedback"></div>
-          <button id="btn-continue" class="btn btn-gold btn-continue" style="display:none;">Continue</button>
-          <button id="btn-prev-clue" class="btn btn-secondary btn-prev-clue" style="display:none;">&larr; Review Previous Clue</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Clue board (bottom) -->
-    <div class="clue-board">
-      <div class="clue-board-label">Evidence Board</div>
-      <div id="clue-cards" class="clue-cards">
-        <!-- Clue cards populated by game.js -->
-      </div>
+        <h2 class="card-title">Realms of Mathematica</h2>
+        <p class="card-desc">Create a hero and embark on a D&D-inspired quest powered by math!</p>
+        <span class="card-tag rpg">RPG Adventure</span>
+      </a>
     </div>
   </div>
-
-  <!-- ==================== VICTORY SCREEN ==================== -->
-  <div id="screen-victory" class="screen">
-    <div class="victory-content">
-      <div class="stamp-container">
-        <div class="case-closed-stamp">CASE<br>CLOSED</div>
-      </div>
-      <div class="muffin-celebrate" id="victory-muffin">
-        <!-- SVG Muffin inserted by game.js -->
-      </div>
-      <h2 class="victory-title" id="victory-title">Case Solved!</h2>
-      <div id="resolution-text" class="resolution-text"></div>
-      <div class="victory-buttons">
-        <button id="btn-next-case" class="btn btn-gold">Next Case</button>
-        <button id="btn-back-cases" class="btn btn-secondary">Back to Cases</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== ALL CASES SOLVED SCREEN ==================== -->
-  <div id="screen-celebrate" class="screen">
-    <div class="celebrate-content">
-      <div class="muffin-celebrate" id="celebrate-muffin">
-        <!-- SVG Muffin inserted by game.js -->
-      </div>
-      <h2 class="celebrate-title">Master Detective!</h2>
-      <p class="celebrate-subtitle">Muffin has solved every case in the agency!</p>
-      <div class="celebrate-text">
-        From vanishing cupcakes to phantom librarians to museum heists — no mystery is too tough for Detective Muffin and his trusty partner. The city sleeps safely tonight, thanks to you!
-      </div>
-      <div class="celebrate-stars">&#9733; &#9733; &#9733;</div>
-      <button id="btn-celebrate-back" class="btn btn-gold">Back to Agency</button>
-    </div>
-  </div>
-
-  <!-- ==================== DEFEAT SCREEN ==================== -->
-  <div id="screen-defeat" class="screen">
-    <div class="defeat-content">
-      <div class="muffin-defeated" id="defeat-muffin">
-        <!-- SVG Muffin inserted by game.js -->
-      </div>
-      <h2 class="defeat-title">Case Failed...</h2>
-      <p class="defeat-subtitle">Muffin took too many hits!</p>
-      <div id="defeat-text" class="defeat-text"></div>
-      <div class="defeat-buttons">
-        <button id="btn-retry" class="btn btn-gold">Try Again</button>
-        <button id="btn-defeat-back" class="btn btn-secondary">Back to Cases</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="problems.js"></script>
-  <script src="narratives.js"></script>
-  <script src="illustrations.js"></script>
-  <script src="game.js"></script>
 </body>
 </html>

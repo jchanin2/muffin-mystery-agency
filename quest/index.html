@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realms of Mathematica</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== TITLE SCREEN ==================== -->
+  <div id="screen-title" class="screen active">
+    <div class="fog-overlay"></div>
+    <div class="title-content">
+      <div class="title-emblem" id="title-emblem"></div>
+      <h1 class="game-title">Realms of<br>Mathematica</h1>
+      <p class="subtitle">A Mathematical Quest Awaits...</p>
+      <div class="title-buttons">
+        <button id="btn-new-quest" class="btn btn-gold">New Quest</button>
+        <button id="btn-continue-quest" class="btn btn-gold" style="display:none;">Continue Quest</button>
+      </div>
+      <a href="../" class="btn btn-secondary btn-back-hub">&larr; Back to Games</a>
+    </div>
+  </div>
+
+  <!-- ==================== CHARACTER CREATION ==================== -->
+  <div id="screen-create" class="screen">
+    <div class="create-container">
+      <h2 class="create-title">Create Your Hero</h2>
+      <div class="create-steps">
+        <span class="step-dot active" data-step="1">1</span>
+        <span class="step-line"></span>
+        <span class="step-dot" data-step="2">2</span>
+        <span class="step-line"></span>
+        <span class="step-dot" data-step="3">3</span>
+        <span class="step-line"></span>
+        <span class="step-dot" data-step="4">4</span>
+      </div>
+
+      <!-- Step 1: Name -->
+      <div id="create-step-1" class="create-step active">
+        <h3>What is your name, adventurer?</h3>
+        <input type="text" id="input-name" class="input-fantasy" placeholder="Enter your name..." maxlength="20">
+        <div class="name-suggestions">
+          <span class="name-chip" data-name="Thorin">Thorin</span>
+          <span class="name-chip" data-name="Lyra">Lyra</span>
+          <span class="name-chip" data-name="Zephyr">Zephyr</span>
+          <span class="name-chip" data-name="Ember">Ember</span>
+          <span class="name-chip" data-name="Finn">Finn</span>
+          <span class="name-chip" data-name="Sage">Sage</span>
+        </div>
+        <button class="btn btn-gold btn-next-step" data-next="2">Next &rarr;</button>
+      </div>
+
+      <!-- Step 2: Race -->
+      <div id="create-step-2" class="create-step">
+        <h3>Choose Your Race</h3>
+        <div class="race-grid" id="race-grid">
+          <!-- Populated by character.js -->
+        </div>
+        <div class="selection-info" id="race-info"></div>
+        <div class="step-nav">
+          <button class="btn btn-secondary btn-prev-step" data-prev="1">&larr; Back</button>
+          <button class="btn btn-gold btn-next-step" data-next="3">Next &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Class -->
+      <div id="create-step-3" class="create-step">
+        <h3>Choose Your Class</h3>
+        <div class="class-grid" id="class-grid">
+          <!-- Populated by character.js -->
+        </div>
+        <div class="selection-info" id="class-info"></div>
+        <div class="step-nav">
+          <button class="btn btn-secondary btn-prev-step" data-prev="2">&larr; Back</button>
+          <button class="btn btn-gold btn-next-step" data-next="4">Next &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Appearance -->
+      <div id="create-step-4" class="create-step">
+        <h3>Customize Your Look</h3>
+        <div class="appearance-preview" id="appearance-preview">
+          <!-- Live sprite preview -->
+        </div>
+        <div class="appearance-options">
+          <div class="option-row">
+            <label>Skin Tone</label>
+            <div class="color-swatches" id="skin-swatches"></div>
+          </div>
+          <div class="option-row">
+            <label>Hair Color</label>
+            <div class="color-swatches" id="hair-swatches"></div>
+          </div>
+          <div class="option-row">
+            <label>Armor Color</label>
+            <div class="color-swatches" id="armor-swatches"></div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-secondary btn-prev-step" data-prev="3">&larr; Back</button>
+          <button id="btn-begin-quest" class="btn btn-gold">Begin Quest!</button>
+        </div>
+      </div>
+
+      <!-- Character preview sidebar -->
+      <div class="create-preview" id="create-preview">
+        <!-- Shows sprite + stats preview -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADVENTURE SCREEN ==================== -->
+  <div id="screen-adventure" class="screen">
+    <!-- Character HUD -->
+    <div class="hud">
+      <div class="hud-left">
+        <div class="hud-sprite" id="hud-sprite"></div>
+        <div class="hud-info">
+          <div class="hud-name" id="hud-name">Hero</div>
+          <div class="hud-level" id="hud-level">Lv. 1</div>
+        </div>
+      </div>
+      <div class="hud-center">
+        <div class="hp-bar-container">
+          <div class="hp-bar" id="hp-bar"></div>
+          <span class="hp-text" id="hp-text">20/20</span>
+        </div>
+        <div class="xp-bar-container">
+          <div class="xp-bar" id="xp-bar"></div>
+          <span class="xp-text" id="xp-text">XP: 0/500</span>
+        </div>
+      </div>
+      <div class="hud-right">
+        <span class="gold-display" id="gold-display">0g</span>
+        <button class="btn-icon" id="btn-inventory" title="Inventory">&#9776;</button>
+        <button class="btn-icon" id="btn-back-menu" title="Menu">&times;</button>
+      </div>
+    </div>
+
+    <!-- Scene -->
+    <div class="adventure-body">
+      <div class="scene-panel">
+        <div class="scene-illustration" id="adventure-scene">
+          <!-- SVG environment -->
+        </div>
+      </div>
+
+      <!-- Narrative + Choices -->
+      <div class="narrative-panel">
+        <div class="narrative-box">
+          <div class="narrative-text" id="narrative-text"></div>
+        </div>
+        <div class="choices" id="choices">
+          <!-- Choice buttons populated by game.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Combat overlay (slides in during encounters) -->
+    <div class="combat-overlay" id="combat-overlay" style="display:none;">
+      <div class="combat-panel">
+        <div class="combat-header">
+          <div class="monster-info">
+            <div class="monster-sprite" id="monster-sprite"></div>
+            <div class="monster-details">
+              <div class="monster-name" id="monster-name">Goblin</div>
+              <div class="monster-hp-bar-container">
+                <div class="monster-hp-bar" id="monster-hp-bar"></div>
+              </div>
+            </div>
+          </div>
+          <div class="combat-vs">VS</div>
+          <div class="player-combat-sprite" id="player-combat-sprite"></div>
+        </div>
+        <div class="combat-narrative" id="combat-narrative"></div>
+        <div class="combat-problem">
+          <div class="problem-label">SOLVE TO ATTACK:</div>
+          <div class="problem-text" id="combat-problem-text"></div>
+          <div class="answer-area">
+            <input type="text" id="combat-answer" class="answer-input" placeholder="Your answer...">
+            <button id="btn-combat-submit" class="btn btn-gold">Attack!</button>
+          </div>
+          <div class="combat-feedback" id="combat-feedback"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== INVENTORY / CHARACTER SHEET ==================== -->
+  <div id="screen-inventory" class="screen">
+    <div class="inventory-container">
+      <div class="inv-header">
+        <h2>Character Sheet</h2>
+        <button id="btn-close-inventory" class="btn btn-secondary">Close</button>
+      </div>
+      <div class="inv-body">
+        <div class="inv-character">
+          <div class="inv-sprite" id="inv-sprite"></div>
+          <div class="inv-name" id="inv-name">Hero</div>
+          <div class="inv-class" id="inv-class">Human Warrior</div>
+          <div class="inv-level" id="inv-level">Level 1</div>
+        </div>
+        <div class="inv-stats" id="inv-stats">
+          <!-- Stats grid populated by game.js -->
+        </div>
+        <div class="inv-equipment" id="inv-equipment">
+          <h3>Equipment</h3>
+          <!-- Equipment list -->
+        </div>
+        <div class="inv-items" id="inv-items">
+          <h3>Inventory</h3>
+          <!-- Item list -->
+        </div>
+        <div class="inv-journal">
+          <h3>Scholar's Journal</h3>
+          <div id="inv-academics">
+            <!-- Academic stats per topic -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LEVEL UP SCREEN ==================== -->
+  <div id="screen-levelup" class="screen">
+    <div class="levelup-content">
+      <h2 class="levelup-title">Level Up!</h2>
+      <div class="levelup-sprite" id="levelup-sprite"></div>
+      <p class="levelup-info" id="levelup-info">You reached Level 2!</p>
+      <p class="levelup-choose">Choose a stat to increase:</p>
+      <div class="stat-choices" id="stat-choices">
+        <!-- Stat buttons -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GAME OVER SCREEN ==================== -->
+  <div id="screen-gameover" class="screen">
+    <div class="gameover-content">
+      <div class="gameover-sprite" id="gameover-sprite"></div>
+      <h2 class="gameover-title">Knocked Out!</h2>
+      <p class="gameover-text">Your hero has fallen... but a true adventurer never gives up!</p>
+      <p class="gameover-penalty" id="gameover-penalty">You lost 10 gold.</p>
+      <button id="btn-respawn" class="btn btn-gold">Get Back Up</button>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER COMPLETE ==================== -->
+  <div id="screen-chapter-complete" class="screen">
+    <div class="chapter-content">
+      <div class="chapter-sprite" id="chapter-sprite"></div>
+      <h2 class="chapter-title" id="chapter-title">Chapter Complete!</h2>
+      <p class="chapter-summary" id="chapter-summary"></p>
+      <div class="chapter-rewards" id="chapter-rewards"></div>
+      <button id="btn-next-chapter" class="btn btn-gold">Continue to Next Chapter</button>
+    </div>
+  </div>
+
+  <!-- ==================== SHOP SCREEN ==================== -->
+  <div id="screen-shop" class="screen">
+    <div class="shop-container">
+      <h2 class="shop-title">Merchant's Wares</h2>
+      <div class="shop-npc" id="shop-npc"></div>
+      <div class="shop-items" id="shop-items">
+        <!-- Shop items populated by game.js -->
+      </div>
+      <div class="shop-gold">Your Gold: <span id="shop-gold-display">0</span></div>
+      <button id="btn-close-shop" class="btn btn-secondary">Leave Shop</button>
+    </div>
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="sprites.js"></script>
+  <script src="environments.js"></script>
+  <script src="problems.js"></script>
+  <script src="character.js"></script>
+  <script src="story.js"></script>
+  <script src="combat.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: #0f0f1a;
+  color: #ecf0f1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hub {
+  text-align: center;
+  padding: 40px 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.hub-title {
+  font-size: 2.8rem;
+  color: #e8a030;
+  text-shadow: 0 2px 12px rgba(232, 160, 48, 0.3);
+  margin-bottom: 8px;
+}
+
+.hub-subtitle {
+  font-size: 1.1rem;
+  color: #95a5a6;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+
+.game-cards {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px 24px 24px;
+  width: 320px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.muffin-card:hover {
+  border-color: #e2b714;
+  box-shadow: 0 12px 40px rgba(226, 183, 20, 0.15);
+}
+
+.quest-card:hover {
+  border-color: #e8a030;
+  box-shadow: 0 12px 40px rgba(232, 160, 48, 0.15);
+}
+
+.card-icon {
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.card-title {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.muffin-card .card-title { color: #e2b714; }
+.quest-card .card-title { color: #e8a030; }
+
+.card-desc {
+  font-size: 0.9rem;
+  color: #95a5a6;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.card-tag {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.card-tag.detective {
+  background: #e2b714;
+  color: #1a1a2e;
+}
+
+.card-tag.rpg {
+  background: #e8a030;
+  color: #1a1a2e;
+}
+
+@media (max-width: 700px) {
+  .hub-title { font-size: 2rem; }
+  .game-cards { flex-direction: column; align-items: center; }
+  .game-card { width: 100%; max-width: 360px; }
+}

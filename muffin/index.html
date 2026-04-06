@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muffin's Mystery Agency</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ==================== TITLE SCREEN ==================== -->
+  <div id="screen-title" class="screen active">
+    <div class="fog-overlay"></div>
+    <div class="title-content">
+      <div class="muffin-logo" id="title-muffin">
+        <!-- SVG Muffin inserted by game.js -->
+      </div>
+      <h1 class="game-title">Muffin's<br>Mystery Agency</h1>
+      <p class="subtitle">A Decimal Division Detective Game</p>
+      <button id="btn-start" class="btn btn-gold">Start Investigating</button>
+    </div>
+  </div>
+
+  <!-- ==================== CASE SELECT SCREEN ==================== -->
+  <div id="screen-cases" class="screen">
+    <div class="screen-header">
+      <h2>Select a Case</h2>
+      <p class="header-subtitle">Choose wisely, detective. Each case grows more dangerous...</p>
+    </div>
+    <div id="case-list" class="case-list">
+      <!-- Cases populated by game.js -->
+    </div>
+    <button id="btn-back-title" class="btn btn-secondary">Back to Agency</button>
+  </div>
+
+  <!-- ==================== GAMEPLAY SCREEN ==================== -->
+  <div id="screen-game" class="screen">
+    <!-- Top bar: case title + hearts -->
+    <div class="game-top-bar">
+      <div class="case-title-bar">
+        <button id="btn-game-back" class="btn-nav" title="Back to Cases">&larr;</button>
+        <span id="game-case-title"></span>
+      </div>
+      <div class="hearts-container" id="hearts">
+        <span class="heart active" data-index="0">&hearts;</span>
+        <span class="heart active" data-index="1">&hearts;</span>
+        <span class="heart active" data-index="2">&hearts;</span>
+      </div>
+      <div class="progress-indicator">
+        Clue <span id="progress-current">1</span> of <span id="progress-total">5</span>
+      </div>
+    </div>
+
+    <!-- Main gameplay area — storybook layout -->
+    <div class="game-main">
+      <!-- Left: Illustration + Narrative (storybook page) -->
+      <div class="storybook-panel">
+        <div class="scene-illustration" id="scene-illustration">
+          <!-- SVG scene inserted by game.js -->
+        </div>
+        <div class="notebook-page">
+          <div class="notebook-header">Detective's Notebook</div>
+          <div id="narrative-text" class="narrative-text"></div>
+        </div>
+      </div>
+
+      <!-- Right: Problem panel -->
+      <div class="problem-panel">
+        <div class="problem-card">
+          <div class="problem-label">Solve to uncover the clue:</div>
+          <div id="problem-text" class="problem-text"></div>
+          <div class="answer-area">
+            <input type="text" id="answer-input" class="answer-input" placeholder="Your answer..." autocomplete="off">
+            <button id="btn-submit" class="btn btn-gold">Submit</button>
+          </div>
+          <div id="feedback" class="feedback"></div>
+          <button id="btn-continue" class="btn btn-gold btn-continue" style="display:none;">Continue</button>
+          <button id="btn-prev-clue" class="btn btn-secondary btn-prev-clue" style="display:none;">&larr; Review Previous Clue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clue board (bottom) -->
+    <div class="clue-board">
+      <div class="clue-board-label">Evidence Board</div>
+      <div id="clue-cards" class="clue-cards">
+        <!-- Clue cards populated by game.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VICTORY SCREEN ==================== -->
+  <div id="screen-victory" class="screen">
+    <div class="victory-content">
+      <div class="stamp-container">
+        <div class="case-closed-stamp">CASE<br>CLOSED</div>
+      </div>
+      <div class="muffin-celebrate" id="victory-muffin">
+        <!-- SVG Muffin inserted by game.js -->
+      </div>
+      <h2 class="victory-title" id="victory-title">Case Solved!</h2>
+      <div id="resolution-text" class="resolution-text"></div>
+      <div class="victory-buttons">
+        <button id="btn-next-case" class="btn btn-gold">Next Case</button>
+        <button id="btn-back-cases" class="btn btn-secondary">Back to Cases</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ALL CASES SOLVED SCREEN ==================== -->
+  <div id="screen-celebrate" class="screen">
+    <div class="celebrate-content">
+      <div class="muffin-celebrate" id="celebrate-muffin">
+        <!-- SVG Muffin inserted by game.js -->
+      </div>
+      <h2 class="celebrate-title">Master Detective!</h2>
+      <p class="celebrate-subtitle">Muffin has solved every case in the agency!</p>
+      <div class="celebrate-text">
+        From vanishing cupcakes to phantom librarians to museum heists — no mystery is too tough for Detective Muffin and his trusty partner. The city sleeps safely tonight, thanks to you!
+      </div>
+      <div class="celebrate-stars">&#9733; &#9733; &#9733;</div>
+      <button id="btn-celebrate-back" class="btn btn-gold">Back to Agency</button>
+    </div>
+  </div>
+
+  <!-- ==================== DEFEAT SCREEN ==================== -->
+  <div id="screen-defeat" class="screen">
+    <div class="defeat-content">
+      <div class="muffin-defeated" id="defeat-muffin">
+        <!-- SVG Muffin inserted by game.js -->
+      </div>
+      <h2 class="defeat-title">Case Failed...</h2>
+      <p class="defeat-subtitle">Muffin took too many hits!</p>
+      <div id="defeat-text" class="defeat-text"></div>
+      <div class="defeat-buttons">
+        <button id="btn-retry" class="btn btn-gold">Try Again</button>
+        <button id="btn-defeat-back" class="btn btn-secondary">Back to Cases</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="problems.js"></script>
+  <script src="narratives.js"></script>
+  <script src="illustrations.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
