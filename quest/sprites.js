@@ -45,9 +45,15 @@ const Sprites = {
   // appearance: { skinTone, hairColor, armorColor }
   // scale: pixel size
   player(race, classType, appearance = {}, scale = 4) {
-    const skin = appearance.skinTone || '#f5c5a3';
-    const hair = appearance.hairColor || '#5c3317';
-    const armor = appearance.armorColor || '#666688';
+    // Resolve colors — accept hex strings or numeric indices into palette arrays
+    const _resolve = (val, palette, fallback) => {
+      if (typeof val === 'string' && val.startsWith('#')) return val;
+      if (typeof val === 'number' && palette && palette[val]) return palette[val];
+      return fallback;
+    };
+    const skin = _resolve(appearance.skinTone, typeof SKIN_TONES !== 'undefined' ? SKIN_TONES : null, '#f5c5a3');
+    const hair = _resolve(appearance.hairColor, typeof HAIR_COLORS !== 'undefined' ? HAIR_COLORS : null, '#5c3317');
+    const armor = _resolve(appearance.armorColor, typeof ARMOR_COLORS !== 'undefined' ? ARMOR_COLORS : null, '#666688');
     const armorDark = _darken(armor);
     const armorLight = _lighten(armor);
     const eyes = race === 'dragonborn' ? '#ff6600' : '#1a1a2e';
