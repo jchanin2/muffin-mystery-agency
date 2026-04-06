@@ -462,6 +462,22 @@ body {
   border-left: 3px solid var(--torch);
 }
 
+.stat-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 6px;
+}
+.stat-legend b {
+  color: var(--torch);
+  margin-right: 2px;
+}
+
 .step-nav {
   display: flex;
   justify-content: space-between;
