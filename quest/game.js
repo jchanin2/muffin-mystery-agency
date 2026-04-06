@@ -796,6 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function showSlots() {
     document.querySelector('.title-buttons').style.display = 'none';
     document.querySelector('.subtitle').style.display = 'none';
+    document.querySelector('.btn-back-hub').style.display = 'none';
     document.getElementById('save-slots').style.display = '';
     refreshSlots();
   }
@@ -804,6 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('save-slots').style.display = 'none';
     document.querySelector('.title-buttons').style.display = '';
     document.querySelector('.subtitle').style.display = '';
+    document.querySelector('.btn-back-hub').style.display = '';
   }
 
   // Play button shows save slots
