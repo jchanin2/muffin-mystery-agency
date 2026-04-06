@@ -621,21 +621,18 @@ function showChapterComplete(node) {
 // SHOP
 // ============================================================
 function showShopAndChoices(node) {
-  // Show choices first, then add shop button
-  const choicesEl = document.getElementById('choices');
-  choicesEl.innerHTML = '';
+  // Show regular choices first (this clears and rebuilds the list)
+  if (node.choices) {
+    showChoices(node.choices);
+  }
 
-  // Add shop button
+  // Then prepend the shop button
+  const choicesEl = document.getElementById('choices');
   const shopBtn = document.createElement('button');
   shopBtn.className = 'choice-btn';
   shopBtn.innerHTML = '<span class="choice-key">$</span> Visit the merchant\'s shop';
   shopBtn.onclick = () => openShop(node);
-  choicesEl.appendChild(shopBtn);
-
-  // Add regular choices
-  if (node.choices) {
-    showChoices(node.choices);
-  }
+  choicesEl.prepend(shopBtn);
 }
 
 function openShop(returnNode) {
@@ -647,22 +644,31 @@ function openShop(returnNode) {
   const shopItemsEl = document.getElementById('shop-items');
   shopItemsEl.innerHTML = '';
 
+  // CHA discount: each point of CHA modifier gives 5% off, up to 25%
+  const chaMod = Character.modifier(gameCharacter.stats.charisma);
+  const discountPct = Math.min(25, Math.max(0, chaMod * 5));
+
   SHOP_ITEMS.forEach(item => {
+    const discountedPrice = Math.max(1, Math.round(item.price * (1 - discountPct / 100)));
     const div = document.createElement('div');
     div.className = 'shop-item';
+    const priceHTML = discountPct > 0
+      ? `<span class="shop-item-price"><s style="opacity:0.5">${item.price}g</s> ${discountedPrice}g</span>`
+      : `<span class="shop-item-price">${item.price}g</span>`;
     div.innerHTML = `
       <div>
         <div class="shop-item-name">${item.name}</div>
         <div class="shop-item-desc">${item.desc}</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <span class="shop-item-price">${item.price}g</span>
-        <button class="btn btn-gold" style="padding:6px 14px;font-size:0.85rem;" ${gameCharacter.gold < item.price ? 'disabled' : ''}>Buy</button>
+        ${priceHTML}
+        <button class="btn btn-gold" style="padding:6px 14px;font-size:0.85rem;" ${gameCharacter.gold < discountedPrice ? 'disabled' : ''}>Buy</button>
       </div>
     `;
     const buyBtn = div.querySelector('button');
     buyBtn.onclick = () => {
-      if (Character.buyItem(gameCharacter, item)) {
+      const shopItem = { ...item, price: discountedPrice };
+      if (Character.buyItem(gameCharacter, shopItem)) {
         Audio.treasure();
         Character.save(gameCharacter);
         document.getElementById('shop-gold-display').textContent = gameCharacter.gold;
