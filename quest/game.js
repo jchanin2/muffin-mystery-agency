@@ -426,20 +426,23 @@ function submitCombatAnswer() {
     updateHUD();
 
     if (result.encounterComplete) {
-      // Disable input, show continue button
-      input.disabled = true;
-      document.getElementById('btn-combat-submit').disabled = true;
-
       if (result.monsterDefeated) {
         Audio.treasure();
       }
 
-      // Show a "Continue" button so player can read the result
+      // Hide the answer area, show Continue button
+      document.querySelector('.answer-area').style.display = 'none';
       const continueBtn = document.createElement('button');
       continueBtn.className = 'btn btn-gold';
       continueBtn.textContent = 'Continue';
       continueBtn.style.marginTop = '12px';
       continueBtn.onclick = () => {
+        // Restore answer area for next combat
+        document.querySelector('.answer-area').style.display = '';
+        input.disabled = false;
+        input.value = '';
+        document.getElementById('btn-combat-submit').disabled = false;
+        continueBtn.remove();
         Combat.end(true);
         if (leveledUp) {
           showLevelUp();
