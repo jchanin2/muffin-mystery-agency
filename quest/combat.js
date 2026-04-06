@@ -59,9 +59,9 @@ const Combat = {
         // Calculate player damage to monster
         let dmg = Character.attackDamage(character);
 
-        // Warrior Power Strike: consecutive correct answers trigger critical hits
+        // Warrior Power Strike: consecutive correct answers trigger double damage
         if (character.class === 'warrior' && this.consecutiveCorrect >= 2) {
-          dmg = Math.floor(dmg * 1.5);
+          dmg = dmg * 2;
           result.critical = true;
         }
 
@@ -100,9 +100,22 @@ const Combat = {
           result.message = `The ${this.monster.name} hits you for ${actualDmg} damage!`;
         }
       } else {
-        // Puzzle — wrong means try again
-        result.message = this.encounter.failure || 'That\'s not right. Try again!';
+        // Puzzle — wrong answer deals minor damage (traps, magical feedback, etc.)
+        const puzzleDmg = this.encounter.difficulty === 'hard' ? 3 :
+                          this.encounter.difficulty === 'medium' ? 2 : 1;
+        const actualDmg = Math.max(1, puzzleDmg - Character.defense(character));
+        character.hp = Math.max(0, character.hp - actualDmg);
+        result.damage = actualDmg;
+
+        if (character.hp <= 0) {
+          result.playerDefeated = true;
+        }
+
+        result.message = this.encounter.failure || `The puzzle fights back! You take ${actualDmg} damage.`;
       }
+
+      // Generate a new problem on wrong answer so player can't brute-force
+      this.generateProblem(this.encounter);
     }
 
     // Check if player is defeated
@@ -110,7 +123,7 @@ const Combat = {
       result.playerDefeated = true;
     }
 
-    // Generate new problem if encounter isn't complete
+    // Generate new problem if encounter isn't complete (next round of combat)
     if (correct && !result.encounterComplete) {
       this.generateProblem(this.encounter);
     }

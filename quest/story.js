@@ -136,7 +136,8 @@ const STORY = {
     chapter: 1, environment: 'village', chapterComplete: true,
     chapterTitle: 'Chapter 1 Complete: The Village of Numeria',
     chapterSummary: 'You defeated Gruk the Goblin Chieftain and saved the village of Numeria! The stolen supplies have been recovered, and the villagers can rest easy tonight. But the elder warns you — Gruk mentioned a "dark master" in the deep tunnels who commanded the raids. Your quest continues...',
-    chapterReward: 'A grateful villager gives you a shining new piece of equipment!'
+    chapterReward: 'A grateful villager gives you a shining new piece of equipment!',
+    chapterRewardItem: { slot: 'weapon', name: 'Village Hero\'s Blade', bonus: 4, type: 'melee' }
   },
 
   // ============================================================
@@ -172,6 +173,7 @@ const STORY = {
 
   ch2_guard_fight: {
     chapter: 2, environment: 'dungeon_corridor',
+    narrative: 'You charge into the guard post. A muscular goblin warrior sits sharpening its spear by a small fire. It leaps to its feet, snarling. Behind it you notice a crude map pinned to the wall — it could show the tunnels deeper inside.',
     encounter: { type: 'combat', monster: { name: 'Goblin Warrior', hp: 20, maxHp: 20, attack: 5, sprite: 'goblin' }, problemTopic: 'place_value', difficulty: 'easy',
       intro: 'The goblin warrior raises its spear!',
       success: 'Your blow sends the goblin sprawling!',
@@ -258,7 +260,8 @@ const STORY = {
     chapter: 2, environment: 'dungeon_corridor', chapterComplete: true,
     chapterTitle: 'Chapter 2 Complete: The Goblin Tunnels',
     chapterSummary: 'You defeated the Skeleton Mage and discovered a journal among the bones. It speaks of a powerful sorceress who fled into the Enchanted Forest long ago, taking forbidden mathematical knowledge with her. The goblins were merely her puppets. To truly end the threat, you must find her in the forest. The journal also mentions a village of forest folk who might help you — if you can find them.',
-    chapterReward: 'You found the Skeleton Mage\'s enchanted ring!'
+    chapterReward: 'You found the Skeleton Mage\'s enchanted ring!',
+    chapterRewardItem: { slot: 'accessory', name: 'Skeleton Mage\'s Ring', bonus: 2, effect: 'Boosts all damage by 2' }
   },
 
   // ============================================================
@@ -364,7 +367,8 @@ const STORY = {
     chapter: 3, environment: 'forest_clearing', chapterComplete: true,
     chapterTitle: 'Chapter 3 Complete: The Enchanted Forest',
     chapterSummary: 'You fought through the corrupted forest and defeated the Forest Wraith guarding Morvina\'s tower. Inside, you found Morvina\'s journal — she has fled north to the Frozen Peaks, seeking an ancient artifact called the Numeral Crown that would amplify her power over mathematics itself. The forest folk are already beginning to heal now that the wraith is gone. But Morvina must be stopped before she reaches the crown!',
-    chapterReward: 'Pip gives you an enchanted forest charm for your journey!'
+    chapterReward: 'Pip gives you an enchanted forest charm for your journey!',
+    chapterRewardItem: { slot: 'accessory', name: 'Forest Charm', bonus: 3, effect: 'Boosts all damage by 3' }
   },
 
   // ============================================================
@@ -386,7 +390,7 @@ const STORY = {
     encounter: { type: 'puzzle', monster: null, problemTopic: 'whole_div_decimal_quot', difficulty: 'medium',
       intro: 'Calculate the safest climbing route up the frozen cliff.',
       success: 'You find the perfect sequence of handholds and pull yourself to the top! The fortress entrance is just ahead.',
-      failure: 'Your foot slips! You catch yourself, but take some damage.' },
+      failure: 'Your foot slips! The ice cuts your hands as you catch yourself.' },
     choicesAfter: [
       { id: 'a', text: 'Enter the dwarven fortress.', next: 'ch4_fortress' }
     ]
@@ -437,7 +441,8 @@ const STORY = {
     chapter: 4, environment: 'castle', chapterComplete: true,
     chapterTitle: 'Chapter 4 Complete: The Frozen Peaks',
     chapterSummary: 'You destroyed Morvina\'s Stone Golem and explored the dwarven fortress. The Numeral Crown is gone — Morvina took it deeper into the mountain, to a place the dwarves called the Dragon\'s Lair. Ancient texts warn that a young dragon has made its home there, drawn by the Crown\'s power. You must venture into the depths before Morvina uses the Crown to bend all of mathematics to her will!',
-    chapterReward: 'You found ancient dwarven armor in the fortress!'
+    chapterReward: 'You found ancient dwarven armor in the fortress!',
+    chapterRewardItem: { slot: 'armor', name: 'Dwarven Plate Armor', bonus: 5 }
   },
 
   // ============================================================
@@ -459,7 +464,7 @@ const STORY = {
     encounter: { type: 'puzzle', monster: null, problemTopic: 'place_value', difficulty: 'hard',
       intro: 'Solve the rune trap before it explodes!',
       success: 'You crack the rune code and the trap fizzles out! Morvina\'s defenses are weakening!',
-      failure: 'The trap zaps you with magical energy!' },
+      failure: 'The trap zaps you with a bolt of magical energy!' },
     choicesAfter: [
       { id: 'a', text: 'Continue toward the lair.', next: 'ch5_antechamber' }
     ]

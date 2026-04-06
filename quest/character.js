@@ -16,7 +16,7 @@ const CLASSES = {
     primaryStat: 'strength',
     desc: 'A mighty fighter who excels in melee combat. Uses STR to deal bonus damage.',
     startEquip: { weapon: { name: 'Iron Sword', bonus: 3, type: 'melee' }, armor: { name: 'Chain Mail', bonus: 2 } },
-    ability: 'Power Strike: Deal double damage on a critical hit'
+    ability: 'Power Strike: Get 2+ correct in a row for double damage'
   },
   wizard: {
     name: 'Wizard',
@@ -123,7 +123,10 @@ const Character = {
       strBonus = Math.max(0, Math.floor(this.modifier(character.stats.strength) / 2));
     }
 
-    return Math.max(1, 5 + primaryMod + strBonus + weaponBonus);
+    // Accessory bonus (e.g., Skeleton Mage's Ring, Forest Charm)
+    const accessoryBonus = character.equipment.accessory ? character.equipment.accessory.bonus : 0;
+
+    return Math.max(1, 5 + primaryMod + strBonus + weaponBonus + accessoryBonus);
   },
 
   // Calculate defense — armor + CON gives damage reduction

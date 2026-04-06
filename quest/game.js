@@ -362,6 +362,9 @@ function showCombatUI() {
   document.getElementById('combat-feedback').textContent = '';
   document.getElementById('combat-feedback').className = 'combat-feedback';
 
+  // Show potion button if player has potions
+  updateCombatPotions();
+
   // Focus input
   const input = document.getElementById('combat-answer');
   input.value = '';
@@ -397,6 +400,36 @@ function showCombatProblem() {
   } else {
     btn.textContent = 'Solve!';
   }
+}
+
+function updateCombatPotions() {
+  const area = document.getElementById('combat-potion-area');
+  area.innerHTML = '';
+  if (!gameCharacter) return;
+
+  const potions = gameCharacter.inventory.filter(i =>
+    i.id === 'health_potion' || i.id === 'great_health_potion'
+  );
+
+  if (potions.length === 0 || gameCharacter.hp >= gameCharacter.maxHp) return;
+
+  potions.forEach(potion => {
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.style.cssText = 'padding:4px 12px;font-size:0.8rem;background:#2a6e2a;color:#fff;border:1px solid #4a4;margin-right:6px;cursor:pointer;';
+    const hpAmount = potion.id === 'great_health_potion' ? 30 : 15;
+    btn.textContent = `\u2764 ${potion.name} (${potion.quantity}) +${hpAmount} HP`;
+    btn.onclick = () => {
+      Character.useItem(gameCharacter, potion.id);
+      Character.save(gameCharacter);
+      updateHUD();
+      updateCombatPotions();
+      const feedbackEl = document.getElementById('combat-feedback');
+      feedbackEl.textContent = `You used a ${potion.name}! Restored ${hpAmount} HP.`;
+      feedbackEl.className = 'combat-feedback correct';
+    };
+    area.appendChild(btn);
+  });
 }
 
 function updateMonsterHPBar() {
@@ -443,8 +476,9 @@ function submitCombatAnswer() {
         feedbackEl.innerHTML = `You defeated <b>${Combat.monster.name}</b>!`;
       }
 
-      // Hide the answer area, show Continue button
+      // Hide the answer area and potions, show Continue button
       document.querySelector('.answer-area').style.display = 'none';
+      document.getElementById('combat-potion-area').innerHTML = '';
       const continueBtn = document.createElement('button');
       continueBtn.className = 'btn btn-gold';
       continueBtn.textContent = 'Continue';
@@ -487,15 +521,20 @@ function submitCombatAnswer() {
 
     Character.save(gameCharacter);
     updateHUD();
+    updateCombatPotions();
 
     if (result.playerDefeated) {
       input.disabled = true;
       document.getElementById('btn-combat-submit').disabled = true;
+      document.getElementById('combat-potion-area').innerHTML = '';
       setTimeout(() => Combat.end(false), 1500);
     } else {
-      // Clear for retry
+      // New problem generated on wrong answer — show it after delay
       input.value = '';
-      setTimeout(() => input.focus(), 300);
+      setTimeout(() => {
+        showCombatProblem();
+        input.focus();
+      }, 1200);
     }
   }
 }
@@ -654,6 +693,19 @@ function showChapterComplete(node) {
   const chapterRewards = { xp: 100, gold: 50 };
   applyReward(chapterRewards);
 
+  // Grant chapter reward item (equipment)
+  if (node.chapterRewardItem) {
+    const item = node.chapterRewardItem;
+    if (item.slot === 'weapon') {
+      gameCharacter.equipment.weapon = { name: item.name, bonus: item.bonus, type: item.type };
+    } else if (item.slot === 'armor') {
+      gameCharacter.equipment.armor = { name: item.name, bonus: item.bonus };
+    } else if (item.slot === 'accessory') {
+      gameCharacter.equipment.accessory = { name: item.name, bonus: item.bonus, effect: item.effect };
+    }
+    Character.save(gameCharacter);
+  }
+
   // Set up next chapter button
   const nextBtn = document.getElementById('btn-next-chapter');
   const nextChapter = gameProgress.currentChapter + 1;
@@ -735,7 +787,6 @@ function openShop(returnNode) {
 
   document.getElementById('btn-close-shop').onclick = () => {
     showScreen('adventure');
-    showNode(returnNode ? gameProgress.currentNodeId : 'ch1_start');
   };
 }
 
