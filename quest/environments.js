@@ -947,6 +947,144 @@ const Environments = {
   },
 
   // ============================================================
+  // UNDERGROUND RIVER — dark cavern with bioluminescent mushrooms
+  // ============================================================
+  underground_river() {
+    const extraDefs = `
+      <linearGradient id="darkWater" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#0a1525"/>
+        <stop offset="50%" stop-color="#0e1a30"/>
+        <stop offset="100%" stop-color="#0a1525"/>
+      </linearGradient>
+      <radialGradient id="mushroomGlow1" cx="18%" cy="75%" r="15%">
+        <stop offset="0%" stop-color="#22ccaa" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#22ccaa" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="mushroomGlow2" cx="82%" cy="78%" r="15%">
+        <stop offset="0%" stop-color="#44aaff" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#44aaff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="ceilingGlow" cx="50%" cy="8%" r="30%">
+        <stop offset="0%" stop-color="#22ccaa" stop-opacity="0.08"/>
+        <stop offset="100%" stop-color="#22ccaa" stop-opacity="0"/>
+      </radialGradient>
+    `;
+    return this.scene('#020208', '#0a0a18', `
+      <!-- Cavern ceiling (rough, organic) -->
+      <path d="M0,0 Q30,20 60,8 Q90,30 120,12 Q150,35 180,18 Q210,38 240,15 Q270,32 300,10 Q330,28 360,12 Q390,25 400,5 L400,65 Q360,78 320,68 Q280,85 240,72 Q200,90 160,75 Q120,88 80,70 Q40,82 0,65 Z" fill="#12122a"/>
+
+      <!-- Stalactites -->
+      <polygon points="65,65 70,105 75,65" fill="#1a1a35"/>
+      <polygon points="68,65 70,98 72,65" fill="#22224a"/>
+      <polygon points="145,75 150,118 155,75" fill="#181838"/>
+      <polygon points="148,75 150,112 152,75" fill="#20204a"/>
+      <polygon points="240,70 245,100 250,70" fill="#1a1a35"/>
+      <polygon points="320,68 325,95 330,68" fill="#181838"/>
+
+      <!-- Bioluminescent mushrooms on ceiling -->
+      ${[55, 120, 195, 280, 340].map((x, i) => {
+        const colors = ['#22ccaa', '#44ddbb', '#33bbff', '#22ccaa', '#44aaff'];
+        const y = 72 + (i * 7) % 15;
+        return `
+          <line x1="${x}" y1="${y - 8}" x2="${x}" y2="${y}" stroke="${colors[i]}" stroke-width="1" opacity="0.5"/>
+          <ellipse cx="${x}" cy="${y}" rx="4" ry="2.5" fill="${colors[i]}" opacity="0.6">
+            <animate attributeName="opacity" values="0.6;0.9;0.4;0.6" dur="${2 + i * 0.3}s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="${x}" cy="${y + 1}" rx="6" ry="3" fill="${colors[i]}" opacity="0.15">
+            <animate attributeName="opacity" values="0.15;0.25;0.1;0.15" dur="${2 + i * 0.3}s" repeatCount="indefinite"/>
+          </ellipse>`;
+      }).join('')}
+
+      <!-- Dark river flowing across -->
+      <path d="M0,145 Q100,138 200,152 Q300,165 400,155 L400,215 Q300,210 200,222 Q100,230 0,218 Z" fill="url(#darkWater)"/>
+
+      <!-- Water surface ripples (subtle, dark) -->
+      <path d="M40,162 Q65,158 90,164" fill="none" stroke="#1a3555" stroke-width="1" opacity="0.4">
+        <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M140,175 Q175,170 210,177" fill="none" stroke="#1a3555" stroke-width="1" opacity="0.35">
+        <animate attributeName="opacity" values="0.35;0.1;0.35" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M260,168 Q290,163 320,170" fill="none" stroke="#1a3555" stroke-width="1" opacity="0.3">
+        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2.8s" begin="1s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Mysterious ripples (something lurking below) -->
+      <ellipse cx="280" cy="185" rx="12" ry="3" fill="none" stroke="#1a3050" stroke-width="1.5" opacity="0.4">
+        <animate attributeName="rx" values="12;20;12" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.4;0.1;0.4" dur="3s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="280" cy="185" rx="6" ry="2" fill="none" stroke="#1a3050" stroke-width="1" opacity="0.5">
+        <animate attributeName="rx" values="6;14;6" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;0.1;0.5" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <!-- Stone bridge (narrow, arched) -->
+      <path d="M150,148 Q200,115 250,152" fill="none" stroke="#3a3a50" stroke-width="10"/>
+      <path d="M150,148 Q200,118 250,152" fill="none" stroke="#4a4a65" stroke-width="5"/>
+      <!-- Bridge arch reflection -->
+      <path d="M160,155 Q200,170 240,158" fill="none" stroke="#0e1a30" stroke-width="2" opacity="0.3"/>
+      <!-- Bridge posts -->
+      <rect x="155" y="130" width="4" height="22" fill="#3a3a50" rx="1"/>
+      <rect x="241" y="133" width="4" height="22" fill="#3a3a50" rx="1"/>
+      <rect x="196" y="118" width="4" height="16" fill="#3a3a50" rx="1"/>
+
+      <!-- Cavern floor (rocky banks) -->
+      <path d="M0,218 Q40,210 80,220 Q110,225 130,218 L130,280 L0,280 Z" fill="#12122a"/>
+      <path d="M0,230 Q40,225 80,232 Q100,235 130,228 L130,280 L0,280 Z" fill="#0e0e22"/>
+      <path d="M270,215 Q310,208 350,218 Q380,222 400,215 L400,280 L270,280 Z" fill="#12122a"/>
+      <path d="M270,228 Q320,220 360,230 Q390,233 400,228 L400,280 L270,280 Z" fill="#0e0e22"/>
+
+      <!-- Glowing mushroom clusters on banks -->
+      <!-- Left bank mushrooms -->
+      <g>
+        <line x1="50" y1="220" x2="50" y2="210" stroke="#1a4a3a" stroke-width="1.5"/>
+        <ellipse cx="50" cy="208" rx="5" ry="3" fill="#22ccaa" opacity="0.7">
+          <animate attributeName="opacity" values="0.7;1;0.5;0.7" dur="2.5s" repeatCount="indefinite"/>
+        </ellipse>
+        <line x1="65" y1="222" x2="65" y2="214" stroke="#1a4a3a" stroke-width="1.5"/>
+        <ellipse cx="65" cy="212" rx="4" ry="2.5" fill="#33ddbb" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0.9;0.4;0.6" dur="3s" begin="0.3s" repeatCount="indefinite"/>
+        </ellipse>
+        <line x1="40" y1="225" x2="40" y2="218" stroke="#1a4a3a" stroke-width="1"/>
+        <ellipse cx="40" cy="216" rx="3" ry="2" fill="#22ccaa" opacity="0.5">
+          <animate attributeName="opacity" values="0.5;0.8;0.3;0.5" dur="2s" begin="0.7s" repeatCount="indefinite"/>
+        </ellipse>
+        ${this._particles(3, 35, 75, 205, 220, '#55eedd', 1.2)}
+      </g>
+
+      <!-- Right bank mushrooms -->
+      <g>
+        <line x1="330" y1="218" x2="330" y2="208" stroke="#1a3a5a" stroke-width="1.5"/>
+        <ellipse cx="330" cy="206" rx="5" ry="3" fill="#44aaff" opacity="0.7">
+          <animate attributeName="opacity" values="0.7;1;0.5;0.7" dur="2.8s" repeatCount="indefinite"/>
+        </ellipse>
+        <line x1="350" y1="220" x2="350" y2="212" stroke="#1a3a5a" stroke-width="1.5"/>
+        <ellipse cx="350" cy="210" rx="4" ry="2.5" fill="#55bbff" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0.9;0.4;0.6" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+        </ellipse>
+        <line x1="370" y1="222" x2="370" y2="216" stroke="#1a3a5a" stroke-width="1"/>
+        <ellipse cx="370" cy="214" rx="3" ry="2" fill="#44aaff" opacity="0.5">
+          <animate attributeName="opacity" values="0.5;0.8;0.3;0.5" dur="3.2s" begin="0.8s" repeatCount="indefinite"/>
+        </ellipse>
+        ${this._particles(3, 325, 375, 202, 218, '#88ccff', 1.2)}
+      </g>
+
+      <!-- Small rocks on banks -->
+      <ellipse cx="90" cy="228" rx="6" ry="3" fill="#0e0e22"/>
+      <ellipse cx="300" cy="225" rx="5" ry="2.5" fill="#0e0e22"/>
+
+      <!-- Glow overlays -->
+      <rect width="400" height="280" fill="url(#mushroomGlow1)"/>
+      <rect width="400" height="280" fill="url(#mushroomGlow2)"/>
+      <rect width="400" height="280" fill="url(#ceilingGlow)"/>
+
+      <!-- Ambient darkness -->
+      <rect width="400" height="280" fill="#000" opacity="0.12"/>
+    `, extraDefs);
+  },
+
+  // ============================================================
   // LIBRARY — grand magical library with candles and books
   // ============================================================
   library() {

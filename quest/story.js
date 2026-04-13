@@ -343,7 +343,7 @@ const STORY = {
   },
 
   ch2_underground_river: {
-    chapter: 2, environment: 'river',
+    chapter: 2, environment: 'underground_river',
     narrative: 'You descend a winding staircase carved into the rock and emerge into a vast underground cavern. A river flows through it, black and swift, lit by clusters of bioluminescent mushrooms on the ceiling. A narrow stone bridge arches over the water — but something large is lurking beneath the surface. You can see ripples.',
     choices: [
       { id: 'a', text: 'Cross the bridge carefully.', next: 'ch2_bridge_cross' },
@@ -352,7 +352,7 @@ const STORY = {
   },
 
   ch2_bridge_cross: {
-    chapter: 2, environment: 'river',
+    chapter: 2, environment: 'underground_river',
     narrative: 'Halfway across the bridge, the water erupts! A cave troll — massive, grey-skinned, dripping with river slime — hauls itself up and blocks your path. It snarls, baring teeth like broken stalactites!',
     encounter: { type: 'combat', monster: { name: 'River Troll', hp: 28, maxHp: 28, attack: 6, sprite: 'troll' }, problemTopic: 'whole_by_decimal', difficulty: 'medium',
       intro: 'The river troll swings its massive fists!',
@@ -365,7 +365,7 @@ const STORY = {
   },
 
   ch2_mushroom_path: {
-    chapter: 2, environment: 'cave',
+    chapter: 2, environment: 'underground_river',
     narrative: 'You follow the riverbank, picking your way between glowing mushrooms. The mushrooms pulse with soft light — blue, then green, then purple — in a mathematical sequence. If you can figure out the pattern, the next pulse will light your way to a safe crossing point.',
     encounter: { type: 'puzzle', monster: null, problemTopic: 'regroup_decimals', difficulty: 'easy',
       intro: 'Decode the mushroom light pattern to find the safe path.',
