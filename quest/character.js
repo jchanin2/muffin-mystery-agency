@@ -355,7 +355,8 @@ const Progress = {
       currentNodeId: 'ch1_start',
       nodesVisited: [],
       monstersDefeated: 0,
-      chaptersCompleted: []
+      chaptersCompleted: [],
+      encountersDone: []
     };
   },
 

@@ -291,8 +291,11 @@ function showNode(nodeId) {
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
 
+  // Check if this node's encounter was already completed (e.g. after level-up or page refresh)
+  const encounterDone = node.encounter && gameProgress.encountersDone && gameProgress.encountersDone.includes(nodeId);
+
   typeWriter(narrativeEl, node.narrative, 15, () => {
-    if (node.encounter) {
+    if (node.encounter && !encounterDone) {
       const btn = document.createElement('button');
       btn.className = 'btn btn-gold choice-btn';
       const label = node.encounter.type === 'combat' ? 'Ready for battle!' : 'Ready!';
@@ -302,6 +305,9 @@ function showNode(nodeId) {
         startEncounter(node);
       };
       choicesEl.appendChild(btn);
+    } else if (encounterDone && node.choicesAfter) {
+      // Encounter already completed — just show the post-encounter choices
+      showChoices(node.choicesAfter);
     } else if (node.shop) {
       showShopAndChoices(node);
     } else {
@@ -356,8 +362,17 @@ function startEncounter(node) {
       return;
     }
 
-    if (victory && node.reward) {
-      applyReward(node.reward);
+    if (victory) {
+      // Mark this encounter as done so it won't replay on reload/level-up
+      if (!gameProgress.encountersDone) gameProgress.encountersDone = [];
+      if (!gameProgress.encountersDone.includes(gameProgress.currentNodeId)) {
+        gameProgress.encountersDone.push(gameProgress.currentNodeId);
+      }
+      Progress.save(gameProgress);
+
+      if (node.reward) {
+        applyReward(node.reward);
+      }
     }
 
     // Show post-encounter narrative and choices
