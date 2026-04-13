@@ -865,9 +865,24 @@ function showChapterComplete(node) {
   const chapterRewards = { xp: 100, gold: 50 };
   applyReward(chapterRewards);
 
-  // Grant chapter reward item (equipment) — show equip prompt
+  // Grant chapter reward item (equipment) — adapt to class, show equip prompt
   if (node.chapterRewardItem) {
-    const item = node.chapterRewardItem;
+    let item = { ...node.chapterRewardItem };
+    // Make weapon rewards class-appropriate
+    if (item.slot === 'weapon' && gameCharacter) {
+      const classWeapons = {
+        warrior: { name: item.name, type: 'melee' },
+        wizard:  { name: item.name.replace('Blade', 'Staff').replace('Sword', 'Staff'), type: 'magic' },
+        rogue:   { name: item.name.replace('Blade', 'Daggers').replace('Sword', 'Daggers'), type: 'melee' },
+        ranger:  { name: item.name.replace('Blade', 'Bow').replace('Sword', 'Bow'), type: 'ranged' }
+      };
+      const classItem = classWeapons[gameCharacter.class] || classWeapons.warrior;
+      item.name = classItem.name;
+      item.type = classItem.type;
+    }
+    // Update the reward text to name the actual item
+    document.getElementById('chapter-rewards').textContent =
+      `A grateful villager gifts you: ${item.name} (+${item.bonus})!`;
     queueEquipPrompt(item, item.slot, () => {
       // Update chapter complete sprite after equip decision
       document.getElementById('chapter-sprite').innerHTML = playerSprite(4);
