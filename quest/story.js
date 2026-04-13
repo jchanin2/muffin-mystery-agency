@@ -255,7 +255,7 @@ const STORY = {
   // ============================================================
   ch2_start: {
     chapter: 2, environment: 'dungeon_corridor',
-    narrative: 'The village elder has given you a map sketched by an old miner. It shows a network of tunnels beneath the eastern hills — far deeper than Gruk\'s cave. "If there truly is a \'dark master\' down there," says the elder, "we\'ll never be safe until you find them." You descend into the tunnels. The air grows cold and damp.',
+    narrative: 'The village elder has given you a map sketched by an old miner. It shows a network of tunnels beneath the eastern hills — far deeper than Gruk\'s cave. "If there truly is a \'dark master\' down there," says the elder, "we\'ll never be safe until you find them." You descend into the tunnels. The air grows cold and damp. After a short while, the passage splits: the main tunnel continues straight ahead, wide enough for a cart, while a narrow side passage branches off to the right, its entrance carved with strange glowing runes.',
     choices: [
       { id: 'a', text: 'Follow the main tunnel deeper.', next: 'ch2_main_tunnel' },
       { id: 'b', text: 'Take the narrow side passage marked with strange runes.', next: 'ch2_rune_passage' },
