@@ -45,8 +45,22 @@ const STORY = {
     chapter: 1, environment: 'tavern',
     narrative: 'Brenna leans over the bar, her voice low. "I\'ll tell you something the elder won\'t. My boy Tam snuck out three nights ago to follow the goblins. He came back white as a sheet, babbling about \'glowing eyes in the dark\' and \'a voice that counts.\' Whatever\'s commanding those goblins — it ain\'t another goblin." She grips your arm. "Bring my boy some peace of mind, adventurer. End this."',
     choices: [
-      { id: 'a', text: 'I\'ll find out what\'s really going on. Where do the goblins come from?', next: 'ch1_info' },
+      { id: 'a', text: 'I\'ll find out what\'s really going on. Where do the goblins come from?', next: 'ch1_brenna_info' },
       { id: 'b', text: 'Can I talk to Tam?', next: 'ch1_tam' }
+    ]
+  },
+
+  ch1_brenna_info: {
+    chapter: 1, environment: 'tavern',
+    narrative: 'Brenna glances around the tavern, then lowers her voice even further. "The tunnels — eastern hills, half a day\'s walk. They\'ve been there for years, never caused much trouble before. But about a month ago, everything changed. New chieftain, the villagers say, but I think it\'s something worse." She pulls out a crumpled piece of parchment from under the bar. "I found this on the road after the last raid. Some kind of supply list, but the numbers don\'t make sense to me — fractions, decimals, all sorts."',
+    encounter: { type: 'puzzle', monster: null, problemTopic: 'decimal_by_whole', difficulty: 'easy',
+      intro: 'Help Brenna make sense of the stolen supply list.',
+      success: '"Well I\'ll be!" Brenna looks impressed. "So that\'s how much they\'ve been taking. More than I thought. Whatever they\'re building down there, it\'s big." She slides you an extra potion across the bar. "Take this. You\'ll need it more than me."',
+      failure: '"These numbers are giving me a headache. Try again, would you?"' },
+    reward: { xp: 20, gold: 5, items: [{ id: 'health_potion', name: 'Health Potion', quantity: 1 }] },
+    choicesAfter: [
+      { id: 'a', text: 'Can I talk to your son Tam about what he saw?', next: 'ch1_tam' },
+      { id: 'b', text: 'I\'ve heard enough. Time to go deal with these goblins.', next: 'ch1_scout' }
     ]
   },
 
@@ -76,8 +90,8 @@ const STORY = {
       success: 'The numbers click into place! You now know exactly what was taken. The supplies were split across multiple sacks, but now you have the full picture. This is valuable information.',
       failure: 'The numbers blur together. You\'ll need to try again.' },
     choicesAfter: [
-      { id: 'a', text: 'Share what you found with the elder.', next: 'ch1_defend' },
-      { id: 'b', text: 'Follow the goblin tracks into the hills.', next: 'ch1_scout' }
+      { id: 'a', text: 'It\'s getting dark. Help the villagers prepare to defend against tonight\'s raid.', next: 'ch1_defend' },
+      { id: 'b', text: 'Follow the goblin tracks into the hills before the trail goes cold.', next: 'ch1_scout' }
     ]
   },
 
@@ -122,7 +136,7 @@ const STORY = {
   },
 
   ch1_trapped_goblin: {
-    chapter: 1, environment: 'forest_clearing',
+    chapter: 1, environment: 'river',
     narrative: 'The goblin is small and terrified, caught in a hunter\'s snare. Unlike the raiders, this one wears no armor and carries no weapons. It whimpers when it sees you. "Please! Grik not bad goblin! Grik try to run away from Chieftain Gruk, but Gruk\'s hunters set trap!" It looks at you with wide, pleading eyes. "Grik know secret way into tunnels. Grik help if you let Grik go!"',
     choices: [
       { id: 'a', text: 'Free the goblin and accept its help.', next: 'ch1_mercy' },
@@ -550,7 +564,7 @@ const STORY = {
 
   ch3_crossroads: {
     chapter: 3, environment: 'forest_clearing',
-    narrative: 'You reach a crossroads marked by a mossy stone pillar. Carved arrows point in three directions, each labeled in faded text: "Village of the Green Folk," "The Whispering River," and "The Old Ruins." A tiny voice from above says, "Oh! THERE you are! I\'ve been looking everywhere!" A fairy flutters down, looking relieved.',
+    narrative: 'You reach a crossroads marked by a mossy stone pillar. Carved arrows point in three directions, each labeled in faded text: "Village of the Green Folk," "The Whispering River," and "The Old Ruins." A tiny glowing fairy zips down from the treetops and hovers in front of your face. "Oh, thank goodness — a real adventurer! I\'m Pip! The forest is in terrible danger and no one will listen to me!" The fairy\'s wings buzz anxiously. "A dark witch named Morvina is corrupting everything! Please, you have to help!"',
     choices: [
       { id: 'a', text: 'Follow the fairy to the village.', next: 'ch3_village' },
       { id: 'b', text: 'Head to the Whispering River.', next: 'ch3_river_route' },
@@ -560,7 +574,7 @@ const STORY = {
 
   ch3_river_route: {
     chapter: 3, environment: 'river',
-    narrative: 'You follow a winding trail down to a wide, shimmering river. The water is crystal clear and seems to glow from within. Pip (who\'s been following you whether you noticed or not) lands on your shoulder. "The river IS safe from corruption, but there\'s a guardian — the River Serpent. It only lets you pass if you prove your worth!"',
+    narrative: 'You follow a winding trail down to a wide, shimmering river. The water is crystal clear and seems to glow from within. Pip lands on your shoulder. "The river IS safe from corruption, but there\'s a guardian — the River Serpent. It only lets you pass if you prove your worth!"',
     encounter: { type: 'puzzle', monster: null, problemTopic: 'decimal_by_whole', difficulty: 'medium',
       intro: 'The River Serpent rises from the water and poses its mathematical challenge!',
       success: 'The serpent nods its massive head and parts the water, revealing a dry path along the riverbed. "You may pass, number-wise one." On the riverbed, you spot something glinting...',
@@ -893,7 +907,7 @@ const STORY = {
   },
 
   ch5_crown_history: {
-    chapter: 5, environment: 'library',
+    chapter: 5, environment: 'cave',
     narrative: 'Near the skeleton, you find a small chamber carved with the history of the Numeral Crown. Ancient murals show dwarven mathematicians creating the Crown to solve impossible problems. But the Crown became addictive — those who wore it couldn\'t stop calculating, couldn\'t stop optimizing, couldn\'t stop "fixing" the world. The dwarves sealed it away and entrusted Calcifex, the wisest creature they knew, to guard it.',
     encounter: { type: 'puzzle', monster: null, problemTopic: 'decimal_to_frac', difficulty: 'hard',
       intro: 'Decipher the ancient mathematical murals to learn the Crown\'s weakness.',

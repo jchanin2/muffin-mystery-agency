@@ -103,15 +103,20 @@ const Combat = {
         // Puzzle — wrong answer deals minor damage (traps, magical feedback, etc.)
         const puzzleDmg = this.encounter.difficulty === 'hard' ? 3 :
                           this.encounter.difficulty === 'medium' ? 2 : 1;
-        const actualDmg = Math.max(1, puzzleDmg - Character.defense(character));
-        character.hp = Math.max(0, character.hp - actualDmg);
-        result.damage = actualDmg;
+        const actualDmg = Character.takeDamage(character, puzzleDmg);
 
-        if (character.hp <= 0) {
-          result.playerDefeated = true;
+        if (actualDmg === 0) {
+          result.dodged = true;
+          result.message = 'You dodge the trap! But your answer was wrong — try again!';
+        } else {
+          result.damage = actualDmg;
+
+          if (character.hp <= 0) {
+            result.playerDefeated = true;
+          }
+
+          result.message = this.encounter.failure || `The puzzle fights back! You take ${actualDmg} damage.`;
         }
-
-        result.message = this.encounter.failure || `The puzzle fights back! You take ${actualDmg} damage.`;
       }
 
       // Generate a new problem on wrong answer so player can't brute-force

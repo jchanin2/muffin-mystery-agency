@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Realms of Mathematica</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -212,6 +212,21 @@
           </div>
           <div id="combat-potion-area" style="margin-top:6px;"></div>
           <div class="combat-feedback" id="combat-feedback"></div>
+          <button id="btn-whiteboard-toggle" class="btn-whiteboard-toggle" style="display:none;">Scratch Pad</button>
+          <div id="whiteboard-panel" class="whiteboard-panel" style="display:none;">
+            <div class="wb-toolbar">
+              <button id="wb-pen" class="wb-tool active" title="Pen">&#9998;</button>
+              <button id="wb-eraser" class="wb-tool" title="Eraser">&#9003;</button>
+              <button id="wb-clear" class="wb-tool" title="Clear All">&#8634;</button>
+              <span class="wb-divider"></span>
+              <span class="wb-color active" data-color="#ffffff" style="background:#ffffff;" title="White"></span>
+              <span class="wb-color" data-color="#e8a030" style="background:#e8a030;" title="Gold"></span>
+              <span class="wb-color" data-color="#5dade2" style="background:#5dade2;" title="Blue"></span>
+              <span class="wb-color" data-color="#58d68d" style="background:#58d68d;" title="Green"></span>
+              <span class="wb-color" data-color="#ec7063" style="background:#ec7063;" title="Red"></span>
+            </div>
+            <canvas id="whiteboard-canvas"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -300,13 +315,14 @@
     </div>
   </div>
 
+  <script src="whiteboard.js?v=1"></script>
   <script src="audio.js"></script>
   <script src="sprites.js?v=3"></script>
   <script src="environments.js?v=3"></script>
   <script src="problems.js?v=3"></script>
-  <script src="character.js?v=2"></script>
-  <script src="story.js?v=3"></script>
-  <script src="combat.js?v=2"></script>
-  <script src="game.js?v=5"></script>
+  <script src="character.js?v=3"></script>
+  <script src="story.js?v=5"></script>
+  <script src="combat.js?v=3"></script>
+  <script src="game.js?v=7"></script>
 </body>
 </html>

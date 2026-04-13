@@ -342,6 +342,7 @@ function startEncounter(node) {
   Combat.start(encounter, gameCharacter, (victory) => {
     // Combat ended
     document.getElementById('combat-overlay').style.display = 'none';
+    Whiteboard.hide();
 
     if (gameCharacter.hp <= 0) {
       handleGameOver();
@@ -352,9 +353,17 @@ function startEncounter(node) {
       applyReward(node.reward);
     }
 
-    // Show post-encounter choices
+    // Show post-encounter narrative and choices
     updateHUD();
-    if (node.choicesAfter) {
+    const postText = victory ? encounter.success : encounter.failure;
+    if (postText && node.choicesAfter) {
+      const narrativeEl = document.getElementById('narrative-text');
+      const choicesEl = document.getElementById('choices');
+      choicesEl.innerHTML = '';
+      typeWriter(narrativeEl, postText, 15, () => {
+        showChoices(node.choicesAfter);
+      });
+    } else if (node.choicesAfter) {
       showChoices(node.choicesAfter);
     }
   });
@@ -408,6 +417,9 @@ function showCombatUI() {
   // Show potion button if player has potions
   updateCombatPotions();
 
+  // Show whiteboard toggle
+  Whiteboard.show();
+
   // Focus input
   const input = document.getElementById('combat-answer');
   input.value = '';
@@ -421,7 +433,7 @@ function showCombatProblem() {
   if (!problem) return;
 
   const problemEl = document.getElementById('combat-problem-text');
-  let html = problem.question;
+  let html = problem.question.replace(/\n/g, '<br>');
   if (problem.hint) {
     html += `<div style="color: var(--torch); font-size: 1.2rem; margin-top: 8px; font-weight: bold;">${problem.hint} = ?</div>`;
   }
@@ -443,6 +455,16 @@ function showCombatProblem() {
   }
 
   problemEl.innerHTML = html;
+
+  // Update input placeholder for multiple choice vs free-response
+  const answerInput = document.getElementById('combat-answer');
+  if (['A', 'B', 'C', 'D'].includes(String(problem.answer).toUpperCase())) {
+    answerInput.placeholder = 'Enter A, B, or C';
+  } else if (String(problem.answer).includes('/')) {
+    answerInput.placeholder = 'Your answer (e.g. 3/4)...';
+  } else {
+    answerInput.placeholder = 'Your answer...';
+  }
 
   // Set button text based on encounter type
   const btn = document.getElementById('btn-combat-submit');
@@ -836,6 +858,7 @@ function openShop(returnNode) {
       if (Character.buyItem(gameCharacter, shopItem)) {
         Audio.treasure();
         Character.save(gameCharacter);
+        updateHUD();
         document.getElementById('shop-gold-display').textContent = gameCharacter.gold;
         // Refresh shop to update afford status
         openShop(returnNode);
@@ -950,6 +973,9 @@ function showInventory() {
 // INITIALIZATION + EVENT LISTENERS
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
+
+  // Initialize whiteboard
+  Whiteboard.init();
 
   // Title screen — show emblem
   document.getElementById('title-emblem').innerHTML = `

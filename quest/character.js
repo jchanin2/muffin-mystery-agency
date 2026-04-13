@@ -203,6 +203,8 @@ const Character = {
       this.heal(character, 15);
     } else if (itemId === 'great_health_potion') {
       this.heal(character, 30);
+    } else {
+      return false; // Unknown item type — don't consume
     }
 
     item.quantity--;
