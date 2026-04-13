@@ -81,14 +81,35 @@ function initCharacterCreation() {
   // Populate race grid
   const raceGrid = document.getElementById('race-grid');
   raceGrid.innerHTML = '';
+  const statExplain = {
+    strength: 'More damage',
+    dexterity: 'Dodge attacks',
+    intelligence: 'Get hints & tips',
+    wisdom: 'Spot danger',
+    charisma: 'Better prices',
+    constitution: 'More HP'
+  };
   for (const [id, data] of Object.entries(RACES)) {
     const div = document.createElement('div');
     div.className = 'race-option' + (id === createState.race ? ' selected' : '');
     div.dataset.race = id;
+    const bonusHtml = Object.entries(data.bonus).map(([s, v]) => {
+      const abbr = s.substring(0, 3).toUpperCase();
+      return `<span class="bonus-tag" title="${statExplain[s]}">+${v} ${abbr}</span>`;
+    }).join('');
+    const raceGameplayShort = {
+      human: 'Balanced — good at everything',
+      elf: 'Smart & wise — gets hints',
+      dwarf: 'Tough & strong — tanks hits',
+      halfling: 'Quick & charming — dodges & deals',
+      dragonborn: 'Powerful — hits hard, survives',
+      tabaxi: 'Agile & alert — dodges & spots danger'
+    };
     div.innerHTML = `
       <div class="option-sprite">${Sprites.player(id, createState.class, createState.appearance, 2)}</div>
       <div class="option-label">${data.name}</div>
-      <div class="option-bonus">${Object.entries(data.bonus).map(([s,v]) => '+' + v + ' ' + s.substring(0,3).toUpperCase()).join(', ')}</div>
+      <div class="option-bonuses">${bonusHtml}</div>
+      <div class="option-gameplay">${raceGameplayShort[id]}</div>
     `;
     div.onclick = () => selectRace(id);
     raceGrid.appendChild(div);
@@ -97,14 +118,22 @@ function initCharacterCreation() {
   // Populate class grid
   const classGrid = document.getElementById('class-grid');
   classGrid.innerHTML = '';
+  const classPerks = {
+    warrior: { icon: '⚔️', perk: 'Double damage on answer streaks' },
+    wizard: { icon: '🔮', perk: 'Hints narrow the answer range' },
+    rogue: { icon: '🗡️', perk: 'Chance to dodge damage on wrong answers' },
+    ranger: { icon: '🏹', perk: 'See which choices are dangerous' }
+  };
   for (const [id, data] of Object.entries(CLASSES)) {
     const div = document.createElement('div');
     div.className = 'class-option' + (id === createState.class ? ' selected' : '');
     div.dataset.class = id;
+    const cp = classPerks[id];
     div.innerHTML = `
       <div class="option-sprite">${Sprites.player(createState.race, id, createState.appearance, 2)}</div>
-      <div class="option-label">${data.name}</div>
-      <div class="option-bonus">Primary: ${data.primaryStat.substring(0,3).toUpperCase()}</div>
+      <div class="option-label">${cp.icon} ${data.name}</div>
+      <div class="option-primary">Best stat: <b>${data.primaryStat.substring(0,3).toUpperCase()}</b></div>
+      <div class="option-perk">${cp.perk}</div>
     `;
     div.onclick = () => selectClass(id);
     classGrid.appendChild(div);
@@ -166,14 +195,28 @@ function selectClass(classId) {
 
 function updateRaceInfo() {
   const data = RACES[createState.race];
+  const gameplay = {
+    human: 'Good at everything, great for beginners. No weaknesses!',
+    elf: 'Gets math hints sooner and spots danger more often.',
+    dwarf: 'Survives longer in tough fights with bonus HP and damage.',
+    halfling: 'Dodges damage on wrong answers and gets cheaper shop prices.',
+    dragonborn: 'Hits hard and takes hits well — a powerhouse in combat.',
+    tabaxi: 'Nimble and perceptive — dodges attacks and spots hidden dangers.'
+  };
   document.getElementById('race-info').innerHTML =
-    `<strong>${data.name}:</strong> ${data.desc}`;
+    `<strong>${data.name}:</strong> ${data.desc}<br><span style="color:var(--parchment-light);font-size:0.85rem;">🎮 <em>${gameplay[createState.race]}</em></span>`;
 }
 
 function updateClassInfo() {
   const data = CLASSES[createState.class];
+  const gameplay = {
+    warrior: 'Best for players who want to deal big damage. Get 2+ correct answers in a row for a Power Strike that deals double damage!',
+    wizard: 'Best for players who want extra help with math. High INT means you get strategy tips and hints that narrow down the answer range.',
+    rogue: 'Best for players who want a safety net. Wrong answers? Your DEX gives you a chance to dodge the damage entirely!',
+    ranger: 'Best for players who like making smart choices. Your WIS can reveal which story choices are risky before you pick them.'
+  };
   document.getElementById('class-info').innerHTML =
-    `<strong>${data.name}:</strong> ${data.desc}<br><em>${data.ability}</em>`;
+    `<strong>${data.name}:</strong> ${data.desc}<br><span style="color:var(--parchment-light);font-size:0.85rem;">🎮 <em>${gameplay[createState.class]}</em></span>`;
 }
 
 function updateAppearancePreview() {
