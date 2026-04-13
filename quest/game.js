@@ -278,10 +278,17 @@ function showNode(nodeId) {
   showScreen('adventure');
   updateHUD();
 
+  // Check if this node's encounter was already completed (e.g. after level-up or page refresh)
+  const encounterDone = node.encounter && gameProgress.encountersDone && gameProgress.encountersDone.includes(nodeId);
+
   // Show environment with character overlays
   const sceneEl = document.getElementById('adventure-scene');
   if (node.environment && Environments[node.environment]) {
-    const characters = SceneCharacters.getCharacters(node, gameCharacter);
+    let characters = SceneCharacters.getCharacters(node, gameCharacter);
+    // Remove defeated monsters from the scene
+    if (encounterDone) {
+      characters = characters.filter(c => c.type !== 'monster');
+    }
     const overlay = SceneCharacters.renderOverlay(characters, gameCharacter);
     sceneEl.innerHTML = Environments[node.environment]() + overlay;
   }
@@ -291,10 +298,12 @@ function showNode(nodeId) {
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
 
-  // Check if this node's encounter was already completed (e.g. after level-up or page refresh)
-  const encounterDone = node.encounter && gameProgress.encountersDone && gameProgress.encountersDone.includes(nodeId);
+  // If encounter already done, show the success text instead of the pre-battle narrative
+  const displayText = encounterDone
+    ? (node.encounter.success || node.narrative)
+    : node.narrative;
 
-  typeWriter(narrativeEl, node.narrative, 15, () => {
+  typeWriter(narrativeEl, displayText, 15, () => {
     if (node.encounter && !encounterDone) {
       const btn = document.createElement('button');
       btn.className = 'btn btn-gold choice-btn';
