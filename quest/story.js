@@ -124,7 +124,7 @@ const STORY = {
 
   ch1_river: {
     chapter: 1, environment: 'river',
-    narrative: 'You find the river Tam described — a wide, shallow stretch where stepping stones hide just beneath the surface. The water is clear but fast-moving, and you can see the stones are spaced in a mathematical pattern. One wrong step and you\'ll be swept downstream. Goblin footprints line both banks.',
+    narrative: 'You reach a wide, shallow river where stepping stones hide just beneath the surface. The water is clear but fast-moving, and you can see the stones are spaced in a mathematical pattern. One wrong step and you\'ll be swept downstream. Goblin footprints line both banks.',
     encounter: { type: 'puzzle', monster: null, problemTopic: 'place_value', difficulty: 'easy',
       intro: 'Calculate the safe stepping stone pattern to cross the river.',
       success: 'You hop across the stones with confidence! On the far bank, you find fresh goblin tracks leading into the hills — and something else: a small cage with a goblin trapped inside!',

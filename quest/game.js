@@ -533,7 +533,9 @@ function submitCombatAnswer() {
       Audio.slash();
       updateMonsterHPBar();
     } else {
-      feedbackEl.textContent = result.message;
+      // For puzzles, show generic feedback here — the full success text
+      // will appear in the narrative panel after the overlay closes
+      feedbackEl.textContent = 'Correct!';
       feedbackEl.className = 'combat-feedback correct';
       Audio.correct();
     }
