@@ -278,10 +278,12 @@ function showNode(nodeId) {
   showScreen('adventure');
   updateHUD();
 
-  // Show environment
+  // Show environment with character overlays
   const sceneEl = document.getElementById('adventure-scene');
   if (node.environment && Environments[node.environment]) {
-    sceneEl.innerHTML = Environments[node.environment]();
+    const characters = SceneCharacters.getCharacters(node, gameCharacter);
+    const overlay = SceneCharacters.renderOverlay(characters, gameCharacter);
+    sceneEl.innerHTML = Environments[node.environment]() + overlay;
   }
 
   // Show narrative, then show choices/encounter after text finishes

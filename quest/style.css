@@ -690,6 +690,7 @@ body {
   overflow: hidden;
   box-shadow: 0 4px 20px var(--shadow);
   border: 2px solid rgba(232,160,48,0.1);
+  position: relative;
 }
 .scene-illustration svg {
   width: 100%;
@@ -697,6 +698,18 @@ body {
   display: block;
   max-height: 40vh;
   object-fit: contain;
+}
+
+.scene-character {
+  position: absolute;
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+  z-index: 2;
+}
+.scene-illustration > svg:first-child {
+  position: relative;
+  z-index: 1;
 }
 
 /* Narrative */

@@ -1089,6 +1089,172 @@ const Environments = {
   }
 };
 
+// ============================================================
+// SCENE CHARACTER OVERLAYS
+// ============================================================
+// NPC figure generator — simple pixel-art figures for scene overlays
+const SceneCharacters = {
+
+  // Small NPC figure as SVG (10x16 pixel grid at given scale)
+  npcFigure(type, scale = 2) {
+    const presets = {
+      elder:    { skin: '#f5c5a3', hair: '#cccccc', robe: '#5a4a8a', robeD: '#3a2a6a', hat: false, beard: '#bbbbbb' },
+      brenna:   { skin: '#deb587', hair: '#8b4513', robe: '#8b5e3c', robeD: '#6a4a2c', hat: false, apron: '#e8d8c0' },
+      tam:      { skin: '#f5c5a3', hair: '#8b4513', robe: '#5a7a3a', robeD: '#3a5a2a', hat: false, child: true },
+      lysara:   { skin: '#f0dcc0', hair: '#daa520', robe: '#2a5a8a', robeD: '#1a3a6a', hat: false, ears: true },
+      grik:     { skin: '#5a8a3a', hair: null,       robe: '#554433', robeD: '#443322', hat: false, goblin: true },
+      nix:      { skin: '#5a8a3a', hair: null,       robe: '#443355', robeD: '#332244', hat: false, goblin: true },
+      pip:      { fairy: true },
+      merchant: { skin: '#c49a6c', hair: '#2c1810', robe: '#8a6a3a', robeD: '#6a4a2a', hat: true },
+      willow:   { skin: '#8dc49a', hair: '#2a5a2a', robe: '#3a7a4a', robeD: '#2a5a3a', hat: false },
+      helga:    { skin: '#f5c5a3', hair: '#c0392b', robe: '#7a5a3a', robeD: '#5a3a2a', hat: false, short: true },
+      kael:     { skin: '#c49a6c', hair: '#2c1810', robe: '#4a6a4a', robeD: '#3a5a3a', hat: false, cloak: '#2a4a2a' },
+      tormund:  { skin: '#aabbcc', hair: '#8899aa', robe: '#667788', robeD: '#556677', hat: false, ghost: true },
+      morvina:  { skin: '#d0c0d0', hair: '#4a1a4a', robe: '#3a1a3a', robeD: '#2a0a2a', hat: true },
+      villager: { skin: '#f5c5a3', hair: '#8b4513', robe: '#7a6a5a', robeD: '#5a4a3a', hat: false }
+    };
+    const p = presets[type] || presets.villager;
+
+    // Fairy is special — just a glowing dot
+    if (p.fairy) {
+      const s = scale;
+      return `<svg width="${8*s}" height="${8*s}" viewBox="0 0 8 8">
+        <circle cx="4" cy="4" r="2" fill="#aaffaa" opacity="0.9"/>
+        <circle cx="4" cy="4" r="3.5" fill="#aaffaa" opacity="0.25"/>
+        <ellipse cx="2" cy="3" rx="1.5" ry="0.7" fill="#ccffcc" opacity="0.5" transform="rotate(-20 2 3)"/>
+        <ellipse cx="6" cy="3" rx="1.5" ry="0.7" fill="#ccffcc" opacity="0.5" transform="rotate(20 6 3)"/>
+      </svg>`;
+    }
+
+    const w = 10, h = p.child ? 12 : 16;
+    const s = scale;
+    let rects = '';
+    const px = (x, y, c) => { rects += `<rect x="${x}" y="${y}" width="1" height="1" fill="${c}"/>`; };
+    const row = (y, x, w2, c) => { rects += `<rect x="${x}" y="${y}" width="${w2}" height="1" fill="${c}"/>`; };
+
+    const sk = p.skin, hr = p.hair, rb = p.robe, rd = p.robeD;
+    const ghost = p.ghost ? ' opacity="0.6"' : '';
+
+    // Head
+    if (hr) { row(0, 3, 4, hr); }
+    row(1, 3, 4, sk);
+    px(4, 1, '#1a1a2e'); px(6, 1, '#1a1a2e'); // eyes
+    row(2, 3, 4, sk);
+    if (p.goblin) { px(2, 1, p.skin); px(8, 1, p.skin); } // ears
+    if (p.ears) { px(2, 1, sk); px(8, 1, sk); } // elf ears
+    if (p.beard) { row(3, 3, 4, p.beard); }
+
+    // Hat
+    if (p.hat) { row(0, 3, 4, rd); rects += `<rect x="4" y="-1" width="2" height="1" fill="${rd}"/>`; }
+
+    // Body
+    const bodyStart = p.child ? 3 : 3;
+    row(bodyStart, 2, 6, rb);
+    row(bodyStart + 1, 2, 6, rb);
+    row(bodyStart + 2, 2, 6, rd);
+    row(bodyStart + 3, 2, 6, rd);
+    if (p.apron) { px(4, bodyStart + 1, p.apron); px(5, bodyStart + 1, p.apron); px(4, bodyStart + 2, p.apron); px(5, bodyStart + 2, p.apron); }
+
+    // Arms
+    px(1, bodyStart + 1, sk); px(8, bodyStart + 1, sk);
+    px(1, bodyStart + 2, sk); px(8, bodyStart + 2, sk);
+
+    if (!p.child) {
+      // Legs
+      row(bodyStart + 4, 3, 2, rd);
+      row(bodyStart + 4, 5, 2, rd);
+      row(bodyStart + 5, 3, 2, '#3a2518');
+      row(bodyStart + 5, 5, 2, '#3a2518');
+    }
+
+    // Cloak
+    if (p.cloak) {
+      px(1, bodyStart, p.cloak); px(8, bodyStart, p.cloak);
+      px(1, bodyStart + 1, p.cloak); px(8, bodyStart + 1, p.cloak);
+    }
+
+    return `<svg width="${w*s}" height="${h*s}" viewBox="0 0 ${w} ${h}"${ghost}>${rects}</svg>`;
+  },
+
+  // Determine which characters to show for a story node
+  getCharacters(node, gameCharacter) {
+    const chars = [];
+    const narrative = (node.narrative || '').toLowerCase();
+
+    // Always show the hero
+    chars.push({ type: 'hero', position: 'center' });
+
+    // Check for named NPCs in the narrative
+    const npcChecks = [
+      { name: 'elder',    keywords: ['the elder', 'elder strokes', 'elder warns', 'village elder', 'old man'] },
+      { name: 'brenna',   keywords: ['brenna'] },
+      { name: 'tam',      keywords: ['tam '] },  // space to avoid "master"
+      { name: 'lysara',   keywords: ['lysara'] },
+      { name: 'grik',     keywords: ['grik'] },
+      { name: 'nix',      keywords: ['nix ','nix,','nix\''] },
+      { name: 'pip',      keywords: ['pip ','pip,','pip\'','pip!','a fairy'] },
+      { name: 'willow',   keywords: ['willow'] },
+      { name: 'helga',    keywords: ['helga'] },
+      { name: 'kael',     keywords: ['kael'] },
+      { name: 'tormund',  keywords: ['tormund'] },
+      { name: 'morvina',  keywords: ['morvina'] },
+      { name: 'merchant', keywords: ['merchant'] }
+    ];
+
+    let npcCount = 0;
+    const positions = ['left', 'right', 'far-left', 'far-right'];
+    for (const npc of npcChecks) {
+      if (npc.keywords.some(kw => narrative.includes(kw))) {
+        chars.push({ type: npc.name, position: positions[npcCount % positions.length] });
+        npcCount++;
+        if (npcCount >= 3) break; // max 3 NPCs in scene
+      }
+    }
+
+    // Check for encounter monsters
+    if (node.encounter && node.encounter.monster) {
+      chars.push({ type: 'monster', monsterSprite: node.encounter.monster.sprite, position: 'right' });
+      // Shift any NPC on 'right' to 'far-right'
+      chars.forEach(c => { if (c.type !== 'monster' && c.position === 'right') c.position = 'far-right'; });
+    }
+
+    return chars;
+  },
+
+  // Render the character overlay HTML (positioned divs over the scene)
+  renderOverlay(characters, gameCharacter) {
+    if (!characters || characters.length === 0) return '';
+
+    // Position mapping (percentage from left, percentage from bottom)
+    const posMap = {
+      'far-left':  { left: '10%', bottom: '12%' },
+      'left':      { left: '22%', bottom: '10%' },
+      'center':    { left: '42%', bottom: '8%' },
+      'right':     { left: '62%', bottom: '10%' },
+      'far-right': { left: '78%', bottom: '12%' }
+    };
+
+    const spriteScale = 3;
+    let html = '';
+    for (const char of characters) {
+      const pos = posMap[char.position] || posMap.center;
+      let spriteHtml = '';
+
+      if (char.type === 'hero' && gameCharacter) {
+        spriteHtml = Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, spriteScale, gameCharacter.equipment);
+      } else if (char.type === 'monster' && char.monsterSprite) {
+        spriteHtml = Sprites.monster(char.monsterSprite, spriteScale);
+      } else {
+        spriteHtml = this.npcFigure(char.type, spriteScale);
+      }
+
+      html += `<div class="scene-character" style="left:${pos.left};bottom:${pos.bottom};">${spriteHtml}</div>`;
+    }
+
+    return html;
+  }
+};
+
 // --- Utility (module-level) ---
 function _envDarken(hex) {
   const r = Math.max(0, parseInt(hex.slice(1, 3), 16) - 30);
