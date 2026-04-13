@@ -383,10 +383,20 @@ function showCombatProblem() {
     html += `<div style="color: var(--torch); font-size: 1.2rem; margin-top: 8px; font-weight: bold;">${problem.hint} = ?</div>`;
   }
 
-  // Wizard hint
+  // Wizard hint (numeric range narrowing)
   const wizHint = Character.getHint(gameCharacter, problem.answer);
   if (wizHint) {
     html += `<div style="color: var(--purple); font-size: 0.85rem; margin-top: 6px; font-style: italic;">${wizHint}</div>`;
+  }
+
+  // Strategy tip on first encounter with a topic
+  const academics = Academics.getAll();
+  const topicData = academics[problem.topic];
+  if (!topicData || topicData.attempts <= 1) {
+    const tip = getStrategyTip(problem.topic, gameCharacter);
+    if (tip) {
+      html += `<div class="strategy-tip" style="color: #a8d8ea; font-size: 0.82rem; margin-top: 8px; padding: 6px 10px; background: rgba(42,42,62,0.7); border-left: 3px solid #a8d8ea; border-radius: 4px;">📖 ${tip}</div>`;
+    }
   }
 
   problemEl.innerHTML = html;
@@ -512,7 +522,13 @@ function submitCombatAnswer() {
       feedbackEl.textContent = result.message;
       Audio.dice();
     } else {
-      feedbackEl.textContent = result.message;
+      // Show wrong-answer message + strategy tip if available
+      let wrongHtml = result.message;
+      const tip = getStrategyTip(Combat.currentProblem.topic, gameCharacter);
+      if (tip) {
+        wrongHtml += `<div style="color: #a8d8ea; font-size: 0.8rem; margin-top: 6px; padding: 5px 8px; background: rgba(42,42,62,0.7); border-left: 3px solid #a8d8ea; border-radius: 4px;">📖 ${tip}</div>`;
+      }
+      feedbackEl.innerHTML = wrongHtml;
       Audio.wrong();
       // Shake screen
       document.querySelector('.combat-panel').classList.add('shake');

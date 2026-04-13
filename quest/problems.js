@@ -389,6 +389,78 @@ function gen_whole_div_decimal_quot(difficulty) {
 }
 
 // ============================================================
+// STRATEGY TIPS (tied to INT stat)
+// ============================================================
+const STRATEGY_TIPS = {
+  whole_by_decimal: {
+    brief: 'Tip: Multiply both numbers by 10 (or 100) to remove the decimal, then divide.',
+    detailed: 'Strategy: Move the decimal point to make the divisor a whole number. For 6 ÷ 0.3, multiply both by 10 to get 60 ÷ 3 = 20. For 0.25, multiply by 100: e.g., 5 ÷ 0.25 → 500 ÷ 25 = 20.'
+  },
+  decimal_by_whole: {
+    brief: 'Tip: Divide normally, then place the decimal point directly above where it is in the dividend.',
+    detailed: 'Strategy: Set up long division as usual. Place the decimal in the quotient directly above the decimal in the dividend. For 4.8 ÷ 2: 48 tenths ÷ 2 = 24 tenths = 2.4. Add zeros if needed.'
+  },
+  decimal_by_decimal: {
+    brief: 'Tip: Shift both decimals right the same number of places to make the divisor a whole number.',
+    detailed: 'Strategy: Count decimal places in the divisor and move both decimals that many places right. For 3.6 ÷ 0.4: move 1 place → 36 ÷ 4 = 9. For 1.25 ÷ 0.05: move 2 places → 125 ÷ 5 = 25.'
+  },
+  frac_to_decimal: {
+    brief: 'Tip: Divide the numerator by the denominator. Think of the fraction bar as ÷.',
+    detailed: 'Strategy: The fraction bar means "divided by." For 3/4: do 3 ÷ 4 = 0.75. Memorize key ones: 1/2 = 0.5, 1/4 = 0.25, 3/4 = 0.75, 1/5 = 0.2, 1/8 = 0.125. For thirds, the decimal repeats (1/3 ≈ 0.33).'
+  },
+  decimal_to_frac: {
+    brief: 'Tip: Read the decimal aloud — 0.25 is "twenty-five hundredths" = 25/100 — then simplify.',
+    detailed: 'Strategy: Put the digits over the place value: 0.25 = 25/100. Simplify by dividing top and bottom by the GCF: 25/100 ÷ 25/25 = 1/4. Key ones: 0.5 = 1/2, 0.2 = 1/5, 0.125 = 1/8, 0.75 = 3/4.'
+  },
+  place_value: {
+    brief: 'Tip: Each place is 10× the one to its right. Tenths, hundredths, thousandths.',
+    detailed: 'Strategy: Decimal places go: ones . tenths hundredths thousandths. The digit\'s VALUE = digit × place. In 3.472: the 4 is in tenths (value 0.4), the 7 is in hundredths (value 0.07), the 2 is in thousandths (value 0.002).'
+  },
+  decimal_forms: {
+    brief: 'Tip: Break the number into its place values added together.',
+    detailed: 'Strategy: Expanded form separates each digit by place value. For 3.25: the 3 is 3 ones, the 2 is 2 tenths (0.2), the 5 is 5 hundredths (0.05). So 3.25 = 3 + 0.2 + 0.05.'
+  },
+  regroup_decimals: {
+    brief: 'Tip: 1 whole = 10 tenths = 100 hundredths. Trade between places like making change.',
+    detailed: 'Strategy: Think of it like money. 1 dollar = 10 dimes = 100 pennies. To regroup 3.4: trade 1 one for 10 tenths, giving 2 ones + 14 tenths. For "how many tenths in 2.3?" — 2 ones = 20 tenths + 3 tenths = 23 tenths.'
+  },
+  estimate_multiply: {
+    brief: 'Tip: Round each number to the nearest whole number first, then multiply.',
+    detailed: 'Strategy: Round each factor to the nearest whole number, then multiply. For 4.8 × 3.1: round to 5 × 3 = 15. The exact answer (14.88) is close! This works because rounding small decimals introduces only small errors.'
+  },
+  estimate_divide: {
+    brief: 'Tip: Round both numbers to friendly whole numbers that divide evenly.',
+    detailed: 'Strategy: Round both numbers so they divide cleanly. For 15.2 ÷ 2.9: round to 15 ÷ 3 = 5. Try to round to "compatible numbers" — pairs you know divide evenly, like 12÷4, 15÷3, 20÷5.'
+  },
+  whole_div_decimal_quot: {
+    brief: 'Tip: When dividing doesn\'t come out even, add a decimal point and zeros to keep going.',
+    detailed: 'Strategy: If there\'s a remainder, add a decimal and keep dividing. For 5 ÷ 2: 2 goes into 5 twice (4), remainder 1. Add .0: 10 ÷ 2 = 5. Answer: 2.5. Think of it as splitting evenly — 5 cookies between 2 people = 2.5 each.'
+  }
+};
+
+// Get a strategy tip based on character's INT and class
+// Returns null, brief tip, or detailed tip
+function getStrategyTip(topicId, character) {
+  const tips = STRATEGY_TIPS[topicId];
+  if (!tips) return null;
+
+  const intMod = Character.modifier(character.stats.intelligence);
+  const isWizard = character.class === 'wizard';
+
+  // Wizard always gets detailed tips
+  if (isWizard) return tips.detailed;
+
+  // INT 14+ (mod 2+): detailed tips
+  if (intMod >= 2) return tips.detailed;
+
+  // INT 12-13 (mod 1): brief tips
+  if (intMod >= 1) return tips.brief;
+
+  // INT < 12: no tips
+  return null;
+}
+
+// ============================================================
 // DISPATCHER
 // ============================================================
 const GENERATORS = {
