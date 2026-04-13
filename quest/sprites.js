@@ -1,10 +1,8 @@
-// sprites.js — Pixel art character/monster/NPC sprites as inline SVG pixel grids
+// sprites.js — Higher-resolution pixel art sprites as inline SVG pixel grids
 
 const Sprites = {
   // Render a pixel grid to SVG
-  // pixelData: 2D array of color strings (null = transparent)
-  // scale: pixel size in SVG units
-  render(pixelData, scale = 4) {
+  render(pixelData, scale = 3) {
     const h = pixelData.length;
     const w = pixelData[0].length;
     let rects = '';
@@ -19,33 +17,8 @@ const Sprites = {
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w * scale} ${h * scale}" width="${w * scale}" height="${h * scale}">${rects}</svg>`;
   },
 
-  // Color palettes
-  _palettes: {
-    skin: {
-      light: '#f5c5a3',
-      medium: '#d4a373',
-      tan: '#b07d56',
-      brown: '#8b5e3c',
-      dark: '#5c3a21',
-      green: '#6b8e5a'  // dragonborn
-    },
-    hair: {
-      black: '#1a1a2e',
-      brown: '#5c3317',
-      blonde: '#d4a017',
-      red: '#8b2500',
-      white: '#cccccc',
-      blue: '#3a6ea5'
-    }
-  },
-
-  // Generate player sprite
-  // race: 'human','elf','dwarf','halfling','dragonborn'
-  // classType: 'warrior','wizard','rogue','ranger'
-  // appearance: { skinTone, hairColor, armorColor }
-  // scale: pixel size
-  player(race, classType, appearance = {}, scale = 4) {
-    // Resolve colors — accept hex strings or numeric indices into palette arrays
+  // Generate player sprite (20x28 grid)
+  player(race, classType, appearance = {}, scale = 3) {
     const _resolve = (val, palette, fallback) => {
       if (typeof val === 'string' && val.startsWith('#')) return val;
       if (typeof val === 'number' && palette && palette[val]) return palette[val];
@@ -54,519 +27,860 @@ const Sprites = {
     const skin = _resolve(appearance.skinTone, typeof SKIN_TONES !== 'undefined' ? SKIN_TONES : null, '#f5c5a3');
     const hair = _resolve(appearance.hairColor, typeof HAIR_COLORS !== 'undefined' ? HAIR_COLORS : null, '#5c3317');
     const armor = _resolve(appearance.armorColor, typeof ARMOR_COLORS !== 'undefined' ? ARMOR_COLORS : null, '#666688');
+    const skinDark = _darken(skin);
+    const hairDark = _darken(hair);
     const armorDark = _darken(armor);
     const armorLight = _lighten(armor);
     const eyes = race === 'dragonborn' ? '#ff6600' : race === 'tabaxi' ? '#44cc44' : '#1a1a2e';
     const boot = '#3a2518';
+    const bootDark = '#2a1810';
+    const belt = '#5a4030';
 
-    // Base 12x16 pixel template
-    const grid = _emptyGrid(12, 16);
+    const grid = _emptyGrid(20, 28);
 
-    // --- Hair / Head top (rows 0-2) ---
+    // --- HAIR / HEAD TOP (rows 0-4) ---
     if (race === 'dwarf') {
-      // Helmet-like hair
-      _fillRow(grid, 0, 3, 8, hair);
-      _fillRow(grid, 1, 2, 9, hair);
-      _fillRow(grid, 2, 2, 9, hair);
+      _fillRect(grid, 0, 6, 8, 2, hair);
+      _fillRect(grid, 1, 5, 10, 1, hair);
+      _fillRect(grid, 2, 4, 12, 2, hair);
+      _fillRect(grid, 4, 4, 12, 1, hairDark);
     } else if (race === 'elf') {
-      // Pointed ear hint
-      _fillRow(grid, 0, 4, 7, hair);
-      _fillRow(grid, 1, 3, 8, hair);
-      _fillRow(grid, 2, 2, 9, hair);
-      grid[2][1] = skin; // ear
-      grid[2][9] = skin; // ear
+      _fillRect(grid, 0, 7, 6, 1, hair);
+      _fillRect(grid, 1, 5, 10, 1, hair);
+      _fillRect(grid, 2, 4, 12, 1, hair);
+      _fillRect(grid, 3, 4, 12, 1, hair);
+      _fillRect(grid, 4, 3, 14, 1, hair);
+      // Pointed ears
+      grid[5][3] = skin; grid[5][16] = skin;
+      grid[6][2] = skin; grid[6][17] = skin;
     } else if (race === 'dragonborn') {
-      _fillRow(grid, 0, 3, 8, skin);
-      _fillRow(grid, 1, 3, 8, skin);
-      _fillRow(grid, 2, 3, 8, skin);
-      grid[0][3] = _darken(skin); // horn
-      grid[0][7] = _darken(skin); // horn
+      _fillRect(grid, 0, 6, 8, 1, skinDark);
+      _fillRect(grid, 1, 5, 10, 1, skin);
+      _fillRect(grid, 2, 5, 10, 1, skin);
+      _fillRect(grid, 3, 5, 10, 2, skin);
+      // Horns
+      grid[0][5] = _darken(skinDark); grid[0][14] = _darken(skinDark);
+      grid[1][4] = _darken(skinDark); grid[1][15] = _darken(skinDark);
     } else if (race === 'tabaxi') {
       // Cat ears
-      grid[0][3] = skin; // left ear
-      grid[0][7] = skin; // right ear
-      grid[0][4] = _darken(skin); // inner ear
-      grid[0][6] = _darken(skin); // inner ear
-      _fillRow(grid, 1, 3, 8, hair);
-      _fillRow(grid, 2, 3, 8, hair);
+      grid[0][5] = skin; grid[0][6] = skin;
+      grid[0][13] = skin; grid[0][14] = skin;
+      grid[1][5] = skin; grid[1][6] = skinDark;
+      grid[1][13] = skinDark; grid[1][14] = skin;
+      _fillRect(grid, 2, 5, 10, 1, hair);
+      _fillRect(grid, 3, 5, 10, 1, hair);
+      _fillRect(grid, 4, 5, 10, 1, hairDark);
     } else if (race === 'halfling') {
-      _fillRow(grid, 0, 4, 7, hair);
-      _fillRow(grid, 1, 3, 8, hair);
-      _fillRow(grid, 2, 3, 8, hair);
+      _fillRect(grid, 1, 7, 6, 1, hair);
+      _fillRect(grid, 2, 5, 10, 1, hair);
+      _fillRect(grid, 3, 5, 10, 1, hair);
+      _fillRect(grid, 4, 5, 10, 1, hairDark);
+      // Curly side hair
+      grid[3][4] = hair; grid[4][4] = hair;
+      grid[3][15] = hair; grid[4][15] = hair;
     } else {
-      // human
-      _fillRow(grid, 0, 4, 7, hair);
-      _fillRow(grid, 1, 3, 8, hair);
-      _fillRow(grid, 2, 3, 8, hair);
+      // Human
+      _fillRect(grid, 0, 7, 6, 1, hair);
+      _fillRect(grid, 1, 5, 10, 1, hair);
+      _fillRect(grid, 2, 5, 10, 1, hair);
+      _fillRect(grid, 3, 5, 10, 1, hair);
+      _fillRect(grid, 4, 5, 10, 1, hairDark);
     }
 
-    // --- Face (rows 3-5) ---
-    _fillRow(grid, 3, 3, 8, skin);
-    _fillRow(grid, 4, 3, 8, skin);
-    grid[4][4] = eyes; // left eye
-    grid[4][6] = eyes; // right eye
-    _fillRow(grid, 5, 4, 7, skin);
-    grid[5][5] = '#cc6655'; // mouth
+    // --- FACE (rows 5-9) ---
+    _fillRect(grid, 5, 5, 10, 1, skin);
+    _fillRect(grid, 6, 5, 10, 1, skin);
+    _fillRect(grid, 7, 5, 10, 1, skin);
+    _fillRect(grid, 8, 6, 8, 1, skin);
+    _fillRect(grid, 9, 7, 6, 1, skin);
+    // Eyes
+    grid[6][7] = eyes; grid[6][8] = eyes;
+    grid[6][11] = eyes; grid[6][12] = eyes;
+    // Eye whites
+    grid[6][6] = '#eee'; grid[6][13] = '#eee';
+    // Nose
+    grid[7][9] = skinDark; grid[7][10] = skinDark;
+    // Mouth
+    grid[8][8] = '#cc6655'; grid[8][9] = '#cc6655'; grid[8][10] = '#cc6655'; grid[8][11] = '#cc6655';
+
+    // Tabaxi cat nose
+    if (race === 'tabaxi') {
+      grid[7][9] = '#ff9999'; grid[7][10] = '#ff9999';
+      // Whisker hints
+      grid[8][5] = skinDark; grid[8][14] = skinDark;
+    }
 
     // Dwarf beard
     if (race === 'dwarf') {
-      _fillRow(grid, 5, 3, 8, hair);
-      grid[5][5] = '#cc6655';
-      _fillRow(grid, 6, 4, 7, hair);
+      _fillRect(grid, 8, 5, 10, 1, hair);
+      grid[8][8] = '#cc6655'; grid[8][9] = '#cc6655'; grid[8][10] = '#cc6655'; grid[8][11] = '#cc6655';
+      _fillRect(grid, 9, 6, 8, 1, hair);
+      _fillRect(grid, 10, 7, 6, 1, hairDark);
+      grid[11][8] = hairDark; grid[11][9] = hairDark; grid[11][10] = hairDark; grid[11][11] = hairDark;
     }
 
-    // --- Neck (row 6) ---
-    grid[6][5] = skin;
+    // --- NECK (row 10) ---
+    grid[10][9] = skin; grid[10][10] = skin;
 
-    // --- Torso (rows 7-10) ---
-    _fillRow(grid, 7, 3, 8, armor);
-    _fillRow(grid, 8, 3, 8, armor);
-    _fillRow(grid, 9, 3, 8, armorDark);
-    _fillRow(grid, 10, 4, 7, armorDark);
+    // --- SHOULDERS + TORSO (rows 11-17) ---
+    _fillRect(grid, 11, 4, 12, 1, armor);
+    _fillRect(grid, 12, 4, 12, 1, armor);
+    _fillRect(grid, 13, 5, 10, 1, armor);
+    _fillRect(grid, 14, 5, 10, 1, armorDark);
+    _fillRect(grid, 15, 5, 10, 1, armorDark);
+    // Belt
+    _fillRect(grid, 16, 6, 8, 1, belt);
+    grid[16][9] = '#c8a030'; grid[16][10] = '#c8a030'; // buckle
 
     // Class-specific torso detail
     if (classType === 'wizard') {
-      grid[8][5] = '#9966cc'; // gem
-      // Robe extends
-      _fillRow(grid, 10, 3, 8, '#4a3a6e');
-      _fillRow(grid, 11, 3, 8, '#4a3a6e');
+      grid[12][9] = '#9966cc'; grid[12][10] = '#9966cc'; // gem
+      grid[13][9] = '#aa77dd'; // gem highlight
+      _fillRect(grid, 15, 5, 10, 1, '#4a3a6e');
+      _fillRect(grid, 16, 5, 10, 1, '#4a3a6e');
+      _fillRect(grid, 17, 5, 10, 1, '#3a2a5e');
+      _fillRect(grid, 18, 6, 8, 1, '#3a2a5e');
     } else if (classType === 'warrior') {
-      grid[7][5] = armorLight; // chest emblem
-      grid[8][5] = armorLight;
+      grid[12][9] = armorLight; grid[12][10] = armorLight;
+      grid[13][9] = armorLight; grid[13][10] = armorLight;
+      // Pauldrons
+      grid[11][3] = armorLight; grid[11][16] = armorLight;
     } else if (classType === 'rogue') {
-      grid[7][5] = '#2a2a2a'; // dark stripe
-      grid[8][5] = '#2a2a2a';
-    }
-
-    // --- Arms (rows 7-10) ---
-    grid[7][2] = skin;
-    grid[7][8] = skin;
-    grid[8][2] = skin;
-    grid[8][8] = skin;
-    grid[9][2] = skin;
-    grid[9][8] = skin;
-
-    // Weapon in right hand
-    if (classType === 'warrior') {
-      grid[7][9] = '#aaaaaa'; // sword
-      grid[8][9] = '#aaaaaa';
-      grid[9][9] = '#aaaaaa';
-      grid[6][9] = '#cccccc'; // blade tip
-    } else if (classType === 'wizard') {
-      grid[7][9] = '#7a5230'; // staff
-      grid[8][9] = '#7a5230';
-      grid[9][9] = '#7a5230';
-      grid[6][9] = '#aa66ff'; // orb
-    } else if (classType === 'rogue') {
-      grid[8][9] = '#888888'; // dagger
-      grid[9][9] = '#888888';
+      // Dark vest stripe
+      grid[12][9] = '#2a2a2a'; grid[12][10] = '#2a2a2a';
+      grid[13][9] = '#2a2a2a'; grid[13][10] = '#2a2a2a';
+      // Hood (if rogue)
+      grid[4][5] = '#2a2a3e'; grid[4][14] = '#2a2a3e';
     } else if (classType === 'ranger') {
-      grid[7][9] = '#7a5230'; // bow
-      grid[8][9] = '#7a5230';
-      grid[9][9] = '#5a3a18';
-      grid[7][10] = '#b8860b'; // bowstring
-      grid[8][10] = '#b8860b';
-      grid[9][10] = '#b8860b';
+      // Cape/cloak hints
+      grid[11][3] = '#2a5a2a'; grid[11][16] = '#2a5a2a';
+      grid[12][3] = '#2a5a2a'; grid[12][16] = '#2a5a2a';
     }
 
-    // Shield for warrior in left hand
+    // --- ARMS (rows 12-16) ---
+    grid[12][3] = skin; grid[12][16] = skin;
+    grid[13][3] = skin; grid[13][16] = skin;
+    grid[14][3] = skin; grid[14][16] = skin;
+    grid[15][3] = skin; grid[15][16] = skin;
+    grid[16][3] = skin; grid[16][16] = skin;
+
+    // --- WEAPON (right hand) ---
     if (classType === 'warrior') {
-      grid[7][1] = '#8b7355';
-      grid[8][1] = '#8b7355';
-      grid[9][1] = '#8b7355';
-      grid[8][0] = '#8b7355';
+      // Sword
+      grid[10][17] = '#cccccc';
+      grid[11][17] = '#bbbbbb'; grid[12][17] = '#aaaaaa';
+      grid[13][17] = '#aaaaaa'; grid[14][17] = '#999999';
+      grid[15][17] = '#888888';
+      grid[16][17] = '#7a5230'; // handle
+      // Shield (left hand)
+      grid[12][1] = '#8b7355'; grid[12][2] = '#8b7355';
+      grid[13][1] = '#8b7355'; grid[13][2] = '#9b8365';
+      grid[14][1] = '#8b7355'; grid[14][2] = '#8b7355';
+      grid[13][0] = '#7b6345';
+    } else if (classType === 'wizard') {
+      // Staff with orb
+      grid[9][17] = '#aa66ff'; grid[9][18] = '#cc88ff'; // orb glow
+      grid[10][17] = '#7a5230';
+      grid[11][17] = '#7a5230'; grid[12][17] = '#7a5230';
+      grid[13][17] = '#7a5230'; grid[14][17] = '#7a5230';
+      grid[15][17] = '#6a4220'; grid[16][17] = '#6a4220';
+    } else if (classType === 'rogue') {
+      // Daggers
+      grid[14][17] = '#999999'; grid[15][17] = '#aaaaaa';
+      grid[14][2] = '#999999'; grid[15][2] = '#aaaaaa';
+    } else if (classType === 'ranger') {
+      // Bow
+      grid[11][17] = '#7a5230'; grid[12][17] = '#7a5230';
+      grid[13][17] = '#6a4220'; grid[14][17] = '#6a4220';
+      grid[15][17] = '#7a5230';
+      // Bowstring
+      grid[11][18] = '#b8860b'; grid[12][18] = '#b8860b';
+      grid[13][18] = '#b8860b'; grid[14][18] = '#b8860b';
+      grid[15][18] = '#b8860b';
     }
 
-    // --- Legs (rows 11-13) ---
+    // --- LEGS (rows 17-23) ---
     if (classType !== 'wizard') {
-      grid[11][4] = armorDark;
-      grid[11][6] = armorDark;
-      grid[12][4] = armorDark;
-      grid[12][6] = armorDark;
+      _fillRect(grid, 17, 6, 3, 1, armorDark);
+      _fillRect(grid, 17, 11, 3, 1, armorDark);
+      _fillRect(grid, 18, 6, 3, 1, armorDark);
+      _fillRect(grid, 18, 11, 3, 1, armorDark);
+      _fillRect(grid, 19, 6, 3, 1, armorDark);
+      _fillRect(grid, 19, 11, 3, 1, armorDark);
+      _fillRect(grid, 20, 6, 3, 1, armorDark);
+      _fillRect(grid, 20, 11, 3, 1, armorDark);
     }
-    grid[13][4] = boot;
-    grid[13][6] = boot;
 
-    // --- Feet (rows 14-15) for non-halflings ---
+    // --- BOOTS (rows 21-24) ---
+    _fillRect(grid, 21, 5, 4, 1, boot);
+    _fillRect(grid, 21, 11, 4, 1, boot);
+    _fillRect(grid, 22, 5, 4, 1, boot);
+    _fillRect(grid, 22, 11, 4, 1, boot);
+    _fillRect(grid, 23, 5, 4, 1, bootDark);
+    _fillRect(grid, 23, 11, 4, 1, bootDark);
+    _fillRect(grid, 24, 4, 5, 1, bootDark);
+    _fillRect(grid, 24, 11, 5, 1, bootDark);
+
     if (race === 'halfling') {
-      grid[13][4] = skin; // barefoot
-      grid[13][6] = skin;
-    } else {
-      grid[14][4] = boot;
-      grid[14][6] = boot;
+      // Barefoot
+      _fillRect(grid, 21, 5, 4, 1, skin);
+      _fillRect(grid, 21, 11, 4, 1, skin);
+      _fillRect(grid, 22, 5, 4, 1, skin);
+      _fillRect(grid, 22, 11, 4, 1, skin);
+      _fillRect(grid, 23, 5, 4, 1, skinDark);
+      _fillRect(grid, 23, 11, 4, 1, skinDark);
+      _fillRect(grid, 24, 4, 5, 1, skinDark);
+      _fillRect(grid, 24, 11, 5, 1, skinDark);
     }
 
-    // Race-specific lower body details
+    // --- RACE-SPECIFIC BODY DETAILS ---
     if (race === 'dragonborn') {
-      // Dragonborn tail
-      grid[12][2] = _darken(skin);
-      grid[13][1] = _darken(skin);
+      grid[19][4] = _darken(skinDark);
+      grid[20][3] = _darken(skinDark);
+      grid[21][2] = skinDark;
+      grid[22][1] = skinDark;
     } else if (race === 'tabaxi') {
-      // Cat tail
-      grid[11][8] = hair;
-      grid[12][9] = hair;
-      grid[13][9] = hair;
-      grid[14][10] = hair;
-      // Cat nose on face
-      grid[5][5] = '#ff9999';
+      // Tail
+      grid[18][15] = hair; grid[18][16] = hair;
+      grid[19][16] = hair; grid[19][17] = hair;
+      grid[20][17] = hair; grid[20][18] = hair;
+      grid[21][18] = hairDark;
     }
 
     return this.render(grid, scale);
   },
 
-  // Monster sprites
-  monster(name, scale = 4) {
+  // Monster sprites — higher resolution
+  monster(name, scale = 3) {
     const monsters = {
       goblin: () => {
-        const grid = _emptyGrid(12, 12);
+        const grid = _emptyGrid(18, 18);
         const skin = '#5a8a3a';
         const dark = '#3a6a2a';
-        // Head
-        _fillRow(grid, 0, 3, 8, skin);
-        _fillRow(grid, 1, 2, 9, skin);
-        _fillRow(grid, 2, 2, 9, skin);
-        grid[1][1] = skin; // ear
-        grid[1][9] = skin; // ear
-        grid[2][3] = '#ff0000'; // eyes
-        grid[2][6] = '#ff0000';
-        _fillRow(grid, 3, 3, 8, skin);
-        grid[3][4] = '#ffffaa'; grid[3][5] = '#ffffaa'; grid[3][6] = '#ffffaa'; // teeth
-        // Body
-        _fillRow(grid, 4, 3, 8, '#554433');
-        _fillRow(grid, 5, 3, 8, '#554433');
-        _fillRow(grid, 6, 3, 8, '#554433');
-        grid[5][2] = skin; grid[5][8] = skin; // arms
-        grid[6][2] = skin; grid[6][8] = skin;
-        // Weapon
-        grid[4][9] = '#888888'; grid[5][9] = '#888888';
-        // Legs
-        grid[7][4] = dark; grid[7][6] = dark;
-        grid[8][4] = dark; grid[8][6] = dark;
-        return grid;
-      },
-      goblin_chief: () => {
-        const grid = _emptyGrid(14, 14);
-        const skin = '#4a7a2a';
-        // Crown
-        grid[0][4] = '#ffd700'; grid[0][6] = '#ffd700'; grid[0][8] = '#ffd700';
-        _fillRow(grid, 1, 3, 10, '#ffd700');
-        // Head
-        _fillRow(grid, 2, 3, 10, skin);
-        _fillRow(grid, 3, 2, 11, skin);
-        grid[3][4] = '#ff0000'; grid[3][8] = '#ff0000'; // eyes
-        _fillRow(grid, 4, 3, 10, skin);
-        grid[4][5] = '#ffffaa'; grid[4][6] = '#ffffaa'; grid[4][7] = '#ffffaa';
-        // Body (armored)
-        _fillRow(grid, 5, 3, 10, '#777777');
-        _fillRow(grid, 6, 2, 11, '#777777');
-        _fillRow(grid, 7, 2, 11, '#666666');
-        _fillRow(grid, 8, 3, 10, '#666666');
-        grid[6][1] = skin; grid[6][11] = skin;
-        grid[7][1] = skin; grid[7][11] = skin;
-        // Big axe
-        grid[5][12] = '#aaaaaa'; grid[6][12] = '#aaaaaa'; grid[7][12] = '#aaaaaa';
-        grid[5][13] = '#aaaaaa';
-        // Legs
-        grid[9][4] = '#555555'; grid[9][8] = '#555555';
-        grid[10][4] = '#555555'; grid[10][8] = '#555555';
-        grid[11][4] = '#3a2518'; grid[11][8] = '#3a2518';
-        return grid;
-      },
-      skeleton: () => {
-        const grid = _emptyGrid(12, 14);
-        const bone = '#e8e0d0';
-        const dark = '#aaa89a';
-        // Skull
-        _fillRow(grid, 0, 3, 8, bone);
-        _fillRow(grid, 1, 3, 8, bone);
-        grid[1][4] = '#1a1a1a'; grid[1][6] = '#1a1a1a'; // eye sockets
-        _fillRow(grid, 2, 4, 7, bone);
-        grid[2][4] = dark; grid[2][5] = dark; grid[2][6] = dark; // teeth
-        // Spine
-        grid[3][5] = bone; grid[4][5] = bone;
-        // Ribs
-        _fillRow(grid, 5, 3, 8, bone);
-        grid[5][5] = null;
-        _fillRow(grid, 6, 3, 8, bone);
-        grid[6][5] = null;
-        grid[7][5] = bone; // spine
-        // Arms
-        grid[5][2] = bone; grid[5][8] = bone;
-        grid[6][2] = bone; grid[6][8] = bone;
-        grid[7][2] = bone; grid[7][8] = bone;
-        // Pelvis
-        _fillRow(grid, 8, 4, 7, bone);
-        // Legs
-        grid[9][4] = bone; grid[9][6] = bone;
-        grid[10][4] = bone; grid[10][6] = bone;
-        grid[11][4] = bone; grid[11][6] = bone;
-        // Sword
-        grid[4][9] = '#aaaaaa'; grid[5][9] = '#aaaaaa'; grid[6][9] = '#aaaaaa';
-        grid[3][9] = '#cccccc';
-        return grid;
-      },
-      skeleton_mage: () => {
-        const grid = _emptyGrid(12, 14);
-        const bone = '#e8e0d0';
-        // Hat
-        grid[0][5] = '#4a2a6e';
-        _fillRow(grid, 1, 3, 8, '#4a2a6e');
-        // Skull
-        _fillRow(grid, 2, 3, 8, bone);
-        grid[2][4] = '#ff00ff'; grid[2][6] = '#ff00ff'; // magic eyes
-        _fillRow(grid, 3, 4, 7, bone);
-        // Robe
-        _fillRow(grid, 4, 3, 8, '#4a2a6e');
-        _fillRow(grid, 5, 2, 9, '#4a2a6e');
-        _fillRow(grid, 6, 2, 9, '#3a1a5e');
-        _fillRow(grid, 7, 2, 9, '#3a1a5e');
-        _fillRow(grid, 8, 3, 8, '#3a1a5e');
-        // Staff with orb
-        grid[1][9] = '#ff66ff'; // orb
-        grid[2][9] = '#7a5230'; grid[3][9] = '#7a5230';
-        grid[4][9] = '#7a5230'; grid[5][9] = '#7a5230';
-        grid[6][9] = '#7a5230';
-        // Bone hands
-        grid[5][1] = bone; grid[5][9] = bone;
-        // Legs peeking from robe
-        grid[9][4] = bone; grid[9][6] = bone;
-        grid[10][4] = bone; grid[10][6] = bone;
-        return grid;
-      },
-      wolf: () => {
-        const grid = _emptyGrid(14, 10);
-        const fur = '#666666';
-        const light = '#888888';
+        const leather = '#554433';
+        const leatherDark = '#443322';
         // Ears
-        grid[0][2] = fur; grid[0][4] = fur;
+        grid[1][2] = skin; grid[1][3] = skin;
+        grid[1][14] = skin; grid[1][15] = skin;
         // Head
-        _fillRow(grid, 1, 1, 6, fur);
-        _fillRow(grid, 2, 0, 7, fur);
-        grid[2][2] = '#ffcc00'; grid[2][4] = '#ffcc00'; // eyes
-        _fillRow(grid, 3, 0, 8, fur);
-        grid[3][0] = light; grid[3][1] = light; // snout
-        grid[3][0] = '#ff3333'; // mouth
-        // Body
-        _fillRow(grid, 4, 2, 10, fur);
-        _fillRow(grid, 5, 2, 11, fur);
-        _fillRow(grid, 6, 3, 11, light);
-        _fillRow(grid, 7, 3, 10, fur);
-        // Tail
-        grid[4][10] = fur; grid[3][11] = fur; grid[2][12] = fur;
-        // Legs
-        grid[8][3] = fur; grid[8][5] = fur; grid[8][8] = fur; grid[8][10] = fur;
-        grid[9][3] = fur; grid[9][5] = fur; grid[9][8] = fur; grid[9][10] = fur;
-        return grid;
-      },
-      spider: () => {
-        const grid = _emptyGrid(14, 10);
-        const body = '#2a1a2a';
-        const leg = '#3a2a3a';
-        // Body
-        _fillRow(grid, 2, 5, 8, body);
-        _fillRow(grid, 3, 4, 9, body);
-        _fillRow(grid, 4, 4, 9, body);
-        _fillRow(grid, 5, 5, 8, body);
-        // Eyes (many!)
-        grid[3][5] = '#ff0000'; grid[3][7] = '#ff0000';
-        grid[2][5] = '#ff0000'; grid[2][7] = '#ff0000';
-        // Red marking
-        grid[4][6] = '#cc0000';
-        // Legs (4 per side)
-        grid[3][3] = leg; grid[2][2] = leg; grid[1][1] = leg;
-        grid[4][3] = leg; grid[4][2] = leg; grid[5][1] = leg;
-        grid[3][9] = leg; grid[2][10] = leg; grid[1][11] = leg;
-        grid[4][9] = leg; grid[4][10] = leg; grid[5][11] = leg;
-        grid[5][3] = leg; grid[6][2] = leg;
-        grid[5][9] = leg; grid[6][10] = leg;
-        return grid;
-      },
-      troll: () => {
-        const grid = _emptyGrid(14, 16);
-        const skin = '#6a7a4a';
-        const dark = '#4a5a2a';
-        // Head
-        _fillRow(grid, 0, 4, 9, skin);
-        _fillRow(grid, 1, 3, 10, skin);
-        _fillRow(grid, 2, 3, 10, skin);
-        grid[1][4] = '#ffcc00'; grid[1][8] = '#ffcc00'; // eyes
-        _fillRow(grid, 3, 4, 9, skin);
-        grid[3][5] = '#553322'; grid[3][6] = '#553322'; grid[3][7] = '#553322'; // mouth
-        // Massive body
-        _fillRow(grid, 4, 2, 11, dark);
-        _fillRow(grid, 5, 1, 12, dark);
-        _fillRow(grid, 6, 1, 12, dark);
-        _fillRow(grid, 7, 1, 12, skin);
-        _fillRow(grid, 8, 2, 11, skin);
-        _fillRow(grid, 9, 2, 11, dark);
-        // Arms
-        grid[5][0] = skin; grid[6][0] = skin; grid[7][0] = skin;
-        grid[5][12] = skin; grid[6][12] = skin; grid[7][12] = skin;
-        // Club
-        grid[4][13] = '#5a3a18'; grid[5][13] = '#5a3a18'; grid[6][13] = '#5a3a18';
-        grid[3][13] = '#7a5230'; grid[3][12] = '#7a5230';
-        // Legs
-        grid[10][4] = dark; grid[10][5] = dark; grid[10][8] = dark; grid[10][9] = dark;
-        grid[11][4] = dark; grid[11][5] = dark; grid[11][8] = dark; grid[11][9] = dark;
-        grid[12][4] = skin; grid[12][5] = skin; grid[12][8] = skin; grid[12][9] = skin;
-        return grid;
-      },
-      dragon: () => {
-        const grid = _emptyGrid(16, 16);
-        const scale1 = '#8b0000';
-        const scale2 = '#aa2200';
-        const belly = '#dd8833';
-        // Horns
-        grid[0][3] = '#444'; grid[0][10] = '#444';
-        grid[1][4] = '#444'; grid[1][9] = '#444';
-        // Head
-        _fillRow(grid, 2, 4, 9, scale1);
-        _fillRow(grid, 3, 3, 10, scale1);
-        grid[3][5] = '#ffcc00'; grid[3][8] = '#ffcc00'; // eyes
-        _fillRow(grid, 4, 2, 11, scale1);
-        grid[4][2] = '#ff6600'; grid[4][3] = '#ff6600'; // fire breath!
-        grid[4][1] = '#ffaa00'; grid[4][0] = '#ffcc00';
+        _fillRect(grid, 0, 5, 8, 1, skin);
+        _fillRect(grid, 1, 4, 10, 1, skin);
+        _fillRect(grid, 2, 4, 10, 1, skin);
+        _fillRect(grid, 3, 4, 10, 1, skin);
+        _fillRect(grid, 4, 5, 8, 1, dark);
+        // Eyes (menacing red)
+        grid[2][5] = '#ff0000'; grid[2][6] = '#ff2200';
+        grid[2][11] = '#ff2200'; grid[2][12] = '#ff0000';
+        // Brow ridge
+        grid[1][5] = dark; grid[1][6] = dark;
+        grid[1][11] = dark; grid[1][12] = dark;
+        // Fangs/teeth
+        grid[4][6] = '#ffffaa'; grid[4][7] = '#ffffcc'; grid[4][8] = '#ffffaa';
+        grid[4][9] = '#ffffcc'; grid[4][10] = '#ffffaa'; grid[4][11] = '#ffffaa';
+        grid[3][7] = '#553322'; grid[3][8] = '#553322'; grid[3][9] = '#553322'; grid[3][10] = '#553322';
         // Neck
-        _fillRow(grid, 5, 5, 9, scale2);
-        // Body
-        _fillRow(grid, 6, 3, 12, scale1);
-        _fillRow(grid, 7, 2, 13, scale1);
-        _fillRow(grid, 8, 2, 13, scale2);
-        _fillRow(grid, 9, 3, 12, scale2);
-        // Belly
-        grid[7][6] = belly; grid[7][7] = belly; grid[7][8] = belly;
-        grid[8][6] = belly; grid[8][7] = belly; grid[8][8] = belly;
-        // Wings
-        grid[5][1] = scale2; grid[4][0] = null; // removed conflict
-        grid[6][0] = scale2; grid[5][0] = scale2;
-        grid[6][13] = scale2; grid[5][13] = scale2; grid[5][14] = scale2;
-        grid[7][14] = scale2;
-        // Tail
-        grid[9][12] = scale1; grid[10][13] = scale1; grid[11][14] = scale1; grid[12][15] = scale2;
+        grid[5][7] = dark; grid[5][8] = dark; grid[5][9] = dark; grid[5][10] = dark;
+        // Body (leather armor)
+        _fillRect(grid, 6, 4, 10, 1, leather);
+        _fillRect(grid, 7, 4, 10, 1, leather);
+        _fillRect(grid, 8, 5, 8, 1, leather);
+        _fillRect(grid, 9, 5, 8, 1, leatherDark);
+        _fillRect(grid, 10, 5, 8, 1, leatherDark);
+        // Belt
+        _fillRect(grid, 10, 5, 8, 1, '#444');
+        grid[10][8] = '#888'; grid[10][9] = '#888';
+        // Arms
+        grid[7][3] = skin; grid[8][3] = skin; grid[9][3] = skin; grid[10][3] = skin;
+        grid[7][14] = skin; grid[8][14] = skin; grid[9][14] = skin; grid[10][14] = skin;
+        grid[7][2] = dark; grid[8][2] = dark;
+        grid[7][15] = dark; grid[8][15] = dark;
+        // Weapon (crude sword)
+        grid[5][15] = '#aaaaaa'; grid[6][15] = '#999999'; grid[7][15] = '#888888';
+        grid[8][15] = '#777777'; grid[4][15] = '#bbbbbb';
+        grid[9][15] = '#6a4a2a'; // handle
         // Legs
-        grid[10][4] = scale1; grid[10][5] = scale1; grid[10][9] = scale1; grid[10][10] = scale1;
-        grid[11][4] = scale1; grid[11][5] = scale1; grid[11][9] = scale1; grid[11][10] = scale1;
-        grid[12][4] = '#333'; grid[12][5] = '#333'; grid[12][9] = '#333'; grid[12][10] = '#333';
-        return grid;
-      },
-      ghost: () => {
-        const grid = _emptyGrid(12, 14);
-        const body = 'rgba(180,200,220,0.7)';
-        const light = 'rgba(200,220,240,0.5)';
-        // Head
-        _fillRow(grid, 0, 3, 8, body);
-        _fillRow(grid, 1, 2, 9, body);
-        _fillRow(grid, 2, 2, 9, body);
-        grid[2][4] = '#000033'; grid[2][6] = '#000033'; // hollow eyes
-        _fillRow(grid, 3, 3, 8, body);
-        grid[3][5] = '#000033'; // mouth
-        // Body flowing
-        _fillRow(grid, 4, 2, 9, body);
-        _fillRow(grid, 5, 2, 9, light);
-        _fillRow(grid, 6, 2, 9, body);
-        _fillRow(grid, 7, 2, 9, body);
-        _fillRow(grid, 8, 3, 8, light);
-        // Wispy bottom
-        grid[9][3] = body; grid[9][5] = body; grid[9][7] = body;
-        grid[10][4] = light; grid[10][6] = light;
-        grid[11][3] = light; grid[11][7] = light;
-        // Arms reaching
-        grid[5][1] = body; grid[5][0] = light;
-        grid[5][9] = body; grid[5][10] = light;
-        return grid;
-      },
-      forest_wraith: () => {
-        const grid = _emptyGrid(14, 16);
-        const cloak = '#1a3a1a';
-        const glow = '#00ff66';
-        const dark = '#0a2a0a';
-        // Hood
-        _fillRow(grid, 0, 4, 9, cloak);
-        _fillRow(grid, 1, 3, 10, cloak);
-        _fillRow(grid, 2, 3, 10, dark);
-        grid[2][5] = glow; grid[2][7] = glow; // glowing eyes
-        _fillRow(grid, 3, 3, 10, dark);
-        // Body (robes)
-        _fillRow(grid, 4, 3, 10, cloak);
-        _fillRow(grid, 5, 2, 11, cloak);
-        _fillRow(grid, 6, 2, 11, cloak);
-        _fillRow(grid, 7, 2, 11, dark);
-        _fillRow(grid, 8, 3, 10, dark);
-        _fillRow(grid, 9, 3, 10, cloak);
-        _fillRow(grid, 10, 4, 9, cloak);
-        // Ghostly tendrils
-        grid[11][3] = dark; grid[11][5] = dark; grid[11][7] = dark; grid[11][9] = dark;
-        grid[12][4] = dark; grid[12][8] = dark;
-        // Branch-like arms
-        grid[5][1] = '#3a2a18'; grid[5][0] = '#3a2a18';
-        grid[6][0] = '#3a2a18';
-        grid[5][11] = '#3a2a18'; grid[5][12] = '#3a2a18';
-        grid[6][12] = '#3a2a18';
-        // Green magic particles
-        grid[4][1] = glow; grid[7][12] = glow; grid[1][11] = glow;
-        return grid;
-      },
-      bat: () => {
-        const grid = _emptyGrid(12, 8);
-        const body = '#2a1a2a';
-        const wing = '#3a2a3a';
-        // Head
-        grid[1][5] = body; grid[1][6] = body;
-        grid[2][5] = body; grid[2][6] = body;
-        grid[2][5] = '#ff0000'; // eye
-        // Ears
-        grid[0][5] = body; grid[0][6] = body;
-        // Body
-        grid[3][5] = body; grid[3][6] = body;
-        grid[4][5] = body; grid[4][6] = body;
-        // Wings spread
-        _fillRow(grid, 2, 1, 4, wing);
-        _fillRow(grid, 2, 7, 10, wing);
-        _fillRow(grid, 3, 0, 4, wing);
-        _fillRow(grid, 3, 7, 11, wing);
-        _fillRow(grid, 4, 1, 3, wing);
-        _fillRow(grid, 4, 8, 10, wing);
+        grid[11][6] = dark; grid[11][7] = dark; grid[11][10] = dark; grid[11][11] = dark;
+        grid[12][6] = dark; grid[12][7] = dark; grid[12][10] = dark; grid[12][11] = dark;
+        grid[13][6] = dark; grid[13][7] = dark; grid[13][10] = dark; grid[13][11] = dark;
         // Feet
-        grid[5][5] = body; grid[5][6] = body;
+        grid[14][5] = '#3a2518'; grid[14][6] = '#3a2518'; grid[14][7] = '#3a2518';
+        grid[14][10] = '#3a2518'; grid[14][11] = '#3a2518'; grid[14][12] = '#3a2518';
         return grid;
       },
-      stone_golem: () => {
-        const grid = _emptyGrid(14, 16);
-        const stone = '#777788';
-        const dark = '#555566';
-        const crack = '#444455';
-        // Head
-        _fillRow(grid, 0, 4, 9, stone);
-        _fillRow(grid, 1, 3, 10, stone);
-        _fillRow(grid, 2, 3, 10, dark);
-        grid[1][5] = '#ffaa00'; grid[1][7] = '#ffaa00'; // glowing eyes
-        grid[2][5] = crack; grid[2][6] = crack; // crack line
-        // Massive body
-        _fillRow(grid, 3, 2, 11, stone);
-        _fillRow(grid, 4, 1, 12, stone);
-        _fillRow(grid, 5, 1, 12, stone);
-        _fillRow(grid, 6, 1, 12, dark);
-        _fillRow(grid, 7, 1, 12, dark);
-        _fillRow(grid, 8, 2, 11, stone);
-        _fillRow(grid, 9, 2, 11, stone);
-        // Crack details
-        grid[5][6] = crack; grid[6][6] = crack; grid[7][5] = crack;
-        grid[4][9] = crack; grid[5][9] = crack;
-        // Massive arms
-        grid[4][0] = stone; grid[5][0] = stone; grid[6][0] = dark;
-        grid[4][12] = stone; grid[5][12] = stone; grid[6][12] = dark;
-        grid[7][0] = dark; grid[7][12] = dark;
-        // Fists
-        grid[8][0] = stone; grid[8][12] = stone;
+
+      goblin_chief: () => {
+        const grid = _emptyGrid(22, 22);
+        const skin = '#4a7a2a';
+        const dark = '#2a5a1a';
+        const armorG = '#777777';
+        const armorD = '#555555';
+        // Crown
+        grid[0][7] = '#ffd700'; grid[0][9] = '#ffd700'; grid[0][11] = '#ffd700'; grid[0][13] = '#ffd700';
+        _fillRect(grid, 1, 5, 12, 1, '#ffd700');
+        _fillRect(grid, 2, 6, 10, 1, '#ddaa00');
+        grid[1][8] = '#ff4444'; grid[1][12] = '#4444ff'; // gems
+        // Head (bigger)
+        _fillRect(grid, 3, 5, 12, 1, skin);
+        _fillRect(grid, 4, 4, 14, 1, skin);
+        _fillRect(grid, 5, 4, 14, 1, skin);
+        _fillRect(grid, 6, 5, 12, 1, skin);
+        // Ears
+        grid[3][3] = skin; grid[3][4] = dark;
+        grid[3][17] = dark; grid[3][18] = skin;
+        grid[4][3] = skin; grid[4][18] = skin;
+        // Eyes
+        grid[4][7] = '#ff0000'; grid[4][8] = '#ff2200';
+        grid[4][13] = '#ff2200'; grid[4][14] = '#ff0000';
+        // Scar
+        grid[5][7] = dark; grid[5][8] = dark;
+        // Mouth/fangs
+        grid[6][8] = '#ffffaa'; grid[6][9] = '#553322'; grid[6][10] = '#553322';
+        grid[6][11] = '#553322'; grid[6][12] = '#553322'; grid[6][13] = '#ffffaa';
+        // Neck
+        _fillRect(grid, 7, 7, 8, 1, dark);
+        // Armored body
+        _fillRect(grid, 8, 4, 14, 1, armorG);
+        _fillRect(grid, 9, 3, 16, 1, armorG);
+        _fillRect(grid, 10, 3, 16, 1, armorD);
+        _fillRect(grid, 11, 4, 14, 1, armorD);
+        _fillRect(grid, 12, 4, 14, 1, armorG);
+        _fillRect(grid, 13, 5, 12, 1, armorD);
+        // Chest emblem
+        grid[10][10] = '#ffd700'; grid[10][11] = '#ffd700';
+        grid[11][10] = '#ffd700'; grid[11][11] = '#ffd700';
+        // Arms
+        grid[9][2] = skin; grid[10][2] = skin; grid[11][2] = skin; grid[12][2] = skin;
+        grid[9][19] = skin; grid[10][19] = skin; grid[11][19] = skin; grid[12][19] = skin;
+        grid[9][1] = dark; grid[10][1] = dark;
+        // BIG axe
+        grid[6][20] = '#aaaaaa'; grid[7][20] = '#aaaaaa'; grid[8][20] = '#bbbbbb';
+        grid[6][21] = '#999999'; grid[7][21] = '#999999';
+        grid[9][20] = '#6a4a2a'; grid[10][20] = '#6a4a2a'; grid[11][20] = '#6a4a2a';
+        grid[12][20] = '#5a3a1a';
         // Legs
-        _fillRow(grid, 10, 3, 6, dark); _fillRow(grid, 10, 7, 10, dark);
-        _fillRow(grid, 11, 3, 6, stone); _fillRow(grid, 11, 7, 10, stone);
-        _fillRow(grid, 12, 3, 6, dark); _fillRow(grid, 12, 7, 10, dark);
+        _fillRect(grid, 14, 6, 4, 1, armorD);
+        _fillRect(grid, 14, 12, 4, 1, armorD);
+        _fillRect(grid, 15, 6, 4, 1, armorD);
+        _fillRect(grid, 15, 12, 4, 1, armorD);
+        _fillRect(grid, 16, 6, 4, 1, dark);
+        _fillRect(grid, 16, 12, 4, 1, dark);
+        // Boots
+        _fillRect(grid, 17, 5, 5, 1, '#3a2518');
+        _fillRect(grid, 17, 12, 5, 1, '#3a2518');
+        return grid;
+      },
+
+      skeleton: () => {
+        const grid = _emptyGrid(18, 22);
+        const bone = '#e8e0d0';
+        const boneD = '#c8c0b0';
+        const dark = '#1a1a2e';
+        // Skull
+        _fillRect(grid, 0, 5, 8, 1, bone);
+        _fillRect(grid, 1, 4, 10, 1, bone);
+        _fillRect(grid, 2, 4, 10, 1, bone);
+        _fillRect(grid, 3, 5, 8, 1, boneD);
+        // Eye sockets
+        grid[1][6] = dark; grid[1][7] = dark;
+        grid[1][10] = dark; grid[1][11] = dark;
+        grid[2][6] = dark; grid[2][7] = dark;
+        grid[2][10] = dark; grid[2][11] = dark;
+        // Nose hole
+        grid[2][8] = boneD; grid[2][9] = boneD;
+        // Jaw/teeth
+        grid[3][6] = boneD; grid[3][7] = '#aaa'; grid[3][8] = boneD; grid[3][9] = '#aaa';
+        grid[3][10] = boneD; grid[3][11] = '#aaa';
+        // Spine
+        grid[4][8] = bone; grid[4][9] = bone;
+        grid[5][8] = boneD; grid[5][9] = boneD;
+        // Ribs
+        _fillRect(grid, 6, 5, 8, 1, bone);
+        grid[6][8] = null; grid[6][9] = null;
+        _fillRect(grid, 7, 5, 8, 1, boneD);
+        grid[7][8] = null; grid[7][9] = null;
+        _fillRect(grid, 8, 5, 8, 1, bone);
+        grid[8][8] = null; grid[8][9] = null;
+        grid[9][8] = bone; grid[9][9] = bone; // spine
+        // Arms
+        grid[6][4] = bone; grid[7][3] = bone; grid[8][3] = boneD;
+        grid[9][3] = boneD; grid[10][3] = bone;
+        grid[6][13] = bone; grid[7][14] = bone; grid[8][14] = boneD;
+        grid[9][14] = boneD; grid[10][14] = bone;
+        // Pelvis
+        _fillRect(grid, 10, 6, 6, 1, bone);
+        _fillRect(grid, 11, 7, 4, 1, boneD);
+        // Legs
+        grid[12][7] = bone; grid[12][8] = bone; grid[12][10] = bone; grid[12][11] = bone;
+        grid[13][7] = boneD; grid[13][8] = boneD; grid[13][10] = boneD; grid[13][11] = boneD;
+        grid[14][7] = bone; grid[14][8] = bone; grid[14][10] = bone; grid[14][11] = bone;
+        grid[15][7] = boneD; grid[15][10] = boneD;
+        // Feet
+        grid[16][6] = bone; grid[16][7] = bone; grid[16][8] = bone;
+        grid[16][10] = bone; grid[16][11] = bone; grid[16][12] = bone;
+        // Rusty sword
+        grid[3][15] = '#cccccc'; grid[4][15] = '#bbbbbb';
+        grid[5][15] = '#aaaaaa'; grid[6][15] = '#999999';
+        grid[7][15] = '#888888'; grid[8][15] = '#777777';
+        grid[9][15] = '#6a4a2a'; // handle
+        return grid;
+      },
+
+      skeleton_mage: () => {
+        const grid = _emptyGrid(18, 22);
+        const bone = '#e8e0d0';
+        const boneD = '#c8c0b0';
+        const robe = '#4a2a6e';
+        const robeD = '#3a1a5e';
+        // Wizard hat
+        grid[0][8] = robe; grid[0][9] = robe;
+        _fillRect(grid, 1, 6, 6, 1, robe);
+        _fillRect(grid, 2, 4, 10, 1, robeD);
+        // Skull
+        _fillRect(grid, 3, 5, 8, 1, bone);
+        _fillRect(grid, 4, 5, 8, 1, bone);
+        _fillRect(grid, 5, 6, 6, 1, boneD);
+        // Magic eyes
+        grid[3][6] = '#ff00ff'; grid[3][7] = '#ff44ff';
+        grid[3][10] = '#ff44ff'; grid[3][11] = '#ff00ff';
+        // Teeth
+        grid[5][7] = '#aaa'; grid[5][8] = boneD; grid[5][9] = '#aaa'; grid[5][10] = boneD;
+        // Robes
+        _fillRect(grid, 6, 5, 8, 1, robe);
+        _fillRect(grid, 7, 4, 10, 1, robe);
+        _fillRect(grid, 8, 3, 12, 1, robe);
+        _fillRect(grid, 9, 3, 12, 1, robeD);
+        _fillRect(grid, 10, 4, 10, 1, robeD);
+        _fillRect(grid, 11, 4, 10, 1, robe);
+        _fillRect(grid, 12, 5, 8, 1, robe);
+        _fillRect(grid, 13, 5, 8, 1, robeD);
+        _fillRect(grid, 14, 6, 6, 1, robeD);
+        // Magic rune on robe
+        grid[9][8] = '#ff66ff'; grid[9][9] = '#ff66ff';
+        grid[10][8] = '#cc44cc'; grid[10][9] = '#cc44cc';
+        // Bone hands
+        grid[8][2] = bone; grid[9][2] = bone;
+        grid[8][15] = bone; grid[9][15] = bone;
+        // Staff with orb
+        grid[1][16] = '#ff66ff'; grid[2][16] = '#dd44dd'; // magic orb
+        grid[3][16] = '#7a5230'; grid[4][16] = '#7a5230';
+        grid[5][16] = '#7a5230'; grid[6][16] = '#7a5230';
+        grid[7][16] = '#7a5230'; grid[8][16] = '#6a4220';
+        // Orb glow
+        grid[0][16] = '#ff88ff'; grid[1][15] = '#ff88ff'; grid[1][17] = '#ff88ff';
+        // Legs peeking
+        grid[15][7] = bone; grid[15][11] = bone;
+        grid[16][7] = bone; grid[16][11] = bone;
+        // Magic particles
+        grid[6][2] = '#ff66ff'; grid[4][1] = '#cc44cc';
+        grid[10][16] = '#ff66ff';
+        return grid;
+      },
+
+      wolf: () => {
+        const grid = _emptyGrid(22, 14);
+        const fur = '#555555';
+        const furL = '#777777';
+        const furD = '#333333';
+        const belly = '#888888';
+        // Ears
+        grid[0][4] = fur; grid[0][5] = fur;
+        grid[0][7] = fur; grid[0][8] = fur;
+        // Head
+        _fillRect(grid, 1, 3, 8, 1, fur);
+        _fillRect(grid, 2, 2, 10, 1, fur);
+        _fillRect(grid, 3, 1, 12, 1, fur);
+        _fillRect(grid, 4, 0, 12, 1, furL);
+        // Eyes
+        grid[2][4] = '#ffcc00'; grid[2][5] = '#ffcc00';
+        grid[2][7] = '#ffcc00'; grid[2][8] = '#ffcc00';
+        // Snout
+        grid[3][1] = furL; grid[3][2] = furL; grid[3][3] = furL;
+        grid[4][0] = '#ff3333'; grid[4][1] = furL; grid[4][2] = furL;
+        grid[3][0] = '#222'; // nose
+        // Body
+        _fillRect(grid, 4, 4, 12, 1, fur);
+        _fillRect(grid, 5, 4, 14, 1, fur);
+        _fillRect(grid, 6, 4, 15, 1, furD);
+        _fillRect(grid, 7, 5, 14, 1, fur);
+        _fillRect(grid, 8, 5, 12, 1, furL);
+        // Belly
+        grid[7][8] = belly; grid[7][9] = belly; grid[7][10] = belly; grid[7][11] = belly;
+        grid[8][8] = belly; grid[8][9] = belly; grid[8][10] = belly;
+        // Tail (bushy)
+        grid[4][16] = fur; grid[3][17] = fur; grid[3][18] = fur;
+        grid[2][18] = furD; grid[2][19] = furL;
+        grid[4][17] = furD;
+        // Legs (4)
+        grid[9][5] = furD; grid[9][6] = furD; grid[9][9] = furD; grid[9][10] = furD;
+        grid[9][13] = furD; grid[9][14] = furD; grid[9][16] = furD; grid[9][17] = furD;
+        grid[10][5] = furD; grid[10][6] = furD; grid[10][9] = furD; grid[10][10] = furD;
+        grid[10][13] = furD; grid[10][14] = furD; grid[10][16] = furD; grid[10][17] = furD;
+        grid[11][5] = furD; grid[11][6] = furD; grid[11][13] = furD; grid[11][14] = furD;
+        // Paws
+        grid[11][4] = '#222'; grid[11][7] = '#222';
+        grid[11][9] = '#222'; grid[11][10] = '#222';
+        grid[11][12] = '#222'; grid[11][15] = '#222';
+        grid[11][16] = '#222'; grid[11][17] = '#222';
+        return grid;
+      },
+
+      spider: () => {
+        const grid = _emptyGrid(22, 14);
+        const body = '#2a1a2a';
+        const bodyL = '#3a2a3a';
+        const leg = '#4a3a4a';
+        const legD = '#2a1a2a';
+        // Head section
+        _fillRect(grid, 3, 8, 5, 1, bodyL);
+        _fillRect(grid, 4, 7, 7, 1, body);
+        _fillRect(grid, 5, 7, 7, 1, bodyL);
+        // Eyes (cluster of red)
+        grid[3][9] = '#ff0000'; grid[3][11] = '#ff0000';
+        grid[4][8] = '#ff2200'; grid[4][10] = '#ff0000'; grid[4][12] = '#ff2200';
+        // Fangs
+        grid[5][9] = '#ffffaa'; grid[5][11] = '#ffffaa';
+        // Abdomen
+        _fillRect(grid, 6, 7, 7, 1, body);
+        _fillRect(grid, 7, 6, 9, 1, body);
+        _fillRect(grid, 8, 6, 9, 1, bodyL);
+        _fillRect(grid, 9, 7, 7, 1, body);
+        // Red marking (hourglass)
+        grid[7][9] = '#cc0000'; grid[7][10] = '#cc0000'; grid[7][11] = '#cc0000';
+        grid[8][10] = '#cc0000';
+        grid[9][9] = '#cc0000'; grid[9][10] = '#cc0000'; grid[9][11] = '#cc0000';
+        // Legs (8, detailed jointed)
+        // Left legs
+        grid[4][6] = leg; grid[3][5] = leg; grid[2][4] = leg; grid[1][3] = legD; grid[0][2] = legD;
+        grid[5][6] = leg; grid[5][5] = leg; grid[6][4] = leg; grid[7][3] = legD;
+        grid[7][6] = leg; grid[8][5] = leg; grid[9][4] = legD; grid[10][3] = legD;
+        grid[8][6] = leg; grid[9][5] = leg; grid[10][4] = legD; grid[11][3] = legD;
+        // Right legs
+        grid[4][14] = leg; grid[3][15] = leg; grid[2][16] = leg; grid[1][17] = legD; grid[0][18] = legD;
+        grid[5][14] = leg; grid[5][15] = leg; grid[6][16] = leg; grid[7][17] = legD;
+        grid[7][14] = leg; grid[8][15] = leg; grid[9][16] = legD; grid[10][17] = legD;
+        grid[8][14] = leg; grid[9][15] = leg; grid[10][16] = legD; grid[11][17] = legD;
+        // Web strand hint
+        grid[0][10] = '#888'; grid[1][10] = '#888';
+        return grid;
+      },
+
+      troll: () => {
+        const grid = _emptyGrid(22, 24);
+        const skin = '#6a7a4a';
+        const skinD = '#4a5a2a';
+        const skinL = '#8a9a6a';
+        // Head
+        _fillRect(grid, 0, 6, 10, 1, skin);
+        _fillRect(grid, 1, 5, 12, 1, skin);
+        _fillRect(grid, 2, 5, 12, 1, skinL);
+        _fillRect(grid, 3, 5, 12, 1, skin);
+        _fillRect(grid, 4, 6, 10, 1, skinD);
+        // Brow
+        grid[1][6] = skinD; grid[1][7] = skinD;
+        grid[1][14] = skinD; grid[1][15] = skinD;
+        // Eyes
+        grid[2][7] = '#ffcc00'; grid[2][8] = '#ffcc00';
+        grid[2][13] = '#ffcc00'; grid[2][14] = '#ffcc00';
+        // Nose (big)
+        grid[3][9] = skinD; grid[3][10] = skinD; grid[3][11] = skinD; grid[3][12] = skinD;
+        // Mouth
+        grid[4][7] = '#553322'; grid[4][8] = '#553322'; grid[4][9] = '#553322';
+        grid[4][10] = '#553322'; grid[4][11] = '#553322'; grid[4][12] = '#553322'; grid[4][13] = '#553322';
+        grid[4][7] = '#ffffaa'; grid[4][14] = '#ffffaa'; // tusks
+        // Massive body
+        _fillRect(grid, 5, 3, 16, 1, skinD);
+        _fillRect(grid, 6, 2, 18, 1, skinD);
+        _fillRect(grid, 7, 2, 18, 1, skin);
+        _fillRect(grid, 8, 2, 18, 1, skin);
+        _fillRect(grid, 9, 2, 18, 1, skinL);
+        _fillRect(grid, 10, 3, 16, 1, skin);
+        _fillRect(grid, 11, 3, 16, 1, skinD);
+        _fillRect(grid, 12, 4, 14, 1, skinD);
+        // Belly
+        grid[8][8] = skinL; grid[8][9] = skinL; grid[8][10] = skinL; grid[8][11] = skinL; grid[8][12] = skinL; grid[8][13] = skinL;
+        grid[9][7] = skinL; grid[9][8] = skinL; grid[9][9] = skinL; grid[9][10] = skinL; grid[9][11] = skinL; grid[9][12] = skinL; grid[9][13] = skinL; grid[9][14] = skinL;
+        // Loincloth
+        _fillRect(grid, 12, 6, 10, 1, '#554433');
+        _fillRect(grid, 13, 7, 8, 1, '#443322');
+        // Arms (huge)
+        grid[6][1] = skin; grid[7][0] = skin; grid[8][0] = skinL;
+        grid[9][0] = skinD; grid[10][0] = skinD; grid[11][0] = skin;
+        grid[6][20] = skin; grid[7][21] = skin; grid[8][21] = skinL;
+        grid[9][21] = skinD; grid[10][21] = skinD; grid[11][21] = skin;
+        // Fists
+        grid[12][0] = skinL; grid[12][1] = skinL;
+        grid[12][20] = skinL; grid[12][21] = skinL;
+        // Club
+        grid[4][21] = '#7a5230'; grid[5][21] = '#5a3a18'; grid[6][21] = '#5a3a18';
+        grid[3][20] = '#7a5230'; grid[3][21] = '#7a5230'; grid[3][19] = '#7a5230';
+        grid[2][20] = '#6a4a28'; grid[2][21] = '#6a4a28';
+        // Legs
+        _fillRect(grid, 14, 6, 4, 1, skinD); _fillRect(grid, 14, 12, 4, 1, skinD);
+        _fillRect(grid, 15, 6, 4, 1, skin); _fillRect(grid, 15, 12, 4, 1, skin);
+        _fillRect(grid, 16, 6, 4, 1, skinD); _fillRect(grid, 16, 12, 4, 1, skinD);
+        _fillRect(grid, 17, 6, 4, 1, skin); _fillRect(grid, 17, 12, 4, 1, skin);
+        // Big feet
+        _fillRect(grid, 18, 5, 6, 1, skinD); _fillRect(grid, 18, 11, 6, 1, skinD);
+        return grid;
+      },
+
+      dragon: () => {
+        const grid = _emptyGrid(26, 24);
+        const sc1 = '#8b0000';
+        const sc2 = '#aa2200';
+        const sc3 = '#660000';
+        const belly = '#dd8833';
+        const bellyL = '#eeaa44';
+        // Horns
+        grid[0][6] = '#555'; grid[0][7] = '#444';
+        grid[0][16] = '#444'; grid[0][17] = '#555';
+        grid[1][7] = '#555'; grid[1][8] = '#444';
+        grid[1][15] = '#444'; grid[1][16] = '#555';
+        // Head
+        _fillRect(grid, 2, 7, 10, 1, sc1);
+        _fillRect(grid, 3, 6, 12, 1, sc1);
+        _fillRect(grid, 4, 5, 14, 1, sc2);
+        _fillRect(grid, 5, 5, 14, 1, sc1);
+        _fillRect(grid, 6, 6, 12, 1, sc3);
+        // Eyes
+        grid[3][8] = '#ffcc00'; grid[3][9] = '#ffee00';
+        grid[3][14] = '#ffee00'; grid[3][15] = '#ffcc00';
+        // Nostrils
+        grid[5][8] = '#440000'; grid[5][9] = '#440000';
+        // Mouth/jaw
+        grid[6][7] = '#ffeecc'; grid[6][8] = sc3; grid[6][9] = '#ffeecc';
+        grid[6][14] = '#ffeecc'; grid[6][15] = sc3; grid[6][16] = '#ffeecc';
+        // Fire breath!
+        grid[5][3] = '#ff6600'; grid[5][4] = '#ff8800';
+        grid[4][2] = '#ffaa00'; grid[4][3] = '#ffcc00';
+        grid[6][3] = '#ff4400'; grid[6][4] = '#ff6600';
+        grid[5][2] = '#ffcc44'; grid[4][1] = '#ffee66';
+        // Neck
+        _fillRect(grid, 7, 8, 8, 1, sc2);
+        _fillRect(grid, 8, 8, 8, 1, sc1);
+        // Wings (spread)
+        // Left wing
+        grid[6][4] = sc2; grid[5][3] = null; // clear fire overlap
+        grid[7][4] = sc2; grid[7][3] = sc2; grid[7][2] = sc1;
+        grid[8][3] = sc2; grid[8][2] = sc1; grid[8][1] = sc3;
+        grid[9][2] = sc2; grid[9][1] = sc3; grid[9][0] = sc1;
+        grid[10][1] = sc2;
+        // Right wing
+        grid[7][19] = sc2; grid[7][20] = sc2; grid[7][21] = sc1;
+        grid[8][20] = sc2; grid[8][21] = sc1; grid[8][22] = sc3;
+        grid[9][21] = sc2; grid[9][22] = sc3; grid[9][23] = sc1;
+        grid[10][22] = sc2;
+        // Wing membrane hints
+        grid[8][4] = sc3; grid[9][3] = sc3; grid[10][2] = sc3;
+        grid[8][19] = sc3; grid[9][20] = sc3; grid[10][21] = sc3;
+        // Body (massive)
+        _fillRect(grid, 9, 5, 14, 1, sc1);
+        _fillRect(grid, 10, 4, 16, 1, sc2);
+        _fillRect(grid, 11, 4, 16, 1, sc1);
+        _fillRect(grid, 12, 4, 16, 1, sc2);
+        _fillRect(grid, 13, 5, 14, 1, sc1);
+        // Belly scales
+        _fillRect(grid, 10, 8, 8, 1, belly);
+        _fillRect(grid, 11, 8, 8, 1, bellyL);
+        _fillRect(grid, 12, 9, 6, 1, belly);
+        // Tail
+        grid[13][18] = sc1; grid[13][19] = sc1;
+        grid[14][19] = sc2; grid[14][20] = sc2;
+        grid[15][20] = sc1; grid[15][21] = sc1;
+        grid[16][21] = sc3; grid[16][22] = sc3;
+        grid[17][22] = sc2; grid[17][23] = sc1;
+        // Tail spade
+        grid[18][23] = sc3; grid[18][24] = sc3;
+        grid[17][24] = sc3;
+        // Legs (powerful)
+        _fillRect(grid, 14, 6, 4, 1, sc1); _fillRect(grid, 14, 14, 4, 1, sc1);
+        _fillRect(grid, 15, 6, 4, 1, sc2); _fillRect(grid, 15, 14, 4, 1, sc2);
+        _fillRect(grid, 16, 6, 4, 1, sc1); _fillRect(grid, 16, 14, 4, 1, sc1);
+        // Claws
+        grid[17][5] = '#333'; grid[17][6] = '#333'; grid[17][10] = '#333';
+        grid[17][13] = '#333'; grid[17][14] = '#333'; grid[17][18] = '#333';
+        _fillRect(grid, 17, 5, 6, 1, '#333');
+        _fillRect(grid, 17, 13, 6, 1, '#333');
+        return grid;
+      },
+
+      ghost: () => {
+        const grid = _emptyGrid(18, 22);
+        const body = 'rgba(180,200,220,0.65)';
+        const bodyL = 'rgba(200,220,240,0.45)';
+        const bodyD = 'rgba(160,180,200,0.55)';
+        // Head
+        _fillRect(grid, 0, 5, 8, 1, body);
+        _fillRect(grid, 1, 4, 10, 1, body);
+        _fillRect(grid, 2, 3, 12, 1, bodyL);
+        _fillRect(grid, 3, 3, 12, 1, body);
+        _fillRect(grid, 4, 4, 10, 1, body);
+        // Hollow eyes
+        grid[2][5] = '#000044'; grid[2][6] = '#000033'; grid[2][7] = '#000044';
+        grid[2][10] = '#000044'; grid[2][11] = '#000033'; grid[2][12] = '#000044';
+        grid[3][6] = '#000022'; grid[3][11] = '#000022';
+        // Mouth (wailing)
+        grid[4][7] = '#000033'; grid[4][8] = '#000033'; grid[4][9] = '#000033'; grid[4][10] = '#000033';
+        // Body (flowing)
+        _fillRect(grid, 5, 3, 12, 1, body);
+        _fillRect(grid, 6, 3, 12, 1, bodyL);
+        _fillRect(grid, 7, 3, 12, 1, body);
+        _fillRect(grid, 8, 3, 12, 1, bodyD);
+        _fillRect(grid, 9, 4, 10, 1, body);
+        _fillRect(grid, 10, 4, 10, 1, bodyL);
+        _fillRect(grid, 11, 4, 10, 1, body);
+        _fillRect(grid, 12, 5, 8, 1, bodyD);
+        // Wispy tendrils
+        grid[13][5] = body; grid[13][7] = bodyL; grid[13][9] = body; grid[13][12] = bodyL;
+        grid[14][6] = bodyD; grid[14][8] = body; grid[14][11] = bodyD;
+        grid[15][5] = bodyL; grid[15][10] = bodyL; grid[15][12] = body;
+        grid[16][7] = bodyD; grid[16][11] = bodyD;
+        // Reaching arms
+        grid[6][2] = body; grid[7][1] = bodyL; grid[8][0] = bodyD;
+        grid[6][15] = body; grid[7][16] = bodyL; grid[8][17] = bodyD;
+        return grid;
+      },
+
+      forest_wraith: () => {
+        const grid = _emptyGrid(22, 24);
+        const cloak = '#1a3a1a';
+        const cloakD = '#0a2a0a';
+        const glow = '#00ff66';
+        const glowD = '#00cc44';
+        // Hood
+        _fillRect(grid, 0, 7, 8, 1, cloak);
+        _fillRect(grid, 1, 5, 12, 1, cloak);
+        _fillRect(grid, 2, 5, 12, 1, cloakD);
+        _fillRect(grid, 3, 5, 12, 1, cloakD);
+        _fillRect(grid, 4, 6, 10, 1, cloakD);
+        // Glowing eyes
+        grid[2][7] = glow; grid[2][8] = glow;
+        grid[2][13] = glow; grid[2][14] = glow;
+        grid[3][7] = glowD; grid[3][14] = glowD;
+        // Body (tattered robes)
+        _fillRect(grid, 5, 5, 12, 1, cloak);
+        _fillRect(grid, 6, 4, 14, 1, cloak);
+        _fillRect(grid, 7, 3, 16, 1, cloak);
+        _fillRect(grid, 8, 3, 16, 1, cloakD);
+        _fillRect(grid, 9, 3, 16, 1, cloak);
+        _fillRect(grid, 10, 4, 14, 1, cloakD);
+        _fillRect(grid, 11, 4, 14, 1, cloak);
+        _fillRect(grid, 12, 5, 12, 1, cloak);
+        _fillRect(grid, 13, 5, 12, 1, cloakD);
+        _fillRect(grid, 14, 6, 10, 1, cloakD);
+        // Tattered edges
+        grid[15][5] = cloak; grid[15][7] = cloakD; grid[15][9] = cloak; grid[15][11] = cloakD; grid[15][14] = cloak; grid[15][16] = cloakD;
+        grid[16][6] = cloakD; grid[16][10] = cloak; grid[16][13] = cloakD;
+        grid[17][7] = cloak; grid[17][12] = cloak;
+        // Branch-like arms
+        grid[7][2] = '#3a2a18'; grid[7][1] = '#3a2a18'; grid[8][0] = '#3a2a18';
+        grid[6][1] = '#4a3a28'; grid[8][1] = '#2a1a08';
+        grid[7][19] = '#3a2a18'; grid[7][20] = '#3a2a18'; grid[8][21] = '#3a2a18';
+        grid[6][20] = '#4a3a28'; grid[8][20] = '#2a1a08';
+        // Twig fingers
+        grid[9][0] = '#2a1a08'; grid[8][21] = '#2a1a08';
+        // Magic particles
+        grid[5][2] = glow; grid[3][19] = glow; grid[9][20] = glowD;
+        grid[1][3] = glowD; grid[11][19] = glow; grid[14][2] = glowD;
+        return grid;
+      },
+
+      bat: () => {
+        const grid = _emptyGrid(20, 12);
+        const body = '#2a1a2a';
+        const bodyL = '#3a2a3a';
+        const wing = '#3a2a3a';
+        const wingD = '#1a0a1a';
+        // Ears
+        grid[0][8] = body; grid[0][9] = body;
+        grid[0][11] = body; grid[0][12] = body;
+        // Head
+        _fillRect(grid, 1, 8, 4, 1, body);
+        _fillRect(grid, 2, 8, 4, 1, bodyL);
+        grid[1][9] = '#ff0000'; grid[1][11] = '#ff0000'; // eyes
+        // Fangs
+        grid[2][9] = '#fff'; grid[2][11] = '#fff';
+        // Body
+        _fillRect(grid, 3, 8, 4, 1, body);
+        _fillRect(grid, 4, 8, 4, 1, bodyL);
+        _fillRect(grid, 5, 9, 2, 1, body);
+        // Wings spread (left)
+        _fillRect(grid, 2, 2, 6, 1, wing);
+        _fillRect(grid, 3, 1, 7, 1, wing);
+        _fillRect(grid, 4, 0, 8, 1, wingD);
+        _fillRect(grid, 5, 1, 7, 1, wing);
+        _fillRect(grid, 6, 2, 5, 1, wingD);
+        // Wings spread (right)
+        _fillRect(grid, 2, 12, 6, 1, wing);
+        _fillRect(grid, 3, 12, 7, 1, wing);
+        _fillRect(grid, 4, 12, 8, 1, wingD);
+        _fillRect(grid, 5, 12, 7, 1, wing);
+        _fillRect(grid, 6, 13, 5, 1, wingD);
+        // Wing bones
+        grid[3][2] = body; grid[4][1] = body;
+        grid[3][17] = body; grid[4][18] = body;
+        // Feet
+        grid[6][9] = body; grid[6][10] = body; grid[6][11] = body;
+        return grid;
+      },
+
+      stone_golem: () => {
+        const grid = _emptyGrid(22, 24);
+        const stone = '#777788';
+        const stoneL = '#8888aa';
+        const stoneD = '#555566';
+        const crack = '#444455';
+        const glow = '#ffaa00';
+        // Head
+        _fillRect(grid, 0, 7, 8, 1, stone);
+        _fillRect(grid, 1, 6, 10, 1, stone);
+        _fillRect(grid, 2, 5, 12, 1, stoneL);
+        _fillRect(grid, 3, 5, 12, 1, stoneD);
+        _fillRect(grid, 4, 6, 10, 1, stoneD);
+        // Glowing eyes
+        grid[1][8] = glow; grid[1][9] = glow;
+        grid[1][12] = glow; grid[1][13] = glow;
+        grid[2][8] = '#ffcc44'; grid[2][13] = '#ffcc44';
+        // Mouth crack
+        grid[3][8] = crack; grid[3][9] = crack; grid[3][10] = crack;
+        grid[3][11] = crack; grid[3][12] = crack; grid[3][13] = crack;
+        // Massive body
+        _fillRect(grid, 5, 3, 16, 1, stone);
+        _fillRect(grid, 6, 2, 18, 1, stone);
+        _fillRect(grid, 7, 2, 18, 1, stoneL);
+        _fillRect(grid, 8, 2, 18, 1, stone);
+        _fillRect(grid, 9, 2, 18, 1, stoneD);
+        _fillRect(grid, 10, 3, 16, 1, stoneD);
+        _fillRect(grid, 11, 3, 16, 1, stone);
+        _fillRect(grid, 12, 4, 14, 1, stone);
+        _fillRect(grid, 13, 4, 14, 1, stoneD);
+        // Crack details
+        grid[7][9] = crack; grid[8][9] = crack; grid[9][8] = crack; grid[10][8] = crack;
+        grid[6][14] = crack; grid[7][14] = crack; grid[8][15] = crack;
+        grid[11][6] = crack; grid[12][7] = crack;
+        // Rune glow
+        grid[8][10] = glow; grid[8][11] = glow;
+        grid[9][10] = '#ffcc44'; grid[9][11] = '#ffcc44';
+        // Massive arms
+        grid[6][1] = stone; grid[7][0] = stoneL; grid[8][0] = stone;
+        grid[9][0] = stoneD; grid[10][0] = stoneD; grid[11][0] = stone;
+        grid[6][20] = stone; grid[7][21] = stoneL; grid[8][21] = stone;
+        grid[9][21] = stoneD; grid[10][21] = stoneD; grid[11][21] = stone;
+        // Fists
+        grid[12][0] = stoneL; grid[12][1] = stoneL;
+        grid[12][20] = stoneL; grid[12][21] = stoneL;
+        grid[13][0] = stone; grid[13][21] = stone;
+        // Legs
+        _fillRect(grid, 14, 5, 5, 1, stoneD); _fillRect(grid, 14, 12, 5, 1, stoneD);
+        _fillRect(grid, 15, 5, 5, 1, stone); _fillRect(grid, 15, 12, 5, 1, stone);
+        _fillRect(grid, 16, 5, 5, 1, stoneD); _fillRect(grid, 16, 12, 5, 1, stoneD);
+        _fillRect(grid, 17, 5, 5, 1, stone); _fillRect(grid, 17, 12, 5, 1, stone);
+        // Feet
+        _fillRect(grid, 18, 4, 7, 1, stoneD); _fillRect(grid, 18, 11, 7, 1, stoneD);
         return grid;
       }
     };
 
-    // Alias mappings
     const aliases = {
       'Gruk': 'goblin_chief',
       'Goblin Raider': 'goblin',
@@ -592,95 +906,150 @@ const Sprites = {
     return this.render(gen(), scale);
   },
 
-  // NPC sprites
-  npc(name, scale = 4) {
+  // NPC sprites — higher resolution
+  npc(name, scale = 3) {
     const npcs = {
       elder: () => {
-        const grid = _emptyGrid(12, 16);
+        const grid = _emptyGrid(18, 26);
         const skin = '#d4a373';
+        const skinD = _darken(skin);
         const robe = '#5a3a8a';
+        const robeD = '#4a2a7a';
         const hair = '#cccccc';
-        // Hair/head
-        _fillRow(grid, 0, 4, 7, hair);
-        _fillRow(grid, 1, 3, 8, hair);
-        _fillRow(grid, 2, 3, 8, skin);
-        grid[2][4] = '#1a1a2e'; grid[2][6] = '#1a1a2e'; // eyes
-        _fillRow(grid, 3, 4, 7, skin);
+        const hairD = '#aaaaaa';
+        // Hair
+        _fillRect(grid, 0, 7, 4, 1, hair);
+        _fillRect(grid, 1, 5, 8, 1, hair);
+        _fillRect(grid, 2, 5, 8, 1, hair);
+        _fillRect(grid, 3, 5, 8, 1, hairD);
+        // Face
+        _fillRect(grid, 4, 5, 8, 1, skin);
+        _fillRect(grid, 5, 5, 8, 1, skin);
+        _fillRect(grid, 6, 6, 6, 1, skin);
+        grid[4][6] = '#1a1a2e'; grid[4][7] = '#eee'; grid[4][10] = '#eee'; grid[4][11] = '#1a1a2e';
         // Beard
-        _fillRow(grid, 4, 4, 7, hair);
-        _fillRow(grid, 5, 4, 7, hair);
-        grid[6][5] = hair;
+        _fillRect(grid, 6, 5, 8, 1, hair);
+        _fillRect(grid, 7, 6, 6, 1, hair);
+        _fillRect(grid, 8, 7, 4, 1, hairD);
+        grid[9][8] = hairD; grid[9][9] = hairD;
         // Robe
-        _fillRow(grid, 5, 3, 8, robe);
-        _fillRow(grid, 6, 3, 8, robe);
-        _fillRow(grid, 7, 2, 9, robe);
-        _fillRow(grid, 8, 2, 9, robe);
-        _fillRow(grid, 9, 3, 8, robe);
-        _fillRow(grid, 10, 3, 8, robe);
+        _fillRect(grid, 8, 5, 8, 1, robe);
+        _fillRect(grid, 9, 4, 10, 1, robe);
+        _fillRect(grid, 10, 4, 10, 1, robe);
+        _fillRect(grid, 11, 3, 12, 1, robe);
+        _fillRect(grid, 12, 3, 12, 1, robeD);
+        _fillRect(grid, 13, 4, 10, 1, robeD);
+        _fillRect(grid, 14, 4, 10, 1, robe);
+        _fillRect(grid, 15, 5, 8, 1, robe);
+        _fillRect(grid, 16, 5, 8, 1, robeD);
+        _fillRect(grid, 17, 5, 8, 1, robeD);
+        // Robe trim
+        grid[11][4] = '#c8a030'; grid[11][14] = '#c8a030';
+        grid[12][4] = '#c8a030'; grid[12][14] = '#c8a030';
         // Staff
-        grid[3][9] = '#aa66ff'; // orb
-        grid[4][9] = '#7a5230'; grid[5][9] = '#7a5230';
-        grid[6][9] = '#7a5230'; grid[7][9] = '#7a5230';
-        grid[8][9] = '#7a5230';
+        grid[3][15] = '#aa66ff'; grid[3][16] = '#cc88ff'; // orb
+        grid[4][15] = '#7a5230';
+        grid[5][15] = '#7a5230'; grid[6][15] = '#7a5230';
+        grid[7][15] = '#7a5230'; grid[8][15] = '#7a5230';
+        grid[9][15] = '#7a5230'; grid[10][15] = '#6a4220';
         // Feet
-        grid[11][4] = '#3a2518'; grid[11][6] = '#3a2518';
+        grid[18][6] = '#3a2518'; grid[18][7] = '#3a2518';
+        grid[18][10] = '#3a2518'; grid[18][11] = '#3a2518';
         return grid;
       },
+
       merchant: () => {
-        const grid = _emptyGrid(12, 16);
+        const grid = _emptyGrid(18, 26);
         const skin = '#b07d56';
+        const skinD = _darken(skin);
         const clothes = '#8b6914';
+        const clothesD = '#7a5a10';
         const hat = '#5a4a2a';
         // Hat
-        _fillRow(grid, 0, 3, 8, hat);
-        _fillRow(grid, 1, 2, 9, hat);
+        _fillRect(grid, 0, 6, 6, 1, hat);
+        _fillRect(grid, 1, 4, 10, 1, hat);
+        _fillRect(grid, 2, 3, 12, 1, _darken(hat));
         // Face
-        _fillRow(grid, 2, 3, 8, skin);
-        _fillRow(grid, 3, 3, 8, skin);
-        grid[3][4] = '#1a1a2e'; grid[3][6] = '#1a1a2e';
-        _fillRow(grid, 4, 4, 7, skin);
-        grid[4][5] = '#cc6655'; // smile
+        _fillRect(grid, 3, 5, 8, 1, skin);
+        _fillRect(grid, 4, 5, 8, 1, skin);
+        _fillRect(grid, 5, 6, 6, 1, skin);
+        grid[4][6] = '#1a1a2e'; grid[4][7] = '#eee'; grid[4][10] = '#eee'; grid[4][11] = '#1a1a2e';
+        grid[5][8] = '#cc6655'; grid[5][9] = '#cc6655'; // smile
+        // Mustache
+        grid[5][6] = '#4a3018'; grid[5][7] = '#4a3018'; grid[5][10] = '#4a3018'; grid[5][11] = '#4a3018';
         // Body
-        _fillRow(grid, 5, 3, 8, clothes);
-        _fillRow(grid, 6, 3, 8, clothes);
-        _fillRow(grid, 7, 2, 9, clothes);
-        _fillRow(grid, 8, 3, 8, '#7a5a10');
-        grid[6][5] = '#ffd700'; // gold button
+        _fillRect(grid, 7, 4, 10, 1, clothes);
+        _fillRect(grid, 8, 4, 10, 1, clothes);
+        _fillRect(grid, 9, 3, 12, 1, clothes);
+        _fillRect(grid, 10, 3, 12, 1, clothesD);
+        _fillRect(grid, 11, 4, 10, 1, clothesD);
+        _fillRect(grid, 12, 4, 10, 1, clothes);
+        // Buttons
+        grid[8][9] = '#ffd700'; grid[9][9] = '#ffd700'; grid[10][9] = '#ffd700';
         // Arms
-        grid[6][2] = skin; grid[7][1] = skin;
-        grid[6][8] = skin; grid[7][9] = skin;
+        grid[8][3] = skin; grid[9][2] = skin; grid[10][2] = skin;
+        grid[8][14] = skin; grid[9][15] = skin; grid[10][15] = skin;
         // Bag
-        grid[7][10] = '#8b7355'; grid[8][10] = '#8b7355'; grid[8][9] = '#8b7355';
-        // Legs/feet
-        grid[9][4] = '#554433'; grid[9][6] = '#554433';
-        grid[10][4] = '#554433'; grid[10][6] = '#554433';
-        grid[11][4] = '#3a2518'; grid[11][6] = '#3a2518';
+        grid[9][16] = '#8b7355'; grid[10][16] = '#8b7355'; grid[10][17] = '#8b7355';
+        grid[11][16] = '#7b6345'; grid[11][17] = '#7b6345';
+        grid[9][17] = '#9b8365';
+        // Belt
+        _fillRect(grid, 12, 5, 8, 1, '#4a3018');
+        grid[12][8] = '#c8a030'; grid[12][9] = '#c8a030';
+        // Legs
+        grid[13][6] = '#554433'; grid[13][7] = '#554433'; grid[13][10] = '#554433'; grid[13][11] = '#554433';
+        grid[14][6] = '#554433'; grid[14][7] = '#554433'; grid[14][10] = '#554433'; grid[14][11] = '#554433';
+        grid[15][6] = '#443322'; grid[15][7] = '#443322'; grid[15][10] = '#443322'; grid[15][11] = '#443322';
+        // Boots
+        grid[16][5] = '#3a2518'; grid[16][6] = '#3a2518'; grid[16][7] = '#3a2518';
+        grid[16][10] = '#3a2518'; grid[16][11] = '#3a2518'; grid[16][12] = '#3a2518';
         return grid;
       },
+
       fairy: () => {
-        const grid = _emptyGrid(10, 12);
+        const grid = _emptyGrid(16, 16);
         const skin = '#ffe4d0';
         const wings = '#88ccff';
+        const wingsL = '#aaddff';
         const dress = '#ff88cc';
-        // Wings
-        grid[1][1] = wings; grid[1][2] = wings; grid[1][7] = wings; grid[1][8] = wings;
-        grid[2][0] = wings; grid[2][1] = wings; grid[2][2] = wings;
-        grid[2][7] = wings; grid[2][8] = wings; grid[2][9] = wings;
-        grid[3][0] = wings; grid[3][1] = wings; grid[3][8] = wings; grid[3][9] = wings;
-        grid[4][1] = wings; grid[4][8] = wings;
+        const dressD = '#dd66aa';
+        // Wings (translucent)
+        _fillRect(grid, 2, 1, 3, 1, wingsL);
+        _fillRect(grid, 3, 0, 4, 1, wings);
+        _fillRect(grid, 4, 0, 4, 1, wingsL);
+        _fillRect(grid, 5, 1, 3, 1, wings);
+        _fillRect(grid, 6, 2, 2, 1, wingsL);
+        _fillRect(grid, 2, 12, 3, 1, wingsL);
+        _fillRect(grid, 3, 12, 4, 1, wings);
+        _fillRect(grid, 4, 12, 4, 1, wingsL);
+        _fillRect(grid, 5, 12, 3, 1, wings);
+        _fillRect(grid, 6, 13, 2, 1, wingsL);
         // Head
-        _fillRow(grid, 1, 3, 6, skin);
-        _fillRow(grid, 2, 3, 6, skin);
-        grid[2][4] = '#3366ff'; // eyes
-        // Body
-        _fillRow(grid, 3, 4, 5, dress);
-        _fillRow(grid, 4, 3, 6, dress);
-        _fillRow(grid, 5, 3, 6, dress);
-        // Sparkle
-        grid[0][3] = '#ffff00'; grid[0][6] = '#ffff00';
-        grid[6][2] = '#ffff00'; grid[6][7] = '#ffff00';
+        _fillRect(grid, 1, 5, 6, 1, skin);
+        _fillRect(grid, 2, 5, 6, 1, skin);
+        _fillRect(grid, 3, 5, 6, 1, skin);
+        // Hair
+        _fillRect(grid, 0, 5, 6, 1, '#ffd700');
+        grid[1][5] = '#ffd700'; grid[1][10] = '#ffd700';
+        // Eyes
+        grid[2][6] = '#3366ff'; grid[2][7] = '#3366ff';
+        grid[2][9] = '#3366ff';
+        // Smile
+        grid[3][7] = '#ff8888'; grid[3][8] = '#ff8888';
+        // Body (dress)
+        _fillRect(grid, 4, 6, 4, 1, dress);
+        _fillRect(grid, 5, 5, 6, 1, dress);
+        _fillRect(grid, 6, 5, 6, 1, dressD);
+        _fillRect(grid, 7, 5, 6, 1, dress);
+        _fillRect(grid, 8, 6, 4, 1, dressD);
+        // Arms
+        grid[5][4] = skin; grid[5][11] = skin;
         // Legs
-        grid[6][4] = skin; grid[6][5] = skin;
+        grid[9][6] = skin; grid[9][7] = skin; grid[9][9] = skin; grid[9][10] = skin;
+        // Sparkles
+        grid[0][3] = '#ffff00'; grid[0][12] = '#ffff00';
+        grid[7][3] = '#ffff00'; grid[7][13] = '#ffff00';
+        grid[1][1] = '#ffff88'; grid[10][14] = '#ffff88';
         return grid;
       }
     };
@@ -712,7 +1081,16 @@ function _fillRow(grid, row, startCol, endCol, color) {
   }
 }
 
+function _fillRect(grid, row, col, w, h, color) {
+  for (let r = row; r < row + h && r < grid.length; r++) {
+    for (let c = col; c < col + w && c < grid[r].length; c++) {
+      grid[r][c] = color;
+    }
+  }
+}
+
 function _darken(hex) {
+  if (!hex || !hex.startsWith('#')) return '#000000';
   const r = Math.max(0, parseInt(hex.slice(1, 3), 16) - 40);
   const g = Math.max(0, parseInt(hex.slice(3, 5), 16) - 40);
   const b = Math.max(0, parseInt(hex.slice(5, 7), 16) - 40);
@@ -720,6 +1098,7 @@ function _darken(hex) {
 }
 
 function _lighten(hex) {
+  if (!hex || !hex.startsWith('#')) return '#ffffff';
   const r = Math.min(255, parseInt(hex.slice(1, 3), 16) + 40);
   const g = Math.min(255, parseInt(hex.slice(3, 5), 16) + 40);
   const b = Math.min(255, parseInt(hex.slice(5, 7), 16) + 40);
