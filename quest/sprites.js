@@ -56,7 +56,7 @@ const Sprites = {
     const armor = _resolve(appearance.armorColor, typeof ARMOR_COLORS !== 'undefined' ? ARMOR_COLORS : null, '#666688');
     const armorDark = _darken(armor);
     const armorLight = _lighten(armor);
-    const eyes = race === 'dragonborn' ? '#ff6600' : '#1a1a2e';
+    const eyes = race === 'dragonborn' ? '#ff6600' : race === 'tabaxi' ? '#44cc44' : '#1a1a2e';
     const boot = '#3a2518';
 
     // Base 12x16 pixel template
@@ -81,6 +81,14 @@ const Sprites = {
       _fillRow(grid, 2, 3, 8, skin);
       grid[0][3] = _darken(skin); // horn
       grid[0][7] = _darken(skin); // horn
+    } else if (race === 'tabaxi') {
+      // Cat ears
+      grid[0][3] = skin; // left ear
+      grid[0][7] = skin; // right ear
+      grid[0][4] = _darken(skin); // inner ear
+      grid[0][6] = _darken(skin); // inner ear
+      _fillRow(grid, 1, 3, 8, hair);
+      _fillRow(grid, 2, 3, 8, hair);
     } else if (race === 'halfling') {
       _fillRow(grid, 0, 4, 7, hair);
       _fillRow(grid, 1, 3, 8, hair);
@@ -188,11 +196,19 @@ const Sprites = {
       grid[14][6] = boot;
     }
 
-    // Dwarf is shorter — shift down less
-    // Dragonborn tail hint
+    // Race-specific lower body details
     if (race === 'dragonborn') {
+      // Dragonborn tail
       grid[12][2] = _darken(skin);
       grid[13][1] = _darken(skin);
+    } else if (race === 'tabaxi') {
+      // Cat tail
+      grid[11][8] = hair;
+      grid[12][9] = hair;
+      grid[13][9] = hair;
+      grid[14][10] = hair;
+      // Cat nose on face
+      grid[5][5] = '#ff9999';
     }
 
     return this.render(grid, scale);

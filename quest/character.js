@@ -7,7 +7,8 @@ const RACES = {
   elf:        { name: 'Elf',        bonus: { intelligence: 2, wisdom: 1 }, desc: 'Wise and perceptive. +2 INT, +1 WIS.' },
   dwarf:      { name: 'Dwarf',      bonus: { constitution: 2, strength: 1 }, desc: 'Tough and sturdy. +2 CON, +1 STR.' },
   halfling:   { name: 'Halfling',   bonus: { dexterity: 2, charisma: 1 }, desc: 'Quick and charming. +2 DEX, +1 CHA.' },
-  dragonborn: { name: 'Dragonborn', bonus: { strength: 2, constitution: 1 }, desc: 'Powerful and fearless. +2 STR, +1 CON.' }
+  dragonborn: { name: 'Dragonborn', bonus: { strength: 2, constitution: 1 }, desc: 'Powerful and fearless. +2 STR, +1 CON.' },
+  tabaxi:     { name: 'Tabaxi',     bonus: { dexterity: 2, wisdom: 1 }, desc: 'Swift and curious cat-folk. +2 DEX, +1 WIS.' }
 };
 
 const CLASSES = {
