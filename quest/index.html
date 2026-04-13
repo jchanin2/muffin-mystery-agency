@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Realms of Mathematica</title>
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -232,6 +232,31 @@
     </div>
   </div>
 
+  <!-- ==================== EQUIP PROMPT ==================== -->
+  <div id="equip-overlay" class="equip-overlay" style="display:none;">
+    <div class="equip-panel">
+      <h2 class="equip-title">New Equipment Found!</h2>
+      <div class="equip-item-name" id="equip-item-name"></div>
+      <div class="equip-compare">
+        <div class="equip-side">
+          <div class="equip-label">Current</div>
+          <div class="equip-sprite" id="equip-sprite-old"></div>
+          <div class="equip-stat" id="equip-stat-old"></div>
+        </div>
+        <div class="equip-arrow">&#10132;</div>
+        <div class="equip-side">
+          <div class="equip-label">New</div>
+          <div class="equip-sprite" id="equip-sprite-new"></div>
+          <div class="equip-stat" id="equip-stat-new"></div>
+        </div>
+      </div>
+      <div class="equip-buttons">
+        <button id="btn-equip-yes" class="btn btn-gold">Equip</button>
+        <button id="btn-equip-no" class="btn btn-secondary">Keep Current</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== INVENTORY / CHARACTER SHEET ==================== -->
   <div id="screen-inventory" class="screen">
     <div class="inventory-container">
@@ -317,12 +342,12 @@
 
   <script src="whiteboard.js?v=1"></script>
   <script src="audio.js"></script>
-  <script src="sprites.js?v=3"></script>
+  <script src="sprites.js?v=4"></script>
   <script src="environments.js?v=3"></script>
   <script src="problems.js?v=3"></script>
   <script src="character.js?v=3"></script>
   <script src="story.js?v=6"></script>
   <script src="combat.js?v=3"></script>
-  <script src="game.js?v=8"></script>
+  <script src="game.js?v=9"></script>
 </body>
 </html>

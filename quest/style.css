@@ -863,6 +863,79 @@ body {
 .combat-feedback.wrong { color: var(--red); }
 
 /* ============================================================
+   EQUIP PROMPT
+   ============================================================ */
+.equip-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.equip-panel {
+  background: var(--stone);
+  border: 2px solid var(--torch);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+}
+.equip-title {
+  color: var(--torch);
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+}
+.equip-item-name {
+  color: var(--parchment-light);
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.equip-compare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.equip-side {
+  flex: 1;
+  text-align: center;
+}
+.equip-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.equip-sprite {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.equip-stat {
+  font-size: 0.85rem;
+  color: var(--parchment-light);
+}
+.equip-stat .stat-better { color: var(--green); font-weight: bold; }
+.equip-stat .stat-worse { color: var(--red); }
+.equip-arrow {
+  font-size: 1.6rem;
+  color: var(--torch);
+  padding-top: 20px;
+}
+.equip-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.equip-buttons .btn { min-width: 110px; }
+
+/* ============================================================
    WHITEBOARD / SCRATCH PAD
    ============================================================ */
 .btn-whiteboard-toggle {

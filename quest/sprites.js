@@ -18,7 +18,8 @@ const Sprites = {
   },
 
   // Generate player sprite (20x28 grid)
-  player(race, classType, appearance = {}, scale = 3) {
+  // equipment: optional { weapon: {bonus, type}, armor: {bonus}, accessory: {bonus} }
+  player(race, classType, appearance = {}, scale = 3, equipment = null) {
     const _resolve = (val, palette, fallback) => {
       if (typeof val === 'string' && val.startsWith('#')) return val;
       if (typeof val === 'number' && palette && palette[val]) return palette[val];
@@ -122,6 +123,19 @@ const Sprites = {
     // --- NECK (row 10) ---
     grid[10][9] = skin; grid[10][10] = skin;
 
+    // --- Equipment tier colors ---
+    const wepBonus = equipment && equipment.weapon ? equipment.weapon.bonus : 0;
+    const armBonus = equipment && equipment.armor ? equipment.armor.bonus : 0;
+    const hasAccessory = equipment && equipment.accessory;
+
+    // Weapon metal color by tier
+    const wepMetal = wepBonus >= 5 ? '#e8d060' : wepBonus >= 4 ? '#70b8e8' : wepBonus >= 3 ? '#cccccc' : '#aaaaaa';
+    const wepMetalDark = wepBonus >= 5 ? '#c8a030' : wepBonus >= 4 ? '#4888b8' : wepBonus >= 3 ? '#999999' : '#777777';
+    const wepGlow = wepBonus >= 5 ? '#ffe888' : wepBonus >= 4 ? '#90d0ff' : null;
+
+    // Armor overlay by tier (heavy armor gets extra details)
+    const armorTier = armBonus >= 5 ? 'heavy' : armBonus >= 3 ? 'medium' : 'light';
+
     // --- SHOULDERS + TORSO (rows 11-17) ---
     _fillRect(grid, 11, 4, 12, 1, armor);
     _fillRect(grid, 12, 4, 12, 1, armor);
@@ -131,6 +145,17 @@ const Sprites = {
     // Belt
     _fillRect(grid, 16, 6, 8, 1, belt);
     grid[16][9] = '#c8a030'; grid[16][10] = '#c8a030'; // buckle
+
+    // Heavy armor details (tier 5+)
+    if (armorTier === 'heavy') {
+      // Reinforced plate lines
+      grid[12][6] = armorLight; grid[12][13] = armorLight;
+      grid[13][6] = armorLight; grid[13][13] = armorLight;
+      grid[14][6] = armorLight; grid[14][13] = armorLight;
+    } else if (armorTier === 'medium') {
+      // Chain links hint
+      grid[13][7] = armorLight; grid[13][12] = armorLight;
+    }
 
     // Class-specific torso detail
     if (classType === 'wizard') {
@@ -143,8 +168,12 @@ const Sprites = {
     } else if (classType === 'warrior') {
       grid[12][9] = armorLight; grid[12][10] = armorLight;
       grid[13][9] = armorLight; grid[13][10] = armorLight;
-      // Pauldrons
+      // Pauldrons — bigger at higher armor tiers
       grid[11][3] = armorLight; grid[11][16] = armorLight;
+      if (armorTier === 'heavy') {
+        grid[10][3] = armorLight; grid[10][16] = armorLight;
+        grid[11][2] = armor; grid[11][17] = armor;
+      }
     } else if (classType === 'rogue') {
       // Dark vest stripe
       grid[12][9] = '#2a2a2a'; grid[12][10] = '#2a2a2a';
@@ -164,39 +193,55 @@ const Sprites = {
     grid[15][3] = skin; grid[15][16] = skin;
     grid[16][3] = skin; grid[16][16] = skin;
 
-    // --- WEAPON (right hand) ---
+    // --- WEAPON (right hand, colored by tier) ---
     if (classType === 'warrior') {
-      // Sword
-      grid[10][17] = '#cccccc';
-      grid[11][17] = '#bbbbbb'; grid[12][17] = '#aaaaaa';
-      grid[13][17] = '#aaaaaa'; grid[14][17] = '#999999';
-      grid[15][17] = '#888888';
+      // Sword — color varies by weapon bonus
+      if (wepGlow) { grid[9][17] = wepGlow; } // glow tip for high-tier
+      grid[10][17] = wepMetal;
+      grid[11][17] = wepMetal; grid[12][17] = wepMetalDark;
+      grid[13][17] = wepMetalDark; grid[14][17] = wepMetalDark;
+      grid[15][17] = wepMetalDark;
       grid[16][17] = '#7a5230'; // handle
       // Shield (left hand)
-      grid[12][1] = '#8b7355'; grid[12][2] = '#8b7355';
-      grid[13][1] = '#8b7355'; grid[13][2] = '#9b8365';
-      grid[14][1] = '#8b7355'; grid[14][2] = '#8b7355';
-      grid[13][0] = '#7b6345';
+      const shieldColor = armorTier === 'heavy' ? armorLight : '#8b7355';
+      const shieldEdge = armorTier === 'heavy' ? armor : '#7b6345';
+      grid[12][1] = shieldColor; grid[12][2] = shieldColor;
+      grid[13][1] = shieldColor; grid[13][2] = shieldColor;
+      grid[14][1] = shieldColor; grid[14][2] = shieldColor;
+      grid[13][0] = shieldEdge;
     } else if (classType === 'wizard') {
-      // Staff with orb
-      grid[9][17] = '#aa66ff'; grid[9][18] = '#cc88ff'; // orb glow
+      // Staff with orb — orb color varies by tier
+      const orbColor = wepBonus >= 5 ? '#ff6600' : wepBonus >= 4 ? '#44ddff' : '#aa66ff';
+      const orbGlow = wepBonus >= 5 ? '#ff9944' : wepBonus >= 4 ? '#88eeff' : '#cc88ff';
+      grid[9][17] = orbColor; grid[9][18] = orbGlow;
+      if (wepBonus >= 5) { grid[8][17] = orbGlow; } // extra glow
       grid[10][17] = '#7a5230';
       grid[11][17] = '#7a5230'; grid[12][17] = '#7a5230';
       grid[13][17] = '#7a5230'; grid[14][17] = '#7a5230';
       grid[15][17] = '#6a4220'; grid[16][17] = '#6a4220';
     } else if (classType === 'rogue') {
-      // Daggers
-      grid[14][17] = '#999999'; grid[15][17] = '#aaaaaa';
-      grid[14][2] = '#999999'; grid[15][2] = '#aaaaaa';
+      // Daggers — color by tier
+      grid[14][17] = wepMetalDark; grid[15][17] = wepMetal;
+      grid[14][2] = wepMetalDark; grid[15][2] = wepMetal;
+      if (wepGlow) { grid[13][17] = wepGlow; grid[13][2] = wepGlow; }
     } else if (classType === 'ranger') {
-      // Bow
-      grid[11][17] = '#7a5230'; grid[12][17] = '#7a5230';
-      grid[13][17] = '#6a4220'; grid[14][17] = '#6a4220';
-      grid[15][17] = '#7a5230';
-      // Bowstring
-      grid[11][18] = '#b8860b'; grid[12][18] = '#b8860b';
-      grid[13][18] = '#b8860b'; grid[14][18] = '#b8860b';
-      grid[15][18] = '#b8860b';
+      // Bow — wood darkens with tier
+      const bowColor = wepBonus >= 5 ? '#5a3a1a' : '#7a5230';
+      const bowDark = wepBonus >= 5 ? '#4a2a10' : '#6a4220';
+      grid[11][17] = bowColor; grid[12][17] = bowColor;
+      grid[13][17] = bowDark; grid[14][17] = bowDark;
+      grid[15][17] = bowColor;
+      // Bowstring — glows at high tier
+      const stringColor = wepBonus >= 5 ? '#ffd700' : wepBonus >= 4 ? '#d0a030' : '#b8860b';
+      grid[11][18] = stringColor; grid[12][18] = stringColor;
+      grid[13][18] = stringColor; grid[14][18] = stringColor;
+      grid[15][18] = stringColor;
+    }
+
+    // --- ACCESSORY glow (ring on left hand) ---
+    if (hasAccessory) {
+      grid[16][3] = '#ffd700'; // gold ring on hand
+      grid[15][3] = '#ffe844'; // sparkle
     }
 
     // --- LEGS (rows 17-23) ---

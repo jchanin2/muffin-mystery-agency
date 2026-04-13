@@ -47,6 +47,11 @@ const createState = {
   appearance: { skinTone: '#f5d0a9', hairColor: '#2c1810', armorColor: '#7f8c8d' }
 };
 
+// Helper: render player sprite with equipment
+function playerSprite(scale) {
+  return Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, scale, gameCharacter.equipment);
+}
+
 // ============================================================
 // HUD UPDATE
 // ============================================================
@@ -71,7 +76,7 @@ function updateHUD() {
 
   // Sprite
   document.getElementById('hud-sprite').innerHTML =
-    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 2);
+    playerSprite(2);
 }
 
 // ============================================================
@@ -397,7 +402,7 @@ function showCombatUI() {
 
   // Player sprite
   document.getElementById('player-combat-sprite').innerHTML =
-    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 3);
+    playerSprite(3);
 
   // Narrative
   document.getElementById('combat-narrative').textContent =
@@ -623,6 +628,90 @@ function submitCombatAnswer() {
 }
 
 // ============================================================
+// EQUIP PROMPT
+// ============================================================
+let equipPromptQueue = [];
+let equipPromptActive = false;
+
+function showEquipPrompt(newItem, slot, onDone) {
+  // newItem: { name, bonus, type/weaponType, slot }
+  // slot: 'weapon', 'armor', or 'accessory'
+  const overlay = document.getElementById('equip-overlay');
+  overlay.style.display = 'flex';
+  equipPromptActive = true;
+
+  const current = gameCharacter.equipment[slot];
+  const currentName = current ? current.name : 'None';
+  const currentBonus = current ? current.bonus : 0;
+  const newBonus = newItem.bonus || 0;
+  const diff = newBonus - currentBonus;
+
+  document.getElementById('equip-item-name').textContent = newItem.name;
+
+  // Render sprites: current equipment vs with new item equipped
+  const oldEquip = { ...gameCharacter.equipment };
+  const newEquip = { ...gameCharacter.equipment };
+  if (slot === 'weapon') {
+    newEquip.weapon = { name: newItem.name, bonus: newItem.bonus, type: newItem.type || newItem.weaponType };
+  } else if (slot === 'armor') {
+    newEquip.armor = { name: newItem.name, bonus: newItem.bonus };
+  } else if (slot === 'accessory') {
+    newEquip.accessory = { name: newItem.name, bonus: newItem.bonus, effect: newItem.effect };
+  }
+
+  document.getElementById('equip-sprite-old').innerHTML =
+    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 4, oldEquip);
+  document.getElementById('equip-sprite-new').innerHTML =
+    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 4, newEquip);
+
+  const slotLabel = slot.charAt(0).toUpperCase() + slot.slice(1);
+  document.getElementById('equip-stat-old').innerHTML =
+    `<div>${currentName}</div><div>${slotLabel}: +${currentBonus}</div>`;
+
+  const diffHtml = diff > 0
+    ? `<span class="stat-better">(+${diff})</span>`
+    : diff < 0 ? `<span class="stat-worse">(${diff})</span>` : '';
+  document.getElementById('equip-stat-new').innerHTML =
+    `<div>${newItem.name}</div><div>${slotLabel}: +${newBonus} ${diffHtml}</div>`;
+
+  document.getElementById('btn-equip-yes').onclick = () => {
+    // Apply the equipment
+    if (slot === 'weapon') {
+      gameCharacter.equipment.weapon = { name: newItem.name, bonus: newItem.bonus, type: newItem.type || newItem.weaponType };
+    } else if (slot === 'armor') {
+      gameCharacter.equipment.armor = { name: newItem.name, bonus: newItem.bonus };
+    } else if (slot === 'accessory') {
+      gameCharacter.equipment.accessory = { name: newItem.name, bonus: newItem.bonus, effect: newItem.effect };
+    }
+    Character.save(gameCharacter);
+    updateHUD();
+    overlay.style.display = 'none';
+    equipPromptActive = false;
+    if (onDone) onDone();
+    processEquipQueue();
+  };
+
+  document.getElementById('btn-equip-no').onclick = () => {
+    // Keep current equipment
+    overlay.style.display = 'none';
+    equipPromptActive = false;
+    if (onDone) onDone();
+    processEquipQueue();
+  };
+}
+
+function queueEquipPrompt(newItem, slot, onDone) {
+  equipPromptQueue.push({ newItem, slot, onDone });
+  if (!equipPromptActive) processEquipQueue();
+}
+
+function processEquipQueue() {
+  if (equipPromptQueue.length === 0) return;
+  const next = equipPromptQueue.shift();
+  showEquipPrompt(next.newItem, next.slot, next.onDone);
+}
+
+// ============================================================
 // REWARDS
 // ============================================================
 function applyReward(reward) {
@@ -659,7 +748,7 @@ function showLevelUp() {
   showScreen('levelup');
 
   document.getElementById('levelup-sprite').innerHTML =
-    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 4);
+    playerSprite(4);
   document.getElementById('levelup-info').textContent =
     `You reached Level ${gameCharacter.level + 1}!`;
 
@@ -743,7 +832,7 @@ function handleGameOver() {
   showScreen('gameover');
 
   document.getElementById('gameover-sprite').innerHTML =
-    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 4);
+    playerSprite(4);
 
   const goldLoss = Math.min(gameCharacter.gold, Math.floor(gameCharacter.gold * 0.3) + 5);
   gameCharacter.gold -= goldLoss;
@@ -762,7 +851,7 @@ function showChapterComplete(node) {
   showScreen('chapter-complete');
 
   document.getElementById('chapter-sprite').innerHTML =
-    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 4);
+    playerSprite(4);
   document.getElementById('chapter-title').textContent = node.chapterTitle;
   document.getElementById('chapter-summary').textContent = node.chapterSummary;
   document.getElementById('chapter-rewards').textContent = node.chapterReward || '';
@@ -776,17 +865,13 @@ function showChapterComplete(node) {
   const chapterRewards = { xp: 100, gold: 50 };
   applyReward(chapterRewards);
 
-  // Grant chapter reward item (equipment)
+  // Grant chapter reward item (equipment) — show equip prompt
   if (node.chapterRewardItem) {
     const item = node.chapterRewardItem;
-    if (item.slot === 'weapon') {
-      gameCharacter.equipment.weapon = { name: item.name, bonus: item.bonus, type: item.type };
-    } else if (item.slot === 'armor') {
-      gameCharacter.equipment.armor = { name: item.name, bonus: item.bonus };
-    } else if (item.slot === 'accessory') {
-      gameCharacter.equipment.accessory = { name: item.name, bonus: item.bonus, effect: item.effect };
-    }
-    Character.save(gameCharacter);
+    queueEquipPrompt(item, item.slot, () => {
+      // Update chapter complete sprite after equip decision
+      document.getElementById('chapter-sprite').innerHTML = playerSprite(4);
+    });
   }
 
   // Set up next chapter button
@@ -857,12 +942,23 @@ function openShop(returnNode) {
     const buyBtn = div.querySelector('button');
     buyBtn.onclick = () => {
       const shopItem = { ...item, price: discountedPrice };
-      if (Character.buyItem(gameCharacter, shopItem)) {
+      if (shopItem.type === 'weapon' || shopItem.type === 'armor') {
+        // Deduct gold but don't auto-equip — show prompt
+        if (gameCharacter.gold < shopItem.price) return;
+        gameCharacter.gold -= shopItem.price;
+        Character.save(gameCharacter);
+        Audio.treasure();
+        updateHUD();
+        document.getElementById('shop-gold-display').textContent = gameCharacter.gold;
+        const slot = shopItem.type;
+        queueEquipPrompt(shopItem, slot, () => {
+          openShop(returnNode);
+        });
+      } else if (Character.buyItem(gameCharacter, shopItem)) {
         Audio.treasure();
         Character.save(gameCharacter);
         updateHUD();
         document.getElementById('shop-gold-display').textContent = gameCharacter.gold;
-        // Refresh shop to update afford status
         openShop(returnNode);
       }
     };
@@ -881,7 +977,7 @@ function showInventory() {
   showScreen('inventory');
 
   document.getElementById('inv-sprite').innerHTML =
-    Sprites.player(gameCharacter.race, gameCharacter.class, gameCharacter.appearance, 4);
+    playerSprite(4);
   document.getElementById('inv-name').textContent = gameCharacter.name;
   document.getElementById('inv-class').textContent =
     RACES[gameCharacter.race].name + ' ' + CLASSES[gameCharacter.class].name;
