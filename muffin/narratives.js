@@ -286,5 +286,121 @@ const CASES = [
     ],
     resolution: 'Barnaby Thornwick confesses. Jealous of the professor\'s genius, he secretly laced a "congratulatory gift potion" with precise doses of Nightshade Extract — masked by Starfire Crystal and carried by Shadowmoss Tincture — and had Luna deliver it unknowingly. Muffin administers the Universal Antidote, and Professor Elixworth\'s eyes flutter open. "My lab..." he croaks. "Is my cauldron still running?" Vera rushes to his side, laughing through her tears. The professor squeezes her hand. "You kept everything together, Vera. Full partnership, starting today." The city guard leads Barnaby away. Luna is cleared of all charges. And Muffin? He tucks his magnifying glass into his detective hat, accepts a warm cup of chamomile tea from Vera, and heads home for a very well-deserved nap.',
     defeatMessage: 'The antidote window is closing fast, and Muffin can\'t crack the clues in time! But Professor Elixworth is a tough old wizard — he\'ll hold on a little longer. Muffin takes a deep breath, straightens his detective hat, and starts the investigation from the top. No potion master goes unsaved on his watch.'
+  },
+
+  // ============================================================
+  // CASE 5: The Case of the Crooked Coin (Hard, 11 problems)
+  // Focus: place value, estimation, fraction↔decimal conversion,
+  //        decimal expanded form, regrouping decimals,
+  //        whole÷whole with decimal quotients, decimal × whole
+  // ============================================================
+  {
+    id: 'crooked_coin',
+    title: 'The Case of the Crooked Coin',
+    difficulty: 'hard',
+    description: 'The Royal Mint of Goldhaven is short hundreds of gold coins — yet the ledger balances perfectly. Someone has been skimming gold by shifting decimal points and hiding entries in ciphers. Muffin must trace the forger before the crown holds the Mint Master accountable.',
+    backdrop: 'mint',
+    problems: [
+      // Problem 1 — Place value: value of 4 in 4.572
+      {
+        cluePrompt: 'Muffin arrives at the Royal Mint of Goldhaven. The Mint Master paces the vault floor, gold coins scattered across a stone counter. "The casting mold is set for 45.72-gram coins, but yesterday\'s batch weighed in at 4.572 grams each — and the ledger still shows them as full weight! Somebody shifted the decimal point, Detective." Muffin picks up a coin and studies the stamped number.',
+        clueReveal: 'The 4 in 4.572 stands for just 4 ones — but in 45.72 it stood for 40. That\'s a tenfold drop in value, carried out with a single decimal point. No clumsy thief would know to shift it so precisely. The forger understands place value.',
+        question: 'On the altered coin, the weight reads <em>4.572</em> grams. What is the <em>value</em> of the <em>4</em> in <em>4.572</em>?',
+        answer: 4,
+        hint: 'Value of the 4 in 4.572'
+      },
+
+      // Problem 2 — Estimate multiply
+      {
+        cluePrompt: 'The Mint Master hands Muffin a payment receipt. "The Appraiser logged 3.8 pounds of gold at 4.9 ducats per pound. He wrote the total as 186.2 ducats." Muffin doesn\'t need exact math — a quick estimate should tell him whether that number is anywhere close to honest.',
+        clueReveal: 'A fair total should land near 20 ducats — not 186.2! The recorded payment is inflated nearly tenfold. Someone pocketed the difference, and they did it counting on nobody bothering to estimate. Muffin circles the entry in red ink.',
+        question: 'Estimate <em>3.8 × 4.9</em> by rounding each factor to the nearest whole number. What is your estimate?',
+        answer: 20,
+        hint: '3.8 × 4.9 (round each factor)'
+      },
+
+      // Problem 3 — Fraction → decimal (3/4)
+      {
+        cluePrompt: 'Tucked inside the day\'s receipts, Muffin finds a handwritten slip in unfamiliar script: <em>"paid 3/4 ounce of gold dust."</em> The Mint\'s official ledger records everything in decimals only — no fractions. To find the matching entry, Muffin must convert.',
+        clueReveal: 'Exactly 0.75 ounces — and the decimal ledger shows a 0.75-ounce payment logged to a name Muffin doesn\'t recognize. The receipt and the ledger line up only if you can switch between fractions and decimals. The forger was counting on someone missing that bridge.',
+        question: 'Convert <em>3/4</em> to a decimal.',
+        answer: 0.75,
+        hint: '3/4'
+      },
+
+      // Problem 4 — Decimal expanded form
+      {
+        cluePrompt: 'Hidden inside the ledger\'s binding Muffin finds a folded slip of paper — a cipher note, written only in place-value pieces. The Mint\'s trained workers use expanded form for private memos. To read the amount, Muffin has to rebuild the decimal.',
+        clueReveal: '3.257 ounces — and that\'s the exact weight of a small crystal vial the vault guard saw in the Appraiser\'s coat pocket yesterday. Either he dropped this note himself, or somebody is trying very hard to frame him.',
+        question: 'Rewrite <em>3 + 2/10 + 5/100 + 7/1000</em> as a single decimal number.',
+        answer: 3.257,
+        hint: '3 + 2/10 + 5/100 + 7/1000'
+      },
+
+      // Problem 5 — Regrouping decimals
+      {
+        cluePrompt: 'The official delivery ledger shows yesterday\'s intake as 2.13 pounds. But the original courier receipt Muffin found earlier tells a different story, and the ledger entry\'s ink looks suspiciously fresh. Muffin lines the two up. The <em>tenths</em> place doesn\'t match.',
+        clueReveal: 'The correct regrouping is one tenth — but the tampered ledger reads "2 + 3 tenths + 3 hundredths," which is 2.33, not 2.13. Someone added 0.2 pounds of phantom gold straight into the record. Muffin scrawls "TAMPERED" in the margin.',
+        question: 'The original entry reads <em>2.13 pounds = 2 + ___ tenths + 3 hundredths</em>. How many <em>tenths</em> go in the blank?',
+        answer: 1,
+        hint: '2.13 = 2 + ? tenths + 3 hundredths'
+      },
+
+      // Problem 6 — Decimal → fraction (0.25)
+      {
+        cluePrompt: 'Muffin interviews Master Scribe Cora, who swears the ledger was locked and spotless when she left last night. She produces a private memo signed by the Appraiser: <em>"0.25 ounces diverted per batch for purity testing."</em> Fourteen batches passed through the Mint this week. But official purity tests are supposed to be logged as <em>fractions</em>, not decimals.',
+        clueReveal: '1/4 ounce — and the fraction-only purity log shows zero entries of 1/4 ounce this week. The Appraiser wrote in decimals because he knew the purity log would never catch a decimal. Cora is cleared. She just never knew the cipher existed.',
+        question: 'Convert <em>0.25</em> to a fraction in simplest form.',
+        answer: '1/4',
+        hint: '0.25'
+      },
+
+      // Problem 7 — Whole ÷ whole with decimal quotient
+      {
+        cluePrompt: 'Muffin counts the diversions from the memo: 78 gold coins siphoned off, split evenly across 12 "test batches." He needs to know exactly how much gold was lifted per batch — and he has a hunch the answer won\'t be a whole number of coins.',
+        clueReveal: 'Exactly 6.5 coins per batch — a decimal, not a whole. That means the thief melted down coins into precise half-coin pieces. This was methodical, patient work. Only someone trained with precision scales could do it — and the Mint has only one such worker.',
+        question: 'A stash of <em>78</em> gold coins is divided equally across <em>12</em> test batches. How many coins per batch? (Give your answer as a decimal.)',
+        answer: 6.5,
+        hint: '78 ÷ 12'
+      },
+
+      // Problem 8 — Estimate divide
+      {
+        cluePrompt: 'The courier\'s delivery log claims 148.6 sacks of gold were brought to the Mint over 28.9 weeks. Before Muffin checks the exact rate, he wants a quick sanity check against the Mint\'s own weekly intake books.',
+        clueReveal: 'About 5 sacks per week on the courier\'s log — but the Mint\'s intake book shows 12 sacks a week arriving! The courier is only accounting for part of the shipments. Either there\'s a second delivery route, or gold is entering the Mint from somewhere off the books. This is bigger than one thief.',
+        question: 'Estimate <em>148.6 ÷ 28.9</em> by rounding each number to a friendly value. What is your estimate?',
+        answer: 5,
+        hint: '148.6 ÷ 28.9 (round each number)'
+      },
+
+      // Problem 9 — Place value (value of 7 in a large number)
+      {
+        cluePrompt: 'Muffin finds the young apprentice, Pip, hiding behind the vault door, pale as a ghost. Pip whispers: "The year-end ledger says 63,472.85 ounces on the books, Inspector. But when I weighed the vault this morning, we\'re short exactly what the <em>7</em> stands for!" Muffin nods slowly. Pip is no forger — he\'s the one who noticed.',
+        clueReveal: 'The 7 represents 70 ounces — and yes, the vault is missing <em>exactly</em> 70 ounces. The ledger still "balances" because the 70 was never erased on paper. It was stolen in physical gold while the numbers stayed in place. A place-value trick nobody thought to check.',
+        question: 'In the year-end total <em>63,472.85</em> ounces, what is the <em>value</em> of the <em>7</em>?',
+        answer: 70,
+        hint: 'Value of the 7 in 63,472.85'
+      },
+
+      // Problem 10 — Fraction → decimal (3/8)
+      {
+        cluePrompt: 'Pip reaches into his apron and unfolds a torn scrap of parchment. "I pulled this from the Appraiser\'s coat yesterday, Inspector. I\'ve been too scared to say anything." The note reads: <em>"Divert 3/8 of daily intake to east cellar."</em> Muffin needs the decimal to compare it against the Mint\'s decimal-only intake book.',
+        clueReveal: '0.375 — and the Mint\'s daily intake log shows a mysterious recurring deduction of exactly 0.375 siphoned off every single day for the past month. Ambrose has been skimming three-eighths of every shipment, hidden in plain sight by a fraction-to-decimal switch. One calculation to go, and the case is airtight.',
+        question: 'Convert <em>3/8</em> to a decimal.',
+        answer: 0.375,
+        hint: '3/8'
+      },
+
+      // Problem 11 — Final proof: 0.375 × 1200
+      {
+        cluePrompt: 'The Mint has received 1,200 ounces of gold over the past month. If Ambrose siphoned exactly 0.375 of every shipment, Muffin can calculate the weight of his secret stash <em>exactly</em>. Whatever number he gets should match the weight of the mystery crate locked in Ambrose\'s east-cellar workshop.',
+        clueReveal: 'Exactly 450 ounces. Muffin and the royal guards force open the east cellar — and there, neatly stacked and labeled "Personal — Do Not Open," sits a crate. On the Mint\'s own scales it weighs <em>precisely 450 ounces</em>. The math is airtight. Place value, estimation, fractions and decimals, all pointing to the same pile of stolen gold. Appraiser Ambrose is arrested on the spot.',
+        question: 'Calculate <em>0.375 × 1,200</em>.',
+        answer: 450,
+        hint: '0.375 × 1,200'
+      }
+    ],
+    resolution: 'Appraiser Ambrose confesses with a long sigh. For months he\'d shifted decimal points on the Royal Scales, hidden diversions inside fraction/decimal cipher switches, and padded the ledger with expanded-form codes only a Mint worker could read. The crown clears the Mint Master of all wrongdoing and reinstates Master Scribe Cora with a formal apology. Apprentice Pip is promoted to Junior Appraiser for his sharp eye. Muffin politely declines the gold reward but does accept a single warm honey-cake from the Mint\'s kitchen. As he ambles home, magnifying glass tucked into his detective hat, he mutters to himself, "You can shift a decimal point, but the math always tells the truth."',
+    defeatMessage: 'The ledger\'s tricks are slippery tonight, and Muffin can\'t pin down the forger in time! But the crooked coin is still sitting in Ambrose\'s east cellar, and the numbers haven\'t changed. Muffin straightens his hat, polishes his magnifying glass, and reopens the case file. A good detective never lets a decimal point fool him twice.'
   }
 ];

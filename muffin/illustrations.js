@@ -1602,6 +1602,607 @@ const Illustrations = {
       ${this._miniMuffin(313, 112, 0.54, true)}
     `);
   },
+
+  // ============================================================
+  // CASE 5: The Case of the Crooked Coin scenes
+  // Palette: candlelit gold + warm stone + parchment + red wax
+  // ============================================================
+
+  // Scene 1: Royal Mint crime scene — tampered scales, Mint Master
+  mint_crime_scene() {
+    return this.scene('#2a1d0a', '#140c03', `
+      <!-- Stone floor -->
+      <rect x="0" y="180" width="400" height="70" fill="#3a2a1a"/>
+      ${[0,70,140,210,280,350].map(x => `<rect x="${x}" y="182" width="68" height="32" fill="#2e2012" stroke="#1a1008" stroke-width="1"/>`).join('')}
+      ${[35,105,175,245,315].map(x => `<rect x="${x}" y="214" width="68" height="36" fill="#2a1d10" stroke="#1a1008" stroke-width="1"/>`).join('')}
+
+      <!-- Back stone wall -->
+      <rect x="0" y="0" width="400" height="180" fill="#3d2c18"/>
+      ${[0,80,160,240,320].map(x => `<rect x="${x}" y="30" width="78" height="30" fill="#4a3522" stroke="#2a1c10" stroke-width="0.7"/>`).join('')}
+      ${[40,120,200,280].map(x => `<rect x="${x}" y="60" width="78" height="30" fill="#44301e" stroke="#2a1c10" stroke-width="0.7"/>`).join('')}
+      ${[0,80,160,240,320].map(x => `<rect x="${x}" y="90" width="78" height="30" fill="#3e2c18" stroke="#2a1c10" stroke-width="0.7"/>`).join('')}
+      ${[40,120,200,280].map(x => `<rect x="${x}" y="120" width="78" height="30" fill="#3a281a" stroke="#2a1c10" stroke-width="0.7"/>`).join('')}
+
+      <!-- Wall torch (right) -->
+      <rect x="355" y="35" width="4" height="22" fill="#4a2e14"/>
+      <ellipse cx="357" cy="35" rx="10" ry="14" fill="#ffaa33" opacity="0.9">
+        <animate attributeName="ry" values="14;16;14" dur="1.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="357" cy="32" rx="6" ry="10" fill="#ffdd66" opacity="0.95"/>
+      <circle cx="357" cy="40" r="42" fill="#ffaa33" opacity="0.08"/>
+
+      <!-- Wooden counter / workbench -->
+      <rect x="60" y="155" width="280" height="28" fill="#6a4824" stroke="#3a2410" stroke-width="1.5" rx="2"/>
+      <rect x="60" y="155" width="280" height="5" fill="#8a6438"/>
+
+      <!-- Balance scale on counter -->
+      <rect x="192" y="110" width="4" height="48" fill="#6a5022"/>
+      <line x1="148" y1="115" x2="244" y2="115" stroke="#b8902a" stroke-width="3"/>
+      <!-- Left pan (heavier, tilted down) -->
+      <line x1="152" y1="115" x2="150" y2="128" stroke="#8a6a18" stroke-width="1"/>
+      <line x1="172" y1="115" x2="174" y2="128" stroke="#8a6a18" stroke-width="1"/>
+      <ellipse cx="162" cy="132" rx="18" ry="5" fill="#aa7a1a"/>
+      <ellipse cx="162" cy="130" rx="18" ry="4" fill="#d4a624"/>
+      <!-- Right pan (lighter, tilted up) -->
+      <line x1="220" y1="115" x2="218" y2="122" stroke="#8a6a18" stroke-width="1"/>
+      <line x1="240" y1="115" x2="242" y2="122" stroke="#8a6a18" stroke-width="1"/>
+      <ellipse cx="230" cy="126" rx="18" ry="5" fill="#aa7a1a"/>
+      <ellipse cx="230" cy="124" rx="18" ry="4" fill="#d4a624"/>
+
+      <!-- Gold coins on left pan -->
+      <ellipse cx="158" cy="126" rx="6" ry="2" fill="#e8c45a"/>
+      <ellipse cx="166" cy="124" rx="6" ry="2" fill="#ddb444"/>
+      <ellipse cx="162" cy="121" rx="6" ry="2" fill="#e8c45a"/>
+      <!-- Gold coin single on right pan -->
+      <ellipse cx="230" cy="121" rx="6" ry="2" fill="#bb8822"/>
+
+      <!-- Scattered coins on counter -->
+      <ellipse cx="95" cy="168" rx="8" ry="3" fill="#d4a624" stroke="#8a6018" stroke-width="0.5"/>
+      <text x="95" y="170" text-anchor="middle" fill="#6a4810" font-size="5" font-weight="bold">4.572</text>
+      <ellipse cx="115" cy="172" rx="8" ry="3" fill="#c49820" stroke="#8a6018" stroke-width="0.5"/>
+      <ellipse cx="135" cy="168" rx="8" ry="3" fill="#d4a624" stroke="#8a6018" stroke-width="0.5"/>
+      <ellipse cx="282" cy="170" rx="8" ry="3" fill="#d4a624" stroke="#8a6018" stroke-width="0.5"/>
+      <ellipse cx="302" cy="168" rx="8" ry="3" fill="#c49820" stroke="#8a6018" stroke-width="0.5"/>
+
+      <!-- Mint Master (behind counter, far right), robed figure -->
+      <path d="M 330 95 L 320 155 L 350 155 L 340 95 Z" fill="#4a2818"/>
+      <rect x="322" y="95" width="26" height="30" fill="#5a3420" rx="2"/>
+      <circle cx="335" cy="82" r="12" fill="#c9a979"/>
+      <path d="M 325 75 Q 335 68 345 75 Q 346 82 345 84 L 325 84 Q 324 82 325 75 Z" fill="#c4c4c4"/>
+      <circle cx="331" cy="82" r="1.2" fill="#2a1a10"/>
+      <circle cx="339" cy="82" r="1.2" fill="#2a1a10"/>
+      <path d="M 330 88 Q 335 85 340 88" fill="none" stroke="#5a3020" stroke-width="1" stroke-linecap="round"/>
+
+      <!-- Muffin examining the tampered scale (left side, on floor) -->
+      ${this._miniMuffin(215, 155, 0.55)}
+    `);
+  },
+
+  // Scene 2: Inflated payment receipt — Muffin scrutinizing
+  mint_scales() {
+    return this.scene('#241808', '#120a03', `
+      <!-- Stone floor -->
+      <rect x="0" y="190" width="400" height="60" fill="#3a2a1a"/>
+      <rect x="0" y="0" width="400" height="190" fill="#2e2012"/>
+
+      <!-- Wooden desk -->
+      <rect x="40" y="155" width="320" height="40" fill="#6a4824" stroke="#3a2410" stroke-width="1.5" rx="2"/>
+      <rect x="40" y="155" width="320" height="5" fill="#8a6438"/>
+      <rect x="48" y="195" width="8" height="45" fill="#4a3218"/>
+      <rect x="344" y="195" width="8" height="45" fill="#4a3218"/>
+
+      <!-- Candle -->
+      <rect x="340" y="130" width="8" height="25" fill="#eee5c8"/>
+      <path d="M 340 155 L 348 155 L 350 140 L 338 140 Z" fill="#f0e6c8" opacity="0.4"/>
+      <ellipse cx="344" cy="126" rx="4" ry="7" fill="#ffcc55">
+        <animate attributeName="ry" values="7;9;7" dur="1.3s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="344" cy="124" rx="2" ry="4" fill="#fff5aa"/>
+      <circle cx="344" cy="135" r="34" fill="#ffaa33" opacity="0.06"/>
+
+      <!-- Large receipt / parchment -->
+      <rect x="75" y="50" width="230" height="130" fill="#eadba0" stroke="#8a6838" stroke-width="1.5" rx="2" transform="rotate(-2 190 115)"/>
+      <rect x="80" y="55" width="220" height="120" fill="#f0e0a8" rx="1" transform="rotate(-2 190 115)"/>
+
+      <!-- Receipt header -->
+      <text x="188" y="72" text-anchor="middle" fill="#6a3818" font-size="10" font-weight="bold" font-family="serif" transform="rotate(-2 188 72)">PAYMENT RECEIPT</text>
+      <line x1="90" y1="80" x2="290" y2="80" stroke="#8a6838" stroke-width="1" transform="rotate(-2 190 80)"/>
+
+      <!-- Receipt lines -->
+      <text x="95" y="96" fill="#3a2010" font-size="7.5" font-family="serif" transform="rotate(-2 95 96)">Weight of gold:</text>
+      <text x="280" y="96" text-anchor="end" fill="#3a2010" font-size="8" font-weight="bold" font-family="serif" transform="rotate(-2 280 96)">3.8 lb</text>
+
+      <text x="95" y="110" fill="#3a2010" font-size="7.5" font-family="serif" transform="rotate(-2 95 110)">Rate per pound:</text>
+      <text x="280" y="110" text-anchor="end" fill="#3a2010" font-size="8" font-weight="bold" font-family="serif" transform="rotate(-2 280 110)">4.9 ducats</text>
+
+      <line x1="95" y1="118" x2="285" y2="118" stroke="#8a6838" stroke-width="0.8" transform="rotate(-2 190 118)"/>
+
+      <text x="95" y="134" fill="#3a2010" font-size="8" font-weight="bold" font-family="serif" transform="rotate(-2 95 134)">TOTAL DUE:</text>
+      <text x="280" y="134" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" font-family="serif" transform="rotate(-2 280 134)">186.2 ducats</text>
+
+      <!-- Red circle around total (Muffin's suspicion) -->
+      <ellipse cx="260" cy="132" rx="46" ry="13" fill="none" stroke="#cc2222" stroke-width="2" transform="rotate(-2 260 132)"/>
+      <line x1="220" y1="140" x2="295" y2="126" stroke="#cc2222" stroke-width="2" stroke-linecap="round" transform="rotate(-2 257 133)"/>
+
+      <!-- Wax seal -->
+      <circle cx="268" cy="158" r="12" fill="#aa2222" stroke="#6a1010" stroke-width="1" transform="rotate(-2 268 158)"/>
+      <text x="268" y="162" text-anchor="middle" fill="#6a0808" font-size="6" font-weight="bold" transform="rotate(-2 268 162)">RM</text>
+
+      <!-- Muffin with magnifier examining receipt -->
+      ${this._miniMuffin(40, 110, 0.6)}
+    `);
+  },
+
+  // Scene 3: Handwritten 3/4 receipt slip
+  mint_receipt() {
+    return this.scene('#1e1608', '#0c0702', `
+      <!-- Wood table -->
+      <rect x="0" y="140" width="400" height="110" fill="#5a3e1e"/>
+      <rect x="0" y="140" width="400" height="6" fill="#7a5a30"/>
+      ${[0,80,160,240,320].map(x => `<line x1="${x}" y1="146" x2="${x+80}" y2="250" stroke="#4a2e14" stroke-width="0.5" opacity="0.5"/>`).join('')}
+
+      <!-- Dim back -->
+      <rect x="0" y="0" width="400" height="140" fill="#2a1e10"/>
+
+      <!-- Candle on left -->
+      <rect x="34" y="90" width="7" height="22" fill="#eee5c8"/>
+      <ellipse cx="37.5" cy="86" rx="3.5" ry="6" fill="#ffcc55">
+        <animate attributeName="ry" values="6;8;6" dur="1.1s" repeatCount="indefinite"/>
+      </ellipse>
+      <circle cx="37.5" cy="95" r="34" fill="#ffaa33" opacity="0.07"/>
+
+      <!-- Handwritten slip of paper -->
+      <rect x="110" y="120" width="190" height="110" fill="#f0e0a8" stroke="#8a6838" stroke-width="1.2" rx="1" transform="rotate(4 205 175)"/>
+      <rect x="114" y="124" width="182" height="102" fill="#f5e6b4" rx="1" transform="rotate(4 205 175)"/>
+
+      <!-- Handwritten cursive text -->
+      <text x="128" y="148" fill="#3a2010" font-size="11" font-family="serif" font-style="italic" transform="rotate(4 128 148)">paid </text>
+      <text x="160" y="152" fill="#aa2222" font-size="18" font-weight="bold" font-family="serif" font-style="italic" transform="rotate(4 160 152)">3/4</text>
+      <text x="192" y="150" fill="#3a2010" font-size="11" font-family="serif" font-style="italic" transform="rotate(4 192 150)">ounce of</text>
+      <text x="128" y="172" fill="#3a2010" font-size="11" font-family="serif" font-style="italic" transform="rotate(4 128 172)">gold dust </text>
+      <text x="128" y="195" fill="#3a2010" font-size="9" font-family="serif" font-style="italic" transform="rotate(4 128 195)">~ unsigned</text>
+
+      <!-- Decorative flourish -->
+      <path d="M 220 200 Q 240 195 250 210 Q 240 215 235 205" fill="none" stroke="#3a2010" stroke-width="0.8" transform="rotate(4 235 205)"/>
+
+      <!-- Small stack of decimal ledger pages in background -->
+      <rect x="300" y="135" width="70" height="50" fill="#e8d5a0" stroke="#8a6838" stroke-width="1" rx="1"/>
+      <rect x="302" y="133" width="70" height="50" fill="#eadba0" stroke="#8a6838" stroke-width="1" rx="1"/>
+      <text x="337" y="150" text-anchor="middle" fill="#6a3818" font-size="6" font-weight="bold">LEDGER</text>
+      <line x1="310" y1="156" x2="364" y2="156" stroke="#8a6838" stroke-width="0.5"/>
+      <text x="315" y="165" fill="#3a2010" font-size="5">0.75 oz ✓</text>
+      <text x="315" y="173" fill="#3a2010" font-size="5">0.50 oz</text>
+      <text x="315" y="181" fill="#3a2010" font-size="5">1.25 oz</text>
+
+      <!-- Muffin holding magnifier, studying the cursive slip -->
+      ${this._miniMuffin(55, 155, 0.58)}
+    `);
+  },
+
+  // Scene 4: Hidden cipher note in expanded form
+  mint_cipher() {
+    return this.scene('#1a1208', '#0a0502', `
+      <!-- Dark book interior -->
+      <rect x="0" y="0" width="400" height="250" fill="#2a1e10"/>
+
+      <!-- Open ledger spread (binding in center) -->
+      <rect x="30" y="25" width="340" height="210" fill="#5a3a1c" stroke="#2a1a08" stroke-width="2" rx="3"/>
+      <rect x="40" y="35" width="320" height="190" fill="#eadba0" rx="1"/>
+      <line x1="200" y1="35" x2="200" y2="225" stroke="#8a6a38" stroke-width="2"/>
+
+      <!-- Left page — Mint ledger entries (normal) -->
+      <text x="120" y="55" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold" font-family="serif">MINT LEDGER</text>
+      ${[0,1,2,3,4,5,6].map(i => `<line x1="50" y1="${75 + i*20}" x2="190" y2="${75 + i*20}" stroke="#8a6a38" stroke-width="0.3"/>`).join('')}
+      <text x="55" y="72" fill="#3a2010" font-size="6">Date</text>
+      <text x="160" y="72" fill="#3a2010" font-size="6">Ounces</text>
+      <text x="55" y="88" fill="#3a2010" font-size="7">14 Frostmoon</text>
+      <text x="165" y="88" fill="#3a2010" font-size="7">0.75</text>
+      <text x="55" y="108" fill="#3a2010" font-size="7">15 Frostmoon</text>
+      <text x="165" y="108" fill="#3a2010" font-size="7">1.20</text>
+      <text x="55" y="128" fill="#3a2010" font-size="7">16 Frostmoon</text>
+      <text x="165" y="128" fill="#3a2010" font-size="7">0.50</text>
+
+      <!-- Right page — THE CIPHER NOTE tucked in -->
+      <rect x="216" y="60" width="138" height="140" fill="#f5e8b8" stroke="#aa6a22" stroke-width="1.2" rx="2" transform="rotate(-3 285 130)"/>
+      <text x="285" y="78" text-anchor="middle" fill="#aa2222" font-size="8" font-weight="bold" font-family="serif" transform="rotate(-3 285 78)">— CIPHER —</text>
+      <line x1="226" y1="86" x2="344" y2="86" stroke="#aa6a22" stroke-width="0.6" transform="rotate(-3 285 86)"/>
+
+      <!-- Expanded form equation -->
+      <text x="285" y="118" text-anchor="middle" fill="#3a2010" font-size="14" font-weight="bold" font-family="serif" transform="rotate(-3 285 118)">3 + 2/10</text>
+      <text x="285" y="140" text-anchor="middle" fill="#3a2010" font-size="14" font-weight="bold" font-family="serif" transform="rotate(-3 285 140)">+ 5/100</text>
+      <text x="285" y="162" text-anchor="middle" fill="#3a2010" font-size="14" font-weight="bold" font-family="serif" transform="rotate(-3 285 162)">+ 7/1000</text>
+      <text x="285" y="186" text-anchor="middle" fill="#aa2222" font-size="13" font-weight="bold" font-family="serif" transform="rotate(-3 285 186)">= ?</text>
+
+      <!-- Candle cast soft glow -->
+      <circle cx="200" cy="130" r="80" fill="#ffaa33" opacity="0.05"/>
+
+      <!-- Muffin peering at the cipher with magnifier -->
+      ${this._miniMuffin(310, 175, 0.45)}
+    `);
+  },
+
+  // Scene 5: Tampered ledger — regrouping mistake
+  mint_ledger_tampered() {
+    return this.scene('#22180a', '#0e0802', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1e10"/>
+
+      <!-- Open ledger book -->
+      <rect x="20" y="20" width="360" height="220" fill="#4a2e14" stroke="#2a180a" stroke-width="2" rx="4"/>
+      <rect x="32" y="32" width="336" height="196" fill="#eadba0" rx="2"/>
+
+      <!-- Page header -->
+      <text x="200" y="55" text-anchor="middle" fill="#3a2010" font-size="12" font-weight="bold" font-family="serif">DELIVERY LEDGER — Frostmoon 17</text>
+      <line x1="50" y1="62" x2="350" y2="62" stroke="#8a6838" stroke-width="0.8"/>
+
+      <!-- Column headers -->
+      <text x="72" y="78" fill="#3a2010" font-size="8" font-weight="bold">ITEM</text>
+      <text x="220" y="78" fill="#3a2010" font-size="8" font-weight="bold">WEIGHT (lb)</text>
+      <text x="320" y="78" fill="#3a2010" font-size="8" font-weight="bold">REGROUP</text>
+
+      <!-- Row 1: normal -->
+      <line x1="50" y1="84" x2="350" y2="84" stroke="#8a6838" stroke-width="0.3"/>
+      <text x="60" y="100" fill="#3a2010" font-size="8">Gold dust</text>
+      <text x="240" y="100" fill="#3a2010" font-size="8">1.45</text>
+      <text x="320" y="100" fill="#3a2010" font-size="7">1 + 4t + 5h</text>
+
+      <line x1="50" y1="110" x2="350" y2="110" stroke="#8a6838" stroke-width="0.3"/>
+
+      <!-- Row 2: THE TAMPERED ROW -->
+      <rect x="46" y="114" width="308" height="32" fill="#ffcc66" opacity="0.25"/>
+      <text x="60" y="132" fill="#3a2010" font-size="8">Ore (raw)</text>
+
+      <!-- Original "2.13" with strikethrough, replaced with "2.33" -->
+      <text x="218" y="132" fill="#888" font-size="9" text-decoration="line-through">2.13</text>
+      <text x="250" y="132" fill="#aa2222" font-size="11" font-weight="bold">2.33</text>
+
+      <!-- Tampered regrouping -->
+      <text x="310" y="132" fill="#aa2222" font-size="7" font-weight="bold">2 + 3t + 3h</text>
+      <text x="310" y="141" fill="#3a2010" font-size="6" font-style="italic">(should be: 2 + ?t + 3h)</text>
+
+      <line x1="50" y1="150" x2="350" y2="150" stroke="#8a6838" stroke-width="0.3"/>
+
+      <!-- Row 3: normal -->
+      <text x="60" y="166" fill="#3a2010" font-size="8">Ingots</text>
+      <text x="240" y="166" fill="#3a2010" font-size="8">5.02</text>
+      <text x="320" y="166" fill="#3a2010" font-size="7">5 + 0t + 2h</text>
+
+      <line x1="50" y1="176" x2="350" y2="176" stroke="#8a6838" stroke-width="0.3"/>
+
+      <!-- Muffin's "TAMPERED" scrawl in margin -->
+      <text x="60" y="200" fill="#cc2222" font-size="14" font-weight="bold" font-family="serif" font-style="italic" transform="rotate(-3 60 200)">TAMPERED!</text>
+      <line x1="130" y1="195" x2="215" y2="135" stroke="#cc2222" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="210,130 217,132 214,138" fill="#cc2222"/>
+
+      <!-- Quill pen near muffin -->
+      <line x1="346" y1="210" x2="370" y2="186" stroke="#6a4a22" stroke-width="1.5"/>
+      <path d="M 368 186 L 378 174 L 370 186 Z" fill="#6a4a22"/>
+
+      <!-- Muffin with magnifier -->
+      ${this._miniMuffin(295, 190, 0.45)}
+    `);
+  },
+
+  // Scene 6: Interview with Master Scribe Cora
+  mint_interview_cora() {
+    return this.scene('#1e1408', '#0a0502', `
+      <!-- Stone floor -->
+      <rect x="0" y="190" width="400" height="60" fill="#3a2a1a"/>
+
+      <!-- Back stone wall with shelves of scrolls -->
+      <rect x="0" y="0" width="400" height="190" fill="#2e2012"/>
+      <rect x="10" y="35" width="180" height="6" fill="#4a3218"/>
+      <rect x="10" y="90" width="180" height="6" fill="#4a3218"/>
+      <!-- Scrolls on shelves -->
+      ${[18,38,58,78,98,118,138,158].map(x => `<rect x="${x}" y="22" width="12" height="13" fill="#eadba0" stroke="#8a6838" stroke-width="0.6"/><rect x="${x-1}" y="22" width="14" height="2" fill="#aa8838"/>`).join('')}
+      ${[18,38,58,78,98,118,138,158].map(x => `<rect x="${x}" y="77" width="12" height="13" fill="#eadba0" stroke="#8a6838" stroke-width="0.6"/><rect x="${x-1}" y="77" width="14" height="2" fill="#aa8838"/>`).join('')}
+
+      <!-- Candle on wall sconce -->
+      <rect x="360" y="35" width="4" height="18" fill="#6a4a22"/>
+      <ellipse cx="362" cy="32" rx="5" ry="8" fill="#ffcc55">
+        <animate attributeName="ry" values="8;10;8" dur="1.3s" repeatCount="indefinite"/>
+      </ellipse>
+      <circle cx="362" cy="40" r="36" fill="#ffaa33" opacity="0.08"/>
+
+      <!-- Writing desk -->
+      <rect x="180" y="160" width="200" height="30" fill="#6a4824" stroke="#3a2410" stroke-width="1.5" rx="2"/>
+      <rect x="180" y="160" width="200" height="4" fill="#8a6438"/>
+      <rect x="188" y="190" width="6" height="40" fill="#4a3218"/>
+      <rect x="370" y="190" width="6" height="40" fill="#4a3218"/>
+
+      <!-- Open ledger on desk -->
+      <rect x="230" y="145" width="110" height="20" fill="#eadba0" stroke="#8a6838" stroke-width="1" transform="rotate(-4 285 155)"/>
+      <line x1="285" y1="145" x2="285" y2="165" stroke="#8a6838" stroke-width="1" transform="rotate(-4 285 155)"/>
+
+      <!-- Inkwell and quill -->
+      <rect x="348" y="148" width="10" height="14" fill="#2a1a0a" rx="2"/>
+      <ellipse cx="353" cy="148" rx="5" ry="2" fill="#1a1008"/>
+      <line x1="355" y1="148" x2="375" y2="125" stroke="#6a4a22" stroke-width="1.5"/>
+      <path d="M 373 125 L 380 116 L 375 125 Z" fill="#e8dcc0"/>
+
+      <!-- Master Scribe Cora standing behind desk, concerned -->
+      <!-- body (long robe with sash) -->
+      <path d="M 278 100 L 262 160 L 312 160 L 300 100 Z" fill="#2a4a5a"/>
+      <rect x="278" y="100" width="22" height="48" fill="#3a5a6a"/>
+      <!-- sash -->
+      <rect x="275" y="123" width="28" height="5" fill="#aa8838"/>
+      <!-- head -->
+      <circle cx="289" cy="88" r="11" fill="#d4b098"/>
+      <!-- hair bun -->
+      <ellipse cx="289" cy="78" rx="10" ry="5" fill="#3a2818"/>
+      <circle cx="289" cy="73" r="5" fill="#3a2818"/>
+      <!-- face -->
+      <circle cx="285" cy="88" r="1" fill="#2a1a10"/>
+      <circle cx="293" cy="88" r="1" fill="#2a1a10"/>
+      <path d="M 285 93 Q 289 94 293 93" fill="none" stroke="#5a2018" stroke-width="0.8" stroke-linecap="round"/>
+      <!-- worried brow -->
+      <line x1="283" y1="84" x2="287" y2="85" stroke="#2a1a10" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="291" y1="85" x2="295" y2="84" stroke="#2a1a10" stroke-width="0.8" stroke-linecap="round"/>
+      <!-- arm holding out memo -->
+      <rect x="248" y="115" width="32" height="7" fill="#3a5a6a" rx="3" transform="rotate(15 264 118)"/>
+      <rect x="242" y="112" width="14" height="18" fill="#eadba0" stroke="#aa2222" stroke-width="0.8" transform="rotate(15 249 121)"/>
+      <text x="249" y="122" text-anchor="middle" fill="#aa2222" font-size="5" font-weight="bold" transform="rotate(15 249 122)">0.25</text>
+
+      <!-- Muffin (left side of desk) looking up at Cora -->
+      ${this._miniMuffin(70, 170, 0.6)}
+    `);
+  },
+
+  // Scene 7: Vault interior — 78 coins in 12 stacks
+  mint_vault() {
+    return this.scene('#1a1208', '#0a0502', `
+      <!-- Heavy stone floor with iron tiles -->
+      <rect x="0" y="175" width="400" height="75" fill="#3a2a1a"/>
+      ${[0,50,100,150,200,250,300,350].map(x => `<rect x="${x}" y="177" width="48" height="35" fill="#2e2012" stroke="#1a1008" stroke-width="1"/>`).join('')}
+      ${[25,75,125,175,225,275,325].map(x => `<rect x="${x}" y="212" width="48" height="38" fill="#2a1d10" stroke="#1a1008" stroke-width="1"/>`).join('')}
+
+      <!-- Back wall -->
+      <rect x="0" y="0" width="400" height="175" fill="#2a1e10"/>
+
+      <!-- Vault door ajar at right edge -->
+      <rect x="340" y="30" width="60" height="150" fill="#5a3a1c" stroke="#2a180a" stroke-width="2"/>
+      <circle cx="355" cy="105" r="10" fill="#8a6a22" stroke="#5a3810" stroke-width="2"/>
+      <circle cx="355" cy="105" r="4" fill="#3a2410"/>
+      ${[0,1,2,3].map(i => `<line x1="${355+Math.cos(i*1.57)*10}" y1="${105+Math.sin(i*1.57)*10}" x2="${355+Math.cos(i*1.57)*16}" y2="${105+Math.sin(i*1.57)*16}" stroke="#5a3810" stroke-width="2"/>`).join('')}
+
+      <!-- Torch casting light -->
+      <rect x="28" y="32" width="4" height="22" fill="#4a2e14"/>
+      <ellipse cx="30" cy="30" rx="8" ry="12" fill="#ffaa33">
+        <animate attributeName="ry" values="12;15;12" dur="1.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <circle cx="30" cy="40" r="60" fill="#ffaa33" opacity="0.08"/>
+
+      <!-- Open ledger/chalkboard on wall showing "78 ÷ 12" -->
+      <rect x="90" y="35" width="130" height="80" fill="#1a0e04" stroke="#8a6838" stroke-width="2" rx="3"/>
+      <text x="155" y="60" text-anchor="middle" fill="#f5e6b4" font-size="8" font-weight="bold" font-family="serif">DIVERSION LOG</text>
+      <line x1="100" y1="68" x2="210" y2="68" stroke="#aa8838" stroke-width="0.8"/>
+      <text x="155" y="88" text-anchor="middle" fill="#ffdd66" font-size="18" font-weight="bold" font-family="serif">78 ÷ 12</text>
+      <text x="155" y="107" text-anchor="middle" fill="#cc6644" font-size="10" font-family="serif">= ? per batch</text>
+
+      <!-- Stacks of gold coins on the floor -->
+      ${[0,1,2,3,4,5,6,7,8,9,10,11].map(i => {
+        const row = Math.floor(i / 6);
+        const col = i % 6;
+        const x = 70 + col * 40;
+        const y = 150 + row * 18;
+        return `<ellipse cx="${x}" cy="${y+8}" rx="11" ry="3" fill="#8a6018"/>
+                <rect x="${x-11}" y="${y}" width="22" height="8" fill="#d4a624" stroke="#8a6018" stroke-width="0.5"/>
+                <rect x="${x-11}" y="${y-3}" width="22" height="4" fill="#e8c45a"/>
+                <ellipse cx="${x}" cy="${y-3}" rx="11" ry="2" fill="#f0d880"/>`;
+      }).join('')}
+
+      <!-- "12 stacks" label -->
+      <text x="200" y="145" text-anchor="middle" fill="#f5e6b4" font-size="7" font-style="italic">12 "test batches"</text>
+
+      <!-- Muffin observing the stacks -->
+      ${this._miniMuffin(290, 160, 0.55)}
+    `);
+  },
+
+  // Scene 8: Courier delivery log chart
+  mint_delivery_log() {
+    return this.scene('#1e1408', '#0a0502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2e2012"/>
+
+      <!-- Wall-mounted delivery chart -->
+      <rect x="40" y="25" width="320" height="195" fill="#eadba0" stroke="#6a4824" stroke-width="3" rx="2"/>
+      <rect x="44" y="29" width="312" height="187" fill="#f0e0a8" rx="1"/>
+
+      <!-- Chart title -->
+      <text x="200" y="50" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif">COURIER — GOLD DELIVERY LOG</text>
+      <line x1="55" y1="58" x2="345" y2="58" stroke="#8a6838" stroke-width="1"/>
+
+      <!-- Summary box -->
+      <rect x="60" y="68" width="280" height="46" fill="#fffae0" stroke="#aa8838" stroke-width="1" rx="2"/>
+      <text x="75" y="84" fill="#3a2010" font-size="9" font-family="serif">Total sacks delivered:</text>
+      <text x="325" y="84" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" font-family="serif">148.6</text>
+      <text x="75" y="100" fill="#3a2010" font-size="9" font-family="serif">Over a span of:</text>
+      <text x="325" y="100" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" font-family="serif">28.9 weeks</text>
+
+      <!-- Rate question -->
+      <rect x="60" y="124" width="280" height="34" fill="#ffcc66" opacity="0.3" stroke="#cc8822" stroke-width="1" rx="2"/>
+      <text x="200" y="146" text-anchor="middle" fill="#aa2222" font-size="14" font-weight="bold" font-family="serif">Rate = 148.6 ÷ 28.9 per week</text>
+
+      <!-- Comparison bar / mismatch warning -->
+      <text x="75" y="175" fill="#3a2010" font-size="8" font-family="serif">Mint's own weekly intake:</text>
+      <text x="325" y="175" text-anchor="end" fill="#226622" font-size="10" font-weight="bold" font-family="serif">12 sacks / week</text>
+
+      <!-- Little weekly tick chart at bottom -->
+      ${[0,1,2,3,4,5,6,7,8,9].map(i => `<rect x="${70 + i*26}" y="${195 - (i%3==2 ? 16 : i%4==1 ? 10 : 14)}" width="16" height="${i%3==2 ? 16 : i%4==1 ? 10 : 14}" fill="#aa8838"/>`).join('')}
+      <line x1="65" y1="196" x2="335" y2="196" stroke="#3a2010" stroke-width="0.8"/>
+
+      <!-- Red question mark on chart -->
+      <text x="360" y="100" fill="#cc2222" font-size="28" font-weight="bold" font-family="serif" transform="rotate(10 360 100)">?</text>
+
+      <!-- Muffin pointing at chart -->
+      ${this._miniMuffin(0, 150, 0.55)}
+    `);
+  },
+
+  // Scene 9: Interview with Apprentice Pip holding the year-end ledger
+  mint_interview_pip() {
+    return this.scene('#1a1006', '#090501', `
+      <!-- Vault corner -->
+      <rect x="0" y="185" width="400" height="65" fill="#3a2a1a"/>
+      <rect x="0" y="0" width="400" height="185" fill="#2a1e10"/>
+
+      <!-- Heavy vault door partly visible at left -->
+      <rect x="0" y="0" width="50" height="250" fill="#5a3a1c" stroke="#2a180a" stroke-width="2"/>
+      <circle cx="25" cy="120" r="14" fill="#8a6a22" stroke="#5a3810" stroke-width="2"/>
+      <circle cx="25" cy="120" r="5" fill="#3a2410"/>
+
+      <!-- Hanging lantern for light -->
+      <line x1="320" y1="0" x2="320" y2="30" stroke="#3a2410" stroke-width="1.5"/>
+      <rect x="310" y="28" width="20" height="26" fill="#4a3218" stroke="#6a4a22" stroke-width="1" rx="1"/>
+      <rect x="312" y="30" width="16" height="22" fill="#ffcc55" opacity="0.7"/>
+      <ellipse cx="320" cy="40" rx="4" ry="6" fill="#fff5aa">
+        <animate attributeName="ry" values="6;8;6" dur="1.3s" repeatCount="indefinite"/>
+      </ellipse>
+      <circle cx="320" cy="40" r="60" fill="#ffcc55" opacity="0.07"/>
+
+      <!-- Apprentice Pip — nervous young figure, stood against wall -->
+      <!-- body (apron over tunic) -->
+      <path d="M 210 110 L 195 195 L 250 195 L 238 110 Z" fill="#5a4018"/>
+      <rect x="210" y="110" width="30" height="60" fill="#6a5022"/>
+      <rect x="208" y="135" width="34" height="30" fill="#e8d5a0" stroke="#aa8838" stroke-width="0.6"/>
+      <!-- head -->
+      <circle cx="223" cy="98" r="12" fill="#e0c0a0"/>
+      <!-- messy hair -->
+      <path d="M 211 93 Q 215 80 223 80 Q 230 80 234 92 Q 238 88 235 95 Q 232 91 228 93 Q 225 86 221 93 Q 215 91 213 98 Q 210 93 211 93 Z" fill="#8a5a20"/>
+      <circle cx="219" cy="98" r="1.2" fill="#2a1a10"/>
+      <circle cx="227" cy="98" r="1.2" fill="#2a1a10"/>
+      <path d="M 219 105 Q 223 104 227 105" fill="none" stroke="#5a2018" stroke-width="0.7"/>
+      <!-- Nervous sweat drop -->
+      <path d="M 212 99 Q 211 104 213 105 Q 215 104 214 99 Z" fill="#88bbee" opacity="0.7"/>
+
+      <!-- Pip clutching a large year-end ledger -->
+      <rect x="190" y="145" width="60" height="46" fill="#4a2e14" stroke="#2a1a08" stroke-width="1.5" rx="2"/>
+      <rect x="194" y="149" width="52" height="38" fill="#eadba0"/>
+      <text x="220" y="162" text-anchor="middle" fill="#3a2010" font-size="5" font-weight="bold">YEAR-END</text>
+      <text x="220" y="171" text-anchor="middle" fill="#aa2222" font-size="8" font-weight="bold">63,472.85</text>
+      <text x="220" y="181" text-anchor="middle" fill="#3a2010" font-size="5">ounces</text>
+      <!-- arms cradling book -->
+      <rect x="185" y="150" width="22" height="6" fill="#6a5022" rx="3" transform="rotate(-10 196 153)"/>
+      <rect x="236" y="150" width="22" height="6" fill="#6a5022" rx="3" transform="rotate(10 247 153)"/>
+
+      <!-- red circle around the "7" in 63,472.85 -->
+      <ellipse cx="228" cy="170" rx="5" ry="7" fill="none" stroke="#cc2222" stroke-width="1.5"/>
+
+      <!-- Muffin comforting, looking up -->
+      ${this._miniMuffin(90, 165, 0.6)}
+    `);
+  },
+
+  // Scene 10: Torn "3/8" note from Ambrose's coat
+  mint_hidden_note() {
+    return this.scene('#1a1006', '#080401', `
+      <rect x="0" y="0" width="400" height="250" fill="#281c10"/>
+
+      <!-- Wooden tabletop -->
+      <rect x="0" y="160" width="400" height="90" fill="#5a3e1e"/>
+      <rect x="0" y="160" width="400" height="6" fill="#7a5a30"/>
+      ${[40,120,200,280,360].map(x => `<line x1="${x}" y1="166" x2="${x}" y2="250" stroke="#4a2e14" stroke-width="0.7" opacity="0.5"/>`).join('')}
+
+      <!-- Coat hanging in background -->
+      <path d="M 300 20 L 260 95 L 280 100 L 305 45 Z" fill="#2a2218"/>
+      <path d="M 305 20 L 345 95 L 325 100 L 300 45 Z" fill="#352a1c"/>
+      <rect x="298" y="15" width="14" height="8" fill="#1a1208"/>
+
+      <!-- Candle -->
+      <rect x="40" y="100" width="7" height="20" fill="#eee5c8"/>
+      <ellipse cx="43.5" cy="96" rx="3.5" ry="6" fill="#ffcc55">
+        <animate attributeName="ry" values="6;8;6" dur="1.1s" repeatCount="indefinite"/>
+      </ellipse>
+      <circle cx="43.5" cy="110" r="42" fill="#ffaa33" opacity="0.08"/>
+
+      <!-- Torn scrap of parchment (irregular edges) -->
+      <path d="M 110 130 L 290 125 L 310 160 L 300 205 L 120 210 L 95 175 Z" fill="#eadba0" stroke="#8a6838" stroke-width="1.2"/>
+      <path d="M 115 135 L 285 130 L 303 160 L 294 200 L 125 205 L 103 175 Z" fill="#f0e0a8"/>
+      <!-- ragged tear lines at top -->
+      <path d="M 110 130 L 115 122 L 130 132 L 145 120 L 160 130 L 180 122 L 200 132 L 220 122 L 245 130 L 270 120 L 290 128" fill="none" stroke="#8a6838" stroke-width="0.7"/>
+
+      <!-- Writing on the scrap — rushed cursive -->
+      <text x="200" y="158" text-anchor="middle" fill="#3a2010" font-size="11" font-family="serif" font-style="italic">Divert</text>
+      <text x="200" y="182" text-anchor="middle" fill="#aa2222" font-size="26" font-weight="bold" font-family="serif" font-style="italic">3/8</text>
+      <text x="200" y="199" text-anchor="middle" fill="#3a2010" font-size="9" font-family="serif" font-style="italic">of daily intake</text>
+      <text x="200" y="210" text-anchor="middle" fill="#3a2010" font-size="9" font-family="serif" font-style="italic">→ east cellar</text>
+
+      <!-- Small signature mark -->
+      <text x="280" y="200" fill="#3a2010" font-size="7" font-family="serif" font-style="italic">— A.</text>
+
+      <!-- Muffin holding magnifier, peering down -->
+      ${this._miniMuffin(310, 170, 0.55, true)}
+    `);
+  },
+
+  // Scene 11: Final confrontation — crate in east cellar
+  mint_confrontation() {
+    return this.scene('#1a0e04', '#070401', `
+      <!-- Damp cellar floor -->
+      <rect x="0" y="185" width="400" height="65" fill="#2a1d10"/>
+      ${[0,60,120,180,240,300,360].map(x => `<rect x="${x}" y="187" width="58" height="32" fill="#22180a" stroke="#1a1008" stroke-width="1"/>`).join('')}
+      ${[30,90,150,210,270,330].map(x => `<rect x="${x}" y="219" width="58" height="31" fill="#1e1608" stroke="#1a1008" stroke-width="1"/>`).join('')}
+
+      <!-- Low brick arch ceiling -->
+      <rect x="0" y="0" width="400" height="185" fill="#1e1608"/>
+      <path d="M 0 0 L 0 50 Q 200 -30 400 50 L 400 0 Z" fill="#120c03"/>
+      ${[0,1,2,3,4].map(i => `<line x1="${i*80}" y1="0" x2="${i*80+20}" y2="50" stroke="#3a2818" stroke-width="1" opacity="0.5"/>`).join('')}
+
+      <!-- Wall torch -->
+      <rect x="352" y="40" width="4" height="22" fill="#4a2e14"/>
+      <ellipse cx="354" cy="36" rx="9" ry="13" fill="#ffaa33">
+        <animate attributeName="ry" values="13;16;13" dur="1.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="354" cy="33" rx="5" ry="9" fill="#ffdd66"/>
+      <circle cx="354" cy="45" r="60" fill="#ffaa33" opacity="0.1"/>
+
+      <!-- Large wooden crate in middle -->
+      <rect x="130" y="115" width="140" height="90" fill="#6a4824" stroke="#2a180a" stroke-width="2.5"/>
+      <rect x="130" y="115" width="140" height="10" fill="#8a6438"/>
+      <line x1="130" y1="160" x2="270" y2="160" stroke="#2a180a" stroke-width="1.5"/>
+      <!-- vertical planks -->
+      <line x1="165" y1="115" x2="165" y2="205" stroke="#3a2410" stroke-width="0.8"/>
+      <line x1="200" y1="115" x2="200" y2="205" stroke="#3a2410" stroke-width="0.8"/>
+      <line x1="235" y1="115" x2="235" y2="205" stroke="#3a2410" stroke-width="0.8"/>
+
+      <!-- Label "PERSONAL — DO NOT OPEN" -->
+      <rect x="144" y="135" width="112" height="20" fill="#eadba0" stroke="#6a3818" stroke-width="1"/>
+      <text x="200" y="148" text-anchor="middle" fill="#aa2222" font-size="7" font-weight="bold" font-family="serif">PERSONAL — DO NOT OPEN</text>
+
+      <!-- Weight stamp below -->
+      <rect x="160" y="170" width="80" height="24" fill="#fffae0" stroke="#aa2222" stroke-width="1.5" transform="rotate(-4 200 182)"/>
+      <text x="200" y="183" text-anchor="middle" fill="#6a3818" font-size="6.5" font-weight="bold" transform="rotate(-4 200 183)">WEIGHT</text>
+      <text x="200" y="192" text-anchor="middle" fill="#aa2222" font-size="10" font-weight="bold" font-family="serif" transform="rotate(-4 200 192)">450 oz</text>
+
+      <!-- Spilled gold coins peeking from crate top -->
+      <ellipse cx="160" cy="113" rx="5" ry="2" fill="#d4a624"/>
+      <ellipse cx="175" cy="111" rx="5" ry="2" fill="#e8c45a"/>
+      <ellipse cx="245" cy="112" rx="5" ry="2" fill="#d4a624"/>
+      <ellipse cx="260" cy="110" rx="5" ry="2" fill="#bb8822"/>
+
+      <!-- Appraiser Ambrose caught, arms raised in defeat (far right) -->
+      <!-- robe -->
+      <path d="M 340 105 L 325 195 L 380 195 L 368 105 Z" fill="#4a2818"/>
+      <rect x="340" y="105" width="24" height="55" fill="#5a3420"/>
+      <!-- head -->
+      <circle cx="352" cy="93" r="11" fill="#c9a979"/>
+      <!-- receding hair -->
+      <path d="M 344 85 Q 350 82 360 85 Q 360 89 358 90 L 346 90 Q 344 87 344 85 Z" fill="#6a4a28"/>
+      <!-- goatee -->
+      <path d="M 350 102 Q 352 108 354 102" fill="#6a4a28"/>
+      <circle cx="348" cy="92" r="1" fill="#2a1a10"/>
+      <circle cx="356" cy="92" r="1" fill="#2a1a10"/>
+      <path d="M 348 100 Q 352 97 356 100" fill="none" stroke="#5a2018" stroke-width="0.8" stroke-linecap="round"/>
+      <!-- hands raised -->
+      <rect x="325" y="80" width="14" height="30" fill="#5a3420" rx="4" transform="rotate(-20 332 95)"/>
+      <rect x="365" y="80" width="14" height="30" fill="#5a3420" rx="4" transform="rotate(20 372 95)"/>
+      <circle cx="327" cy="75" r="5" fill="#c9a979"/>
+      <circle cx="377" cy="75" r="5" fill="#c9a979"/>
+
+      <!-- Muffin pointing accusingly, proud pose (left) -->
+      ${this._miniMuffin(55, 145, 0.65)}
+    `);
+  },
+
 };
 
 // Map scene names to problem indices per case
@@ -1643,5 +2244,18 @@ const SCENE_MAP = {
     'potion_antidote_mix',        // 11: Mixing antidote
     'potion_analysis',            // 12: Analysis room
     'potion_confrontation'        // 13: Final confrontation
+  ],
+  crooked_coin: [
+    'mint_crime_scene',       // 1: Place value (4 in 4.572)
+    'mint_scales',            // 2: Estimate multiply (3.8 × 4.9)
+    'mint_receipt',           // 3: Fraction → decimal (3/4)
+    'mint_cipher',            // 4: Decimal expanded form
+    'mint_ledger_tampered',   // 5: Regrouping decimals
+    'mint_interview_cora',    // 6: Decimal → fraction (0.25)
+    'mint_vault',             // 7: Whole ÷ whole decimal quotient (78 ÷ 12)
+    'mint_delivery_log',      // 8: Estimate divide (148.6 ÷ 28.9)
+    'mint_interview_pip',     // 9: Place value (7 in 63,472.85)
+    'mint_hidden_note',       // 10: Fraction → decimal (3/8)
+    'mint_confrontation'      // 11: Final proof (0.375 × 1,200)
   ]
 };

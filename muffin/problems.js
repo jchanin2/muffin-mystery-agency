@@ -349,10 +349,26 @@ const ProblemGenerator = {
     }
   },
 
-  // Validate an answer with epsilon tolerance
+  // Validate an answer with epsilon tolerance.
+  // Accepts plain decimals ("0.75"), commas ("1,200"), and fraction form ("3/4").
+  // If correctAnswer is itself a fraction string (e.g. "1/4"), it is parsed the same way,
+  // so equivalent fractions like "2/8" also count.
   checkAnswer(userAnswer, correctAnswer) {
-    const parsed = parseFloat(userAnswer);
-    if (isNaN(parsed)) return false;
-    return Math.abs(parsed - correctAnswer) < 0.001;
+    const parseVal = (v) => {
+      if (typeof v === 'number') return v;
+      const s = String(v).trim().replace(/,/g, '');
+      const fracMatch = s.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(-?\d+(?:\.\d+)?)$/);
+      if (fracMatch) {
+        const denom = parseFloat(fracMatch[2]);
+        if (denom === 0) return NaN;
+        return parseFloat(fracMatch[1]) / denom;
+      }
+      const n = parseFloat(s);
+      return isNaN(n) ? NaN : n;
+    };
+    const u = parseVal(userAnswer);
+    const c = parseVal(correctAnswer);
+    if (isNaN(u) || isNaN(c)) return false;
+    return Math.abs(u - c) < 0.001;
   }
 };
