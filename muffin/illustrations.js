@@ -847,6 +847,16 @@ const Illustrations = {
       <rect x="140" y="195" width="20" height="15" fill="#f0e8d0" rx="1" transform="rotate(-15 150 202)"/>
       <rect x="165" y="200" width="18" height="12" fill="#e8e0c8" rx="1" transform="rotate(8 174 206)"/>
 
+      <!-- Professor Elixworth unconscious — lower body visible, extends off-screen left -->
+      <rect x="-18" y="187" width="92" height="34" fill="#4a2288" rx="7" transform="rotate(-11 46 204)"/>
+      <rect x="-10" y="194" width="76" height="11" fill="#5c35a0" rx="4" transform="rotate(-11 46 204)"/>
+      <!-- Boot (far foot) -->
+      <ellipse cx="64" cy="212" rx="15" ry="9" fill="#28180a" transform="rotate(-11 64 212)"/>
+      <ellipse cx="60" cy="209" rx="9" ry="5" fill="#3a2412" transform="rotate(-11 60 209)"/>
+      <!-- Boot (near foot, slightly overlapping) -->
+      <ellipse cx="53" cy="221" rx="16" ry="9" fill="#221408" transform="rotate(-8 53 221)"/>
+      <ellipse cx="49" cy="218" rx="9" ry="5" fill="#3a2412" transform="rotate(-8 49 218)"/>
+
       <!-- Open dosage logbook -->
       <rect x="30" y="100" width="45" height="30" fill="#f0e8d0" rx="2" stroke="#8a6a40" stroke-width="1"/>
       <line x1="52" y1="100" x2="52" y2="130" stroke="#8a6a40" stroke-width="1"/>
@@ -854,7 +864,7 @@ const Illustrations = {
       <line x1="35" y1="114" x2="48" y2="114" stroke="#666" stroke-width="0.5"/>
       <line x1="55" y1="108" x2="72" y2="108" stroke="#666" stroke-width="0.5"/>
       <line x1="55" y1="114" x2="70" y2="114" stroke="#666" stroke-width="0.5"/>
-      <text x="60" y="122" fill="#cc4444" font-size="5" font-weight="bold">4.5x10^2</text>
+      <text x="55" y="122" fill="#cc4444" font-size="5" font-weight="bold">6.3×10<tspan dy="-3" font-size="3.5">3</tspan></text>
 
       <!-- Muffin investigating -->
       ${this._miniMuffin(50, 130)}
@@ -1329,6 +1339,269 @@ const Illustrations = {
       ${this._miniMuffin(80, 110, 0.6)}
     `);
   },
+
+  // Scene: Professor's research notes (Powers of 10 divide)
+  potion_notes() {
+    return this.scene('#100e03', '#0c0a02', `
+      <!-- Warm candlelit study — wood-panelled walls -->
+      <rect x="0" y="0" width="400" height="250" fill="#1a1408"/>
+      ${[0,32,64,96,128,160,192,224,256,288,320,352,384].map(x => `<rect x="${x}" y="0" width="30" height="175" fill="${x%64===0?'#1e1608':'#1c1508'}" stroke="#14100a" stroke-width="1"/>`).join('')}
+      <!-- Floor boards -->
+      <rect x="0" y="175" width="400" height="75" fill="#18120a"/>
+      ${[0,48,96].map(i => `<rect x="0" y="${175+i}" width="400" height="48" fill="${i===48?'#160f08':'#18120a'}" stroke="#100c06" stroke-width="0.5"/>`).join('')}
+
+      <!-- Chalkboard on back wall (safety protocol) -->
+      <rect x="210" y="12" width="170" height="108" fill="#172212" rx="4" stroke="#5a3c18" stroke-width="3"/>
+      <rect x="215" y="17" width="160" height="98" fill="#1a2814" rx="2"/>
+      <text x="295" y="34" text-anchor="middle" fill="#b8d4b0" font-size="7" font-weight="bold">Safety Protocol</text>
+      <line x1="218" y1="38" x2="372" y2="38" stroke="#6a9060" stroke-width="0.6" opacity="0.6"/>
+      <text x="295" y="52" text-anchor="middle" fill="#9cc890" font-size="5.5">Lethal dose threshold:</text>
+      <text x="295" y="66" text-anchor="middle" fill="#ddffd8" font-size="6.5">6,300 ÷ 10² mg/hr</text>
+      <text x="295" y="82" text-anchor="middle" fill="#ffee88" font-size="8" font-weight="bold">= 63 mg/hr</text>
+      <text x="295" y="98" text-anchor="middle" fill="#ff8888" font-size="5.5">⚠ DO NOT EXCEED ⚠</text>
+      <!-- chalk ledge -->
+      <rect x="215" y="108" width="160" height="6" fill="#172212" rx="1"/>
+      <rect x="222" y="107" width="18" height="5" fill="#ccddbb" rx="1" opacity="0.6"/>
+      <rect x="248" y="107" width="12" height="5" fill="#ccddbb" rx="1" opacity="0.5"/>
+
+      <!-- Oak desk -->
+      <rect x="20" y="132" width="185" height="48" fill="#4a2e10" rx="4" stroke="#3a2008" stroke-width="2"/>
+      <rect x="20" y="132" width="185" height="10" fill="#5c3c18" rx="2"/>
+      <rect x="25" y="178" width="12" height="22" fill="#3a2008"/>
+      <rect x="185" y="178" width="12" height="22" fill="#3a2008"/>
+
+      <!-- Stack of reference books (left of desk) -->
+      <rect x="28" y="110" width="40" height="11" fill="#7a2222" rx="1" stroke="#5a1a1a" stroke-width="0.5"/>
+      <rect x="30" y="100" width="36" height="11" fill="#224a88" rx="1" stroke="#1a3a6a" stroke-width="0.5"/>
+      <rect x="32" y="91" width="32" height="10" fill="#226633" rx="1" stroke="#1a5522" stroke-width="0.5"/>
+
+      <!-- Open research notebook (center of desk) -->
+      <rect x="82" y="110" width="108" height="26" fill="#f4eedc" rx="2" stroke="#8a6a40" stroke-width="1.5"/>
+      <line x1="136" y1="110" x2="136" y2="136" stroke="#c4a468" stroke-width="1"/>
+      <!-- Left page lines -->
+      ${[116,121,126,131].map(y=>`<line x1="85" y1="${y}" x2="134" y2="${y}" stroke="#ccc" stroke-width="0.4"/>`).join('')}
+      <text x="100" y="119" text-anchor="middle" fill="#2a1800" font-size="4.5" font-style="italic">Max safe dose:</text>
+      <text x="96" y="127" fill="#cc2222" font-size="5.5" font-weight="bold">6,300÷10²=63</text>
+      <!-- Right page -->
+      ${[116,121,126,131].map(y=>`<line x1="138" y1="${y}" x2="186" y2="${y}" stroke="#ccc" stroke-width="0.4"/>`).join('')}
+      <text x="162" y="119" text-anchor="middle" fill="#333" font-size="4">Nightshade</text>
+      <text x="162" y="125" text-anchor="middle" fill="#cc2222" font-size="5" font-weight="bold">THRESHOLD</text>
+      <text x="162" y="132" text-anchor="middle" fill="#cc2222" font-size="4.5">63 mg/hr !</text>
+
+      <!-- Candle with animated flame -->
+      <rect x="56" y="110" width="11" height="24" fill="#ede0c0" rx="1"/>
+      <rect x="58" y="108" width="7" height="4" fill="#ede0c0"/>
+      <ellipse cx="62" cy="106" rx="4" ry="6" fill="#ff7722" opacity="0.85">
+        <animate attributeName="rx" values="4;3.2;4.5;4" dur="1.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="62" cy="105" rx="2.5" ry="3.5" fill="#ffcc22" opacity="0.9"/>
+      <ellipse cx="62" cy="118" rx="24" ry="18" fill="#ff8833" opacity="0.05"/>
+
+      <!-- Quill pen and inkwell -->
+      <ellipse cx="198" cy="130" rx="9" ry="11" fill="#0d0d0d"/>
+      <ellipse cx="198" cy="123" rx="5.5" ry="5" fill="#1a1a8a" opacity="0.9"/>
+      <line x1="198" y1="113" x2="208" y2="100" stroke="#d4c896" stroke-width="1.5"/>
+      <ellipse cx="209" cy="99" rx="5" ry="2.5" fill="#e8dca8"/>
+
+      <!-- Muffin reading the notebook intently -->
+      ${this._miniMuffin(148, 132, 0.48, true)}
+    `);
+  },
+
+  // Scene: Storage closet — forced entry, tipped Starfire Crystal
+  potion_storage() {
+    return this.scene('#060610', '#030308', `
+      <!-- Narrow stone storage room -->
+      <rect x="0" y="0" width="400" height="250" fill="#0a0a16"/>
+      <!-- Stone blocks left wall -->
+      ${[[0,0,118,55],[118,0,162,40],[280,0,120,48],[0,55,98,52],[98,55,182,45],[280,55,120,52],[0,107,138,50],[138,107,122,55],[260,107,140,50],[0,157,110,48],[110,157,160,44],[270,157,130,48]].map(([x,y,w,h])=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#0e0e1a" stroke="#08080e" stroke-width="1.5"/>`).join('')}
+      <!-- Floor -->
+      <rect x="0" y="180" width="400" height="70" fill="#0c0c14"/>
+      ${[0,80,160,240,320].map(x=>`<rect x="${x}" y="183" width="78" height="32" fill="#0a0a12" stroke="#06060c" stroke-width="1"/>`).join('')}
+
+      <!-- Left shelving unit -->
+      <rect x="8" y="18" width="9" height="165" fill="#3a2616" rx="1"/>
+      <rect x="148" y="18" width="9" height="165" fill="#3a2616" rx="1"/>
+      ${[32,72,112,152].map(y=>`<rect x="8" y="${y}" width="149" height="7" fill="#4a3420" stroke="#3a2816" stroke-width="1"/>`).join('')}
+
+      <!-- Shelf contents — organized containers -->
+      <!-- Top shelf: large sealed canisters -->
+      <rect x="16" y="13" width="30" height="19" fill="#4a6677" rx="2" stroke="#3a5566" stroke-width="1"/>
+      <rect x="50" y="15" width="24" height="17" fill="#556644" rx="2" stroke="#445533" stroke-width="1"/>
+      <rect x="78" y="12" width="32" height="20" fill="#664433" rx="2" stroke="#553322" stroke-width="1"/>
+      <rect x="114" y="14" width="22" height="18" fill="#445566" rx="2" stroke="#334455" stroke-width="1"/>
+      <!-- Second shelf: glass jars -->
+      ${[[18,52],[38,54],[58,52],[78,55],[98,53],[118,52],[138,54]].map(([x,y])=>`<ellipse cx="${x+8}" cy="${y}" rx="10" ry="12" fill="#7a8a9a" opacity="0.7" stroke="#5a6a7a" stroke-width="0.5"/><ellipse cx="${x+8}" cy="${y-8}" rx="7" ry="3.5" fill="#8a9aaa" opacity="0.6"/>`).join('')}
+      <!-- Third shelf: small vials (mostly intact) -->
+      ${[14,24,34,44,54,64,74,84,102,112].map(x=>`<rect x="${x}" y="97" width="8" height="16" fill="#aaccee" rx="2" stroke="#88aacc" stroke-width="0.5" opacity="0.8"/><circle cx="${x+4}" cy="96" r="3" fill="#bbddf0" opacity="0.7"/>`).join('')}
+      <!-- TIPPED Starfire Crystal container — glittering crystals spilled -->
+      <rect x="92" y="108" width="28" height="18" fill="#e8d890" rx="3" transform="rotate(82 106 117)" stroke="#d4c470" stroke-width="1"/>
+      <text x="76" y="126" fill="#cc8800" font-size="4.5" font-style="italic" font-weight="bold">Starfire</text>
+      <!-- Spilled crystals (scattered sparkles) -->
+      ${[[96,152,0.7],[108,158,0.9],[88,161,0.6],[122,155,0.8],[114,163,0.75],[102,167,0.65],[84,155,0.85],[128,162,0.7],[118,170,0.6],[94,169,0.8]].map(([x,y,op])=>`<polygon points="${x},${y} ${x+3},${y-5} ${x+6},${y} ${x+3},${y+2}" fill="#f0e060" opacity="${op}"/>`).join('')}
+
+      <!-- Broken lock on floor (forced entry) -->
+      <rect x="220" y="194" width="22" height="13" fill="#777" rx="2"/>
+      <path d="M224,193 Q231,184 238,193" fill="none" stroke="#999" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Broken shackle -->
+      <path d="M228,191 Q231,186 234,191" fill="none" stroke="#bbb" stroke-width="2" opacity="0.5" stroke-dasharray="2,1"/>
+
+      <!-- Right shelving unit (some items disturbed) -->
+      <rect x="248" y="18" width="9" height="165" fill="#3a2616" rx="1"/>
+      <rect x="383" y="18" width="9" height="165" fill="#3a2616" rx="1"/>
+      ${[32,72,112,152].map(y=>`<rect x="248" y="${y}" width="144" height="7" fill="#4a3420"/>`).join('')}
+      <rect x="256" y="14" width="28" height="18" fill="#556644" rx="2"/>
+      <rect x="288" y="16" width="22" height="16" fill="#774433" rx="2" transform="rotate(9 299 24)"/>
+      <rect x="316" y="13" width="30" height="19" fill="#4a5566" rx="2"/>
+      <rect x="352" y="15" width="24" height="17" fill="#665544" rx="2"/>
+
+      <!-- Muffin with torch/light investigating -->
+      ${this._miniMuffin(195, 135, 0.55)}
+      <!-- Torch glow (soft cone of light) -->
+      <polygon points="228,155 320,128 320,182" fill="#ffee88" opacity="0.05"/>
+      <ellipse cx="240" cy="155" rx="30" ry="20" fill="#ffee88" opacity="0.04"/>
+    `);
+  },
+
+  // Scene: Barnaby's hidden back room — sinister inventory
+  potion_barnaby_shop() {
+    return this.scene('#060508', '#030304', `
+      <!-- Dark wood-panelled back room -->
+      <rect x="0" y="0" width="400" height="250" fill="#0a0810"/>
+      <!-- Vertical wood planks -->
+      ${[0,28,56,84,112,140,168,196,224,252,280,308,336,364,392].map((x,i)=>`<rect x="${x}" y="0" width="26" height="175" fill="${i%3===0?'#14100a':'i%3===1?#120e08:#100c06'}" stroke="#0a0806" stroke-width="1"/>`).join('')}
+      <!-- Floor boards -->
+      <rect x="0" y="175" width="400" height="75" fill="#100e08"/>
+      ${[0,50,100,150].map(i=>`<rect x="0" y="${175+i}" width="400" height="50" fill="${i%100===0?'#120f08':'#0e0c06'}" stroke="#080604" stroke-width="0.5"/>`).join('')}
+
+      <!-- Stacked wooden crates (right side) -->
+      ${[[228,115,75,55],[238,65,65,50],[248,22,55,43]].map(([x,y,w,h])=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#2e1c0a" rx="2" stroke="#221408" stroke-width="2"/><line x1="${x+10}" y1="${y}" x2="${x+10}" y2="${y+h}" stroke="#1e1206" stroke-width="1"/><line x1="${x+w-10}" y1="${y}" x2="${x+w-10}" y2="${y+h}" stroke="#1e1206" stroke-width="1"/><line x1="${x}" y1="${y+Math.floor(h/2)}" x2="${x+w}" y2="${y+Math.floor(h/2)}" stroke="#1e1206" stroke-width="1"/>`).join('')}
+      <!-- More crates far right -->
+      <rect x="318" y="122" width="72" height="53" fill="#281a08" rx="2" stroke="#1e1206" stroke-width="2"/>
+      <rect x="328" y="75" width="62" height="47" fill="#241608" rx="2" stroke="#1c1005" stroke-width="2"/>
+      <rect x="338" y="35" width="52" height="40" fill="#201408" rx="2" stroke="#1a0e04" stroke-width="2"/>
+
+      <!-- Suspicious glowing cabinet (left wall) — Shadowmoss inside -->
+      <rect x="18" y="25" width="74" height="138" fill="#261808" rx="4" stroke="#3a2a12" stroke-width="3"/>
+      <line x1="55" y1="25" x2="55" y2="163" stroke="#3a2a12" stroke-width="2"/>
+      <rect x="22" y="30" width="30" height="96" fill="#1e1408" rx="2"/>
+      <rect x="56" y="30" width="30" height="96" fill="#1e1408" rx="2"/>
+      <!-- Lock -->
+      <rect x="47" y="76" width="16" height="10" fill="#887733" rx="2"/>
+      <path d="M49,75 Q55,67 61,75" fill="none" stroke="#aa9944" stroke-width="2.5"/>
+      <!-- Eerie green glow seeping from seams -->
+      <rect x="18" y="25" width="74" height="138" fill="none" stroke="#33bb33" stroke-width="1.5" opacity="0.45" rx="4"/>
+      <rect x="20" y="27" width="70" height="134" fill="none" stroke="#22dd22" stroke-width="0.7" opacity="0.2" rx="3"/>
+      <ellipse cx="55" cy="170" rx="34" ry="10" fill="#22cc22" opacity="0.09"/>
+      <!-- Glow pulse animation -->
+      <rect x="18" y="25" width="74" height="138" fill="#22aa22" opacity="0.03" rx="4">
+        <animate attributeName="opacity" values="0.03;0.07;0.03" dur="2s" repeatCount="indefinite"/>
+      </rect>
+
+      <!-- Table with open ledger (center) -->
+      <rect x="110" y="143" width="130" height="22" fill="#261808" rx="3"/>
+      <rect x="108" y="138" width="134" height="22" fill="#1e1208" rx="2"/>
+      <!-- Open ledger (damning evidence) -->
+      <rect x="115" y="116" width="118" height="24" fill="#eee8d0" rx="2" stroke="#aa8844" stroke-width="1.5"/>
+      <line x1="174" y1="116" x2="174" y2="140" stroke="#c4a458" stroke-width="1"/>
+      <!-- Ledger text left page -->
+      <text x="122" y="126" fill="#1a0c00" font-size="4.5">10² btl × 0.85g</text>
+      <text x="120" y="134" fill="#bb1111" font-size="5" font-weight="bold">= 85g Shadowmoss</text>
+      <!-- Ledger text right page -->
+      <text x="178" y="123" fill="#1a0c00" font-size="4">SECRET STOCK</text>
+      <text x="178" y="130" fill="#993300" font-size="4" font-weight="bold">DO NOT REGISTER</text>
+      <text x="178" y="137" fill="#663300" font-size="3.5">(carrier agent)</text>
+
+      <!-- Single dim candle on table -->
+      <rect x="243" y="120" width="9" height="20" fill="#e8ddb8" rx="1"/>
+      <ellipse cx="248" cy="117" rx="3.5" ry="5" fill="#ff6600" opacity="0.75">
+        <animate attributeName="opacity" values="0.75;0.55;0.8;0.7;0.75" dur="1.8s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="248" cy="116" rx="2" ry="3" fill="#ffaa00" opacity="0.9"/>
+
+      <!-- Muffin sneaking — smaller, peeking around crate -->
+      ${this._miniMuffin(258, 134, 0.44, true)}
+    `);
+  },
+
+  // Scene: Mixing the antidote — measuring fractions with precision
+  potion_antidote_mix() {
+    return this.scene('#141208', '#0e0c06', `
+      <!-- Warm alchemist workspace — hopeful golden atmosphere -->
+      <rect x="0" y="175" width="400" height="75" fill="#2a2210"/>
+      ${[0,70,140,210,280,350].map(x=>`<rect x="${x}" y="178" width="68" height="35" fill="#241c0c" stroke="#1a1408" stroke-width="1" rx="1"/>`).join('')}
+      <rect x="0" y="0" width="400" height="175" fill="#1c1a0a"/>
+      <!-- Clean workbench surface -->
+      <rect x="0" y="148" width="400" height="32" fill="#3c3218"/>
+      <rect x="0" y="148" width="400" height="6" fill="#4c4220"/>
+      <!-- Warm ambient glow -->
+      <ellipse cx="255" cy="140" rx="100" ry="50" fill="#cc9922" opacity="0.04"/>
+
+      <!-- Open recipe book (left side) -->
+      <rect x="18" y="92" width="102" height="60" fill="#f2ecdc" rx="3" stroke="#8a6a3a" stroke-width="2"/>
+      <line x1="69" y1="92" x2="69" y2="152" stroke="#c0a058" stroke-width="1.2"/>
+      <text x="43" y="106" text-anchor="middle" fill="#3a1808" font-size="5.5" font-weight="bold">Antidote</text>
+      <text x="43" y="114" text-anchor="middle" fill="#3a1808" font-size="5.5" font-weight="bold">Recipe</text>
+      <line x1="21" y1="117" x2="67" y2="117" stroke="#8a6a3a" stroke-width="0.5"/>
+      <!-- Left page fractions -->
+      <text x="43" y="128" text-anchor="middle" fill="#553312" font-size="5">1/3 Starlight</text>
+      <text x="43" y="136" text-anchor="middle" fill="#553312" font-size="5">+ 1/4 Dragon</text>
+      <text x="43" y="144" text-anchor="middle" fill="#553312" font-size="5">Tear</text>
+      <!-- Right page (working with LCD) -->
+      <text x="86" y="103" text-anchor="middle" fill="#226622" font-size="5" font-weight="bold">LCD = 12</text>
+      <line x1="72" y1="107" x2="117" y2="107" stroke="#226622" stroke-width="0.6"/>
+      <text x="86" y="117" text-anchor="middle" fill="#226622" font-size="5">4/12 + 3/12</text>
+      <line x1="75" y1="122" x2="116" y2="122" stroke="#226622" stroke-width="1.2"/>
+      <text x="86" y="133" text-anchor="middle" fill="#226622" font-size="9" font-weight="bold">7/12</text>
+      <text x="86" y="146" text-anchor="middle" fill="#226622" font-size="4.5">✓ measured</text>
+
+      <!-- Small measuring cylinder 1 — Starlight Essence (blue, 1/3 full) -->
+      <rect x="148" y="86" width="24" height="68" fill="none" stroke="#7799cc" stroke-width="1.5" rx="3"/>
+      <rect x="150" y="88" width="20" height="64" fill="#cce4ff" opacity="0.1" rx="2"/>
+      <!-- liquid fills bottom 1/3 -->
+      <rect x="150" y="130" width="20" height="22" fill="#5588cc" opacity="0.55" rx="2"/>
+      <ellipse cx="160" cy="129" rx="10" ry="3" fill="#6699dd" opacity="0.5"/>
+      <text x="160" y="83" text-anchor="middle" fill="#7799cc" font-size="4.5">1/3</text>
+      <!-- tick marks -->
+      ${[0,1,2,3].map(i=>`<line x1="148" y1="${108+i*16}" x2="154" y2="${108+i*16}" stroke="#7799cc" stroke-width="0.6"/>`).join('')}
+
+      <!-- Small measuring cylinder 2 — Dragon Tear (amber, 1/4 full) -->
+      <rect x="182" y="86" width="24" height="68" fill="none" stroke="#cc9944" stroke-width="1.5" rx="3"/>
+      <rect x="184" y="88" width="20" height="64" fill="#fff4cc" opacity="0.1" rx="2"/>
+      <!-- liquid fills bottom 1/4 -->
+      <rect x="184" y="137" width="20" height="17" fill="#cc8822" opacity="0.55" rx="2"/>
+      <ellipse cx="194" cy="136" rx="10" ry="3" fill="#dd9933" opacity="0.5"/>
+      <text x="194" y="83" text-anchor="middle" fill="#cc9944" font-size="4.5">1/4</text>
+      ${[0,1,2,3].map(i=>`<line x1="182" y1="${108+i*16}" x2="188" y2="${108+i*16}" stroke="#cc9944" stroke-width="0.6"/>`).join('')}
+
+      <!-- Large central beaker — combined antidote shimmering gold (7/12 full) -->
+      <rect x="222" y="72" width="74" height="84" fill="#32280e" rx="5" stroke="#aa8833" stroke-width="2"/>
+      <rect x="225" y="75" width="68" height="78" fill="#28200c" rx="3"/>
+      <!-- Golden antidote (7/12 of beaker height ≈ 46px of 78px) -->
+      <rect x="225" y="107" width="68" height="46" fill="#bb8811" opacity="0.45" rx="2"/>
+      <ellipse cx="259" cy="106" rx="34" ry="6" fill="#ddaa33" opacity="0.4"/>
+      <!-- Shimmer sparkles animating -->
+      <circle cx="238" cy="120" r="2.2" fill="#ffdd44" opacity="0.6">
+        <animate attributeName="opacity" values="0.6;1;0.6" dur="1s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="120;116;120" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="268" cy="132" r="1.6" fill="#ffee66" opacity="0.5">
+        <animate attributeName="opacity" values="0.5;0.95;0.5" dur="1.4s" begin="0.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="250" cy="126" r="1.8" fill="#ffe844" opacity="0.7">
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="0.9s" begin="0.7s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="126;121;126" dur="0.9s" begin="0.7s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="242" cy="138" r="1.4" fill="#ffcc33" opacity="0.55">
+        <animate attributeName="opacity" values="0.55;0.9;0.55" dur="1.6s" begin="0.2s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Beaker label -->
+      <text x="259" y="68" text-anchor="middle" fill="#cc9933" font-size="5.5" font-weight="bold">7/12 vial</text>
+
+      <!-- Muffin carefully pouring, precise and focused -->
+      ${this._miniMuffin(313, 112, 0.54, true)}
+    `);
+  },
 };
 
 // Map scene names to problem indices per case
@@ -1357,14 +1630,18 @@ const SCENE_MAP = {
     'museum_safe'
   ],
   poisoned_potion: [
-    'potion_lab',
-    'potion_ingredients',
-    'potion_delivery_log',
-    'potion_interview_vera',
-    'potion_interview_barnaby',
-    'potion_interview_luna',
-    'potion_study',
-    'potion_analysis',
-    'potion_confrontation'
+    'potion_lab',           // 1: Crime scene
+    'potion_notes',         // 2: Safety protocol
+    'potion_ingredients',   // 3: Ingredient shelves
+    'potion_storage',       // 4: Storage closet
+    'potion_delivery_log',  // 5: Delivery log
+    'potion_interview_vera',      // 6: Vera interview
+    'potion_interview_barnaby',   // 7: Barnaby interview
+    'potion_barnaby_shop',        // 8: Barnaby's back room
+    'potion_interview_luna',      // 9: Luna interview
+    'potion_study',               // 10: Professor's study
+    'potion_antidote_mix',        // 11: Mixing antidote
+    'potion_analysis',            // 12: Analysis room
+    'potion_confrontation'        // 13: Final confrontation
   ]
 };

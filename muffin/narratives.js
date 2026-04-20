@@ -180,80 +180,111 @@ const CASES = [
     description: 'Professor Elixworth, the realm\'s greatest potion maker, has been found unconscious in his lab. Three suspects, a locked lab, and magical measurements hold the key to saving him before the antidote window closes...',
     backdrop: 'potionlab',
     problems: [
-      // Problem 1: Crime scene — Powers of 10
+      // Problem 1 — Crime scene: Powers of 10 (multiply, 10³)
       {
-        cluePrompt: 'Muffin arrives at Professor Elixworth\'s potion laboratory. The old wizard lies unconscious on the floor, his cauldron still bubbling with a sickly green glow. A dosage logbook sits open on the counter, but the critical entry is smudged. Only part of it is legible: the poison was measured in scientific notation.',
-        clueReveal: 'The dosage was exactly 450 milligrams! Muffin notes this in his detective journal. That\'s a very precise amount -- whoever did this knew exactly what they were doing. This was no accident.',
-        question: 'The smudged logbook entry reads: "Administered dosage: 4.5 x 10^2 milligrams." What is 4.5 x 10^2 as a plain number?',
-        answer: 450,
-        hint: '4.5 x 10^2 = 4.5 x 100 = ?'
+        cluePrompt: 'Muffin arrives at Professor Elixworth\'s potion laboratory. The old wizard lies on the stone floor, his robes splayed out behind him. The cauldron bubbles with a sickly green glow. A dosage logbook sits open on the counter — most of it is smudged, but Muffin can make out the original order quantity written in scientific notation.',
+        clueReveal: 'The Nightshade Extract order was 6,300 milligrams — a dangerously large supply. Checking the current inventory: nearly all of it has been used. This was deliberate, and someone placed that order recently. Muffin underlines the number twice.',
+        question: 'The logbook shows a recent order: "Nightshade Extract — 6.3 × 10<sup>3</sup> milligrams." What is 6.3 × 10<sup>3</sup> as a plain number?',
+        answer: 6300,
+        hint: '6.3 × 10<sup>3</sup>'
       },
-      // Problem 2: Ingredient shelves — Metric conversion (mg to g)
+      // Problem 2 — Professor's notes: Powers of 10 (divide, 10²)
       {
-        cluePrompt: 'Muffin climbs a stepladder to examine the ingredient shelves. Hundreds of jars line the walls, each labeled in careful handwriting. One jar catches his eye: "Nightshade Extract" -- a powerful toxin in the wrong hands. The jar\'s label shows the contents in milligrams, but the professor\'s recipe cards are all written in grams.',
-        clueReveal: 'The Nightshade Extract jar is missing exactly 2.5 grams -- precisely enough for the poison dosage plus the binding agent. Someone measured this with laboratory precision, not a hasty grab.',
-        question: 'The Nightshade Extract jar originally held 5,000 mg. After the theft, it holds 2,500 mg. How many grams of Nightshade were taken? (Hint: 1 g = 1,000 mg)',
+        cluePrompt: 'On the professor\'s desk Muffin finds a safety protocol pinned beside the workspace: maximum safe doses, lethal thresholds, and emergency antidote procedures. One line catches his eye — the lethal threshold for Nightshade Extract, expressed as a large number divided by a power of 10. Someone ignored this warning entirely.',
+        clueReveal: 'The lethal threshold is just 63 milligrams per hour. The professor received far more than that. The poisoning was deliberate and precisely calculated — not a lab accident. Muffin writes "INTENTIONAL" in his notebook and adds three exclamation marks.',
+        question: 'The safety note reads: "Lethal threshold = 6,300 ÷ 10<sup>2</sup> mg per hour." What is 6,300 ÷ 10<sup>2</sup>?',
+        answer: 63,
+        hint: '6,300 ÷ 10<sup>2</sup>'
+      },
+      // Problem 3 — Ingredient shelves: Metric conversion (mg → g)
+      {
+        cluePrompt: 'Muffin climbs a stepladder to inspect the ingredient shelves. Hundreds of jars line the walls in careful handwriting. One jar jumps out: "Nightshade Extract — HANDLE WITH EXTREME CARE." The label shows contents in milligrams, but the crime report tracks stolen amounts in grams. Muffin needs to convert to make the comparison.',
+        clueReveal: 'Exactly 2.5 grams of Nightshade Extract are missing. That\'s a precise, calculated amount — not a clumsy spill. Whoever took this used a calibrated scale. This rules out a smash-and-grab. The thief had chemistry knowledge.',
+        question: 'The Nightshade jar originally held 3,750 mg. It now holds 1,250 mg, so 2,500 mg were taken. How many <em>grams</em> is 2,500 mg? (1 g = 1,000 mg)',
         answer: 2.5,
-        hint: '2,500 mg / 1,000 = ? g'
+        hint: '2,500 ÷ 1,000'
       },
-      // Problem 3: Delivery logbook — Metric conversion (kg to g)
+      // Problem 4 — Storage closet: Metric conversion (g → mg, reverse direction)
       {
-        cluePrompt: 'Muffin opens the delivery logbook on the professor\'s desk. The most recent entry is from Luna Starwell, the professor\'s regular courier. She delivered a shipment of Moonstone Powder yesterday. The delivery is recorded in kilograms, but the lab inventory tracks everything in grams.',
-        clueReveal: 'Luna delivered 750 grams of Moonstone Powder, but the lab inventory shows only 680 grams were shelved. That means 70 grams are unaccounted for. Where did the missing powder go?',
-        question: 'Luna\'s delivery receipt shows she brought 0.75 kg of Moonstone Powder. How many grams is that? (Hint: 1 kg = 1,000 g)',
+        cluePrompt: 'Behind the lab Muffin finds a storage closet with a freshly-picked lock. Inside, a small container of Starfire Crystal has been tipped over — crystals scattered across the shelf. Starfire Crystal is a rare binding agent with one documented use: making Nightshade Extract harder to detect. The label shows the amount in grams, but Muffin needs milligrams for the toxicology report.',
+        clueReveal: '85 milligrams of Starfire Crystal were taken — just enough to mask the Nightshade in a drink. This rules out Vera, who is a beginning apprentice and wouldn\'t know about Starfire Crystal. Someone with serious potion knowledge did this.',
+        question: 'The tipped container was labeled "0.085 g of Starfire Crystal." How many <em>milligrams</em> is 0.085 g? (1 g = 1,000 mg)',
+        answer: 85,
+        hint: '0.085 × 1,000'
+      },
+      // Problem 5 — Delivery logbook: Metric conversion (kg → g)
+      {
+        cluePrompt: 'Muffin opens the delivery logbook on the professor\'s desk. The most recent entry is from Luna Starwell, the professor\'s regular courier. She delivered Moonstone Powder yesterday — an ingredient with no harmful properties, but her delivery record reveals something important about timing. The receipt uses kilograms; the lab inventory uses grams.',
+        clueReveal: 'Luna delivered 750 grams of Moonstone Powder, but only 680 grams were entered into inventory. Seventy grams unaccounted for — and Moonstone Powder is harmless on its own, but it\'s also an excellent disguise for suspicious-colored liquids. Someone used it as camouflage.',
+        question: 'Luna\'s delivery receipt shows she brought 0.75 kg of Moonstone Powder. How many <em>grams</em> is 0.75 kg? (1 kg = 1,000 g)',
         answer: 750,
-        hint: '0.75 x 1,000 = ? g'
+        hint: '0.75 × 1,000'
       },
-      // Problem 4: Interview Vera — Metric conversion (mL to L)
+      // Problem 6 — Interview Vera: Metric conversion (mL → L)
       {
-        cluePrompt: 'Muffin interviews Vera Vex, the professor\'s ambitious apprentice. She\'s nervous but cooperative, claiming she spent all morning measuring purified water for practice potions. Her workbench is covered in graduated cylinders and beakers, all meticulously labeled.',
-        clueReveal: 'Vera used 3.2 liters of water -- that matches exactly with a standard Healing Tonic recipe. Muffin cross-checks the recipe book: she\'s telling the truth about what she was brewing. But Vera also mentions something interesting: Barnaby Thornwick visited the lab yesterday evening, "dropping off a gift for the professor."',
-        question: 'Vera\'s workbench log shows she used exactly 3,200 mL of purified water. How many liters is that? (Hint: 1 L = 1,000 mL)',
+        cluePrompt: 'Muffin interviews Vera Vex, the professor\'s apprentice. She\'s nervous but answers every question. She claims she spent the whole morning at her bench, measuring purified water for practice potions. Her workbench is indeed covered in labeled cylinders and beakers. Muffin checks her water log against the recipe she claims to have followed.',
+        clueReveal: 'Vera used exactly 3.2 liters of water — a perfect match for the standard Healing Tonic recipe. Her alibi checks out. But as she talks, she mentions something useful: Barnaby Thornwick, the professor\'s rival, visited the lab the previous evening to drop off "a congratulatory gift."',
+        question: 'Vera\'s workbench log shows she used 3,200 mL of purified water. How many <em>liters</em> is 3,200 mL? (1 L = 1,000 mL)',
         answer: 3.2,
-        hint: '3,200 / 1,000 = ? L'
+        hint: '3,200 ÷ 1,000'
       },
-      // Problem 5: Interview Barnaby — Powers of 10
+      // Problem 7 — Interview Barnaby: Powers of 10 (multiply, 10³)
       {
-        cluePrompt: 'Muffin visits Barnaby Thornwick\'s rival potion shop across town. The shop is darker and more cluttered than the professor\'s immaculate lab. Barnaby claims he was simply restocking supplies and has receipts to prove it. But one order stands out: a suspiciously large purchase of rare ingredients.',
-        clueReveal: 'Barnaby spent 350 gold coins on a massive order! That\'s far more than a small rival shop would normally need. When Muffin asks about it, Barnaby stammers: "I... was planning to expand." His eyes dart to a locked cabinet behind the counter.',
-        question: 'Barnaby\'s receipt shows he ordered 10^3 empty vials at 0.35 gold coins each. How much did he spend in total? (Remember: 10^3 = 1,000)',
+        cluePrompt: 'Muffin visits Barnaby Thornwick\'s rival potion shop across town. The shop is darker and more cluttered than the professor\'s lab. Barnaby presents receipts to prove he was busy restocking — but when Muffin examines them closely, one order is staggering: a purchase of empty vials far beyond what any small shop would ever need.',
+        clueReveal: 'Barnaby spent 350 gold coins on supplies — enough to stock a factory, not a one-room shop! When Muffin presses him on it, Barnaby stammers and his eyes flick to a locked cabinet behind the counter. "I was... planning to expand," he mutters unconvincingly.',
+        question: 'Barnaby\'s receipt shows he ordered 10<sup>3</sup> empty vials at 0.35 gold coins each. What was his total cost?',
         answer: 350,
-        hint: '1,000 x 0.35 = ?'
+        hint: '10<sup>3</sup> × 0.35'
       },
-      // Problem 6: Interview Luna — Multi-step metric conversion
+      // Problem 8 — Barnaby's back room: Powers of 10 (multiply, 10²)
       {
-        cluePrompt: 'Muffin tracks down Luna Starwell at the courier depot. She\'s a cheerful, honest woman who has delivered for the professor for years. She provides her full route log from yesterday, which Muffin needs to verify her alibi. If her distances check out, she couldn\'t have been at the lab when the poisoning happened.',
-        clueReveal: 'Luna\'s total route was 4.3 km, and the time stamps prove she was at the harbor during the poisoning window. Her alibi is solid -- she\'s innocent! But she reveals one crucial detail: Barnaby asked her to deliver a special "congratulatory potion" to the professor as a gift. She had no idea what was inside.',
-        question: 'Luna\'s route went from the harbor to the market (2.5 km), then from the market to the professor\'s lab (1,800 meters further). What was her total route distance in kilometers? (Hint: 1 km = 1,000 m)',
+        cluePrompt: 'While Barnaby is distracted, Muffin spots a ledger on the back room shelf that isn\'t listed in any public record. It\'s a hidden inventory — stock that Barnaby never registered. The amounts are written in powers-of-10 shorthand, and one entry stands out immediately.',
+        clueReveal: 'Barnaby is secretly hoarding 85 grams of Shadowmoss Tincture — a rare substance with exactly one documented use: as a carrier agent in Nightshade Extract poisonings, making the poison absorb faster. Combined with Starfire Crystal to mask it. This is no coincidence. Muffin photographs the ledger.',
+        question: 'Barnaby\'s hidden ledger lists "10<sup>2</sup> bottles × 0.85 g each" of Shadowmoss Tincture. How many total grams does he have?',
+        answer: 85,
+        hint: '10<sup>2</sup> × 0.85'
+      },
+      // Problem 9 — Interview Luna: Multi-step metric (km + m → km)
+      {
+        cluePrompt: 'Muffin tracks down Luna Starwell at the courier depot. She\'s forthcoming and honest — no signs of deception. She hands over her complete route log from the day of the poisoning. Muffin needs to verify the total distance to confirm whether she had time to detour to the lab during the critical window.',
+        clueReveal: 'Luna\'s route was exactly 4.3 km, and the GPS timestamps prove she was at the harbor warehouse during the entire poisoning window. Her alibi is airtight. But she adds one crucial detail: Barnaby specifically asked her to deliver a "congratulatory gift potion" to the professor. She had absolutely no idea what was inside.',
+        question: 'Luna\'s route: harbor to market (2.5 km), then market to the lab (1,800 m further). What was her total route in <em>kilometers</em>? (1 km = 1,000 m)',
         answer: 4.3,
-        hint: '2.5 + (1,800 / 1,000) = ?'
+        hint: '2.5 + (1,800 ÷ 1,000)'
       },
-      // Problem 7: Professor's study — Common denominators intro
+      // Problem 10 — Professor's study: Common denominators (find LCD)
       {
-        cluePrompt: 'In the professor\'s private study, Muffin discovers a hidden formula tucked inside an ancient book. It\'s the recipe for a Universal Antidote -- exactly what\'s needed to save the professor! But the recipe uses fractions with different denominators, and Muffin needs to find a common denominator to measure the ingredients properly.',
-        clueReveal: 'With a common denominator of 12, Muffin can measure the fractions accurately! The recipe calls for 4/12 of a vial of Starlight Essence and 3/12 of a vial of Dragon Tear. Muffin begins preparing the antidote. Now he just needs to identify the exact poison to calibrate the cure.',
-        question: 'The antidote recipe calls for 1/3 of a vial of Starlight Essence and 1/4 of a vial of Dragon Tear. To measure these accurately, Muffin needs a common denominator. What is the least common denominator of 3 and 4?',
-        answer: 12,
-        hint: 'Multiples of 3: 3, 6, 9, 12... Multiples of 4: 4, 8, 12...'
+        cluePrompt: 'In the professor\'s private study, Muffin discovers an ancient grimoire hidden behind a false panel in the bookcase. Inside: the recipe for a Universal Antidote. Exactly what\'s needed! But the recipe uses fractions with different denominators — 1/3 of one ingredient and 1/4 of another. To measure them precisely, Muffin first needs to find a common denominator.',
+        clueReveal: 'The least common denominator of 3 and 4 is 12! With that, Muffin can convert both fractions to twelfths and measure precisely. He starts laying out the ingredients. The antidote is almost ready — he just needs to do the final measurements.',
+        question: 'The antidote calls for 1/3 vial of Starlight Essence and 1/4 vial of Dragon Tear. To add these fractions, Muffin needs a common denominator. What is the <em>least common denominator</em> of 3 and 4?',
+        answer: 12
       },
-      // Problem 8: Potion analysis — Metric conversion (g to mg)
+      // Problem 11 — Mixing the antidote: Apply LCD to add fractions
       {
-        cluePrompt: 'Muffin brings a sample of the "gift potion" from Barnaby to the analysis room. Using the professor\'s precision equipment, he measures the concentration of Nightshade Extract in the liquid. The reading comes back in grams, but he needs it in milligrams to compare with the dosage from the logbook.',
-        clueReveal: 'The concentration is exactly 45 milligrams per dose -- and the "gift potion" contained exactly 10 doses. That means the total Nightshade in Barnaby\'s gift was 450 mg -- the EXACT amount from the dosage logbook! The pieces are falling into place.',
-        question: 'The analysis equipment reads a Nightshade concentration of 0.045 grams per dose. How many milligrams is 0.045 grams? (Hint: 1 g = 1,000 mg)',
+        cluePrompt: 'With the common denominator found, Muffin converts both fractions: 1/3 becomes 4/12, and 1/4 becomes 3/12. Now he can add them to find the exact total amount of liquid the antidote requires. He must get this right — too little won\'t work, and too much could cause new problems.',
+        clueReveal: 'The antidote requires 7/12 of a vial total — Muffin measures it out with surgical precision. The liquid shimmers gold as the two ingredients combine. He holds it up to the candlelight: it\'s perfect. Now he just needs to confirm the exact poison to finish the calibration.',
+        question: 'Muffin converts the fractions: 1/3 = 4/12, and 1/4 = 3/12. When he adds 4/12 + 3/12, the answer is ?/12. What is the numerator (the top number)?',
+        answer: 7,
+        hint: '4/12 + 3/12'
+      },
+      // Problem 12 — Potion analysis: Metric conversion (g → mg)
+      {
+        cluePrompt: 'Muffin brings a sample from Barnaby\'s "gift potion" to the analysis room. The professor\'s precision equipment measures Nightshade concentration in grams per dose. But the dosage logbook records everything in milligrams. Muffin must convert to make the final comparison.',
+        clueReveal: 'The gift potion contains exactly 45 milligrams of Nightshade per dose, and there were 10 doses in the bottle. Total: 450 mg — the exact amount the professor received. And where did 450 mg of Nightshade come from? The jar on the shelf that was missing 2,500 mg, combined with multiple doses. The math is airtight.',
+        question: 'The analysis reads: "Nightshade concentration: 0.045 g per dose." How many <em>milligrams</em> is 0.045 g? (1 g = 1,000 mg)',
         answer: 45,
-        hint: '0.045 x 1,000 = ? mg'
+        hint: '0.045 × 1,000'
       },
-      // Problem 9: The confrontation — Powers of 10 (final proof)
+      // Problem 13 — The confrontation: Powers of 10 (final proof, 10¹)
       {
-        cluePrompt: 'Muffin returns to Barnaby\'s shop with all the evidence. He lays it out: the delivery, the dosage, the Nightshade match. Barnaby\'s face goes pale. "You can\'t prove anything!" he sputters. But Muffin has one final calculation -- the critical link between the stolen Nightshade and the exact dosage found in the professor\'s system.',
-        clueReveal: 'The answer is 45 -- exactly matching the analysis! Barnaby\'s "gift potion" contained precisely 4.5 x 10^1 mg of Nightshade per dose, and the professor drank 10 doses over two days. The math is irrefutable. Barnaby slumps in his chair. "He was going to put me out of business," he whispers. "His new formula would have made my potions worthless..."',
-        question: 'The critical evidence: the poison contained 4.5 x 10^1 mg of Nightshade per dose. What is 4.5 x 10^1 as a plain number?',
+        cluePrompt: 'Muffin confronts Barnaby with everything: the Nightshade order, the Starfire Crystal, the Shadowmoss, Luna\'s testimony, and the gift potion analysis. Barnaby\'s face drains of color. "You can\'t prove it was me!" he snarls. But Muffin has one final calculation — the number that seals the case and matches the dosage log perfectly.',
+        clueReveal: '45 milligrams per dose — identical to 4.5 × 10¹. The numbers match perfectly, down to the milligram. Barnaby\'s chair scrapes as he slumps back. "He was going to publish a formula that would make my potions obsolete," he whispers. "I panicked. I never meant for it to go this far..."',
+        question: 'Final proof: the gift potion contained 4.5 × 10<sup>1</sup> mg of Nightshade per dose. What is 4.5 × 10<sup>1</sup> as a plain number?',
         answer: 45,
-        hint: '4.5 x 10^1 = 4.5 x 10 = ?'
+        hint: '4.5 × 10<sup>1</sup>'
       }
     ],
-    resolution: 'Barnaby Thornwick confesses to everything. Jealous of the professor\'s genius, he laced a "congratulatory gift potion" with precise doses of Nightshade Extract and had Luna deliver it unknowingly. Muffin administers the Universal Antidote, and Professor Elixworth\'s eyes flutter open. "My lab..." he croaks. "Is my lab okay?" Vera rushes to his side, tears in her eyes. The professor smiles weakly. "Vera, I think it\'s time I made you a full partner." The city guard leads Barnaby away. Luna is cleared of all suspicion. And Muffin? He tucks his magnifying glass into his detective hat, accepts a warm cup of chamomile tea, and heads home for a well-deserved nap.',
-    defeatMessage: 'The antidote window is closing fast, and Muffin can\'t crack the clues in time! But Professor Elixworth is a tough old wizard -- he\'ll hold on a little longer. Muffin takes a deep breath, straightens his detective hat, and starts the investigation from the top. No potion master goes unsaved on his watch.'
+    resolution: 'Barnaby Thornwick confesses. Jealous of the professor\'s genius, he secretly laced a "congratulatory gift potion" with precise doses of Nightshade Extract — masked by Starfire Crystal and carried by Shadowmoss Tincture — and had Luna deliver it unknowingly. Muffin administers the Universal Antidote, and Professor Elixworth\'s eyes flutter open. "My lab..." he croaks. "Is my cauldron still running?" Vera rushes to his side, laughing through her tears. The professor squeezes her hand. "You kept everything together, Vera. Full partnership, starting today." The city guard leads Barnaby away. Luna is cleared of all charges. And Muffin? He tucks his magnifying glass into his detective hat, accepts a warm cup of chamomile tea from Vera, and heads home for a very well-deserved nap.',
+    defeatMessage: 'The antidote window is closing fast, and Muffin can\'t crack the clues in time! But Professor Elixworth is a tough old wizard — he\'ll hold on a little longer. Muffin takes a deep breath, straightens his detective hat, and starts the investigation from the top. No potion master goes unsaved on his watch.'
   }
 ];

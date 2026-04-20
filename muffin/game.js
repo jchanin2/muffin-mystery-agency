@@ -337,13 +337,13 @@ function showProblem() {
   // Show story-relevant problem with equation hint
   problemTextEl.innerHTML = '';
   const questionText = document.createElement('div');
-  questionText.textContent = problem.question;
+  questionText.innerHTML = problem.question;
   questionText.style.marginBottom = '8px';
   problemTextEl.appendChild(questionText);
 
   if (problem.hint) {
     const hintText = document.createElement('div');
-    hintText.textContent = problem.hint + ' = ?';
+    hintText.innerHTML = problem.hint + ' = ?';
     hintText.style.fontSize = '1.4rem';
     hintText.style.color = '#e2b714';
     hintText.style.marginTop = '4px';

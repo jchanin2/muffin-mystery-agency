@@ -456,10 +456,19 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
+  align-items: stretch;
+}
+
+.answer-area .btn {
+  padding-left: 20px;
+  padding-right: 20px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .answer-input {
   flex: 1;
+  min-width: 0;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.3rem;
   padding: 10px 16px;
