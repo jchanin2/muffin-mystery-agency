@@ -257,14 +257,15 @@ const CASES = [
         cluePrompt: 'In the professor\'s private study, Muffin discovers an ancient grimoire hidden behind a false panel in the bookcase. Inside: the recipe for a Universal Antidote. Exactly what\'s needed! But the recipe uses fractions with different denominators — 1/3 of one ingredient and 1/4 of another. To measure them precisely, Muffin first needs to find a common denominator.',
         clueReveal: 'The least common denominator of 3 and 4 is 12! With that, Muffin can convert both fractions to twelfths and measure precisely. He starts laying out the ingredients. The antidote is almost ready — he just needs to do the final measurements.',
         question: 'The antidote calls for 1/3 vial of Starlight Essence and 1/4 vial of Dragon Tear. To add these fractions, Muffin needs a common denominator. What is the <em>least common denominator</em> of 3 and 4?',
-        answer: 12
+        answer: 12,
+        hint: 'LCD of 3 and 4'
       },
       // Problem 11 — Mixing the antidote: Apply LCD to add fractions
       {
         cluePrompt: 'With the common denominator found, Muffin converts both fractions: 1/3 becomes 4/12, and 1/4 becomes 3/12. Now he can add them to find the exact total amount of liquid the antidote requires. He must get this right — too little won\'t work, and too much could cause new problems.',
-        clueReveal: 'The antidote requires 7/12 of a vial total — Muffin measures it out with surgical precision. The liquid shimmers gold as the two ingredients combine. He holds it up to the candlelight: it\'s perfect. Now he just needs to confirm the exact poison to finish the calibration.',
-        question: 'Muffin converts the fractions: 1/3 = 4/12, and 1/4 = 3/12. When he adds 4/12 + 3/12, the answer is ?/12. What is the numerator (the top number)?',
-        answer: 7,
+        clueReveal: 'Exactly 7/12 of a vial — Muffin measures it out with surgical precision. The liquid shimmers gold as the two ingredients combine. He holds it up to the candlelight: it\'s perfect. Now he just needs to confirm the exact poison to finish the calibration.',
+        question: 'Muffin converts the fractions: 1/3 = 4/12, and 1/4 = 3/12. What is <em>4/12 + 3/12</em>? Write your answer as a fraction.',
+        answer: '7/12',
         hint: '4/12 + 3/12'
       },
       // Problem 12 — Potion analysis: Metric conversion (g → mg)
@@ -275,13 +276,13 @@ const CASES = [
         answer: 45,
         hint: '0.045 × 1,000'
       },
-      // Problem 13 — The confrontation: Powers of 10 (final proof, 10¹)
+      // Problem 13 — The confrontation: Decimal division reveals the full scale
       {
-        cluePrompt: 'Muffin confronts Barnaby with everything: the Nightshade order, the Starfire Crystal, the Shadowmoss, Luna\'s testimony, and the gift potion analysis. Barnaby\'s face drains of color. "You can\'t prove it was me!" he snarls. But Muffin has one final calculation — the number that seals the case and matches the dosage log perfectly.',
-        clueReveal: '45 milligrams per dose — identical to 4.5 × 10¹. The numbers match perfectly, down to the milligram. Barnaby\'s chair scrapes as he slumps back. "He was going to publish a formula that would make my potions obsolete," he whispers. "I panicked. I never meant for it to go this far..."',
-        question: 'Final proof: the gift potion contained 4.5 × 10<sup>1</sup> mg of Nightshade per dose. What is 4.5 × 10<sup>1</sup> as a plain number?',
-        answer: 45,
-        hint: '4.5 × 10<sup>1</sup>'
+        cluePrompt: 'Muffin confronts Barnaby with everything: the Nightshade order, the Starfire Crystal, the Shadowmoss, Luna\'s testimony, and the gift potion analysis. Barnaby\'s face drains of color. "You can\'t prove my plan was bigger than one potion!" he snarls. But Muffin has one final calculation — the number that reveals just how much poison Barnaby had truly been stockpiling.',
+        clueReveal: 'One hundred and seventy doses! Barnaby wasn\'t just after the professor — he was stockpiling enough Shadowmoss to poison every rival alchemist in the realm. The math doesn\'t just convict him of attempted murder; it exposes a conspiracy. Barnaby slumps into his chair. "He was going to publish a formula that would make my potions obsolete," he whispers. "I panicked. I never meant for it to go this far..."',
+        question: 'Barnaby hoarded <em>85</em> grams of Shadowmoss Tincture (Clue 8), and each dose of his poison requires <em>0.5</em> grams of it. How many <em>total doses</em> could Barnaby have made if he had not been stopped?',
+        answer: 170,
+        hint: '85 ÷ 0.5'
       }
     ],
     resolution: 'Barnaby Thornwick confesses. Jealous of the professor\'s genius, he secretly laced a "congratulatory gift potion" with precise doses of Nightshade Extract — masked by Starfire Crystal and carried by Shadowmoss Tincture — and had Luna deliver it unknowingly. Muffin administers the Universal Antidote, and Professor Elixworth\'s eyes flutter open. "My lab..." he croaks. "Is my cauldron still running?" Vera rushes to his side, laughing through her tears. The professor squeezes her hand. "You kept everything together, Vera. Full partnership, starting today." The city guard leads Barnaby away. Luna is cleared of all charges. And Muffin? He tucks his magnifying glass into his detective hat, accepts a warm cup of chamomile tea from Vera, and heads home for a very well-deserved nap.',
