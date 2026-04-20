@@ -320,13 +320,13 @@ const CASES = [
         hint: '3.8 × 4.9 (round each factor)'
       },
 
-      // Problem 3 — Fraction → decimal (3/4)
+      // Problem 3 — Fraction addition (1/2 + 1/4)
       {
-        cluePrompt: 'Tucked inside the day\'s receipts, Muffin finds a handwritten slip in unfamiliar script: <em>"paid 3/4 ounce of gold dust."</em> The Mint\'s official ledger records everything in decimals only — no fractions. To find the matching entry, Muffin must convert.',
-        clueReveal: 'Exactly 0.75 ounces — and the decimal ledger shows a 0.75-ounce payment logged to a name Muffin doesn\'t recognize. The receipt and the ledger line up only if you can switch between fractions and decimals. The forger was counting on someone missing that bridge.',
-        question: 'Convert <em>3/4</em> to a decimal.',
-        answer: 0.75,
-        hint: '3/4'
+        cluePrompt: 'Tucked inside the day\'s receipts, Muffin finds a handwritten slip in unfamiliar script itemizing two separate payments: <em>1/2 ounce of gold dust to the courier</em>, plus <em>1/4 ounce to the guard captain</em>. The Mint\'s official ledger records only a single <em>combined</em> entry, in decimals. To find the matching entry, Muffin must add the two fractions.',
+        clueReveal: 'Three-quarters of an ounce total — and as a decimal, 3/4 = 0.75, which matches a 0.75-ounce payment logged to a name Muffin doesn\'t recognize. The receipt and the ledger line up only if you can add unlike fractions and switch between fractions and decimals. The forger was counting on someone missing that bridge.',
+        question: 'Add <em>1/2 + 1/4</em>. Give your answer as a fraction in simplest form.',
+        answer: '3/4',
+        hint: '1/2 + 1/4'
       },
 
       // Problem 4 — Decimal expanded form
@@ -347,13 +347,13 @@ const CASES = [
         hint: '2.13 = 1 + ? tenths + 3 hundredths'
       },
 
-      // Problem 6 — Decimal → fraction (0.25)
+      // Problem 6 — Fraction subtraction (3/4 − 1/2)
       {
-        cluePrompt: 'Muffin interviews Master Scribe Cora, who swears the ledger was locked and spotless when she left last night. She produces a private memo signed by the Appraiser: <em>"0.25 ounces diverted per batch for purity testing."</em> Twelve batches passed through the Mint this week. But official purity tests are supposed to be logged as <em>fractions</em>, not decimals.',
-        clueReveal: '1/4 ounce — and the fraction-only purity log shows zero entries of 1/4 ounce this week. The Appraiser wrote in decimals because he knew the purity log would never catch a decimal. Cora is cleared. She just never knew the cipher existed.',
-        question: 'Convert <em>0.25</em> to a fraction in simplest form.',
+        cluePrompt: 'Muffin interviews Master Scribe Cora, who swears the ledger was locked and spotless when she left last night. She unlocks the official purity log and shows him today\'s entry: the daily reserve starts at <em>3/4</em> ounce of Nightshade for official tests, and the Appraiser signed out <em>1/2</em> ounce earlier today. The vial cabinet should still have the remainder — but Cora\'s hand shakes as she reaches for the key.',
+        clueReveal: 'One-quarter ounce should be left in the vial cabinet. But when Cora unlocks it, the cabinet is <em>empty</em>. That missing 1/4 ounce was siphoned directly by the Appraiser, who counted on no one doing the subtraction. Cora is cleared — she never knew there was anything to check.',
+        question: 'The purity reserve starts at <em>3/4</em> ounce. The Appraiser signed out <em>1/2</em> ounce. How much <em>should</em> remain? Calculate <em>3/4 − 1/2</em> and give your answer as a fraction in simplest form.',
         answer: '1/4',
-        hint: '0.25'
+        hint: '3/4 − 1/2'
       },
 
       // Problem 7 — Whole ÷ whole with decimal quotient
@@ -392,13 +392,13 @@ const CASES = [
         hint: '3/8'
       },
 
-      // Problem 11 — Final proof: 0.375 × 1200
+      // Problem 11 — Final proof: 3/8 × 1,200 (fraction × whole)
       {
-        cluePrompt: 'The Mint has received 1,200 ounces of gold over the past month. If Ambrose siphoned exactly 0.375 of every shipment, Muffin can calculate the weight of his secret stash <em>exactly</em>. Whatever number he gets should match the weight of the mystery crate locked in Ambrose\'s east-cellar workshop.',
-        clueReveal: 'Exactly 450 ounces. Muffin and the royal guards force open the east cellar — and there, neatly stacked and labeled "Personal — Do Not Open," sits a crate. On the Mint\'s own scales it weighs <em>precisely 450 ounces</em>. The math is airtight. Place value, estimation, fractions and decimals, all pointing to the same pile of stolen gold. Appraiser Ambrose is arrested on the spot.',
-        question: 'Calculate <em>0.375 × 1,200</em>.',
+        cluePrompt: 'The Mint has received <em>1,200</em> ounces of gold over the past month. From Clue 10, Muffin knows Ambrose siphoned exactly <em>3/8</em> of every shipment. With the fraction from the torn note, he can calculate the weight of the secret stash <em>exactly</em>. Whatever number he gets should match the weight of the mystery crate locked in Ambrose\'s east-cellar workshop.',
+        clueReveal: 'Exactly 450 ounces. Muffin and the royal guards force open the east cellar — and there, neatly stacked and labeled "Personal — Do Not Open," sits a crate. On the Mint\'s own scales it weighs <em>precisely 450 ounces</em>. The math is airtight. Place value, estimation, fraction operations, all pointing to the same pile of stolen gold. Appraiser Ambrose is arrested on the spot.',
+        question: 'Calculate <em>3/8 × 1,200</em>.',
         answer: 450,
-        hint: '0.375 × 1,200'
+        hint: '3/8 × 1,200'
       }
     ],
     resolution: 'Appraiser Ambrose confesses with a long sigh. For months he\'d shifted decimal points on the Royal Scales, hidden diversions inside fraction/decimal cipher switches, and padded the ledger with expanded-form codes only a Mint worker could read. The crown clears the Mint Master of all wrongdoing and reinstates Master Scribe Cora with a formal apology. Apprentice Pip is promoted to Junior Appraiser for his sharp eye. Muffin politely declines the gold reward but does accept a single warm honey-cake from the Mint\'s kitchen. As he ambles home, magnifying glass tucked into his detective hat, he mutters to himself, "You can shift a decimal point, but the math always tells the truth."',

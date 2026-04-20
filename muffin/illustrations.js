@@ -1755,12 +1755,16 @@ const Illustrations = {
       <rect x="110" y="120" width="190" height="110" fill="#f0e0a8" stroke="#8a6838" stroke-width="1.2" rx="1" transform="rotate(4 205 175)"/>
       <rect x="114" y="124" width="182" height="102" fill="#f5e6b4" rx="1" transform="rotate(4 205 175)"/>
 
-      <!-- Handwritten cursive text -->
-      <text x="128" y="148" fill="#3a2010" font-size="11" font-family="serif" font-style="italic" transform="rotate(4 128 148)">paid </text>
-      <text x="160" y="152" fill="#aa2222" font-size="18" font-weight="bold" font-family="serif" font-style="italic" transform="rotate(4 160 152)">3/4</text>
-      <text x="192" y="150" fill="#3a2010" font-size="11" font-family="serif" font-style="italic" transform="rotate(4 192 150)">ounce of</text>
-      <text x="128" y="172" fill="#3a2010" font-size="11" font-family="serif" font-style="italic" transform="rotate(4 128 172)">gold dust </text>
-      <text x="128" y="195" fill="#3a2010" font-size="9" font-family="serif" font-style="italic" transform="rotate(4 128 195)">~ unsigned</text>
+      <!-- Handwritten cursive text: two itemized payments for fraction addition -->
+      <text x="128" y="146" fill="#3a2010" font-size="10" font-family="serif" font-style="italic" transform="rotate(4 128 146)">courier: </text>
+      <text x="188" y="150" fill="#aa2222" font-size="16" font-weight="bold" font-family="serif" font-style="italic" transform="rotate(4 188 150)">1/2</text>
+      <text x="216" y="148" fill="#3a2010" font-size="10" font-family="serif" font-style="italic" transform="rotate(4 216 148)">oz</text>
+      <text x="128" y="168" fill="#3a2010" font-size="10" font-family="serif" font-style="italic" transform="rotate(4 128 168)">guard:    </text>
+      <text x="188" y="172" fill="#aa2222" font-size="16" font-weight="bold" font-family="serif" font-style="italic" transform="rotate(4 188 172)">1/4</text>
+      <text x="216" y="170" fill="#3a2010" font-size="10" font-family="serif" font-style="italic" transform="rotate(4 216 170)">oz</text>
+      <line x1="128" y1="182" x2="242" y2="182" stroke="#3a2010" stroke-width="0.8" transform="rotate(4 185 182)"/>
+      <text x="128" y="198" fill="#3a2010" font-size="10" font-family="serif" font-style="italic" transform="rotate(4 128 198)">total:    ?   oz</text>
+      <text x="128" y="214" fill="#3a2010" font-size="8" font-family="serif" font-style="italic" transform="rotate(4 128 214)">~ unsigned</text>
 
       <!-- Decorative flourish -->
       <path d="M 220 200 Q 240 195 250 210 Q 240 215 235 205" fill="none" stroke="#3a2010" stroke-width="0.8" transform="rotate(4 235 205)"/>
@@ -1937,10 +1941,12 @@ const Illustrations = {
       <!-- worried brow -->
       <line x1="283" y1="84" x2="287" y2="85" stroke="#2a1a10" stroke-width="0.8" stroke-linecap="round"/>
       <line x1="291" y1="85" x2="295" y2="84" stroke="#2a1a10" stroke-width="0.8" stroke-linecap="round"/>
-      <!-- arm holding out memo -->
-      <rect x="248" y="115" width="32" height="7" fill="#3a5a6a" rx="3" transform="rotate(15 264 118)"/>
-      <rect x="242" y="112" width="14" height="18" fill="#eadba0" stroke="#aa2222" stroke-width="0.8" transform="rotate(15 249 121)"/>
-      <text x="249" y="122" text-anchor="middle" fill="#aa2222" font-size="5" font-weight="bold" transform="rotate(15 249 122)">0.25</text>
+      <!-- arm holding out purity log showing 3/4 reserve minus 1/2 signed out -->
+      <rect x="246" y="113" width="34" height="9" fill="#3a5a6a" rx="3" transform="rotate(15 263 117)"/>
+      <rect x="238" y="106" width="22" height="24" fill="#eadba0" stroke="#aa2222" stroke-width="0.8" transform="rotate(15 249 118)"/>
+      <text x="249" y="115" text-anchor="middle" fill="#3a2010" font-size="4" font-weight="bold" transform="rotate(15 249 115)">PURITY</text>
+      <text x="249" y="121" text-anchor="middle" fill="#aa2222" font-size="5" font-weight="bold" transform="rotate(15 249 121)">3/4 − 1/2</text>
+      <text x="249" y="127" text-anchor="middle" fill="#aa2222" font-size="4" font-weight="bold" transform="rotate(15 249 127)">= ?</text>
 
       <!-- Muffin (left side of desk) looking up at Cora -->
       ${this._miniMuffin(70, 170, 0.6)}
