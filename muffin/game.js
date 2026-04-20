@@ -129,21 +129,29 @@ function typeWriter(element, text, speed = 25) {
   }
 
   return new Promise(resolve => {
-    element.textContent = '';
+    // innerHTML so inline tags like <sup> and <em> render as they appear.
+    element.innerHTML = '';
     let i = 0;
     let cancelled = false;
 
     typeWriterCancel = () => {
       cancelled = true;
-      element.textContent = text;
+      element.innerHTML = text;
       resolve();
     };
 
     function type() {
       if (cancelled) return;
       if (i < text.length) {
-        element.textContent += text.charAt(i);
-        i++;
+        // If we're at the start of an HTML tag, consume the whole tag in
+        // one step so the browser never sees a half-open tag.
+        if (text.charAt(i) === '<') {
+          const end = text.indexOf('>', i);
+          i = (end === -1) ? text.length : end + 1;
+        } else {
+          i++;
+        }
+        element.innerHTML = text.slice(0, i);
         setTimeout(type, speed);
       } else {
         typeWriterCancel = null;
@@ -536,21 +544,25 @@ function showPreviousClue() {
   const continueBtn = document.getElementById('btn-continue');
   const prevBtn = document.getElementById('btn-prev-clue');
 
+  // Cancel any in-flight typewriter so its queued chars don't get appended
+  // to the clue reveal we're about to render.
+  if (typeWriterCancel) typeWriterCancel();
+
   // Update progress
   document.getElementById('progress-current').textContent = Game.currentProblemIndex + 1;
 
-  // Show the clue reveal text (already solved)
-  narrativeEl.textContent = problem.clueReveal;
+  // Show the clue reveal text (already solved) — innerHTML so <em>/<sup> render
+  narrativeEl.innerHTML = problem.clueReveal;
 
-  // Show the question and answer
+  // Show the question and answer — innerHTML so <sup>/<em> render correctly
   problemTextEl.innerHTML = '';
   const questionText = document.createElement('div');
-  questionText.textContent = problem.question;
+  questionText.innerHTML = problem.question;
   questionText.style.marginBottom = '8px';
   problemTextEl.appendChild(questionText);
   if (problem.hint) {
     const hintText = document.createElement('div');
-    hintText.textContent = problem.hint + ' = ' + problem.answer;
+    hintText.innerHTML = problem.hint + ' = ' + problem.answer;
     hintText.style.fontSize = '1.4rem';
     hintText.style.color = '#2ecc71';
     hintText.style.marginTop = '4px';
