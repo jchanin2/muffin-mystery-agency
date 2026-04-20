@@ -301,13 +301,13 @@ const CASES = [
     description: 'The Royal Mint of Goldhaven is short hundreds of gold coins — yet the ledger balances perfectly. Someone has been skimming gold by shifting decimal points and hiding entries in ciphers. Muffin must trace the forger before the crown holds the Mint Master accountable.',
     backdrop: 'mint',
     problems: [
-      // Problem 1 — Place value: value of 4 in 4.572
+      // Problem 1 — Place value: value of 4 in 45.72 (tens place)
       {
-        cluePrompt: 'Muffin arrives at the Royal Mint of Goldhaven. The Mint Master paces the vault floor, gold coins scattered across a stone counter. "The casting mold is set for 45.72-gram coins, but yesterday\'s batch weighed in at 4.572 grams each — and the ledger still shows them as full weight! Somebody shifted the decimal point, Detective." Muffin picks up a coin and studies the stamped number.',
-        clueReveal: 'The 4 in 4.572 stands for just 4 ones — but in 45.72 it stood for 40. That\'s a tenfold drop in value, carried out with a single decimal point. No clumsy thief would know to shift it so precisely. The forger understands place value.',
-        question: 'On the altered coin, the weight reads <em>4.572</em> grams. What is the <em>value</em> of the <em>4</em> in <em>4.572</em>?',
-        answer: 4,
-        hint: 'Value of the 4 in 4.572'
+        cluePrompt: 'Muffin arrives at the Royal Mint of Goldhaven. The Mint Master paces the vault floor, gold coins scattered across a stone counter. "The casting mold is set for 45.72-gram coins, but yesterday\'s batch weighed in at only 4.572 grams each — and the ledger still shows them as full weight! Somebody shifted the decimal point, Detective." Muffin picks up a coin, studies the stamp, and looks hard at the 4 — the digit that moved the farthest.',
+        clueReveal: 'In the original 45.72-gram weight, the 4 stood for a full 40 grams. In the altered 4.572 weight, that same 4 stands for just 4 grams — a tenfold drop, carried out with a single decimal point. No clumsy thief would know to shift it so precisely. The forger understands place value.',
+        question: 'The casting mold was set for <em>45.72</em>-gram coins. What is the <em>value</em> of the <em>4</em> in <em>45.72</em>?',
+        answer: 40,
+        hint: 'Value of the 4 in 45.72'
       },
 
       // Problem 2 — Estimate multiply
@@ -337,18 +337,18 @@ const CASES = [
         hint: '3 + 2/10 + 5/100 + 7/1000'
       },
 
-      // Problem 5 — Regrouping decimals
+      // Problem 5 — Regrouping decimals (11 tenths)
       {
-        cluePrompt: 'The official delivery ledger shows yesterday\'s intake as 2.13 pounds. But the original courier receipt Muffin found earlier tells a different story, and the ledger entry\'s ink looks suspiciously fresh. Muffin lines the two up. The <em>tenths</em> place doesn\'t match.',
-        clueReveal: 'The correct regrouping is one tenth — but the tampered ledger reads "2 + 3 tenths + 3 hundredths," which is 2.33, not 2.13. Someone added 0.2 pounds of phantom gold straight into the record. Muffin scrawls "TAMPERED" in the margin.',
-        question: 'The original entry reads <em>2.13 pounds = 2 + ___ tenths + 3 hundredths</em>. How many <em>tenths</em> go in the blank?',
-        answer: 1,
-        hint: '2.13 = 2 + ? tenths + 3 hundredths'
+        cluePrompt: 'The courier\'s original receipt shows yesterday\'s intake as 2.13 pounds — but the receipt doesn\'t write the "2" as two wholes. The Mint\'s couriers always regroup a whole into tenths so their bookkeeping is harder to fake. The form reads "1 + ___ tenths + 3 hundredths" — and the tampered ledger got this regrouping wrong, which is how Muffin spots the forgery.',
+        clueReveal: 'Eleven tenths! Trading one whole for ten tenths gives 10 tenths, plus the 1 tenth already there, makes 11. The courier\'s form was correct. But the tampered ledger wrote "3 tenths" instead of 11 — a huge number difference only a forger rushing to cover their tracks would make. Muffin scrawls "TAMPERED" in the margin.',
+        question: 'The courier\'s form reads <em>2.13 pounds = 1 + ___ tenths + 3 hundredths</em>. How many <em>tenths</em> go in the blank?',
+        answer: 11,
+        hint: '2.13 = 1 + ? tenths + 3 hundredths'
       },
 
       // Problem 6 — Decimal → fraction (0.25)
       {
-        cluePrompt: 'Muffin interviews Master Scribe Cora, who swears the ledger was locked and spotless when she left last night. She produces a private memo signed by the Appraiser: <em>"0.25 ounces diverted per batch for purity testing."</em> Fourteen batches passed through the Mint this week. But official purity tests are supposed to be logged as <em>fractions</em>, not decimals.',
+        cluePrompt: 'Muffin interviews Master Scribe Cora, who swears the ledger was locked and spotless when she left last night. She produces a private memo signed by the Appraiser: <em>"0.25 ounces diverted per batch for purity testing."</em> Twelve batches passed through the Mint this week. But official purity tests are supposed to be logged as <em>fractions</em>, not decimals.',
         clueReveal: '1/4 ounce — and the fraction-only purity log shows zero entries of 1/4 ounce this week. The Appraiser wrote in decimals because he knew the purity log would never catch a decimal. Cora is cleared. She just never knew the cipher existed.',
         question: 'Convert <em>0.25</em> to a fraction in simplest form.',
         answer: '1/4',
@@ -367,7 +367,7 @@ const CASES = [
       // Problem 8 — Estimate divide
       {
         cluePrompt: 'The courier\'s delivery log claims 148.6 sacks of gold were brought to the Mint over 28.9 weeks. Before Muffin checks the exact rate, he wants a quick sanity check against the Mint\'s own weekly intake books.',
-        clueReveal: 'About 5 sacks per week on the courier\'s log — but the Mint\'s intake book shows 12 sacks a week arriving! The courier is only accounting for part of the shipments. Either there\'s a second delivery route, or gold is entering the Mint from somewhere off the books. This is bigger than one thief.',
+        clueReveal: 'About 5 sacks per week on the courier\'s log — but the Mint\'s intake book shows 12 sacks arriving! Seven extra sacks a week are slipping into the Mint off-book. Muffin cross-references the intake slips: every one of those extra deliveries was signed in by the Appraiser personally. Ambrose isn\'t just skimming — he\'s been padding the intake to grow his stash in plain sight.',
         question: 'Estimate <em>148.6 ÷ 28.9</em> by rounding each number to a friendly value. What is your estimate?',
         answer: 5,
         hint: '148.6 ÷ 28.9 (round each number)'
