@@ -5,7 +5,11 @@ const ProblemType = {
   WHOLE_BY_DECIMAL: 'whole_by_decimal',
   DECIMAL_BY_DECIMAL: 'decimal_by_decimal',
   MONEY_WORD: 'money_word',
-  MEASUREMENT_WORD: 'measurement_word'
+  MEASUREMENT_WORD: 'measurement_word',
+  POWERS_OF_10: 'powers_of_10',
+  METRIC_CONVERSION: 'metric_conversion',
+  MULTIPLY_DIVIDE_POW10: 'multiply_divide_pow10',
+  COMMON_DENOMINATOR: 'common_denominator'
 };
 
 // Generate problems backwards from clean answers to guarantee nice results
@@ -194,6 +198,131 @@ const ProblemGenerator = {
     };
   },
 
+  // Type 6: Powers of 10
+  // e.g., 10^3 = ?, or 4.5 x 10^2 = ?
+  generatePowersOf10(difficulty) {
+    if (difficulty === 'easy') {
+      // Simple: What is 10^n?
+      const exp = this.randInt(1, 4);
+      const answer = Math.pow(10, exp);
+      return {
+        type: ProblemType.POWERS_OF_10,
+        question: `What is 10 to the power of ${exp}? (10^${exp})`,
+        answer: answer,
+        isWordProblem: true
+      };
+    } else if (difficulty === 'medium') {
+      // Multiply a number by a power of 10
+      const exp = this.randInt(1, 3);
+      const base = this.round(this.pick([1.5, 2.5, 3.5, 4.5, 0.5, 0.25, 6.2, 7.8]));
+      const power = Math.pow(10, exp);
+      const answer = this.round(base * power);
+      return {
+        type: ProblemType.POWERS_OF_10,
+        question: `What is ${base} x 10^${exp}?`,
+        answer: answer,
+        isWordProblem: true
+      };
+    } else {
+      // Mixed: evaluate expressions with powers of 10
+      const exp = this.randInt(2, 4);
+      const base = this.round(this.pick([0.3, 0.45, 1.2, 2.5, 3.6, 0.08]));
+      const power = Math.pow(10, exp);
+      const answer = this.round(base * power);
+      return {
+        type: ProblemType.POWERS_OF_10,
+        question: `Calculate: ${base} x 10^${exp}`,
+        answer: answer,
+        isWordProblem: true
+      };
+    }
+  },
+
+  // Type 7: Metric conversions
+  // e.g., 3.5 km = ? m, 2500 mg = ? g
+  generateMetricConversion(difficulty) {
+    const conversions = [
+      { from: 'km', to: 'm', factor: 1000, dir: 'multiply' },
+      { from: 'm', to: 'cm', factor: 100, dir: 'multiply' },
+      { from: 'cm', to: 'mm', factor: 10, dir: 'multiply' },
+      { from: 'kg', to: 'g', factor: 1000, dir: 'multiply' },
+      { from: 'g', to: 'mg', factor: 1000, dir: 'multiply' },
+      { from: 'L', to: 'mL', factor: 1000, dir: 'multiply' },
+      { from: 'm', to: 'km', factor: 1000, dir: 'divide' },
+      { from: 'cm', to: 'm', factor: 100, dir: 'divide' },
+      { from: 'g', to: 'kg', factor: 1000, dir: 'divide' },
+      { from: 'mg', to: 'g', factor: 1000, dir: 'divide' },
+      { from: 'mL', to: 'L', factor: 1000, dir: 'divide' }
+    ];
+    const conv = this.pick(conversions);
+    let value, answer;
+    if (conv.dir === 'multiply') {
+      value = this.round(this.pick([0.5, 1.5, 2.5, 3.5, 0.75, 4.2, 0.25, 6.8]));
+      answer = this.round(value * conv.factor);
+    } else {
+      answer = this.round(this.pick([0.5, 1.5, 2.5, 3.5, 0.75, 4.2, 0.25, 6.8]));
+      value = this.round(answer * conv.factor);
+    }
+    return {
+      type: ProblemType.METRIC_CONVERSION,
+      question: `Convert: ${value} ${conv.from} = ? ${conv.to}`,
+      answer: answer,
+      isWordProblem: true
+    };
+  },
+
+  // Type 8: Multiply/divide whole numbers and decimals by 10, 100, 1000
+  generateMultiplyDividePow10(difficulty) {
+    const multipliers = [10, 100, 1000];
+    const mult = this.pick(multipliers);
+    const isMultiply = Math.random() < 0.5;
+    let value, answer;
+    if (isMultiply) {
+      value = this.round(this.pick([0.3, 0.45, 1.2, 2.5, 3.6, 0.08, 4.5, 7.25]));
+      answer = this.round(value * mult);
+      return {
+        type: ProblemType.MULTIPLY_DIVIDE_POW10,
+        question: `${value} x ${mult} = ?`,
+        answer: answer,
+        isWordProblem: true
+      };
+    } else {
+      answer = this.round(this.pick([0.3, 0.45, 1.2, 2.5, 3.6, 4.5, 6.7, 7.25]));
+      value = this.round(answer * mult);
+      return {
+        type: ProblemType.MULTIPLY_DIVIDE_POW10,
+        question: `${value} / ${mult} = ?`,
+        answer: answer,
+        isWordProblem: true
+      };
+    }
+  },
+
+  // Type 9: Common denominators (intro)
+  // e.g., Find the least common denominator for 1/3 and 1/4
+  generateCommonDenominator(difficulty) {
+    const pairs = [
+      { d1: 2, d2: 3, lcd: 6 },
+      { d1: 3, d2: 4, lcd: 12 },
+      { d1: 2, d2: 5, lcd: 10 },
+      { d1: 3, d2: 5, lcd: 15 },
+      { d1: 4, d2: 5, lcd: 20 },
+      { d1: 3, d2: 6, lcd: 6 },
+      { d1: 4, d2: 6, lcd: 12 },
+      { d1: 2, d2: 7, lcd: 14 },
+      { d1: 5, d2: 6, lcd: 30 }
+    ];
+    const easyPairs = pairs.slice(0, 4);
+    const pool = difficulty === 'easy' ? easyPairs : pairs;
+    const pair = this.pick(pool);
+    return {
+      type: ProblemType.COMMON_DENOMINATOR,
+      question: `Find the least common denominator for 1/${pair.d1} and 1/${pair.d2}.`,
+      answer: pair.lcd,
+      isWordProblem: true
+    };
+  },
+
   // Main generator: dispatch by type
   generate(type, difficulty = 'easy') {
     switch (type) {
@@ -207,6 +336,14 @@ const ProblemGenerator = {
         return this.generateMoneyWord(difficulty);
       case ProblemType.MEASUREMENT_WORD:
         return this.generateMeasurementWord(difficulty);
+      case ProblemType.POWERS_OF_10:
+        return this.generatePowersOf10(difficulty);
+      case ProblemType.METRIC_CONVERSION:
+        return this.generateMetricConversion(difficulty);
+      case ProblemType.MULTIPLY_DIVIDE_POW10:
+        return this.generateMultiplyDividePow10(difficulty);
+      case ProblemType.COMMON_DENOMINATOR:
+        return this.generateCommonDenominator(difficulty);
       default:
         return this.generateDecimalByWhole(difficulty);
     }
