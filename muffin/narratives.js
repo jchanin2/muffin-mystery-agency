@@ -201,40 +201,35 @@ const CASES = [
         cluePrompt: 'Muffin climbs a stepladder to inspect the ingredient shelves. Hundreds of jars line the walls in careful handwriting. One jar jumps out: "Nightshade Extract — HANDLE WITH EXTREME CARE." The label shows contents in milligrams, but the crime report tracks stolen amounts in grams. Muffin needs to convert to make the comparison.',
         clueReveal: 'Exactly 2.5 grams of Nightshade Extract are missing. That\'s a precise, calculated amount — not a clumsy spill. Whoever took this used a calibrated scale. This rules out a smash-and-grab. The thief had chemistry knowledge.',
         question: 'The Nightshade jar originally held 3,750 mg. It now holds 1,250 mg, so 2,500 mg were taken. How many <em>grams</em> is 2,500 mg? (1 g = 1,000 mg)',
-        answer: 2.5,
-        hint: '2,500 ÷ 1,000'
+        answer: 2.5
       },
       // Problem 4 — Storage closet: Metric conversion (g → mg, reverse direction)
       {
         cluePrompt: 'Behind the lab Muffin finds a storage closet with a freshly-picked lock. Inside, a small container of Starfire Crystal has been tipped over — crystals scattered across the shelf. Starfire Crystal is a rare binding agent with one documented use: making Nightshade Extract harder to detect. The label shows the amount in grams, but Muffin needs milligrams for the toxicology report.',
         clueReveal: '85 milligrams of Starfire Crystal were taken — just enough to mask the Nightshade in a drink. This rules out Vera, who is a beginning apprentice and wouldn\'t know about Starfire Crystal. Someone with serious potion knowledge did this.',
         question: 'The tipped container was labeled "0.085 g of Starfire Crystal." How many <em>milligrams</em> is 0.085 g? (1 g = 1,000 mg)',
-        answer: 85,
-        hint: '0.085 × 1,000'
+        answer: 85
       },
       // Problem 5 — Delivery logbook: Metric conversion (kg → g)
       {
         cluePrompt: 'Muffin opens the delivery logbook on the professor\'s desk. The most recent entry is from Luna Starwell, the professor\'s regular courier. She delivered Moonstone Powder yesterday — an ingredient with no harmful properties, but her delivery record reveals something important about timing. The receipt uses kilograms; the lab inventory uses grams.',
         clueReveal: 'Luna delivered 750 grams of Moonstone Powder, but only 680 grams were entered into inventory. Seventy grams unaccounted for — and Moonstone Powder is harmless on its own, but it\'s also an excellent disguise for suspicious-colored liquids. Someone used it as camouflage.',
         question: 'Luna\'s delivery receipt shows she brought 0.75 kg of Moonstone Powder. How many <em>grams</em> is 0.75 kg? (1 kg = 1,000 g)',
-        answer: 750,
-        hint: '0.75 × 1,000'
+        answer: 750
       },
       // Problem 6 — Interview Vera: Metric conversion (mL → L)
       {
         cluePrompt: 'Muffin interviews Vera Vex, the professor\'s apprentice. She\'s nervous but answers every question. She claims she spent the whole morning at her bench, measuring purified water for practice potions. Her workbench is indeed covered in labeled cylinders and beakers. Muffin checks her water log against the recipe she claims to have followed.',
         clueReveal: 'Vera used exactly 3.2 liters of water — a perfect match for the standard Healing Tonic recipe. Her alibi checks out. But as she talks, she mentions something useful: Barnaby Thornwick, the professor\'s rival, visited the lab the previous evening to drop off "a congratulatory gift."',
         question: 'Vera\'s workbench log shows she used 3,200 mL of purified water. How many <em>liters</em> is 3,200 mL? (1 L = 1,000 mL)',
-        answer: 3.2,
-        hint: '3,200 ÷ 1,000'
+        answer: 3.2
       },
       // Problem 7 — Interview Barnaby: Powers of 10 (multiply, 10³)
       {
         cluePrompt: 'Muffin visits Barnaby Thornwick\'s rival potion shop across town. The shop is darker and more cluttered than the professor\'s lab. Barnaby presents receipts to prove he was busy restocking — but when Muffin examines them closely, one order is staggering: a purchase of empty vials far beyond what any small shop would ever need.',
         clueReveal: 'Barnaby spent 350 gold coins on supplies — enough to stock a factory, not a one-room shop! When Muffin presses him on it, Barnaby stammers and his eyes flick to a locked cabinet behind the counter. "I was... planning to expand," he mutters unconvincingly.',
         question: 'Barnaby\'s receipt shows he ordered 10<sup>3</sup> empty vials at 0.35 gold coins each. What was his total cost?',
-        answer: 350,
-        hint: '10<sup>3</sup> × 0.35'
+        answer: 350
       },
       // Problem 8 — Barnaby's back room: Powers of 10 (multiply, 10²)
       {
@@ -249,8 +244,7 @@ const CASES = [
         cluePrompt: 'Muffin tracks down Luna Starwell at the courier depot. She\'s forthcoming and honest — no signs of deception. She hands over her complete route log from the day of the poisoning. Muffin needs to verify the total distance to confirm whether she had time to detour to the lab during the critical window.',
         clueReveal: 'Luna\'s route was exactly 4.3 km, and the GPS timestamps prove she was at the harbor warehouse during the entire poisoning window. Her alibi is airtight. But she adds one crucial detail: Barnaby specifically asked her to deliver a "congratulatory gift potion" to the professor. She had absolutely no idea what was inside.',
         question: 'Luna\'s route: harbor to market (2.5 km), then market to the lab (1,800 m further). What was her total route in <em>kilometers</em>? (1 km = 1,000 m)',
-        answer: 4.3,
-        hint: '2.5 + (1,800 ÷ 1,000)'
+        answer: 4.3
       },
       // Problem 10 — Professor's study: Common denominators (find LCD)
       {
@@ -273,16 +267,14 @@ const CASES = [
         cluePrompt: 'Muffin brings a sample from Barnaby\'s "gift potion" to the analysis room. The professor\'s precision equipment measures Nightshade concentration in grams per dose. But the dosage logbook records everything in milligrams. Muffin must convert to make the final comparison.',
         clueReveal: 'The gift potion contains exactly 45 milligrams of Nightshade per dose, and there were 10 doses in the bottle. Total: 450 mg — the exact amount the professor received. And where did 450 mg of Nightshade come from? The jar on the shelf that was missing 2,500 mg, combined with multiple doses. The math is airtight.',
         question: 'The analysis reads: "Nightshade concentration: 0.045 g per dose." How many <em>milligrams</em> is 0.045 g? (1 g = 1,000 mg)',
-        answer: 45,
-        hint: '0.045 × 1,000'
+        answer: 45
       },
       // Problem 13 — The confrontation: Decimal division reveals the full scale
       {
         cluePrompt: 'Muffin confronts Barnaby with everything: the Nightshade order, the Starfire Crystal, the Shadowmoss, Luna\'s testimony, and the gift potion analysis. Barnaby\'s face drains of color. "You can\'t prove my plan was bigger than one potion!" he snarls. But Muffin has one final calculation — the number that reveals just how much poison Barnaby had truly been stockpiling.',
         clueReveal: 'One hundred and seventy doses! Barnaby wasn\'t just after the professor — he was stockpiling enough Shadowmoss to poison every rival alchemist in the realm. The math doesn\'t just convict him of attempted murder; it exposes a conspiracy. Barnaby slumps into his chair. "He was going to publish a formula that would make my potions obsolete," he whispers. "I panicked. I never meant for it to go this far..."',
         question: 'Barnaby hoarded <em>85</em> grams of Shadowmoss Tincture (Clue 8), and each dose of his poison requires <em>0.5</em> grams of it. How many <em>total doses</em> could Barnaby have made if he had not been stopped?',
-        answer: 170,
-        hint: '85 ÷ 0.5'
+        answer: 170
       }
     ],
     resolution: 'Barnaby Thornwick confesses. Jealous of the professor\'s genius, he secretly laced a "congratulatory gift potion" with precise doses of Nightshade Extract — masked by Starfire Crystal and carried by Shadowmoss Tincture — and had Luna deliver it unknowingly. Muffin administers the Universal Antidote, and Professor Elixworth\'s eyes flutter open. "My lab..." he croaks. "Is my cauldron still running?" Vera rushes to his side, laughing through her tears. The professor squeezes her hand. "You kept everything together, Vera. Full partnership, starting today." The city guard leads Barnaby away. Luna is cleared of all charges. And Muffin? He tucks his magnifying glass into his detective hat, accepts a warm cup of chamomile tea from Vera, and heads home for a very well-deserved nap.',
@@ -450,8 +442,7 @@ const CASES = [
         cluePrompt: 'Inside the inn, an old grey-bearded fox is waiting by the fire — <em>Howell Greaves</em>, the village elder, with a face like cracked stone and the look of a man who has not slept in a week. "Detective. They say a werewolf has woken in our old forest, and I will tell you plainly: I have sat watch every night for a fortnight, and the Beast comes within an hour and a half of moonrise, every single time. Not once early. Not once late. Whatever you are about to face, Detective — please — I need to know the precise window in minutes."',
         clueReveal: 'Ninety minutes — an hour and a half — between moonrise and the first kill, every single attack night. Whatever this thing is, it follows the moon as faithfully as the old stories say a werewolf must. Muffin scribbles "1:30 from moonrise" in his notebook and underlines it. The wood itself seems to lean closer to the village in the silence afterward.',
         question: 'The Beast strikes within <em>1½ hours</em> of moonrise. How many <em>minutes</em> is 1½ hours?',
-        answer: 90,
-        hint: '1½ × 60'
+        answer: 90
       },
 
       // Problem 2 — Fraction +/− with like denominators
@@ -486,8 +477,7 @@ const CASES = [
         cluePrompt: 'In Mira\'s cottage, Muffin notices a tally-counter on the wall — the kind a worried mother keeps. "Petra has been missing for <em>2½ days</em>," Mira whispers. "The last anyone saw her, she was at the well by the wood-edge, talking to Tom Reedy — the Marrowed Man, the survivor of the second attack. He was attacked the very next dusk. He has not spoken a word since. Detective, I need to know the exact hours my Petra has been out there."',
         clueReveal: '60 hours. Two and a half days — sixty cold, dark hours — and Petra has been alone in that wood. Muffin\'s grip tightens on his magnifying glass. Time is no longer abstract. He also notes: Petra spoke with Tom Reedy moments before Tom himself was attacked. Did Tom warn her of something? Did she warn HIM? Or was she silenced for what they both knew?',
         question: 'Petra has been missing for <em>2½ days</em>. How many <em>hours</em> is 2½ days? (1 day = 24 hours)',
-        answer: 60,
-        hint: '2½ × 24'
+        answer: 60
       },
 
       // Problem 6 — Fraction × whole
@@ -495,8 +485,7 @@ const CASES = [
         cluePrompt: 'Outside the inn, Muffin counts the closed shutters. "Of the 24 households in Hollowmere," Howell says quietly, "5/8 refuse to leave their homes after sundown. And the rest — Detective, you should hear what they whisper. They blame <em>Goody Nye</em>, the hermit at the wood\'s edge. \'Wolf-talker,\' they call her. Some say she is the witch who woke the Beast from the old forest. The whole village is one bad night from going up there with torches."',
         clueReveal: 'Fifteen households shuttered in fear, and the remaining nine all pointing at one woman. Goody Nye — the eccentric hermit who has lived alone for thirty years, who collects strange forest plants, who is said to whisper to wolves on bright nights. Muffin makes a note: visit Goody Nye. He cannot yet tell whether she is a victim of village paranoia, or something far darker.',
         question: 'Of <em>24</em> households, <em>5/8</em> refuse to leave their homes after dark. How many households is that?',
-        answer: 15,
-        hint: '5/8 × 24'
+        answer: 15
       },
 
       // ============================================================
@@ -517,8 +506,7 @@ const CASES = [
         cluePrompt: 'A shepherd places the most recent kill <em>3¼ miles</em> deep into the wood, along the old logging trail. Muffin and Stone have already covered <em>1⅔ miles</em> by midmorning. As they walk, Stone rolls up his sleeve. Three pale scars run from elbow to wrist. "I was clawed when I was sixteen, Detective. By a forest wolf, in this same wood. Some of the lads say a wolf\'s bite leaves a mark on your blood for life. I don\'t believe it. But on bad nights I wonder."',
         clueReveal: '1 and 7/12 miles to go through the trees — and the man Muffin has been walking beside, the man he has been TRUSTING, is himself a wolf-survivor twenty years gone. The villagers\' old stories say a wolf-bite "marks" a person. If there is even a grain of truth to it — and Muffin is in no hurry to dismiss old stories tonight — then Stone, too, must go on the suspect list. Muffin walks a little further behind him.',
         question: 'The kill is <em>3¼</em> miles in; they have walked <em>1⅔</em>. How far remains? (Give your answer as a mixed number, e.g. <em>1 5/12</em>.)',
-        answer: '19/12',
-        hint: '3¼ − 1⅔'
+        answer: '19/12'
       },
 
       // Problem 9 — Solve for missing fraction
@@ -535,8 +523,7 @@ const CASES = [
         cluePrompt: 'At the second attack site, Muffin presses his paw into a perfect claw imprint sunk deep in the mud. He weighs the soil load: the print took <em>0.6 kg</em> of pressure to form. Stone says the largest forest wolf he has ever caught left an imprint of only <em>350 g</em>. Muffin needs both numbers in the same units before he can draw any conclusion.',
         clueReveal: '600 grams of pressure — nearly <em>twice</em> the largest forest wolf on record. Two possibilities present themselves to Muffin\'s mind, and at this moment he cannot tell them apart. EITHER something walks this wood that is not of nature… OR something natural has been DRAGGED, weighted by human hands, to leave a deceptive print. The mud holds its silence either way.',
         question: 'The Beast\'s claw imprint took <em>0.6 kg</em> of pressure. How many <em>grams</em> is 0.6 kg? (1 kg = 1,000 g)',
-        answer: 600,
-        hint: '0.6 × 1,000'
+        answer: 600
       },
 
       // Problem 11 — Three-fraction addition (unlike denominators, sums to 1)
@@ -553,8 +540,7 @@ const CASES = [
         cluePrompt: 'Howell tells Muffin the village watch begins at <em>6¼</em> hours past noon (sundown) and ends at <em>10¾</em> hours past noon (the deepest dark before dawn-watch). The Beast hunts only inside that window. Muffin needs the duration. Howell adds, low: "On every attack night, your suspects each say they were home alone. Wendell in his hut. Goody in her clearing. Tom in his cabin. Stone in his quarters. Crooke in his room at the inn — lamp lit, but no one heard him moving. Any of them could have slipped out a back stair."',
         clueReveal: '4½ hours of darkness — the killing window. Five suspects, five uncorroborated alibis, all of them inside that window. The math has narrowed nothing. The wood has narrowed nothing. Muffin folds the watch sheet into his notebook and stares at the five names. Tonight one of them is the Beast.',
         question: 'The night watch runs from <em>6¼</em> hours past noon to <em>10¾</em> hours past noon. How many <em>hours</em> is that? (Give as a mixed number or fraction.)',
-        answer: '9/2',
-        hint: '10¾ − 6¼'
+        answer: '9/2'
       },
 
       // Problem 13 — Solve for missing fraction (gamekeeper alibi)
@@ -575,8 +561,7 @@ const CASES = [
         cluePrompt: 'Tonight the moon is hidden behind cloud — a 30-minute "moonless gap" in which Muffin can creep into the wood without being seen by whatever stalks it. Howell says the cloud will hold for only <em>4/5</em> of that window before it breaks. Muffin needs the safe minutes. He goes in alone — Stone is too injured an old hand to risk the dark, and any of the four suspects could be following.',
         clueReveal: '24 minutes — and they\'ll have to count. Muffin lights a shielded lantern, ties his bootlaces tight, and slips into the trees. Behind him, Stone closes the inn door and snuffs every village lamp. Whatever lurks in this wood, Muffin will face it without backup tonight.',
         question: 'Of the 30-minute moonless gap, <em>4/5</em> is safe to move in. How many minutes?',
-        answer: 24,
-        hint: '4/5 × 30'
+        answer: 24
       },
 
       // Problem 15 — Fraction +/− unlike denominators (paw-print fork)
@@ -611,8 +596,7 @@ const CASES = [
         cluePrompt: 'A cave-mouth map is sketched in the back of the notebook, in the same hand as the inheritance ledger. From Hollowmere village square to a hidden entrance: <em>1,750 m</em> through the wood. The Constable\'s only map of the wood is in <em>kilometers</em>. Muffin needs the conversion to place the cave on it.',
         clueReveal: '1.75 kilometers from the square — well past any search Stone\'s men have run. They\'ve been looking too close. Muffin folds the map. "Wherever Petra is," he murmurs, "she is THERE." And whoever drew this map and wrote the inheritance ledger is the same person — and that person is the Beast.',
         question: 'The cave is <em>1,750 m</em> from the village square. How many <em>kilometers</em> is that? (1 km = 1,000 m)',
-        answer: 1.75,
-        hint: '1,750 ÷ 1,000'
+        answer: 1.75
       },
 
       // Problem 19 — Mixed-number subtraction (alibi)
@@ -669,8 +653,7 @@ const CASES = [
         cluePrompt: 'Halfway through the dig, lantern light approaches the cave mouth. Crooke is returning. The wall-clock in the cave reads <em>10:55 PM</em>; the full moon peaks tonight at <em>11:43 PM</em>, when Crooke planned to "stage" Petra\'s death. Muffin needs to know exactly how many minutes he has.',
         clueReveal: '48 minutes. Less than an hour to free Petra, escape the cave, and confront Crooke before the staged moment. Muffin signals Wendell. They dig harder. Outside, the wolfhound starts barking — Crooke has reached the mouth.',
         question: 'It\'s now <em>10:55 PM</em>. The full moon peaks at <em>11:43 PM</em>. How many <em>minutes</em> until peak?',
-        answer: 48,
-        hint: '11:43 − 10:55'
+        answer: 48
       },
 
       // Problem 25 — Multi-step climax (fraction of remainder)
@@ -678,8 +661,7 @@ const CASES = [
         cluePrompt: 'At the cave mouth, lantern in paw, Muffin confronts Salvian Crooke. The notebook is open between them. "Your aunt is Petra Vell\'s great-aunt," Muffin says quietly. "Her will leaves her fortune to Petra unless Petra dies before her. <em>3,600 gold</em>, in total. From your own ledger: <em>1/3</em> already promised to your smuggling captain. <em>1/4</em> to a forger. The rest you keep. Show me the math, Crooke." The naturalist\'s face drains of color as Muffin reads the totals aloud.',
         clueReveal: 'Exactly 1,500 gold pieces — Crooke\'s share of a child\'s death. Constable Stone steps from the trees behind him with shackles. Crooke\'s wolfhound, suddenly without its master\'s whistle, simply sits down and licks Muffin\'s paw. The Beast was always just a very loyal dog. Petra runs to Wendell. Mira\'s tincture stays uncorked. The full moon rises on a closed case.',
         question: 'From <em>3,600 gold</em>, subtract <em>1/3</em> (smuggler) and <em>1/4</em> (forger). How many gold pieces does Crooke keep? Calculate <em>3,600 × (1 − 1/3 − 1/4)</em>.',
-        answer: 1500,
-        hint: '3,600 × 5/12'
+        answer: 1500
       }
     ],
     resolution: 'Salvian Crooke is hauled away in irons before dawn, and at the inn that morning, with Petra warm in her mother\'s arms and the village shutters unbolting one by one, Muffin lays the case out from the beginning so that everyone — including Howell Greaves, who never quite believed him — can see how every clue was the same clue, read sideways. Crooke\'s aunt, in the next county, is Petra\'s great-aunt; her will leaves her estate to Petra unless Petra dies before her. The "powder" line in Crooke\'s tidy ledger was phosphor-moss dust, stolen from Mira\'s shelf with the unfamiliar handwriting on the jar. The wolfhound\'s painted hide produced the silver-white glow in moonlight; the same paint produced the yellow-gold eyes; "PAINT" on Tom Reedy\'s slate was Tom telling them so as best a frightened man could. The claw imprint of 600 grams was made by a real wolf paw, dragged and weighted by Crooke himself. The wood-tract south of Wendell\'s hut was spared because Crooke\'s cave hideout lay to the northwest and he had no reason to draw attention there. The 1.5-hour-from-moonrise schedule was a man\'s schedule, not a beast\'s — moonrise was simply Crooke\'s start time. Goody Nye sold him moss without knowing what he meant by it; she is innocent of everything except living strangely. Wendell was tired. Stone was old-scarred. Tom was terrified. Petra was unlucky enough to be loved by an aunt with a fortune. Muffin tucks his magnifying glass into his hat and tips it to the morning. "There was never a beast in this wood," he says quietly. "There was only a man who wanted there to be one."',
