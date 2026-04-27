@@ -239,8 +239,12 @@ function startCase(caseData) {
   // Show game screen
   showScreen('game');
 
-  // Show first problem
-  showProblem();
+  // If the case has an opening narrative, show it before Clue 1.
+  if (caseData.intro) {
+    showCaseIntro(caseData.intro, () => showProblem());
+  } else {
+    showProblem();
+  }
 }
 
 // ============================================================
@@ -356,6 +360,44 @@ function revealClueCard(index) {
   if (card) {
     card.classList.add('revealed');
   }
+}
+
+// ============================================================
+// CASE INTRO OVERLAY — fires once before Clue 1 if the case has an
+// `intro` field. Optional illustration + multi-paragraph narrative.
+// ============================================================
+function showCaseIntro(intro, onContinue) {
+  const overlay = document.getElementById('case-intro-overlay');
+  if (!overlay || !intro) {
+    onContinue();
+    return;
+  }
+  // Title + body text (HTML allowed for <em>, <p>, custom classes)
+  document.getElementById('case-intro-title').textContent = intro.title || '';
+  document.getElementById('case-intro-text').innerHTML = intro.text || '';
+
+  // Optional illustration: render the named scene from Illustrations
+  const illusEl = document.getElementById('case-intro-illustration');
+  if (intro.illustration && Illustrations[intro.illustration]) {
+    illusEl.innerHTML = Illustrations[intro.illustration]();
+  } else {
+    illusEl.innerHTML = '';
+  }
+
+  // Custom button label, falling back to the default
+  const btn = document.getElementById('btn-case-intro-continue');
+  btn.innerHTML = intro.buttonLabel ? intro.buttonLabel.replace(/→/g, '&rarr;') : 'Begin Investigation &rarr;';
+
+  overlay.style.display = 'flex';
+  overlay.scrollTop = 0;
+  requestAnimationFrame(() => overlay.classList.add('active'));
+
+  const handler = () => {
+    btn.removeEventListener('click', handler);
+    overlay.classList.remove('active');
+    setTimeout(() => { overlay.style.display = 'none'; onContinue(); }, 300);
+  };
+  btn.addEventListener('click', handler);
 }
 
 // ============================================================

@@ -932,3 +932,117 @@ body {
   text-transform: uppercase;
   margin-bottom: 24px;
 }
+
+/* ============================================================
+   CASE INTRO OVERLAY — fires before Clue 1, sets up the case
+   ============================================================ */
+.case-intro {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(20, 14, 8, 0.95) 0%, rgba(4, 2, 1, 0.99) 70%);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  overflow-y: auto;
+}
+.case-intro.active {
+  opacity: 1;
+}
+.case-intro-content {
+  text-align: center;
+  max-width: 680px;
+  width: 100%;
+  padding: 32px 36px 36px;
+  background:
+    radial-gradient(ellipse at top, rgba(255, 230, 140, 0.07), transparent 60%),
+    linear-gradient(180deg, #1a1208 0%, #0a0502 100%);
+  border: 1px solid rgba(226, 183, 20, 0.35);
+  border-radius: 6px;
+  box-shadow: 0 0 80px rgba(226, 183, 20, 0.18), inset 0 0 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(10px);
+  transition: transform 0.4s ease;
+  margin: auto;
+}
+.case-intro.active .case-intro-content {
+  transform: translateY(0);
+}
+.case-intro-illustration {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto 18px;
+  border: 1px solid rgba(226, 183, 20, 0.25);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 26px rgba(0, 0, 0, 0.6);
+}
+.case-intro-illustration:empty {
+  display: none;
+}
+.case-intro-illustration svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.case-intro-flourish {
+  font-size: 1.6rem;
+  color: var(--gold, #E2B714);
+  margin: 6px 0 4px;
+  text-shadow: 0 0 12px rgba(226, 183, 20, 0.5);
+}
+.case-intro-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.85rem;
+  color: var(--gold-glow, #f2cc5e);
+  margin: 4px 0 18px;
+  text-shadow: 0 2px 14px rgba(226, 183, 20, 0.3);
+}
+.case-intro-text {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-light, #f0e8d0);
+  text-align: left;
+  margin-bottom: 26px;
+}
+.case-intro-text p {
+  margin-bottom: 14px;
+}
+.case-intro-text p:last-child {
+  margin-bottom: 0;
+}
+.case-intro-text em {
+  color: var(--gold-glow, #f2cc5e);
+  font-style: italic;
+}
+.case-intro-text .intro-letter {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: #c9c3a0;
+  background: rgba(234, 219, 160, 0.08);
+  border-left: 3px solid rgba(226, 183, 20, 0.5);
+  padding: 12px 18px;
+  margin: 16px 0;
+  border-radius: 0 4px 4px 0;
+}
+.case-intro-text .intro-letter-sig {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.92rem;
+  color: var(--gold, #E2B714);
+  text-align: right;
+}
+.case-intro-text .intro-tagline {
+  text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold-glow, #f2cc5e);
+  letter-spacing: 0.05em;
+  margin-top: 18px;
+}

@@ -2256,6 +2256,89 @@ const Illustrations = {
     `;
   },
 
+  // Intro: Muffin's agency office, candlelit, letter open on desk
+  beast_intro() {
+    return this.scene('#1a1410', '#070502', `
+      <!-- Wood-paneled office wall -->
+      <rect x="0" y="0" width="400" height="180" fill="#2a1f12"/>
+      ${[0,80,160,240,320].map(x => `<line x1="${x}" y1="0" x2="${x}" y2="180" stroke="#1a1208" stroke-width="1"/>`).join('')}
+      <!-- Floor -->
+      <rect x="0" y="180" width="400" height="70" fill="#3a2818"/>
+      <rect x="0" y="180" width="400" height="4" fill="#5a3818"/>
+      ${[0,1,2,3,4,5].map(i => `<line x1="${i*70}" y1="180" x2="${i*70 + 30}" y2="250" stroke="#2a1810" stroke-width="0.6" opacity="0.5"/>`).join('')}
+
+      <!-- Window on right with night rain -->
+      <rect x="270" y="20" width="120" height="120" fill="#0a0e1a" stroke="#5a3818" stroke-width="3"/>
+      <line x1="330" y1="20" x2="330" y2="140" stroke="#5a3818" stroke-width="2"/>
+      <line x1="270" y1="80" x2="390" y2="80" stroke="#5a3818" stroke-width="2"/>
+      <!-- Distant city rooftops in window -->
+      <polygon points="275,90 290,75 305,82 325,72 325,90" fill="#1a1610" opacity="0.85"/>
+      <polygon points="335,90 350,75 365,80 380,72 385,90" fill="#1a1610" opacity="0.85"/>
+      <!-- Rain streaks on glass -->
+      ${[280, 295, 308, 320, 340, 355, 370, 380].map((x, i) => `<line x1="${x}" y1="${25 + (i % 3) * 8}" x2="${x - 5}" y2="${65 + (i % 3) * 8}" stroke="#5a8aaa" stroke-width="0.7" opacity="0.4"/>`).join('')}
+      ${[285, 305, 325, 345, 365].map((x, i) => `<line x1="${x}" y1="${85 + (i % 2) * 6}" x2="${x - 4}" y2="${130 + (i % 2) * 6}" stroke="#5a8aaa" stroke-width="0.7" opacity="0.35"/>`).join('')}
+
+      <!-- Bookshelf on left -->
+      <rect x="10" y="40" width="60" height="110" fill="#3a2818" stroke="#1a1008" stroke-width="1"/>
+      ${[55, 78, 101, 124].map((y, i) => `<rect x="14" y="${y}" width="52" height="3" fill="#1a1008"/>`).join('')}
+      ${[ [16, 42, '#5a3818'], [25, 42, '#7a3818'], [34, 42, '#3a4818'], [43, 42, '#5a2818'], [52, 42, '#3a2818'], [61, 42, '#7a4828'],
+          [16, 60, '#3a4818'], [25, 60, '#5a3818'], [34, 60, '#7a3818'], [43, 60, '#3a5818'], [52, 60, '#7a4818'], [61, 60, '#5a2818'],
+          [16, 83, '#5a3818'], [25, 83, '#3a4818'], [34, 83, '#7a4828'], [43, 83, '#5a2818'], [52, 83, '#3a2818'], [61, 83, '#7a3818'],
+          [16, 106, '#7a3818'], [25, 106, '#5a3818'], [34, 106, '#3a4818'], [43, 106, '#5a2818'], [52, 106, '#3a2818'], [61, 106, '#5a3818']
+        ].map(([x, y, c]) => `<rect x="${x}" y="${y}" width="7" height="14" fill="${c}" stroke="#1a1008" stroke-width="0.4"/>`).join('')}
+
+      <!-- Desk in foreground -->
+      <rect x="80" y="155" width="220" height="32" fill="#5a3a1c" stroke="#2a1408" stroke-width="2"/>
+      <rect x="80" y="155" width="220" height="5" fill="#7a5a30"/>
+      <rect x="86" y="187" width="10" height="50" fill="#3a2410"/>
+      <rect x="284" y="187" width="10" height="50" fill="#3a2410"/>
+
+      <!-- Open letter on desk -->
+      <rect x="135" y="120" width="135" height="50" fill="#eadba0" stroke="#aa2222" stroke-width="1.2" transform="rotate(-3 202 145)"/>
+      <text x="202" y="135" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic" transform="rotate(-3 202 135)">Detective Muffin —</text>
+      ${[140, 144, 148, 152, 156].map(y => `<line x1="143" y1="${y}" x2="261" y2="${y}" stroke="#3a2010" stroke-width="0.4" opacity="0.55" transform="rotate(-3 202 ${y})"/>`).join('')}
+      <text x="245" y="164" text-anchor="end" fill="#3a2010" font-size="5" font-style="italic" transform="rotate(-3 245 164)">— Mira Vell</text>
+      <!-- Wax seal on letter -->
+      <circle cx="155" cy="160" r="6" fill="#aa2222" stroke="#6a1010" stroke-width="0.6" transform="rotate(-3 155 160)"/>
+
+      <!-- Candle on desk -->
+      <rect x="100" y="135" width="6" height="20" fill="#eee5c8"/>
+      <rect x="98" y="155" width="10" height="4" fill="#3a2410"/>
+      <ellipse cx="103" cy="131" rx="3" ry="6" fill="#ffcc55">
+        <animate attributeName="ry" values="6;8;6" dur="1.3s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="103" cy="129" rx="1.5" ry="4" fill="#fff5aa"/>
+      <circle cx="103" cy="140" r="60" fill="#ffaa33" opacity="0.1"/>
+      <circle cx="103" cy="140" r="35" fill="#ffaa33" opacity="0.07"/>
+
+      <!-- Inkwell + quill -->
+      <rect x="265" y="140" width="12" height="15" fill="#1a1208" rx="1.5"/>
+      <ellipse cx="271" cy="140" rx="6" ry="2" fill="#0a0603"/>
+      <line x1="277" y1="140" x2="296" y2="120" stroke="#5a3a1c" stroke-width="1.2"/>
+      <path d="M 294 120 L 300 113 L 296 121 Z" fill="#eadba0"/>
+
+      <!-- Magnifying glass beside letter -->
+      <circle cx="115" cy="172" r="11" fill="none" stroke="#E2B714" stroke-width="2.2"/>
+      <circle cx="115" cy="172" r="9" fill="rgba(200,220,255,0.1)"/>
+      <line x1="106" y1="180" x2="98" y2="190" stroke="#E2B714" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Muffin at desk reading the letter -->
+      ${this._miniMuffin(195, 95, 0.55)}
+
+      <!-- Background door cracked open with rain-soaked silhouette of Stone -->
+      <rect x="155" y="38" width="40" height="100" fill="#1a1208" stroke="#5a3818" stroke-width="1.5"/>
+      <line x1="155" y1="38" x2="155" y2="138" stroke="#5a3818" stroke-width="3"/>
+      <rect x="160" y="44" width="32" height="92" fill="#0a0e1a"/>
+      <!-- Rain-soaked constable silhouette in doorway -->
+      <path d="M 168 60 L 162 130 L 188 130 L 184 60 Z" fill="#0a0603" opacity="0.85"/>
+      <circle cx="176" cy="55" r="6" fill="#0a0603"/>
+      <ellipse cx="176" cy="48" rx="8" ry="3" fill="#0a0603"/>
+      <!-- Drips off coat -->
+      <line x1="168" y1="125" x2="168" y2="135" stroke="#5a8aaa" stroke-width="0.6" opacity="0.5"/>
+      <line x1="184" y1="128" x2="184" y2="138" stroke="#5a8aaa" stroke-width="0.6" opacity="0.5"/>
+    `);
+  },
+
   // Scene 1: Inn arrival at sunset, Howell waiting
   forest_inn_arrival() {
     return this.scene('#1a1f1a', '#080a07', `

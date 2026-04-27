@@ -421,6 +421,18 @@ const CASES = [
     difficulty: 'hard',
     description: 'A werewolf is said to stalk the ancient forest at Hollowmere — sheep killed by the dozen, woodsmen mauled, a young girl missing in the trees. The next full moon is four nights away. Muffin must find the truth, and the missing child, before whatever\'s out there strikes again.',
     backdrop: 'forest',
+    intro: {
+      title: 'A Letter from the Coast',
+      illustration: 'beast_intro',
+      text: '<p>It is late October at Muffin\'s Mystery Agency in the city — rain on the windows, a candle burning low. Muffin has just finished filing his last case report when a hard knock rattles the front door.</p>' +
+            '<p>The man on the step is soaked to the bone. He says his name is <em>Constable Gareth Stone</em>, and he has ridden through the rain from a coastal village called <em>Hollowmere</em>, a half-day up the post-road. He hands Muffin a sodden letter. His hand is shaking.</p>' +
+            '<p class="intro-letter">"Detective — my daughter Petra has been missing in the wood for <em>two days</em>. Two woodsmen have been mauled, one of them killed. Our villagers say a <em>werewolf</em> has woken in the old forest. The next full moon is <em>four nights</em> away. If Petra is not found before then, I do not believe she will be found at all. Please.<br><span class="intro-letter-sig">— Mira Vell, healer of Hollowmere</span>"</p>' +
+            '<p>Muffin reads the letter twice. He folds it carefully, snuffs his candle, and tucks his magnifying glass into the band of his deerstalker hat.</p>' +
+            '<p>"Saddle the post-coach, Constable. We ride at first light."</p>' +
+            '<p>By dusk the next day Muffin steps off the coach at the inn at Hollowmere, fog already rolling thick from the trees. Old <em>Howell Greaves</em>, the village elder, is waiting at the door, his face like cracked stone.</p>' +
+            '<p class="intro-tagline">The case begins now.</p>',
+      buttonLabel: 'Travel to Hollowmere →'
+    },
     chapters: [
       { title: 'Night One — Arrival in Hollowmere', length: 6 },
       { title: 'Night Two — The Investigation', length: 7 },
