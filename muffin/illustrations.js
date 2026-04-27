@@ -2620,9 +2620,9 @@ const Illustrations = {
       <!-- Village square (center) -->
       <circle cx="200" cy="135" r="9" fill="#aa8838" stroke="#3a2010" stroke-width="1"/>
       <text x="200" y="155" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">village</text>
-      <!-- Trees scattered around -->
+      <!-- Trees scattered around (top scatter + sparse bottom flanks, leaving room for hut) -->
       ${[80, 125, 165, 240, 290, 330].map((x, i) => `<polygon points="${x},${80 + (i%2)*16} ${x - 5},${95 + (i%2)*16} ${x + 5},${95 + (i%2)*16}" fill="#2a4818" stroke="#1a2810" stroke-width="0.5"/>`).join('')}
-      ${[70, 110, 150, 220, 270, 310].map((x, i) => `<polygon points="${x},${175 + (i%2)*8} ${x - 5},${188 + (i%2)*8} ${x + 5},${188 + (i%2)*8}" fill="#2a4818" stroke="#1a2810" stroke-width="0.5"/>`).join('')}
+      ${[70, 105, 240, 280, 320].map((x, i) => `<polygon points="${x},${178 + (i%2)*6} ${x - 5},${191 + (i%2)*6} ${x + 5},${191 + (i%2)*6}" fill="#2a4818" stroke="#1a2810" stroke-width="0.5"/>`).join('')}
       <!-- Attack site 1: north (red X) -->
       <line x1="195" y1="80" x2="205" y2="90" stroke="#aa2222" stroke-width="2.5"/>
       <line x1="205" y1="80" x2="195" y2="90" stroke="#aa2222" stroke-width="2.5"/>
@@ -2633,8 +2633,24 @@ const Illustrations = {
       <line x1="285" y1="130" x2="275" y2="140" stroke="#aa2222" stroke-width="2.5"/>
       <line x1="210" y1="135" x2="275" y2="135" stroke="#aa2222" stroke-width="0.6" stroke-dasharray="2 2"/>
       <text x="295" y="138" fill="#aa2222" font-size="8" font-weight="bold" font-family="serif">1/4 mi E</text>
-      <!-- Total range bracket -->
-      <text x="200" y="200" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold">total range = 1/3 + 1/4 = ?</text>
+
+      <!-- Wendell Skye's gamekeeper hut, south of village (no attacks here) -->
+      <line x1="200" y1="143" x2="180" y2="178" stroke="#3a2010" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.55"/>
+      <!-- Hut walls -->
+      <rect x="168" y="180" width="24" height="15" fill="#7a4a20" stroke="#3a2010" stroke-width="0.7"/>
+      <!-- Roof -->
+      <polygon points="165,180 180,170 195,180" fill="#4a2810" stroke="#3a2010" stroke-width="0.7"/>
+      <!-- Door -->
+      <rect x="178" y="187" width="4" height="8" fill="#1a1008"/>
+      <!-- Window -->
+      <rect x="185" y="183" width="4" height="3" fill="#f5e6b4" stroke="#3a2010" stroke-width="0.3"/>
+      <line x1="187" y1="183" x2="187" y2="186" stroke="#3a2010" stroke-width="0.3"/>
+      <!-- Chimney with thin smoke -->
+      <rect x="172" y="172" width="2.5" height="5" fill="#3a2010"/>
+      <path d="M 173 172 Q 171 168 173 165 Q 175 162 173 158" stroke="#a89880" stroke-width="0.6" fill="none" opacity="0.6"/>
+      <!-- Hut label -->
+      <text x="180" y="206" text-anchor="middle" fill="#3a2010" font-size="6.5" font-style="italic">Skye's hut</text>
+      <text x="180" y="213" text-anchor="middle" fill="#226622" font-size="5" font-style="italic">(no attacks)</text>
       ${this._miniMuffin(20, 165, 0.5)}
     `);
   },
