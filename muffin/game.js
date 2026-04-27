@@ -215,6 +215,7 @@ function startCase(caseData) {
   Game.currentCase = caseData;
   Game.currentProblemIndex = 0;
   Game.health = 3;
+  Game.solvedClues = new Set();
 
   // Use the fixed story-relevant problems from the case data
   Game.problems = caseData.problems;
@@ -275,31 +276,110 @@ function loseHeart() {
 }
 
 // ============================================================
+// CHAPTERS — optional per-case multi-chapter pacing
+// ============================================================
+// A case can declare a `chapters` array like:
+//   chapters: [
+//     { title: 'Night One — Arrival', length: 6 },
+//     { title: 'Night Two — Investigation', length: 7 },
+//     ...
+//   ]
+// The lengths must sum to the total number of problems. Cases without
+// `chapters` keep the original behavior (all clue cards visible at once).
+function getCaseChapters() {
+  return (Game.currentCase && Array.isArray(Game.currentCase.chapters))
+    ? Game.currentCase.chapters
+    : null;
+}
+
+function getChapterForIndex(problemIndex) {
+  const chapters = getCaseChapters();
+  if (!chapters) return null;
+  let acc = 0;
+  for (let i = 0; i < chapters.length; i++) {
+    const len = chapters[i].length;
+    if (problemIndex < acc + len) {
+      return { index: i, title: chapters[i].title, startIndex: acc, endIndex: acc + len - 1 };
+    }
+    acc += len;
+  }
+  // Past the last chapter — return the final one for safety.
+  const last = chapters.length - 1;
+  return { index: last, title: chapters[last].title, startIndex: acc - chapters[last].length, endIndex: acc - 1 };
+}
+
+// ============================================================
 // CLUE CARDS
 // ============================================================
 function renderClueCards() {
   const container = document.getElementById('clue-cards');
   container.innerHTML = '';
 
-  Game.problems.forEach((_, i) => {
+  const chapter = getChapterForIndex(Game.currentProblemIndex);
+  const headerEl = document.getElementById('clue-board-chapter');
+  if (chapter && headerEl) {
+    headerEl.textContent = chapter.title;
+    headerEl.style.display = 'block';
+  } else if (headerEl) {
+    headerEl.style.display = 'none';
+  }
+
+  // Determine which problem indices to render in the evidence board.
+  const startIdx = chapter ? chapter.startIndex : 0;
+  const endIdx = chapter ? chapter.endIndex : Game.problems.length - 1;
+
+  for (let i = startIdx; i <= endIdx; i++) {
     const card = document.createElement('div');
     card.className = 'clue-card';
     card.dataset.index = i;
+    // Numbering inside a chapter is local (Clue 1, 2, 3, ...) so Jacob
+    // sees a manageable count instead of "Clue 14 of 25".
+    const localNum = chapter ? (i - startIdx + 1) : (i + 1);
     card.innerHTML = `
       <div class="clue-card-inner">
         <div class="clue-card-front">?</div>
-        <div class="clue-card-back">Clue ${i + 1}</div>
+        <div class="clue-card-back">Clue ${localNum}</div>
       </div>
     `;
+    // If this clue is already solved (revisiting the case), mark revealed.
+    if (Game.solvedClues && Game.solvedClues.has(i)) {
+      card.classList.add('revealed');
+    }
     container.appendChild(card);
-  });
+  }
 }
 
 function revealClueCard(index) {
+  if (!Game.solvedClues) Game.solvedClues = new Set();
+  Game.solvedClues.add(index);
   const card = document.querySelector(`.clue-card[data-index="${index}"]`);
   if (card) {
     card.classList.add('revealed');
   }
+}
+
+// ============================================================
+// CHAPTER-BREAK OVERLAY
+// ============================================================
+function showChapterBreak(chapterTitle, onContinue) {
+  const overlay = document.getElementById('chapter-break-overlay');
+  if (!overlay) {
+    // No overlay element (legacy HTML) — just continue.
+    onContinue();
+    return;
+  }
+  document.getElementById('chapter-break-title').textContent = chapterTitle;
+  overlay.style.display = 'flex';
+  // Trigger CSS animation
+  requestAnimationFrame(() => overlay.classList.add('active'));
+
+  const btn = document.getElementById('btn-chapter-continue');
+  const handler = () => {
+    btn.removeEventListener('click', handler);
+    overlay.classList.remove('active');
+    setTimeout(() => { overlay.style.display = 'none'; onContinue(); }, 250);
+  };
+  btn.addEventListener('click', handler);
 }
 
 // ============================================================
@@ -431,9 +511,19 @@ function handleCorrect(problem) {
 }
 
 function handleContinue() {
+  const prevChapter = getChapterForIndex(Game.currentProblemIndex);
   Game.currentProblemIndex++;
   if (Game.currentProblemIndex >= Game.problems.length) {
     handleVictory();
+    return;
+  }
+  const nextChapter = getChapterForIndex(Game.currentProblemIndex);
+  // If we've crossed a chapter boundary, show the chapter-break overlay first.
+  if (prevChapter && nextChapter && nextChapter.index > prevChapter.index) {
+    showChapterBreak(nextChapter.title, () => {
+      renderClueCards();
+      showProblem();
+    });
   } else {
     showProblem();
   }

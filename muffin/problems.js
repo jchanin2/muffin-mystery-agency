@@ -350,19 +350,32 @@ const ProblemGenerator = {
   },
 
   // Validate an answer with epsilon tolerance.
-  // Accepts plain decimals ("0.75"), commas ("1,200"), and fraction form ("3/4").
-  // If correctAnswer is itself a fraction string (e.g. "1/4"), it is parsed the same way,
-  // so equivalent fractions like "2/8" also count.
+  // Accepts plain decimals ("0.75"), commas ("1,200"), pure fractions ("3/4"),
+  // and mixed numbers ("1 7/12", "1-7/12", "1_7/12"). If correctAnswer is itself
+  // a fraction string (e.g. "1/4"), it is parsed the same way, so equivalent
+  // forms like "2/8" or "0.25" also count.
   checkAnswer(userAnswer, correctAnswer) {
     const parseVal = (v) => {
       if (typeof v === 'number') return v;
       const s = String(v).trim().replace(/,/g, '');
+      // Mixed number: "1 7/12" / "1-7/12" / "1_7/12"
+      const mixedMatch = s.match(/^(-?\d+)[\s_-]+(\d+)\s*\/\s*(\d+)$/);
+      if (mixedMatch) {
+        const whole = parseInt(mixedMatch[1], 10);
+        const num = parseInt(mixedMatch[2], 10);
+        const denom = parseInt(mixedMatch[3], 10);
+        if (denom === 0) return NaN;
+        const sign = whole < 0 || mixedMatch[1] === '-0' ? -1 : 1;
+        return whole + sign * (num / denom);
+      }
+      // Pure fraction: "3/4"
       const fracMatch = s.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(-?\d+(?:\.\d+)?)$/);
       if (fracMatch) {
         const denom = parseFloat(fracMatch[2]);
         if (denom === 0) return NaN;
         return parseFloat(fracMatch[1]) / denom;
       }
+      // Plain decimal or whole number
       const n = parseFloat(s);
       return isNaN(n) ? NaN : n;
     };

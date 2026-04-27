@@ -2209,6 +2209,858 @@ const Illustrations = {
     `);
   },
 
+  // ============================================================
+  // CASE 6: The Beast of Hollowmere Wood scenes
+  // Palette: deep forest greens + fog gray + moonlight + lantern orange
+  // ============================================================
+
+  // Helper: distant treeline silhouette
+  _treeline(y = 150, opacity = 0.85) {
+    const peaks = [];
+    let x = 0;
+    while (x < 420) {
+      const peak = 18 + Math.floor(((x * 47) % 30));
+      peaks.push(`${x},${y} ${x + 8},${y - peak} ${x + 16},${y}`);
+      x += 16;
+    }
+    return `<polygon points="${peaks.join(' ')}" fill="#0a1208" opacity="${opacity}"/>`;
+  },
+
+  // Helper: full moon (back-glow)
+  _moon(cx, cy, r = 18) {
+    return `
+      <circle cx="${cx}" cy="${cy}" r="${r * 2.2}" fill="#e8e4c0" opacity="0.06"/>
+      <circle cx="${cx}" cy="${cy}" r="${r * 1.5}" fill="#e8e4c0" opacity="0.1"/>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="#f0eccc"/>
+      <circle cx="${cx - r * 0.3}" cy="${cy - r * 0.2}" r="${r * 0.15}" fill="#d4cfa6" opacity="0.6"/>
+      <circle cx="${cx + r * 0.4}" cy="${cy + r * 0.3}" r="${r * 0.18}" fill="#d4cfa6" opacity="0.5"/>
+    `;
+  },
+
+  // Helper: fog band
+  _fog(y = 130, alpha = 0.18) {
+    return `
+      <ellipse cx="100" cy="${y}" rx="140" ry="14" fill="#a8b2a0" opacity="${alpha}"/>
+      <ellipse cx="280" cy="${y + 8}" rx="160" ry="12" fill="#a8b2a0" opacity="${alpha * 0.85}"/>
+      <ellipse cx="200" cy="${y + 20}" rx="180" ry="10" fill="#a8b2a0" opacity="${alpha * 0.7}"/>
+    `;
+  },
+
+  // Helper: gnarled tree
+  _tree(x, y, h = 80) {
+    return `
+      <path d="M ${x} ${y} Q ${x - 4} ${y - h * 0.4} ${x + 2} ${y - h * 0.7} Q ${x - 5} ${y - h} ${x + 3} ${y - h}" fill="none" stroke="#1a1208" stroke-width="3.5"/>
+      <path d="M ${x + 1} ${y - h * 0.5} L ${x + 14} ${y - h * 0.7}" stroke="#1a1208" stroke-width="2" fill="none"/>
+      <path d="M ${x - 1} ${y - h * 0.7} L ${x - 16} ${y - h * 0.85}" stroke="#1a1208" stroke-width="2" fill="none"/>
+      <path d="M ${x + 2} ${y - h * 0.85} L ${x + 12} ${y - h * 0.95}" stroke="#1a1208" stroke-width="1.5" fill="none"/>
+    `;
+  },
+
+  // Scene 1: Inn arrival at sunset, Howell waiting
+  forest_inn_arrival() {
+    return this.scene('#1a1f1a', '#080a07', `
+      <!-- Sky band with sunset glow on horizon -->
+      <rect x="0" y="0" width="400" height="120" fill="#2a2418"/>
+      <rect x="0" y="105" width="400" height="20" fill="#553828" opacity="0.55"/>
+      <!-- Distant treeline -->
+      ${this._treeline(135, 0.9)}
+      <!-- Inn building -->
+      <polygon points="80,160 80,100 200,80 320,100 320,160" fill="#3a2818" stroke="#1a1208" stroke-width="1.5"/>
+      <polygon points="80,100 200,60 320,100" fill="#2a1c10" stroke="#1a1208" stroke-width="1.5"/>
+      <!-- Inn door -->
+      <rect x="180" y="120" width="40" height="40" fill="#1a1208" stroke="#5a3a1c" stroke-width="2"/>
+      <rect x="195" y="135" width="3" height="3" fill="#ffaa33"/>
+      <!-- Glowing inn windows -->
+      <rect x="105" y="115" width="22" height="20" fill="#ffcc55" opacity="0.85"/>
+      <rect x="270" y="115" width="22" height="20" fill="#ffcc55" opacity="0.85"/>
+      <line x1="116" y1="115" x2="116" y2="135" stroke="#3a2818" stroke-width="1"/>
+      <line x1="281" y1="115" x2="281" y2="135" stroke="#3a2818" stroke-width="1"/>
+      <!-- Lantern hanging by door -->
+      <line x1="178" y1="115" x2="178" y2="125" stroke="#3a2818" stroke-width="1"/>
+      <rect x="173" y="125" width="10" height="14" fill="#3a2818"/>
+      <ellipse cx="178" cy="132" rx="3" ry="5" fill="#ffcc55"/>
+      <circle cx="178" cy="135" r="22" fill="#ffaa33" opacity="0.12"/>
+      <!-- Foreground ground -->
+      <rect x="0" y="160" width="400" height="90" fill="#1a1410"/>
+      <!-- Howell Greaves silhouette by door (cloaked elder) -->
+      <path d="M 230 105 L 215 158 L 250 158 L 245 105 Z" fill="#1a1208"/>
+      <circle cx="237" cy="100" r="8" fill="#3a3018"/>
+      <path d="M 229 96 L 246 96 L 247 102 L 228 102 Z" fill="#1a1208"/>
+      <!-- Fog band -->
+      ${this._fog(155, 0.22)}
+      <!-- Muffin (post-coach arrival, traveling cloak feel) -->
+      ${this._miniMuffin(70, 145, 0.6)}
+    `);
+  },
+
+  // Scene 2: Tally sheet on inn table
+  forest_tally_sheet() {
+    return this.scene('#1f1a12', '#0a0703', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <!-- Wooden table -->
+      <rect x="0" y="180" width="400" height="70" fill="#5a3e1e"/>
+      <rect x="0" y="180" width="400" height="5" fill="#7a5a30"/>
+      <!-- Candle -->
+      <rect x="46" y="120" width="6" height="22" fill="#eee5c8"/>
+      <ellipse cx="49" cy="116" rx="3" ry="6" fill="#ffcc55">
+        <animate attributeName="ry" values="6;8;6" dur="1.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <circle cx="49" cy="125" r="48" fill="#ffaa33" opacity="0.07"/>
+      <!-- Tally sheet -->
+      <rect x="105" y="60" width="220" height="135" fill="#eadba0" stroke="#6a3818" stroke-width="1.5" rx="2" transform="rotate(-2 215 127)"/>
+      <text x="215" y="80" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" transform="rotate(-2 215 80)">LIVESTOCK TALLY</text>
+      <line x1="115" y1="88" x2="315" y2="88" stroke="#8a6838" stroke-width="0.8" transform="rotate(-2 215 88)"/>
+      <text x="125" y="108" fill="#3a2010" font-size="10" font-family="serif" transform="rotate(-2 125 108)">Mon — Tannings:</text>
+      <text x="285" y="108" text-anchor="end" fill="#aa2222" font-size="14" font-weight="bold" font-family="serif" transform="rotate(-2 285 108)">3/8</text>
+      <text x="125" y="130" fill="#3a2010" font-size="10" font-family="serif" transform="rotate(-2 125 130)">Tue — Pell farm:</text>
+      <text x="285" y="130" text-anchor="end" fill="#aa2222" font-size="14" font-weight="bold" font-family="serif" transform="rotate(-2 285 130)">2/8</text>
+      <line x1="125" y1="142" x2="305" y2="142" stroke="#3a2010" stroke-width="0.8" transform="rotate(-2 215 142)"/>
+      <text x="125" y="162" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" transform="rotate(-2 125 162)">TOTAL:</text>
+      <text x="285" y="162" text-anchor="end" fill="#aa2222" font-size="16" font-weight="bold" font-family="serif" transform="rotate(-2 285 162)">?</text>
+      ${this._miniMuffin(335, 165, 0.5, true)}
+    `);
+  },
+
+  // Scene 3: Mira's herb cottage interior
+  forest_mira_cottage() {
+    return this.scene('#1a1810', '#080603', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a2412"/>
+      <rect x="0" y="180" width="400" height="70" fill="#4a3818"/>
+      <!-- Hanging dried herbs -->
+      ${[40, 80, 120, 160, 200, 240, 280, 320, 360].map(x => `
+        <line x1="${x}" y1="0" x2="${x}" y2="22" stroke="#4a2812" stroke-width="0.8"/>
+        <path d="M ${x - 4} 22 L ${x} 50 L ${x + 4} 22 Z" fill="#3a4818"/>
+        <path d="M ${x - 3} 30 L ${x} 48 L ${x + 3} 30" stroke="#4a5828" stroke-width="0.6" fill="none"/>
+      `).join('')}
+      <!-- Shelf with jars -->
+      <rect x="240" y="80" width="150" height="6" fill="#3a2412"/>
+      ${[252, 275, 298, 321, 344, 367].map((x, i) => `
+        <rect x="${x}" y="${65 + (i % 2) * 3}" width="14" height="${15 - (i % 2) * 2}" fill="#${['8a6a18', 'aa6a3a', '4a6628', '8a4a2a', 'aa8a3a', '6a4828'][i]}" stroke="#1a1208" stroke-width="0.5" rx="1"/>
+        <rect x="${x}" y="${64 + (i % 2) * 3}" width="14" height="3" fill="#1a1208"/>
+      `).join('')}
+      <!-- One jar labeled "phosphor moss" stands out, glowing -->
+      <rect x="340" y="64" width="16" height="18" fill="#5a8838" stroke="#aaff66" stroke-width="1" rx="1"/>
+      <ellipse cx="348" cy="73" rx="6" ry="2" fill="#aaff66" opacity="0.5">
+        <animate attributeName="opacity" values="0.5;0.85;0.5" dur="2s" repeatCount="indefinite"/>
+      </ellipse>
+      <text x="348" y="98" text-anchor="middle" fill="#aaff66" font-size="3.5" font-style="italic">phosphor</text>
+      <!-- Mortar and pestle on table -->
+      <rect x="60" y="155" width="140" height="32" fill="#5a3e1e" stroke="#3a2410" stroke-width="1"/>
+      <rect x="60" y="155" width="140" height="4" fill="#7a5a30"/>
+      <ellipse cx="100" cy="158" rx="22" ry="4" fill="#3a2818"/>
+      <ellipse cx="100" cy="155" rx="22" ry="6" fill="#5a4828"/>
+      <!-- Recipe paper -->
+      <rect x="140" y="135" width="60" height="22" fill="#eadba0" stroke="#6a3818" stroke-width="0.8" transform="rotate(-3 170 146)"/>
+      <text x="170" y="146" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold" transform="rotate(-3 170 146)">1/3 + 1/4</text>
+      <text x="170" y="153" text-anchor="middle" fill="#aa2222" font-size="5" font-weight="bold" transform="rotate(-3 170 153)">LCD = ?</text>
+      <!-- Mira (worried, in back) -->
+      <path d="M 260 110 L 250 188 L 290 188 L 280 110 Z" fill="#5a4818"/>
+      <circle cx="270" cy="100" r="9" fill="#d4b098"/>
+      <ellipse cx="270" cy="92" rx="9" ry="4" fill="#5a3818"/>
+      <circle cx="266" cy="101" r="0.8" fill="#2a1a10"/>
+      <circle cx="274" cy="101" r="0.8" fill="#2a1a10"/>
+      <path d="M 266 107 Q 270 107 274 107" fill="none" stroke="#5a2018" stroke-width="0.6"/>
+      ${this._miniMuffin(40, 165, 0.55)}
+    `);
+  },
+
+  // Scene 4: Constable ledger of nightly losses
+  forest_constable_ledger() {
+    return this.scene('#1a1612', '#080603', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a2114"/>
+      <!-- Open ledger -->
+      <rect x="40" y="35" width="320" height="180" fill="#5a3a1c" stroke="#1a1008" stroke-width="2.5"/>
+      <rect x="50" y="45" width="300" height="160" fill="#eadba0"/>
+      <line x1="200" y1="45" x2="200" y2="205" stroke="#8a6838" stroke-width="1.5"/>
+      <text x="200" y="62" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif">CONSTABLE'S LOSS REGISTER</text>
+      <line x1="60" y1="68" x2="340" y2="68" stroke="#8a6838" stroke-width="0.7"/>
+      <text x="120" y="90" text-anchor="middle" fill="#3a2010" font-size="9" font-style="italic">Night One</text>
+      <text x="120" y="115" text-anchor="middle" fill="#aa2222" font-size="22" font-weight="bold" font-family="serif">1/6</text>
+      <text x="120" y="148" text-anchor="middle" fill="#3a2010" font-size="9" font-style="italic">Night Two</text>
+      <text x="120" y="173" text-anchor="middle" fill="#aa2222" font-size="22" font-weight="bold" font-family="serif">2/6</text>
+      <text x="280" y="90" text-anchor="middle" fill="#3a2010" font-size="9" font-style="italic">Night Three</text>
+      <text x="280" y="115" text-anchor="middle" fill="#aa2222" font-size="22" font-weight="bold" font-family="serif">2/6</text>
+      <text x="280" y="148" text-anchor="middle" fill="#3a2010" font-size="9" font-style="italic">TOTAL LOST</text>
+      <text x="280" y="178" text-anchor="middle" fill="#7a1818" font-size="26" font-weight="bold" font-family="serif">?</text>
+      ${this._miniMuffin(20, 145, 0.5)}
+    `);
+  },
+
+  // Scene 5: Mira's worry clock
+  forest_petra_clock() {
+    return this.scene('#1a1612', '#080603', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a2114"/>
+      <!-- Wall behind -->
+      <rect x="100" y="40" width="200" height="160" fill="#3a2818" stroke="#1a1008" stroke-width="1"/>
+      <!-- Pendulum clock body -->
+      <rect x="155" y="55" width="90" height="140" fill="#4a2818" stroke="#1a1008" stroke-width="2" rx="3"/>
+      <!-- Clock face -->
+      <circle cx="200" cy="95" r="32" fill="#eadba0" stroke="#1a1008" stroke-width="2"/>
+      <!-- Clock numbers (12, 3, 6, 9) -->
+      <text x="200" y="78" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">XII</text>
+      <text x="226" y="98" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">III</text>
+      <text x="200" y="118" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">VI</text>
+      <text x="174" y="98" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">IX</text>
+      <!-- Hands frozen -->
+      <line x1="200" y1="95" x2="200" y2="78" stroke="#1a1008" stroke-width="2.5"/>
+      <line x1="200" y1="95" x2="218" y2="100" stroke="#1a1008" stroke-width="1.8"/>
+      <circle cx="200" cy="95" r="2" fill="#1a1008"/>
+      <!-- Pendulum -->
+      <line x1="200" y1="130" x2="200" y2="180" stroke="#3a2810" stroke-width="1"/>
+      <circle cx="200" cy="180" r="9" fill="#aa8838" stroke="#3a2810" stroke-width="1"/>
+      <!-- Tally marks counting Petra's hours -->
+      <rect x="118" y="55" width="30" height="140" fill="#1a1008" opacity="0.4"/>
+      <text x="133" y="68" text-anchor="middle" fill="#eadba0" font-size="6" font-style="italic">PETRA</text>
+      <text x="133" y="78" text-anchor="middle" fill="#eadba0" font-size="6" font-style="italic">missing</text>
+      ${[0,1,2,3,4].map(i => `<line x1="124" y1="${88 + i*16}" x2="142" y2="${88 + i*16}" stroke="#aa2222" stroke-width="1.5"/>`).join('')}
+      <text x="133" y="180" text-anchor="middle" fill="#aaff66" font-size="9" font-weight="bold">2½</text>
+      <text x="133" y="190" text-anchor="middle" fill="#eadba0" font-size="5" font-style="italic">days</text>
+      ${this._miniMuffin(310, 165, 0.55)}
+    `);
+  },
+
+  // Scene 6: Shuttered village street at dusk
+  forest_shuttered_village() {
+    return this.scene('#0e1208', '#040603', `
+      ${this._moon(340, 50, 16)}
+      <!-- Cobblestone street -->
+      <rect x="0" y="170" width="400" height="80" fill="#1e1812"/>
+      ${[15, 50, 90, 130, 170, 210, 250, 290, 330, 370].map(x => `<ellipse cx="${x}" cy="195" rx="12" ry="3" fill="#2a2418" stroke="#1a1208" stroke-width="0.5"/>`).join('')}
+      ${[35, 70, 110, 150, 190, 230, 270, 310, 350].map(x => `<ellipse cx="${x}" cy="220" rx="14" ry="3.5" fill="#2a2418" stroke="#1a1208" stroke-width="0.5"/>`).join('')}
+      <!-- Row of cottages, all shuttered -->
+      ${[20, 100, 180, 260].map((x, i) => `
+        <polygon points="${x},170 ${x},115 ${x + 35},90 ${x + 70},115 ${x + 70},170" fill="#2a1e12" stroke="#1a1008" stroke-width="1"/>
+        <polygon points="${x},115 ${x + 35},88 ${x + 70},115" fill="#1a1208"/>
+        <!-- Shuttered window -->
+        <rect x="${x + 12}" y="125" width="20" height="22" fill="#3a2812" stroke="#1a1008" stroke-width="0.8"/>
+        ${[0,1,2,3].map(j => `<line x1="${x + 12}" y1="${130 + j*5}" x2="${x + 32}" y2="${130 + j*5}" stroke="#1a1008" stroke-width="0.4"/>`).join('')}
+        <!-- Door barred -->
+        <rect x="${x + 38}" y="135" width="18" height="34" fill="#1a1008" stroke="#3a2410" stroke-width="0.8"/>
+        <line x1="${x + 36}" y1="148" x2="${x + 58}" y2="148" stroke="#5a3818" stroke-width="2"/>
+      `).join('')}
+      <!-- One window, dim candle -->
+      <rect x="282" y="125" width="20" height="22" fill="#553820" stroke="#1a1008" stroke-width="0.8"/>
+      <ellipse cx="292" cy="138" rx="3" ry="5" fill="#ffaa55" opacity="0.7"/>
+      ${this._fog(180, 0.18)}
+      ${this._miniMuffin(170, 175, 0.55)}
+    `);
+  },
+
+  // Scene 7: Map of two attack sites
+  forest_attack_map() {
+    return this.scene('#1a1612', '#080603', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <!-- Parchment map -->
+      <rect x="40" y="30" width="320" height="190" fill="#eadba0" stroke="#6a3818" stroke-width="2.5" rx="3"/>
+      <rect x="46" y="36" width="308" height="178" fill="#f0e0a8" rx="2"/>
+      <text x="200" y="55" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">HOLLOWMERE WOOD — ATTACK MAP</text>
+      <!-- Compass rose -->
+      <circle cx="335" cy="80" r="14" fill="none" stroke="#3a2010" stroke-width="0.8"/>
+      <text x="335" y="71" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">N</text>
+      <line x1="335" y1="73" x2="335" y2="89" stroke="#3a2010" stroke-width="1.2"/>
+      <line x1="328" y1="80" x2="342" y2="80" stroke="#3a2010" stroke-width="0.6"/>
+      <!-- Village square (center) -->
+      <circle cx="200" cy="135" r="9" fill="#aa8838" stroke="#3a2010" stroke-width="1"/>
+      <text x="200" y="155" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">village</text>
+      <!-- Trees scattered around -->
+      ${[80, 125, 165, 240, 290, 330].map((x, i) => `<polygon points="${x},${80 + (i%2)*16} ${x - 5},${95 + (i%2)*16} ${x + 5},${95 + (i%2)*16}" fill="#2a4818" stroke="#1a2810" stroke-width="0.5"/>`).join('')}
+      ${[70, 110, 150, 220, 270, 310].map((x, i) => `<polygon points="${x},${175 + (i%2)*8} ${x - 5},${188 + (i%2)*8} ${x + 5},${188 + (i%2)*8}" fill="#2a4818" stroke="#1a2810" stroke-width="0.5"/>`).join('')}
+      <!-- Attack site 1: north (red X) -->
+      <line x1="195" y1="80" x2="205" y2="90" stroke="#aa2222" stroke-width="2.5"/>
+      <line x1="205" y1="80" x2="195" y2="90" stroke="#aa2222" stroke-width="2.5"/>
+      <line x1="200" y1="90" x2="200" y2="126" stroke="#aa2222" stroke-width="0.6" stroke-dasharray="2 2"/>
+      <text x="170" y="78" text-anchor="end" fill="#aa2222" font-size="8" font-weight="bold" font-family="serif">1/3 mi N</text>
+      <!-- Attack site 2: east (red X) -->
+      <line x1="275" y1="130" x2="285" y2="140" stroke="#aa2222" stroke-width="2.5"/>
+      <line x1="285" y1="130" x2="275" y2="140" stroke="#aa2222" stroke-width="2.5"/>
+      <line x1="210" y1="135" x2="275" y2="135" stroke="#aa2222" stroke-width="0.6" stroke-dasharray="2 2"/>
+      <text x="295" y="138" fill="#aa2222" font-size="8" font-weight="bold" font-family="serif">1/4 mi E</text>
+      <!-- Total range bracket -->
+      <text x="200" y="200" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold">total range = 1/3 + 1/4 = ?</text>
+      ${this._miniMuffin(20, 165, 0.5)}
+    `);
+  },
+
+  // Scene 8: Logging trail through deep wood
+  forest_logging_trail() {
+    return this.scene('#0a1208', '#040603', `
+      ${this._moon(345, 38, 14)}
+      <rect x="0" y="160" width="400" height="90" fill="#1e1812"/>
+      <!-- Trail (curving path) -->
+      <path d="M 100 250 Q 180 220 200 175 Q 220 145 280 115" fill="none" stroke="#3a2c18" stroke-width="22" stroke-linecap="round" opacity="0.6"/>
+      <path d="M 100 250 Q 180 220 200 175 Q 220 145 280 115" fill="none" stroke="#4a3a20" stroke-width="14" stroke-linecap="round"/>
+      <!-- Forest trees flanking -->
+      ${this._tree(40, 220, 90)}
+      ${this._tree(70, 195, 70)}
+      ${this._tree(100, 168, 60)}
+      ${this._tree(310, 175, 95)}
+      ${this._tree(345, 200, 75)}
+      ${this._tree(370, 230, 55)}
+      ${this._tree(20, 170, 80)}
+      ${this._tree(380, 165, 70)}
+      ${this._treeline(165, 0.95)}
+      <!-- Mile markers (small wooden posts) -->
+      <rect x="170" y="178" width="3" height="14" fill="#5a3a18"/>
+      <text x="180" y="185" fill="#eadba0" font-size="6" font-style="italic">1⅔ mi</text>
+      <rect x="265" y="118" width="3" height="14" fill="#5a3a18"/>
+      <text x="275" y="125" fill="#aa2222" font-size="6" font-style="italic">3¼ mi</text>
+      ${this._fog(190, 0.22)}
+      ${this._miniMuffin(125, 215, 0.55)}
+    `);
+  },
+
+  // Scene 9: Marrowed Man's cabin interior, slate sketch
+  forest_marrowed_cabin() {
+    return this.scene('#15110a', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <rect x="0" y="180" width="400" height="70" fill="#3a2c18"/>
+      <!-- Wall planks -->
+      ${[0,80,160,240,320].map(x => `<line x1="${x}" y1="0" x2="${x}" y2="180" stroke="#1a1008" stroke-width="1.2"/>`).join('')}
+      <!-- Hanging slate -->
+      <rect x="100" y="55" width="200" height="120" fill="#1a1612" stroke="#5a3818" stroke-width="3" rx="3"/>
+      <line x1="195" y1="40" x2="200" y2="55" stroke="#3a2410" stroke-width="1"/>
+      <line x1="205" y1="40" x2="200" y2="55" stroke="#3a2410" stroke-width="1"/>
+      <!-- Chalk sketch of flight path on slate -->
+      <text x="200" y="80" text-anchor="middle" fill="#eaeae0" font-size="7" font-style="italic">— flight —</text>
+      <path d="M 130 110 L 175 105 L 220 100 L 270 95" stroke="#eaeae0" stroke-width="1.5" fill="none" stroke-dasharray="3 2"/>
+      <!-- Spot of attack -->
+      <line x1="172" y1="100" x2="178" y2="110" stroke="#aa2222" stroke-width="1.5"/>
+      <line x1="178" y1="100" x2="172" y2="110" stroke="#aa2222" stroke-width="1.5"/>
+      <text x="175" y="125" text-anchor="middle" fill="#aa2222" font-size="5">attack</text>
+      <text x="125" y="100" text-anchor="end" fill="#eaeae0" font-size="7" font-weight="bold">1/3 mi</text>
+      <text x="270" y="100" fill="#eaeae0" font-size="7" font-weight="bold">?</text>
+      <text x="200" y="155" text-anchor="middle" fill="#eaeae0" font-size="7">total: 5/6 mi</text>
+      <text x="200" y="168" text-anchor="middle" fill="#aaff66" font-size="6" font-weight="bold" font-style="italic">"PAINT"</text>
+      <!-- Marrowed Man (silhouette in shadow corner) -->
+      <path d="M 340 110 L 333 195 L 360 195 L 355 110 Z" fill="#0a0603"/>
+      <circle cx="346" cy="100" r="8" fill="#1a1208"/>
+      ${this._miniMuffin(35, 165, 0.55)}
+    `);
+  },
+
+  // Scene 10: Pressed claw print in mud
+  forest_clawprint() {
+    return this.scene('#1e1810', '#080603', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <rect x="0" y="60" width="400" height="190" fill="#3a2c18"/>
+      <!-- Mud texture -->
+      ${[0,50,100,150,200,250,300,350].map(x => `<ellipse cx="${x + (x*7)%30}" cy="${110 + (x*11)%80}" rx="${8 + (x*3)%6}" ry="${3 + (x*2)%4}" fill="#2a1f10" opacity="0.5"/>`).join('')}
+      <!-- Massive claw print -->
+      <ellipse cx="200" cy="155" rx="65" ry="45" fill="#1a1208" opacity="0.6"/>
+      <ellipse cx="200" cy="155" rx="60" ry="42" fill="#0a0703"/>
+      <!-- Pad -->
+      <ellipse cx="200" cy="170" rx="38" ry="22" fill="#1a1208"/>
+      <!-- Toes -->
+      <ellipse cx="170" cy="135" rx="14" ry="18" fill="#0a0703" transform="rotate(-22 170 135)"/>
+      <ellipse cx="190" cy="125" rx="14" ry="20" fill="#0a0703" transform="rotate(-8 190 125)"/>
+      <ellipse cx="210" cy="125" rx="14" ry="20" fill="#0a0703" transform="rotate(8 210 125)"/>
+      <ellipse cx="230" cy="135" rx="14" ry="18" fill="#0a0703" transform="rotate(22 230 135)"/>
+      <!-- Claw tips -->
+      ${[ [162, 116], [186, 105], [214, 105], [238, 116] ].map(([x, y]) => `<polygon points="${x - 2},${y + 4} ${x + 2},${y + 4} ${x},${y - 5}" fill="#1a1008"/>`).join('')}
+      <!-- Pressure scale label -->
+      <rect x="270" y="190" width="105" height="36" fill="#eadba0" stroke="#aa2222" stroke-width="1.5" transform="rotate(-3 322 208)"/>
+      <text x="322" y="204" text-anchor="middle" fill="#3a2010" font-size="7" font-weight="bold" transform="rotate(-3 322 204)">CLAW PRESSURE</text>
+      <text x="322" y="218" text-anchor="middle" fill="#aa2222" font-size="11" font-weight="bold" transform="rotate(-3 322 218)">0.6 kg = ? g</text>
+      ${this._miniMuffin(30, 195, 0.55)}
+    `);
+  },
+
+  // Scene 11: Crooke's expense ledger glimpsed through inn window
+  forest_crooke_ledger() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a2114"/>
+      <!-- Window frame at edge -->
+      <rect x="0" y="0" width="40" height="250" fill="#3a2818"/>
+      <rect x="32" y="0" width="8" height="250" fill="#1a1008"/>
+      <rect x="0" y="0" width="400" height="20" fill="#3a2818"/>
+      <rect x="0" y="230" width="400" height="20" fill="#3a2818"/>
+      <!-- Inn table interior -->
+      <rect x="40" y="160" width="360" height="90" fill="#5a3e1e"/>
+      <!-- Open ledger book -->
+      <rect x="80" y="50" width="280" height="160" fill="#5a3a1c" stroke="#1a1008" stroke-width="2"/>
+      <rect x="88" y="58" width="264" height="144" fill="#eadba0"/>
+      <line x1="220" y1="58" x2="220" y2="202" stroke="#8a6838" stroke-width="1.5"/>
+      <text x="220" y="76" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold" font-style="italic">— EXPENSE LEDGER —</text>
+      <line x1="98" y1="84" x2="342" y2="84" stroke="#8a6838" stroke-width="0.7"/>
+      <text x="106" y="105" fill="#3a2010" font-size="9" font-style="italic">lamp oil ........</text>
+      <text x="208" y="105" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" font-family="serif">1/2</text>
+      <text x="106" y="130" fill="#3a2010" font-size="9" font-style="italic">ink ............</text>
+      <text x="208" y="130" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" font-family="serif">1/3</text>
+      <text x="106" y="155" fill="#3a2010" font-size="9" font-style="italic">powder .........</text>
+      <text x="208" y="155" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" font-family="serif">1/6</text>
+      <line x1="98" y1="166" x2="208" y2="166" stroke="#3a2010" stroke-width="0.6"/>
+      <text x="106" y="186" fill="#3a2010" font-size="9" font-weight="bold">total =</text>
+      <text x="208" y="186" text-anchor="end" fill="#7a1818" font-size="13" font-weight="bold">?</text>
+      <!-- Right page: cryptic notes -->
+      <text x="285" y="105" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">— do not log —</text>
+      <text x="232" y="125" fill="#3a2010" font-size="7" font-style="italic">room · board</text>
+      <text x="232" y="140" fill="#3a2010" font-size="7" font-style="italic">horse fodder</text>
+      <text x="232" y="155" fill="#3a2010" font-size="7" font-style="italic">food</text>
+      <text x="285" y="180" text-anchor="middle" fill="#7a1818" font-size="9" font-weight="bold">??</text>
+      <!-- Candle -->
+      <rect x="62" y="85" width="5" height="14" fill="#eee5c8"/>
+      <ellipse cx="64.5" cy="83" rx="2.5" ry="4" fill="#ffcc55"/>
+      ${this._miniMuffin(370, 175, 0.5, true)}
+    `);
+  },
+
+  // Scene 12: Night-watch clock face
+  forest_watch_clock() {
+    return this.scene('#0a1108', '#040603', `
+      ${this._moon(60, 50, 15)}
+      ${this._treeline(160, 0.9)}
+      <rect x="0" y="160" width="400" height="90" fill="#1e1812"/>
+      <!-- Big clock tower -->
+      <rect x="155" y="40" width="90" height="180" fill="#2a1e10" stroke="#1a1008" stroke-width="2"/>
+      <polygon points="155,40 200,15 245,40" fill="#1a1008" stroke="#1a1008" stroke-width="1"/>
+      <!-- Face -->
+      <circle cx="200" cy="100" r="36" fill="#eadba0" stroke="#1a1008" stroke-width="2"/>
+      <!-- Hour marks -->
+      ${[0,1,2,3,4,5,6,7,8,9,10,11].map(h => {
+        const a = (h/12)*Math.PI*2 - Math.PI/2;
+        const x1 = 200 + Math.cos(a)*32, y1 = 100 + Math.sin(a)*32;
+        const x2 = 200 + Math.cos(a)*36, y2 = 100 + Math.sin(a)*36;
+        return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#1a1008" stroke-width="1.5"/>`;
+      }).join('')}
+      <!-- Hands at 6¼ to 10¾ shadow region -->
+      <!-- Shading the watch window arc -->
+      <path d="M 200 100 L 232 100 A 32 32 0 0 1 187 130 Z" fill="#aa2222" opacity="0.18"/>
+      <line x1="200" y1="100" x2="232" y2="100" stroke="#aa2222" stroke-width="1.5"/>
+      <line x1="200" y1="100" x2="187" y2="130" stroke="#aa2222" stroke-width="1.5"/>
+      <circle cx="200" cy="100" r="2.5" fill="#1a1008"/>
+      <text x="200" y="160" text-anchor="middle" fill="#eadba0" font-size="7" font-weight="bold">NIGHT WATCH</text>
+      <text x="200" y="172" text-anchor="middle" fill="#aaff66" font-size="6" font-style="italic">6¼ → 10¾  =  ?</text>
+      <!-- Pendulum -->
+      <line x1="200" y1="140" x2="200" y2="200" stroke="#3a2818" stroke-width="1"/>
+      <circle cx="200" cy="200" r="10" fill="#aa8838" stroke="#3a2810" stroke-width="1"/>
+      ${this._miniMuffin(310, 170, 0.55)}
+    `);
+  },
+
+  // Scene 13: Wendell's gamekeeper patrol log
+  forest_gamekeeper_log() {
+    return this.scene('#0e1208', '#040603', `
+      ${this._moon(345, 35, 12)}
+      ${this._treeline(120, 0.9)}
+      <rect x="0" y="135" width="400" height="115" fill="#1e1812"/>
+      <!-- Log on tree stump -->
+      <ellipse cx="200" cy="195" rx="68" ry="14" fill="#3a2810"/>
+      <ellipse cx="200" cy="190" rx="68" ry="14" fill="#5a3a18" stroke="#1a1008" stroke-width="1.5"/>
+      <ellipse cx="200" cy="190" rx="60" ry="11" fill="#7a5828"/>
+      ${[0,1,2].map(i => `<circle cx="200" cy="190" r="${20 + i*12}" fill="none" stroke="#3a2818" stroke-width="0.6" opacity="0.8"/>`).join('')}
+      <!-- Log book -->
+      <rect x="135" y="148" width="130" height="40" fill="#eadba0" stroke="#6a3818" stroke-width="1.5" rx="2" transform="rotate(-3 200 168)"/>
+      <text x="200" y="158" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold" transform="rotate(-3 200 158)">PATROL LOG — Wendell Skye</text>
+      <line x1="142" y1="162" x2="258" y2="162" stroke="#8a6838" stroke-width="0.5" transform="rotate(-3 200 162)"/>
+      <text x="148" y="172" fill="#3a2010" font-size="6" transform="rotate(-3 148 172)">total walked:</text>
+      <text x="252" y="172" text-anchor="end" fill="#3a2010" font-size="7" font-weight="bold" transform="rotate(-3 252 172)">5/6 mi</text>
+      <text x="148" y="182" fill="#3a2010" font-size="6" transform="rotate(-3 148 182)">accounted:</text>
+      <text x="252" y="182" text-anchor="end" fill="#aa2222" font-size="7" font-weight="bold" transform="rotate(-3 252 182)">2/3 mi</text>
+      <!-- Wendell -->
+      <path d="M 320 110 L 305 200 L 345 200 L 332 110 Z" fill="#3a4818"/>
+      <circle cx="325" cy="100" r="11" fill="#d4b098"/>
+      <ellipse cx="325" cy="92" rx="11" ry="4" fill="#5a3818"/>
+      <circle cx="321" cy="101" r="0.8" fill="#2a1a10"/>
+      <circle cx="329" cy="101" r="0.8" fill="#2a1a10"/>
+      <path d="M 321 107 Q 325 109 329 107" fill="none" stroke="#5a2018" stroke-width="0.5"/>
+      ${this._miniMuffin(50, 175, 0.55)}
+    `);
+  },
+
+  // Scene 14: Cloud-covered moon (moonless gap)
+  forest_moonless_gap() {
+    return this.scene('#0a1208', '#020401', `
+      <!-- Heavily clouded moon -->
+      ${this._moon(200, 80, 26)}
+      <ellipse cx="180" cy="78" rx="60" ry="22" fill="#1a1812" opacity="0.85"/>
+      <ellipse cx="220" cy="86" rx="70" ry="20" fill="#0a0a07" opacity="0.85"/>
+      <ellipse cx="195" cy="92" rx="55" ry="14" fill="#0a0a07" opacity="0.7"/>
+      ${this._treeline(165, 0.95)}
+      <rect x="0" y="170" width="400" height="80" fill="#0e0a05"/>
+      ${this._tree(60, 230, 95)}
+      ${this._tree(335, 235, 100)}
+      ${this._tree(20, 220, 75)}
+      ${this._tree(380, 218, 80)}
+      ${this._fog(195, 0.3)}
+      <!-- Pocket watch in foreground -->
+      <circle cx="200" cy="195" r="26" fill="#3a2810" stroke="#aa8838" stroke-width="2"/>
+      <circle cx="200" cy="195" r="22" fill="#eadba0"/>
+      <text x="200" y="190" text-anchor="middle" fill="#aaff66" font-size="6" font-weight="bold" font-style="italic">moonless</text>
+      <text x="200" y="200" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold">30 min</text>
+      <text x="200" y="208" text-anchor="middle" fill="#aa2222" font-size="6" font-weight="bold">×4/5 = ?</text>
+      ${this._miniMuffin(305, 195, 0.5)}
+    `);
+  },
+
+  // Scene 15: Forked paw-print trail
+  forest_paw_fork() {
+    return this.scene('#0a1108', '#030502', `
+      ${this._treeline(60, 0.95)}
+      <rect x="0" y="80" width="400" height="170" fill="#1e1812"/>
+      <!-- Trail forking -->
+      <path d="M 200 230 Q 200 180 130 110" fill="none" stroke="#3a2c18" stroke-width="20" stroke-linecap="round" opacity="0.55"/>
+      <path d="M 200 230 Q 220 200 290 130" fill="none" stroke="#3a2c18" stroke-width="20" stroke-linecap="round" opacity="0.55"/>
+      ${this._tree(70, 130, 70)}
+      ${this._tree(330, 145, 75)}
+      ${this._tree(40, 180, 85)}
+      ${this._tree(360, 175, 80)}
+      <!-- Paw prints on west branch -->
+      ${[ [180, 200], [165, 175], [148, 152], [135, 130] ].map(([x, y]) => `
+        <ellipse cx="${x}" cy="${y}" rx="8" ry="11" fill="#0a0703" opacity="0.8"/>
+        <ellipse cx="${x - 4}" cy="${y - 7}" rx="2.5" ry="3.5" fill="#0a0703" opacity="0.8"/>
+        <ellipse cx="${x + 4}" cy="${y - 7}" rx="2.5" ry="3.5" fill="#0a0703" opacity="0.8"/>
+      `).join('')}
+      <text x="120" y="120" fill="#aaff66" font-size="9" font-weight="bold" font-style="italic">1/4 mi</text>
+      <!-- Paw prints on southwest branch -->
+      ${[ [220, 205], [240, 180], [258, 155], [278, 130] ].map(([x, y]) => `
+        <ellipse cx="${x}" cy="${y}" rx="8" ry="11" fill="#0a0703" opacity="0.8"/>
+        <ellipse cx="${x - 4}" cy="${y - 7}" rx="2.5" ry="3.5" fill="#0a0703" opacity="0.8"/>
+        <ellipse cx="${x + 4}" cy="${y - 7}" rx="2.5" ry="3.5" fill="#0a0703" opacity="0.8"/>
+      `).join('')}
+      <text x="288" y="120" fill="#aaff66" font-size="9" font-weight="bold" font-style="italic">5/12 mi</text>
+      ${this._fog(210, 0.25)}
+      ${this._miniMuffin(178, 215, 0.55)}
+    `);
+  },
+
+  // Scene 16: Brass-clasp notebook in hollow stump
+  forest_hollow_notebook() {
+    return this.scene('#0a0e07', '#020401', `
+      ${this._treeline(80, 0.95)}
+      <rect x="0" y="120" width="400" height="130" fill="#1a1610"/>
+      <!-- Hollow stump -->
+      <ellipse cx="200" cy="225" rx="100" ry="20" fill="#1a1008"/>
+      <ellipse cx="200" cy="215" rx="100" ry="20" fill="#3a2410" stroke="#1a1008" stroke-width="2"/>
+      <ellipse cx="200" cy="208" rx="92" ry="17" fill="#1a1008"/>
+      <ellipse cx="200" cy="205" rx="80" ry="14" fill="#0a0603"/>
+      <!-- Notebook open inside hollow -->
+      <rect x="160" y="160" width="80" height="50" fill="#3a2818" stroke="#1a1008" stroke-width="2" transform="rotate(-4 200 185)"/>
+      <rect x="166" y="166" width="68" height="38" fill="#eadba0" transform="rotate(-4 200 185)"/>
+      <text x="200" y="180" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold" transform="rotate(-4 200 180)">— inheritance —</text>
+      <text x="180" y="190" text-anchor="middle" fill="#aa2222" font-size="6" font-weight="bold" transform="rotate(-4 180 190)">7/8</text>
+      <text x="200" y="190" text-anchor="middle" fill="#3a2010" font-size="5" transform="rotate(-4 200 190)">−1/4 −1/3</text>
+      <text x="220" y="200" text-anchor="middle" fill="#7a1818" font-size="7" font-weight="bold" transform="rotate(-4 220 200)">= ?</text>
+      <!-- Brass clasp -->
+      <rect x="195" y="178" width="10" height="6" fill="#aa8838" stroke="#3a2810" stroke-width="0.5" transform="rotate(-4 200 181)"/>
+      ${this._tree(50, 200, 90)}
+      ${this._tree(355, 195, 95)}
+      ${this._fog(140, 0.18)}
+      ${this._miniMuffin(45, 195, 0.55)}
+    `);
+  },
+
+  // Scene 17: Phosphor-moss recipe page
+  forest_phosphor_recipe() {
+    return this.scene('#0a0e07', '#020401', `
+      <rect x="0" y="0" width="400" height="250" fill="#1e1810"/>
+      <!-- Recipe page (close-up) -->
+      <rect x="40" y="30" width="320" height="190" fill="#eadba0" stroke="#6a3818" stroke-width="2.5" rx="3"/>
+      <text x="200" y="58" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-style="italic" font-family="serif">PHOSPHOR-MOSS DUST RECIPE</text>
+      <line x1="60" y1="68" x2="340" y2="68" stroke="#8a6838" stroke-width="0.7"/>
+      <text x="60" y="95" fill="#3a2010" font-size="11" font-style="italic">Take</text>
+      <text x="105" y="100" fill="#aa2222" font-size="20" font-weight="bold" font-family="serif">1/3</text>
+      <text x="135" y="95" fill="#3a2010" font-size="11" font-style="italic">of a vial of moss dust.</text>
+      <text x="60" y="130" fill="#3a2010" font-size="11" font-style="italic">Mix with</text>
+      <text x="135" y="135" fill="#aa2222" font-size="20" font-weight="bold" font-family="serif">1/4</text>
+      <text x="165" y="130" fill="#3a2010" font-size="11" font-style="italic">oil.</text>
+      <line x1="60" y1="150" x2="340" y2="150" stroke="#3a2010" stroke-width="0.6"/>
+      <text x="60" y="175" fill="#3a2010" font-size="11" font-weight="bold">Active glow =</text>
+      <text x="200" y="180" fill="#7a1818" font-size="20" font-weight="bold" font-family="serif">1/3 × 1/4 = ?</text>
+      <!-- Glowing splatter -->
+      <circle cx="320" cy="190" r="14" fill="#aaff66" opacity="0.4">
+        <animate attributeName="opacity" values="0.4;0.8;0.4" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="320" cy="190" r="8" fill="#ccff88" opacity="0.7"/>
+      ${this._miniMuffin(60, 195, 0.5)}
+    `);
+  },
+
+  // Scene 18: Hidden cave map
+  forest_cave_map() {
+    return this.scene('#1a1612', '#080603', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <rect x="40" y="35" width="320" height="180" fill="#eadba0" stroke="#6a3818" stroke-width="2" rx="3"/>
+      <text x="200" y="58" text-anchor="middle" fill="#3a2010" font-size="10" font-weight="bold" font-family="serif" font-style="italic">— CAVE MAP, sketched in pencil —</text>
+      <!-- Stylized treeline -->
+      ${[60,90,120,150,180,210,240,270,300,330].map((x, i) => `<polygon points="${x},${130 + (i%2)*8} ${x - 4},${145 + (i%2)*8} ${x + 4},${145 + (i%2)*8}" fill="#2a4818"/>`).join('')}
+      <!-- Village (bottom-left) -->
+      <rect x="58" y="178" width="20" height="14" fill="#5a3818" stroke="#3a2010" stroke-width="0.6"/>
+      <polygon points="58,178 68,170 78,178" fill="#3a2410"/>
+      <text x="68" y="200" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">Hollowmere</text>
+      <!-- Path winding right -->
+      <path d="M 78 185 Q 150 175 200 165 Q 260 152 320 142" stroke="#3a2010" stroke-width="1" fill="none" stroke-dasharray="4 2"/>
+      <!-- Cave mouth (top-right) -->
+      <ellipse cx="320" cy="142" rx="22" ry="14" fill="#1a1008" stroke="#3a2010" stroke-width="1.5"/>
+      <ellipse cx="320" cy="142" rx="14" ry="8" fill="#0a0603"/>
+      <text x="320" y="120" text-anchor="middle" fill="#7a1818" font-size="7" font-weight="bold">CAVE</text>
+      <!-- Distance label -->
+      <text x="200" y="178" text-anchor="middle" fill="#aa2222" font-size="9" font-weight="bold">1,750 m</text>
+      <text x="200" y="190" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">(convert to km)</text>
+      ${this._miniMuffin(310, 165, 0.45, true)}
+    `);
+  },
+
+  // Scene 19: Crooke's alibi check at the inn
+  forest_inn_alibi() {
+    return this.scene('#1a1610', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <!-- Inn interior background -->
+      <rect x="0" y="170" width="400" height="80" fill="#5a3e1e"/>
+      <rect x="0" y="170" width="400" height="5" fill="#7a5a30"/>
+      <!-- Wall clock -->
+      <circle cx="320" cy="80" r="38" fill="#eadba0" stroke="#3a2010" stroke-width="3"/>
+      <text x="320" y="55" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">XII</text>
+      <text x="350" y="83" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">III</text>
+      <text x="320" y="108" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">VI</text>
+      <text x="290" y="83" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">IX</text>
+      <line x1="320" y1="80" x2="320" y2="58" stroke="#1a1008" stroke-width="2"/>
+      <line x1="320" y1="80" x2="346" y2="80" stroke="#1a1008" stroke-width="1.4"/>
+      <circle cx="320" cy="80" r="2" fill="#1a1008"/>
+      <text x="320" y="135" text-anchor="middle" fill="#aaff66" font-size="6">9⅙ pm</text>
+      <!-- Alibi note on table -->
+      <rect x="60" y="60" width="200" height="120" fill="#eadba0" stroke="#aa2222" stroke-width="1.5" transform="rotate(-3 160 120)"/>
+      <text x="160" y="80" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold" transform="rotate(-3 160 80)">CROOKE'S ALIBI</text>
+      <line x1="70" y1="88" x2="250" y2="88" stroke="#8a6838" stroke-width="0.6" transform="rotate(-3 160 88)"/>
+      <text x="80" y="108" fill="#3a2010" font-size="8" transform="rotate(-3 80 108)">arrived inn:</text>
+      <text x="245" y="108" text-anchor="end" fill="#3a2010" font-size="9" font-weight="bold" transform="rotate(-3 245 108)">7¾ pm</text>
+      <text x="80" y="125" fill="#3a2010" font-size="8" transform="rotate(-3 80 125)">left inn:</text>
+      <text x="245" y="125" text-anchor="end" fill="#3a2010" font-size="9" font-weight="bold" transform="rotate(-3 245 125)">9⅙ pm</text>
+      <line x1="80" y1="135" x2="245" y2="135" stroke="#3a2010" stroke-width="0.6" transform="rotate(-3 160 135)"/>
+      <text x="80" y="155" fill="#3a2010" font-size="8" font-weight="bold" transform="rotate(-3 80 155)">duration =</text>
+      <text x="245" y="155" text-anchor="end" fill="#7a1818" font-size="11" font-weight="bold" transform="rotate(-3 245 155)">?</text>
+      <!-- ATTACK marker -->
+      <text x="160" y="200" text-anchor="middle" fill="#aa2222" font-size="8" font-weight="bold" font-style="italic">attack: 9 pm — INSIDE this window</text>
+      ${this._miniMuffin(35, 175, 0.5)}
+    `);
+  },
+
+  // Scene 20: Search teams gathering at village edge
+  forest_search_teams() {
+    return this.scene('#0a1108', '#030502', `
+      ${this._moon(60, 38, 14)}
+      ${this._treeline(140, 0.92)}
+      <rect x="0" y="160" width="400" height="90" fill="#1e1812"/>
+      <!-- Lanterns held by silhouetted teams -->
+      ${[55, 115, 175, 235, 295, 355].map((x, i) => `
+        <!-- silhouette -->
+        <path d="M ${x - 6} 165 L ${x - 8} 215 L ${x + 8} 215 L ${x + 6} 165 Z" fill="#0a0603"/>
+        <circle cx="${x}" cy="160" r="6" fill="#1a1208"/>
+        <!-- lantern -->
+        <line x1="${x + 7}" y1="180" x2="${x + 12}" y2="190" stroke="#3a2410" stroke-width="0.8"/>
+        <rect x="${x + 9}" y="190" width="6" height="8" fill="#3a2410"/>
+        <ellipse cx="${x + 12}" cy="194" rx="2" ry="3" fill="#ffaa55">
+          <animate attributeName="ry" values="3;4;3" dur="${1 + i * 0.2}s" repeatCount="indefinite"/>
+        </ellipse>
+        <circle cx="${x + 12}" cy="194" r="14" fill="#ffaa33" opacity="${0.06 + (i % 3) * 0.02}"/>
+      `).join('')}
+      <!-- Satchel of evidence in foreground -->
+      <rect x="170" y="190" width="60" height="38" fill="#3a2410" stroke="#1a1008" stroke-width="1.5" rx="3"/>
+      <rect x="170" y="190" width="60" height="6" fill="#5a3818"/>
+      <line x1="180" y1="186" x2="220" y2="186" stroke="#5a3818" stroke-width="2"/>
+      <text x="200" y="216" text-anchor="middle" fill="#aaff66" font-size="6" font-weight="bold" font-style="italic">3/4 lb ÷ 6</text>
+      ${this._fog(195, 0.18)}
+    `);
+  },
+
+  // Scene 21: Mira's antidote tincture
+  forest_antidote_doses() {
+    return this.scene('#1a1610', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <rect x="0" y="170" width="400" height="80" fill="#3a2818"/>
+      <rect x="0" y="170" width="400" height="4" fill="#5a3a18"/>
+      <!-- Big jar of antidote -->
+      <rect x="160" y="60" width="80" height="120" fill="#aaff66" opacity="0.18" stroke="#3a2010" stroke-width="2" rx="6"/>
+      <ellipse cx="200" cy="64" rx="40" ry="6" fill="#3a2010"/>
+      <ellipse cx="200" cy="60" rx="40" ry="7" fill="#5a3818"/>
+      <!-- Liquid -->
+      <rect x="166" y="72" width="68" height="98" fill="#aaff66" opacity="0.55" rx="3"/>
+      <ellipse cx="200" cy="72" rx="34" ry="4" fill="#ccff88" opacity="0.6"/>
+      <!-- Sparkles -->
+      <circle cx="180" cy="100" r="1.5" fill="#fff" opacity="0.7">
+        <animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="218" cy="135" r="1.5" fill="#fff" opacity="0.7">
+        <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.5s" begin="0.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="200" cy="155" r="1" fill="#fff" opacity="0.6">
+        <animate attributeName="opacity" values="0.4;0.8;0.4" dur="1s" begin="0.7s" repeatCount="indefinite"/>
+      </circle>
+      <!-- Label -->
+      <rect x="170" y="100" width="60" height="32" fill="#eadba0" stroke="#3a2010" stroke-width="0.8"/>
+      <text x="200" y="112" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">ANTIDOTE</text>
+      <text x="200" y="122" text-anchor="middle" fill="#3a2010" font-size="6">6 cups total</text>
+      <text x="200" y="129" text-anchor="middle" fill="#aa2222" font-size="6" font-weight="bold">2/3 cup/dose</text>
+      <!-- Small dose vials -->
+      ${[80, 105, 130, 290, 315, 340].map((x, i) => `
+        <rect x="${x}" y="155" width="14" height="20" fill="#aaff66" opacity="0.45" stroke="#3a2010" stroke-width="0.8" rx="1"/>
+        <rect x="${x - 1}" y="153" width="16" height="3" fill="#3a2818"/>
+      `).join('')}
+      <text x="200" y="200" text-anchor="middle" fill="#aaff66" font-size="9" font-weight="bold" font-style="italic">6 ÷ 2/3 = ?</text>
+      ${this._miniMuffin(40, 175, 0.55)}
+    `);
+  },
+
+  // Scene 22: The hound charges through the wood
+  forest_hound_chase() {
+    return this.scene('#0a0a05', '#020201', `
+      ${this._moon(330, 35, 13)}
+      ${this._treeline(115, 0.95)}
+      <rect x="0" y="135" width="400" height="115" fill="#1a1208"/>
+      ${this._tree(40, 200, 80)}
+      ${this._tree(360, 215, 90)}
+      ${this._tree(85, 180, 65)}
+      ${this._tree(320, 175, 70)}
+      <!-- Phosphorescent wolfhound charging -->
+      <ellipse cx="200" cy="175" rx="60" ry="22" fill="#0a0603"/>
+      <!-- Hound body (low slung, tense) -->
+      <ellipse cx="200" cy="170" rx="48" ry="16" fill="#1a1612" stroke="#aaff66" stroke-width="1.2"/>
+      <!-- Phosphor stripes -->
+      <ellipse cx="180" cy="168" rx="6" ry="4" fill="#aaff66" opacity="0.5">
+        <animate attributeName="opacity" values="0.5;0.85;0.5" dur="1.4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="200" cy="170" rx="6" ry="4" fill="#aaff66" opacity="0.45">
+        <animate attributeName="opacity" values="0.45;0.8;0.45" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="220" cy="168" rx="6" ry="4" fill="#aaff66" opacity="0.5">
+        <animate attributeName="opacity" values="0.5;0.85;0.5" dur="1.5s" begin="0.6s" repeatCount="indefinite"/>
+      </ellipse>
+      <!-- Head -->
+      <ellipse cx="248" cy="160" rx="18" ry="13" fill="#1a1612" stroke="#aaff66" stroke-width="1"/>
+      <!-- Snout -->
+      <path d="M 263 158 L 275 162 L 263 165 Z" fill="#0a0603"/>
+      <!-- Glowing eyes -->
+      <circle cx="251" cy="156" r="2.5" fill="#ffcc44">
+        <animate attributeName="r" values="2.5;3.2;2.5" dur="0.9s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="244" cy="158" r="2.5" fill="#ffcc44">
+        <animate attributeName="r" values="2.5;3.2;2.5" dur="0.9s" begin="0.3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="251" cy="156" r="1.2" fill="#fff"/>
+      <circle cx="244" cy="158" r="1.2" fill="#fff"/>
+      <!-- Teeth -->
+      <polygon points="269,162 271,166 273,162" fill="#fff"/>
+      <polygon points="271,162 273,166 275,162" fill="#fff"/>
+      <!-- Legs (in motion) -->
+      <line x1="170" y1="180" x2="160" y2="200" stroke="#1a1612" stroke-width="3"/>
+      <line x1="190" y1="180" x2="200" y2="200" stroke="#1a1612" stroke-width="3"/>
+      <line x1="220" y1="180" x2="225" y2="195" stroke="#1a1612" stroke-width="3"/>
+      <line x1="240" y1="178" x2="248" y2="195" stroke="#1a1612" stroke-width="3"/>
+      <!-- Speed label -->
+      <text x="200" y="225" text-anchor="middle" fill="#aaff66" font-size="9" font-weight="bold" font-style="italic">5/6 mi ÷ 1/4 hr = ?</text>
+      ${this._fog(160, 0.25)}
+      ${this._miniMuffin(50, 195, 0.5)}
+    `);
+  },
+
+  // Scene 23: Cave dig — Wendell + Muffin clearing the grate
+  forest_cave_dig() {
+    return this.scene('#0a0805', '#020201', `
+      <!-- Cave interior background -->
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <path d="M 0 0 L 0 90 Q 200 -10 400 90 L 400 0 Z" fill="#0a0603"/>
+      <!-- Cave floor with stone tiles -->
+      <rect x="0" y="180" width="400" height="70" fill="#1e1610"/>
+      ${[0,55,110,165,220,275,330].map(x => `<rect x="${x}" y="183" width="53" height="32" fill="#160e08" stroke="#0a0603" stroke-width="0.5"/>`).join('')}
+      <!-- Iron grate (foreground) -->
+      <rect x="120" y="115" width="160" height="80" fill="#2a1f12" stroke="#1a1008" stroke-width="3"/>
+      ${[140, 170, 200, 230, 260].map(x => `<line x1="${x}" y1="115" x2="${x}" y2="195" stroke="#3a2410" stroke-width="2"/>`).join('')}
+      ${[135, 155, 175].map(y => `<line x1="120" y1="${y}" x2="280" y2="${y}" stroke="#3a2410" stroke-width="2"/>`).join('')}
+      <!-- Petra behind the grate -->
+      <path d="M 195 130 L 188 175 L 212 175 L 205 130 Z" fill="#5a3a18"/>
+      <circle cx="200" cy="123" r="7" fill="#d4b098"/>
+      <ellipse cx="200" cy="118" rx="7" ry="3" fill="#3a2418"/>
+      <!-- Wendell digging on left -->
+      <path d="M 60 105 L 50 195 L 90 195 L 80 105 Z" fill="#3a4818"/>
+      <circle cx="70" cy="98" r="11" fill="#d4b098"/>
+      <!-- Shovel -->
+      <line x1="85" y1="115" x2="120" y2="180" stroke="#5a3818" stroke-width="3"/>
+      <polygon points="116,178 124,178 124,192 116,192" fill="#5a5060" stroke="#1a1008" stroke-width="0.8"/>
+      <!-- Muffin digging on right -->
+      ${this._miniMuffin(305, 155, 0.6, true)}
+      <line x1="295" y1="180" x2="280" y2="195" stroke="#5a3818" stroke-width="2.5"/>
+      <polygon points="278,193 286,193 286,205 278,205" fill="#5a5060" stroke="#1a1008" stroke-width="0.8"/>
+      <!-- Sparks/dust around dig -->
+      ${[ [105, 200], [110, 192], [98, 195], [275, 200], [270, 188], [285, 195] ].map(([x, y], i) => `<circle cx="${x}" cy="${y}" r="${1 + (i % 2)}" fill="#aaff66" opacity="${0.4 + (i % 3) * 0.1}"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="${1 + i * 0.2}s" repeatCount="indefinite"/></circle>`).join('')}
+      <!-- Rate label -->
+      <text x="200" y="222" text-anchor="middle" fill="#aaff66" font-size="9" font-weight="bold" font-style="italic">Wendell 1/4 + Muffin 1/6 = ?</text>
+    `);
+  },
+
+  // Scene 24: Cave wall clock countdown
+  forest_moon_clock() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <!-- Cave wall with mounted clock -->
+      <rect x="0" y="0" width="400" height="250" fill="#0a0603"/>
+      <ellipse cx="200" cy="125" rx="190" ry="120" fill="#1e1610" opacity="0.9"/>
+      <!-- Clock on wall -->
+      <circle cx="200" cy="120" r="60" fill="#3a2818" stroke="#aa8838" stroke-width="3"/>
+      <circle cx="200" cy="120" r="52" fill="#eadba0" stroke="#1a1008" stroke-width="1.5"/>
+      <!-- Roman numerals -->
+      <text x="200" y="78" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold">XII</text>
+      <text x="240" y="124" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold">III</text>
+      <text x="200" y="170" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold">VI</text>
+      <text x="160" y="124" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold">IX</text>
+      <!-- Hands at 10:55 -->
+      <line x1="200" y1="120" x2="195" y2="78" stroke="#1a1008" stroke-width="3"/>
+      <line x1="200" y1="120" x2="172" y2="116" stroke="#1a1008" stroke-width="2.2"/>
+      <circle cx="200" cy="120" r="3" fill="#1a1008"/>
+      <!-- Time labels -->
+      <text x="200" y="200" text-anchor="middle" fill="#aaff66" font-size="9" font-weight="bold" font-style="italic">now: 10:55 PM</text>
+      <text x="200" y="215" text-anchor="middle" fill="#aa2222" font-size="9" font-weight="bold" font-style="italic">moon peak: 11:43 PM</text>
+      <text x="200" y="234" text-anchor="middle" fill="#7a1818" font-size="11" font-weight="bold">minutes remaining = ?</text>
+      <!-- Dripping water for atmosphere -->
+      <line x1="50" y1="20" x2="50" y2="40" stroke="#5588aa" stroke-width="1" opacity="0.5"/>
+      <ellipse cx="50" cy="42" rx="2" ry="3" fill="#5588aa" opacity="0.4"/>
+      <line x1="350" y1="15" x2="350" y2="35" stroke="#5588aa" stroke-width="1" opacity="0.4"/>
+    `);
+  },
+
+  // Scene 25: Final confrontation with Crooke at cave mouth, dawn breaking
+  forest_confrontation() {
+    return this.scene('#1a1410', '#040603', `
+      <!-- Predawn sky -->
+      <rect x="0" y="0" width="400" height="120" fill="#2a1f12"/>
+      <rect x="0" y="105" width="400" height="20" fill="#553828" opacity="0.7"/>
+      ${this._treeline(135, 0.95)}
+      <!-- Cave mouth -->
+      <ellipse cx="200" cy="155" rx="100" ry="42" fill="#0a0603"/>
+      <ellipse cx="200" cy="155" rx="92" ry="36" fill="#000"/>
+      <!-- Cave floor -->
+      <rect x="0" y="175" width="400" height="75" fill="#1e1812"/>
+      <!-- Crooke (the villain), arms raised, defeated -->
+      <path d="M 230 130 L 218 200 L 258 200 L 245 130 Z" fill="#3a2818"/>
+      <rect x="225" y="135" width="22" height="40" fill="#4a3220"/>
+      <circle cx="236" cy="120" r="10" fill="#c9a979"/>
+      <ellipse cx="236" cy="115" rx="9" ry="4" fill="#5a3818"/>
+      <circle cx="232" cy="121" r="0.8" fill="#1a1008"/>
+      <circle cx="240" cy="121" r="0.8" fill="#1a1008"/>
+      <path d="M 232 128 Q 236 130 240 128" fill="none" stroke="#5a2018" stroke-width="0.6"/>
+      <!-- Hands raised in surrender -->
+      <rect x="208" y="105" width="14" height="26" fill="#4a3220" rx="3" transform="rotate(-25 215 118)"/>
+      <rect x="248" y="105" width="14" height="26" fill="#4a3220" rx="3" transform="rotate(25 255 118)"/>
+      <circle cx="208" cy="100" r="5" fill="#c9a979"/>
+      <circle cx="262" cy="100" r="5" fill="#c9a979"/>
+      <!-- Constable behind Crooke with shackles -->
+      <path d="M 290 135 L 282 200 L 312 200 L 305 135 Z" fill="#1e2a4a"/>
+      <circle cx="295" cy="125" r="9" fill="#d4b098"/>
+      <ellipse cx="295" cy="119" rx="9" ry="4" fill="#1a1008"/>
+      <!-- Shackles in hand -->
+      <circle cx="288" cy="155" r="4" fill="none" stroke="#5a5060" stroke-width="1.5"/>
+      <circle cx="282" cy="161" r="4" fill="none" stroke="#5a5060" stroke-width="1.5"/>
+      <!-- Notebook on ground (open) -->
+      <rect x="155" y="195" width="40" height="20" fill="#5a3a1c" stroke="#1a1008" stroke-width="1.2"/>
+      <rect x="158" y="198" width="34" height="14" fill="#eadba0"/>
+      <text x="175" y="208" text-anchor="middle" fill="#7a1818" font-size="5" font-weight="bold">3,600 g</text>
+      <!-- Calculation in air -->
+      <rect x="40" y="35" width="170" height="50" fill="#eadba0" opacity="0.92" stroke="#aa2222" stroke-width="1.5" rx="3"/>
+      <text x="125" y="55" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold" font-family="serif">CROOKE'S CUT:</text>
+      <text x="125" y="74" text-anchor="middle" fill="#7a1818" font-size="13" font-weight="bold" font-family="serif">3,600 × 5/12 = ?</text>
+      <!-- Muffin proud -->
+      ${this._miniMuffin(50, 165, 0.7)}
+    `);
+  },
+
 };
 
 // Map scene names to problem indices per case
@@ -2263,5 +3115,36 @@ const SCENE_MAP = {
     'mint_interview_pip',     // 9: Place value (7 in 63,472.85)
     'mint_hidden_note',       // 10: Fraction → decimal (3/8)
     'mint_confrontation'      // 11: Final proof (0.375 × 1,200)
+  ],
+  beast_hollowmere: [
+    // Night One — Arrival in Hollowmere
+    'forest_inn_arrival',         // 1: Howell at the inn (time conv)
+    'forest_tally_sheet',         // 2: Tally sheet (frac add like)
+    'forest_mira_cottage',        // 3: Mira's herb cottage (LCD)
+    'forest_constable_ledger',    // 4: Constable ledger (3-frac add)
+    'forest_petra_clock',         // 5: Mira's worry clock (days→hr)
+    'forest_shuttered_village',   // 6: Closed shutters (frac × whole)
+    // Night Two — The Investigation
+    'forest_attack_map',          // 7: Map of two attack sites
+    'forest_logging_trail',       // 8: Walking the trail (mixed sub)
+    'forest_marrowed_cabin',      // 9: Marrowed Man's cabin
+    'forest_clawprint',           // 10: Pressed claw print (kg→g)
+    'forest_crooke_ledger',       // 11: Crooke's expense ledger
+    'forest_watch_clock',         // 12: Night watch hours
+    'forest_gamekeeper_log',      // 13: Wendell's patrol log
+    // Night Three — The Vanishing
+    'forest_moonless_gap',        // 14: Cloud-covered moon (frac × whole)
+    'forest_paw_fork',            // 15: Forked paw prints
+    'forest_hollow_notebook',     // 16: Notebook in stump
+    'forest_phosphor_recipe',     // 17: Phosphor recipe (frac × frac)
+    'forest_cave_map',            // 18: Hidden cave map (m→km)
+    'forest_inn_alibi',           // 19: Crooke's alibi check
+    // Night Four — The Revelation
+    'forest_search_teams',        // 20: 6 search teams divide evidence
+    'forest_antidote_doses',      // 21: Mira's antidote tincture
+    'forest_hound_chase',         // 22: The hound charges (frac ÷ frac)
+    'forest_cave_dig',            // 23: Digging out the grate (work)
+    'forest_moon_clock',          // 24: Cave wall-clock (time conv)
+    'forest_confrontation'        // 25: Final confrontation with Crooke
   ]
 };

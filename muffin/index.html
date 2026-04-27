@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Muffin's Mystery Agency</title>
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <!-- ==================== TITLE SCREEN ==================== -->
@@ -82,9 +82,20 @@
     <!-- Clue board (bottom) -->
     <div class="clue-board">
       <div class="clue-board-label">Evidence Board</div>
+      <div id="clue-board-chapter" class="clue-board-chapter" style="display:none;"></div>
       <div id="clue-cards" class="clue-cards">
         <!-- Clue cards populated by game.js -->
       </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER BREAK OVERLAY ==================== -->
+  <div id="chapter-break-overlay" class="chapter-break" style="display:none;">
+    <div class="chapter-break-content">
+      <div class="chapter-break-flourish">&#9670;</div>
+      <h2 id="chapter-break-title" class="chapter-break-title"></h2>
+      <p class="chapter-break-subtitle">A new chapter begins...</p>
+      <button id="btn-chapter-continue" class="btn btn-gold">Continue &rarr;</button>
     </div>
   </div>
 
@@ -139,9 +150,9 @@
   </div>
 
   <!-- Scripts -->
-  <script src="problems.js?v=7"></script>
-  <script src="narratives.js?v=7"></script>
-  <script src="illustrations.js?v=7"></script>
-  <script src="game.js?v=7"></script>
+  <script src="problems.js?v=8"></script>
+  <script src="narratives.js?v=8"></script>
+  <script src="illustrations.js?v=8"></script>
+  <script src="game.js?v=8"></script>
 </body>
 </html>
