@@ -2436,13 +2436,88 @@ const Illustrations = {
       <rect x="140" y="135" width="60" height="22" fill="#eadba0" stroke="#6a3818" stroke-width="0.8" transform="rotate(-3 170 146)"/>
       <text x="170" y="146" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold" transform="rotate(-3 170 146)">1/3 + 1/4</text>
       <text x="170" y="153" text-anchor="middle" fill="#aa2222" font-size="5" font-weight="bold" transform="rotate(-3 170 153)">LCD = ?</text>
-      <!-- Mira (worried, in back) -->
-      <path d="M 260 110 L 250 188 L 290 188 L 280 110 Z" fill="#5a4818"/>
-      <circle cx="270" cy="100" r="9" fill="#d4b098"/>
-      <ellipse cx="270" cy="92" rx="9" ry="4" fill="#5a3818"/>
-      <circle cx="266" cy="101" r="0.8" fill="#2a1a10"/>
-      <circle cx="274" cy="101" r="0.8" fill="#2a1a10"/>
-      <path d="M 266 107 Q 270 107 274 107" fill="none" stroke="#5a2018" stroke-width="0.6"/>
+      <!-- Mira Vell — village healer, distraught mother of Petra -->
+      <!-- Skirt (flares slightly toward floor) -->
+      <path d="M 250 138 Q 247 165 244 188 L 296 188 Q 293 165 290 138 Z" fill="#4a3820"/>
+      <!-- Skirt fold highlight -->
+      <path d="M 268 138 Q 267 162 266 188 L 274 188 Q 273 162 272 138 Z" fill="#5a4828" opacity="0.55"/>
+      <!-- Bodice (darker, tighter under apron) -->
+      <path d="M 258 115 L 252 138 L 288 138 L 282 115 Z" fill="#3a2818"/>
+      <!-- Apron over bodice + skirt -->
+      <path d="M 260 119 L 256 184 L 284 184 L 280 119 Z" fill="#d4c89a"/>
+      <!-- Apron neck strap -->
+      <path d="M 263 119 L 268 113 L 272 113 L 277 119 Z" fill="#d4c89a"/>
+      <!-- Apron sash + knot -->
+      <rect x="252" y="142" width="36" height="3" fill="#aa8838"/>
+      <rect x="269" y="143" width="6" height="6" fill="#aa8838"/>
+      <!-- Apron pocket with herb sprig -->
+      <rect x="274" y="156" width="9" height="9" fill="#c4b88a" stroke="#aa9870" stroke-width="0.4" rx="0.5"/>
+      <line x1="278" y1="156" x2="276" y2="148" stroke="#4a5818" stroke-width="0.7"/>
+      <ellipse cx="277" cy="151" rx="2" ry="1" fill="#5a6828"/>
+      <ellipse cx="276" cy="148" rx="1.2" ry="0.8" fill="#6a7838"/>
+      <!-- Herbal stain on apron -->
+      <ellipse cx="263" cy="166" rx="2.5" ry="1.5" fill="#5a6828" opacity="0.45"/>
+
+      <!-- Sleeves (bodice continues into arms) -->
+      <path d="M 256 119 L 252 148 L 258 152 L 264 148 L 262 119 Z" fill="#3a2818"/>
+      <path d="M 284 119 L 288 148 L 282 152 L 276 148 L 278 119 Z" fill="#3a2818"/>
+      <!-- Cuff trim -->
+      <rect x="252" y="146" width="12" height="2" fill="#5a3818"/>
+      <rect x="276" y="146" width="12" height="2" fill="#5a3818"/>
+      <!-- Hands clasped at front of apron -->
+      <ellipse cx="270" cy="152" rx="10" ry="4.5" fill="#d4b098"/>
+      <line x1="266" y1="151" x2="274" y2="151" stroke="#a48068" stroke-width="0.5"/>
+      <line x1="270" y1="148" x2="270" y2="155" stroke="#a48068" stroke-width="0.4"/>
+
+      <!-- Neck -->
+      <rect x="266" y="108" width="8" height="9" fill="#d4b098"/>
+      <path d="M 266 113 Q 270 114 274 113" stroke="#a48068" stroke-width="0.5" fill="none" opacity="0.7"/>
+
+      <!-- Head (oval, weathered tan) -->
+      <ellipse cx="270" cy="100" rx="10.5" ry="12" fill="#d4b098"/>
+      <!-- Cheek warmth -->
+      <ellipse cx="262" cy="103" rx="2" ry="2.5" fill="#c48870" opacity="0.45"/>
+      <ellipse cx="278" cy="103" rx="2" ry="2.5" fill="#c48870" opacity="0.45"/>
+
+      <!-- Hair: low bun + side frame, gray-streaked -->
+      <ellipse cx="270" cy="91" rx="10.5" ry="5.5" fill="#3a2818"/>
+      <ellipse cx="270" cy="88" rx="8" ry="3" fill="#4a3018"/>
+      <path d="M 261 95 Q 258 105 261 112 L 264 112 Q 264 102 264 96 Z" fill="#3a2818"/>
+      <path d="M 279 95 Q 282 105 279 112 L 276 112 Q 276 102 276 96 Z" fill="#3a2818"/>
+      <!-- Gray streaks (older, weathered) -->
+      <path d="M 264 92 Q 263 99 265 105" stroke="#a89880" stroke-width="0.6" fill="none"/>
+      <path d="M 276 93 Q 277 99 275 105" stroke="#a89880" stroke-width="0.6" fill="none"/>
+      <!-- Loose strand falling beside face -->
+      <path d="M 261 99 Q 258 109 257 115" stroke="#3a2818" stroke-width="0.7" fill="none"/>
+
+      <!-- Eyebrows (distressed: slight upward tilt at center) -->
+      <path d="M 262 96 Q 265 94 268 96" stroke="#3a2818" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M 272 96 Q 275 94 278 96" stroke="#3a2818" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+      <!-- Eyes (almond, sad) -->
+      <ellipse cx="265" cy="100" rx="2" ry="1.3" fill="#fff"/>
+      <circle cx="265" cy="100.3" r="1" fill="#3a2818"/>
+      <circle cx="265.3" cy="100" r="0.3" fill="#fff"/>
+      <path d="M 263 99 Q 265 98 267 99" stroke="#5a4030" stroke-width="0.5" fill="none"/>
+      <ellipse cx="275" cy="100" rx="2" ry="1.3" fill="#fff"/>
+      <circle cx="275" cy="100.3" r="1" fill="#3a2818"/>
+      <circle cx="275.3" cy="100" r="0.3" fill="#fff"/>
+      <path d="M 273 99 Q 275 98 277 99" stroke="#5a4030" stroke-width="0.5" fill="none"/>
+
+      <!-- Tear streak from left eye -->
+      <path d="M 264 102 Q 263 105 263 108" stroke="#88aadd" stroke-width="0.7" fill="none" opacity="0.85"/>
+      <ellipse cx="263" cy="108" rx="0.7" ry="1.1" fill="#88bbee" opacity="0.85"/>
+
+      <!-- Nose -->
+      <path d="M 270 100 Q 269 104 270 107" stroke="#a48068" stroke-width="0.5" fill="none"/>
+      <line x1="269" y1="106.5" x2="271" y2="106.5" stroke="#a48068" stroke-width="0.5"/>
+
+      <!-- Mouth (slight downturn, pursed) -->
+      <path d="M 267 110 Q 270 109.5 273 110" stroke="#7a3818" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+
+      <!-- Ears -->
+      <ellipse cx="260" cy="101" rx="1.4" ry="2" fill="#c49880"/>
+      <ellipse cx="280" cy="101" rx="1.4" ry="2" fill="#c49880"/>
       ${this._miniMuffin(40, 165, 0.55)}
     `);
   },
