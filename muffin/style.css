@@ -343,26 +343,34 @@ body {
   color: var(--text-dim);
 }
 
-/* Game main layout — storybook style */
+/* Game main layout — vertical storybook flow:
+   scene → Detective's Notebook → math problem.
+   Story-first reading order; everything full width inside max-width 960. */
 .game-main {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 18px;
   width: 100%;
   max-width: 960px;
   flex: 1;
   min-height: 0;
 }
 
-/* Storybook panel (illustration + narrative) */
+/* Storybook panel (illustration + narrative) — sits at top, full width */
 .storybook-panel {
-  flex: 1.2;
-  min-width: 0;
+  width: 100%;
+  flex: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .scene-illustration {
+  /* Cap the scene at a postcard-sized banner so it doesn't push the
+     notebook and problem panel offscreen. The 8:5 SVG ratio is preserved. */
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px var(--shadow);
@@ -414,13 +422,17 @@ body {
   min-height: 50px;
 }
 
-/* Problem panel */
+/* Problem panel — sits below the storybook panel, story-first vertical flow */
 .problem-panel {
-  flex: 0.8;
-  min-width: 0;
+  width: 100%;
+  flex: none;
 }
 
 .problem-card {
+  /* Constrain the form width so input + button don't sprawl across 960px,
+     while still letting the panel sit naturally below the notebook. */
+  max-width: 760px;
+  margin: 0 auto;
   background: var(--navy-light);
   border: 1px solid rgba(226, 183, 20, 0.3);
   border-radius: 8px;
@@ -839,9 +851,7 @@ body {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 700px) {
-  .game-main {
-    flex-direction: column;
-  }
+  /* .game-main is already flex-column at all widths now */
 
   .game-title {
     font-size: 2.2rem;
@@ -864,10 +874,6 @@ body {
   .game-top-bar {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .storybook-panel {
-    flex: none;
   }
 }
 
