@@ -2365,10 +2365,66 @@ const Illustrations = {
       <circle cx="178" cy="135" r="22" fill="#ffaa33" opacity="0.12"/>
       <!-- Foreground ground -->
       <rect x="0" y="160" width="400" height="90" fill="#1a1410"/>
-      <!-- Howell Greaves silhouette by door (cloaked elder) -->
-      <path d="M 230 105 L 215 158 L 250 158 L 245 105 Z" fill="#1a1208"/>
-      <circle cx="237" cy="100" r="8" fill="#3a3018"/>
-      <path d="M 229 96 L 246 96 L 247 102 L 228 102 Z" fill="#1a1208"/>
+      <!-- Howell Greaves — village elder, weary, waiting at the inn door -->
+      <!-- Boots peeking from under coat -->
+      <ellipse cx="227" cy="158" rx="4.5" ry="1.8" fill="#1a0a04"/>
+      <ellipse cx="245" cy="158" rx="4.5" ry="1.8" fill="#1a0a04"/>
+      <rect x="223" y="151" width="9" height="8" fill="#2a1408" rx="0.5"/>
+      <rect x="241" y="151" width="9" height="8" fill="#2a1408" rx="0.5"/>
+      <!-- Long heavy travelling cloak -->
+      <path d="M 223 100 L 213 156 L 257 156 L 247 100 Z" fill="#2a1810"/>
+      <!-- Coat center fold -->
+      <line x1="235" y1="102" x2="235" y2="156" stroke="#1a1008" stroke-width="0.7" opacity="0.7"/>
+      <!-- Coat trim along bottom -->
+      <path d="M 213 156 L 257 156 L 256 158 L 214 158 Z" fill="#3a2418"/>
+      <!-- Heavy left sleeve -->
+      <path d="M 217 102 L 211 138 L 219 138 L 222 102 Z" fill="#2a1810"/>
+      <!-- Right sleeve (holding walking stick) -->
+      <path d="M 248 102 L 254 138 L 246 138 L 245 102 Z" fill="#2a1810"/>
+      <!-- Hands -->
+      <ellipse cx="215" cy="142" rx="3.5" ry="2.5" fill="#c49880"/>
+      <ellipse cx="250" cy="142" rx="3.5" ry="2.5" fill="#c49880"/>
+      <!-- Walking stick / cane -->
+      <line x1="252" y1="142" x2="256" y2="158" stroke="#3a2010" stroke-width="2"/>
+      <circle cx="252" cy="135" r="3" fill="#5a3818" stroke="#3a2010" stroke-width="0.5"/>
+      <!-- Brass clasp at neck -->
+      <circle cx="235" cy="103" r="1.5" fill="#aa8838" stroke="#5a3010" stroke-width="0.4"/>
+      <!-- Neck -->
+      <rect x="232" y="92" width="6" height="9" fill="#c49880"/>
+      <!-- Head -->
+      <ellipse cx="235" cy="86" rx="9" ry="9.5" fill="#c49880"/>
+      <!-- Cheek warmth from inn lantern -->
+      <ellipse cx="229" cy="89" rx="1.8" ry="2" fill="#aa6850" opacity="0.5"/>
+      <ellipse cx="241" cy="89" rx="1.8" ry="2" fill="#aa6850" opacity="0.5"/>
+      <!-- Bushy white-grey beard (lower face) -->
+      <path d="M 228 88 Q 226 104 235 107 Q 244 104 242 88 Q 240 94 235 94 Q 230 94 228 88 Z" fill="#d8d0c0"/>
+      <path d="M 230 92 Q 230 102 235 104 Q 240 102 240 92" fill="#c8c0b0" opacity="0.6"/>
+      <!-- Mustache (over beard) -->
+      <path d="M 229 87 Q 235 84 241 87" stroke="#d8d0c0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Eyes (weary, deep-set) -->
+      <ellipse cx="231" cy="83" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="231" cy="83" r="0.6" fill="#3a2818"/>
+      <ellipse cx="239" cy="83" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="239" cy="83" r="0.6" fill="#3a2818"/>
+      <!-- Bushy white-grey eyebrows (stern) -->
+      <path d="M 228 80 Q 231 78 234 80" stroke="#a89880" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M 236 80 Q 239 78 242 80" stroke="#a89880" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <!-- Crow's feet (age lines) -->
+      <line x1="225" y1="83" x2="227" y2="82" stroke="#a48068" stroke-width="0.4"/>
+      <line x1="225" y1="85" x2="227" y2="85" stroke="#a48068" stroke-width="0.4"/>
+      <line x1="243" y1="83" x2="245" y2="82" stroke="#a48068" stroke-width="0.4"/>
+      <line x1="243" y1="85" x2="245" y2="85" stroke="#a48068" stroke-width="0.4"/>
+      <!-- Forehead worry line -->
+      <path d="M 229 78 Q 235 77 241 78" stroke="#a48068" stroke-width="0.5" fill="none" opacity="0.6"/>
+      <!-- Nose -->
+      <path d="M 235 85 Q 234 89 235 91" stroke="#a48068" stroke-width="0.5" fill="none"/>
+      <!-- Ears -->
+      <ellipse cx="226" cy="86" rx="1.2" ry="1.7" fill="#b48870"/>
+      <ellipse cx="244" cy="86" rx="1.2" ry="1.7" fill="#b48870"/>
+      <!-- Felt cap (brown wool, slightly tilted) -->
+      <ellipse cx="235" cy="76" rx="11" ry="3.5" fill="#3a2010"/>
+      <path d="M 224 76 Q 235 72 246 76 L 246 79 Q 235 81 224 79 Z" fill="#4a2818"/>
+      <path d="M 225 79 Q 235 81 245 79 L 244 82 Q 235 83 226 82 Z" fill="#2a1408"/>
       <!-- Fog band -->
       ${this._fog(155, 0.22)}
       <!-- Muffin (post-coach arrival, traveling cloak feel) -->
@@ -2705,9 +2761,61 @@ const Illustrations = {
       <text x="270" y="100" fill="#eaeae0" font-size="7" font-weight="bold">?</text>
       <text x="200" y="155" text-anchor="middle" fill="#eaeae0" font-size="7">total: 5/6 mi</text>
       <text x="200" y="168" text-anchor="middle" fill="#aaff66" font-size="6" font-weight="bold" font-style="italic">"PAINT"</text>
-      <!-- Marrowed Man (silhouette in shadow corner) -->
-      <path d="M 340 110 L 333 195 L 360 195 L 355 110 Z" fill="#0a0603"/>
-      <circle cx="346" cy="100" r="8" fill="#1a1208"/>
+      <!-- Tom Reedy, the Marrowed Man — maimed survivor in shadow corner -->
+      <!-- Boots -->
+      <ellipse cx="343" cy="195" rx="4" ry="1.5" fill="#0a0603"/>
+      <ellipse cx="356" cy="195" rx="4" ry="1.5" fill="#0a0603"/>
+      <rect x="340" y="188" width="6" height="8" fill="#1a1008"/>
+      <rect x="353" y="188" width="6" height="8" fill="#1a1008"/>
+      <!-- Tattered coat -->
+      <path d="M 340 110 L 333 188 L 365 188 L 358 110 Z" fill="#2a1810"/>
+      <!-- Coat tear (jagged hem) -->
+      <path d="M 333 188 L 336 192 L 339 188 L 342 192 L 345 188 L 348 192 L 351 188 L 354 192 L 357 188 L 360 192 L 363 188 L 365 188" fill="#1a0a04"/>
+      <!-- Bandaged left arm (in sling) -->
+      <path d="M 333 118 L 326 145 L 332 152 L 340 145 Z" fill="#2a1810"/>
+      <rect x="328" y="125" width="9" height="3" fill="#d4c89a" opacity="0.85"/>
+      <rect x="326" y="138" width="11" height="3" fill="#d4c89a" opacity="0.85"/>
+      <rect x="324" y="148" width="13" height="3" fill="#d4c89a" opacity="0.85"/>
+      <!-- Hand poking from bandages -->
+      <ellipse cx="332" cy="155" rx="3" ry="2.5" fill="#a8806a"/>
+      <!-- Right arm (uninjured) -->
+      <path d="M 358 118 L 366 148 L 360 154 L 354 148 Z" fill="#2a1810"/>
+      <ellipse cx="362" cy="156" rx="3.5" ry="2.5" fill="#c49880"/>
+      <!-- Chalk in right hand (he was sketching the slate) -->
+      <rect x="361" y="158" width="2" height="4" fill="#eadba0" transform="rotate(20 362 160)"/>
+      <!-- Neck (wrapped in bandage) -->
+      <rect x="343" y="93" width="6" height="9" fill="#a8806a"/>
+      <rect x="341" y="100" width="10" height="3" fill="#d4c89a"/>
+      <!-- Head -->
+      <ellipse cx="346" cy="86" rx="9" ry="9.5" fill="#a8806a"/>
+      <!-- Diagonal claw scar across face -->
+      <line x1="340" y1="80" x2="350" y2="92" stroke="#7a3818" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="341" y1="79" x2="351" y2="91" stroke="#5a1810" stroke-width="0.5" stroke-linecap="round"/>
+      <!-- Bandage diagonal across head -->
+      <path d="M 339 81 L 354 89 L 354 92 L 339 84 Z" fill="#d4c89a"/>
+      <!-- Eyes (vacant, traumatized — pupils tiny, surrounded by white) -->
+      <ellipse cx="343" cy="86" rx="1.6" ry="1.1" fill="#fff"/>
+      <circle cx="343" cy="86" r="0.4" fill="#3a2818"/>
+      <ellipse cx="349" cy="86" rx="1.6" ry="1.1" fill="#fff"/>
+      <circle cx="349" cy="86" r="0.4" fill="#3a2818"/>
+      <!-- Dark circles under eyes (no sleep) -->
+      <path d="M 341 89 Q 343 90 345 89" stroke="#5a3010" stroke-width="0.4" fill="none" opacity="0.7"/>
+      <path d="M 347 89 Q 349 90 351 89" stroke="#5a3010" stroke-width="0.4" fill="none" opacity="0.7"/>
+      <!-- Gaunt eyebrows (raised in fear) -->
+      <path d="M 341 82 Q 343 80 346 82" stroke="#3a2010" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+      <path d="M 347 82 Q 350 80 352 82" stroke="#3a2010" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+      <!-- Hollow cheeks -->
+      <path d="M 339 88 Q 339 92 341 94" stroke="#7a5040" stroke-width="0.4" fill="none" opacity="0.6"/>
+      <path d="M 353 88 Q 353 92 351 94" stroke="#7a5040" stroke-width="0.4" fill="none" opacity="0.6"/>
+      <!-- Nose -->
+      <path d="M 346 86 Q 345 89 346 91" stroke="#7a5040" stroke-width="0.5" fill="none"/>
+      <!-- Mouth (thin line, mute) -->
+      <path d="M 343 94 L 349 94" stroke="#5a2810" stroke-width="0.7" stroke-linecap="round"/>
+      <!-- Ears -->
+      <ellipse cx="337" cy="87" rx="1.2" ry="1.7" fill="#988060"/>
+      <ellipse cx="355" cy="87" rx="1.2" ry="1.7" fill="#988060"/>
+      <!-- Tousled grey-brown hair -->
+      <path d="M 337 78 Q 339 73 343 73 Q 346 71 350 73 Q 353 73 355 78 Q 354 81 350 81 Q 348 78 345 79 Q 341 78 339 81 Q 337 81 337 78 Z" fill="#5a4830"/>
       ${this._miniMuffin(35, 165, 0.55)}
     `);
   },
@@ -2830,13 +2938,70 @@ const Illustrations = {
       <text x="252" y="172" text-anchor="end" fill="#3a2010" font-size="7" font-weight="bold" transform="rotate(-3 252 172)">5/6 mi</text>
       <text x="148" y="182" fill="#3a2010" font-size="6" transform="rotate(-3 148 182)">accounted:</text>
       <text x="252" y="182" text-anchor="end" fill="#aa2222" font-size="7" font-weight="bold" transform="rotate(-3 252 182)">2/3 mi</text>
-      <!-- Wendell -->
-      <path d="M 320 110 L 305 200 L 345 200 L 332 110 Z" fill="#3a4818"/>
-      <circle cx="325" cy="100" r="11" fill="#d4b098"/>
-      <ellipse cx="325" cy="92" rx="11" ry="4" fill="#5a3818"/>
-      <circle cx="321" cy="101" r="0.8" fill="#2a1a10"/>
-      <circle cx="329" cy="101" r="0.8" fill="#2a1a10"/>
-      <path d="M 321 107 Q 325 109 329 107" fill="none" stroke="#5a2018" stroke-width="0.5"/>
+      <!-- Wendell Skye — gamekeeper, gentle giant, head bowed in apology -->
+      <!-- Heavy boots -->
+      <ellipse cx="316" cy="200" rx="6" ry="2.5" fill="#1a0a04"/>
+      <ellipse cx="334" cy="200" rx="6" ry="2.5" fill="#1a0a04"/>
+      <rect x="311" y="190" width="11" height="10" fill="#2a1408" rx="1"/>
+      <rect x="328" y="190" width="11" height="10" fill="#2a1408" rx="1"/>
+      <!-- Trousers -->
+      <rect x="312" y="160" width="11" height="32" fill="#3a2410"/>
+      <rect x="328" y="160" width="11" height="32" fill="#3a2410"/>
+      <!-- Belt -->
+      <rect x="308" y="155" width="38" height="6" fill="#5a3818"/>
+      <rect x="324" y="156" width="6" height="4" fill="#aa8838"/>
+      <!-- Long woolen gamekeeper coat (forest green) -->
+      <path d="M 304 105 L 298 165 L 354 165 L 348 105 Z" fill="#3a4820"/>
+      <!-- Coat lapels (darker, V-shape) -->
+      <polygon points="318,108 314,140 322,138" fill="#2a3818"/>
+      <polygon points="334,108 338,140 330,138" fill="#2a3818"/>
+      <!-- Buttons down the front -->
+      <circle cx="326" cy="118" r="1.1" fill="#aa8838"/>
+      <circle cx="326" cy="128" r="1.1" fill="#aa8838"/>
+      <circle cx="326" cy="138" r="1.1" fill="#aa8838"/>
+      <circle cx="326" cy="148" r="1.1" fill="#aa8838"/>
+      <!-- Shoulder pads / epaulettes -->
+      <rect x="304" y="105" width="14" height="6" fill="#4a5828"/>
+      <rect x="334" y="105" width="14" height="6" fill="#4a5828"/>
+      <!-- Arms hanging down -->
+      <rect x="302" y="111" width="9" height="44" fill="#3a4820"/>
+      <rect x="341" y="111" width="9" height="44" fill="#3a4820"/>
+      <!-- Cuffs (darker trim) -->
+      <rect x="301" y="148" width="11" height="4" fill="#2a3818"/>
+      <rect x="340" y="148" width="11" height="4" fill="#2a3818"/>
+      <!-- Hands clasped in front (apologetic) -->
+      <ellipse cx="320" cy="160" rx="5" ry="3.5" fill="#d4b098"/>
+      <ellipse cx="332" cy="160" rx="5" ry="3.5" fill="#d4b098"/>
+      <line x1="320" y1="160" x2="332" y2="160" stroke="#a48068" stroke-width="0.5"/>
+      <!-- Neck -->
+      <rect x="322" y="98" width="8" height="9" fill="#d4b098"/>
+      <!-- Head -->
+      <ellipse cx="326" cy="91" rx="11" ry="11.5" fill="#d4b098"/>
+      <!-- Cheek warmth -->
+      <ellipse cx="319" cy="94" rx="2" ry="2.2" fill="#c48870" opacity="0.5"/>
+      <ellipse cx="333" cy="94" rx="2" ry="2.2" fill="#c48870" opacity="0.5"/>
+      <!-- Gamekeeper's flat cap (brown wool) -->
+      <ellipse cx="326" cy="80" rx="13" ry="4" fill="#3a2410"/>
+      <path d="M 313 80 Q 326 76 339 80 L 339 84 Q 326 86 313 84 Z" fill="#4a3018"/>
+      <path d="M 314 84 Q 326 86 338 84 L 336 87 Q 326 88 316 87 Z" fill="#2a1808"/>
+      <!-- Bushy brown beard -->
+      <path d="M 318 96 Q 318 109 326 111 Q 334 109 334 96 Q 332 99 326 99 Q 320 99 318 96 Z" fill="#5a3818"/>
+      <path d="M 320 100 Q 322 108 326 109 Q 330 108 332 100" fill="#4a2810" opacity="0.7"/>
+      <!-- Mustache over beard -->
+      <path d="M 320 95 Q 326 92 332 95" stroke="#5a3818" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- Eyes (looking down, apologetic) -->
+      <ellipse cx="322" cy="89" rx="1.6" ry="1" fill="#fff"/>
+      <circle cx="322" cy="89.5" r="0.7" fill="#3a2818"/>
+      <ellipse cx="330" cy="89" rx="1.6" ry="1" fill="#fff"/>
+      <circle cx="330" cy="89.5" r="0.7" fill="#3a2818"/>
+      <!-- Eyebrows (bushy, slightly downturned) -->
+      <path d="M 318 86 Q 322 85 326 86" stroke="#3a2010" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M 326 86 Q 330 85 334 86" stroke="#3a2010" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <!-- Nose -->
+      <path d="M 326 90 Q 325 93 326 95" stroke="#a48068" stroke-width="0.5" fill="none"/>
+      <!-- Ears -->
+      <ellipse cx="316" cy="92" rx="1.4" ry="2" fill="#c49880"/>
+      <ellipse cx="336" cy="92" rx="1.4" ry="2" fill="#c49880"/>
       ${this._miniMuffin(50, 175, 0.55)}
     `);
   },
@@ -3139,13 +3304,102 @@ const Illustrations = {
       <rect x="120" y="115" width="160" height="80" fill="#2a1f12" stroke="#1a1008" stroke-width="3"/>
       ${[140, 170, 200, 230, 260].map(x => `<line x1="${x}" y1="115" x2="${x}" y2="195" stroke="#3a2410" stroke-width="2"/>`).join('')}
       ${[135, 155, 175].map(y => `<line x1="120" y1="${y}" x2="280" y2="${y}" stroke="#3a2410" stroke-width="2"/>`).join('')}
-      <!-- Petra behind the grate -->
-      <path d="M 195 130 L 188 175 L 212 175 L 205 130 Z" fill="#5a3a18"/>
-      <circle cx="200" cy="123" r="7" fill="#d4b098"/>
-      <ellipse cx="200" cy="118" rx="7" ry="3" fill="#3a2418"/>
-      <!-- Wendell digging on left -->
-      <path d="M 60 105 L 50 195 L 90 195 L 80 105 Z" fill="#3a4818"/>
-      <circle cx="70" cy="98" r="11" fill="#d4b098"/>
+      <!-- Petra Vell behind the grate — small, scared, alive -->
+      <!-- Small shoes -->
+      <ellipse cx="195" cy="175" rx="3" ry="1.2" fill="#1a1008"/>
+      <ellipse cx="205" cy="175" rx="3" ry="1.2" fill="#1a1008"/>
+      <!-- Stockings -->
+      <rect x="193" y="166" width="4" height="9" fill="#a8a098"/>
+      <rect x="203" y="166" width="4" height="9" fill="#a8a098"/>
+      <!-- Pinafore dress (girl's dress) -->
+      <path d="M 192 138 L 188 168 L 212 168 L 208 138 Z" fill="#5a4a28"/>
+      <!-- Pinafore apron over dress -->
+      <path d="M 195 142 L 192 165 L 208 165 L 205 142 Z" fill="#d4c89a"/>
+      <!-- Bodice top -->
+      <path d="M 194 130 L 192 142 L 208 142 L 206 130 Z" fill="#4a3818"/>
+      <!-- Sleeves (puffed) -->
+      <ellipse cx="190" cy="135" rx="3.5" ry="4" fill="#5a4a28"/>
+      <ellipse cx="210" cy="135" rx="3.5" ry="4" fill="#5a4a28"/>
+      <!-- Arms (tied at front) -->
+      <rect x="192" y="138" width="4" height="14" fill="#5a4a28"/>
+      <rect x="204" y="138" width="4" height="14" fill="#5a4a28"/>
+      <!-- Hands clasped/tied -->
+      <ellipse cx="200" cy="153" rx="6" ry="2.5" fill="#d4b098"/>
+      <!-- Rope binding wrists -->
+      <path d="M 195 150 Q 200 152 205 150 Q 200 154 195 150" fill="none" stroke="#5a3010" stroke-width="0.8"/>
+      <line x1="200" y1="150" x2="200" y2="155" stroke="#5a3010" stroke-width="0.6"/>
+      <!-- Neck -->
+      <rect x="197" y="118" width="6" height="6" fill="#d4b098"/>
+      <!-- Head (small, child) -->
+      <ellipse cx="200" cy="113" rx="7" ry="7.5" fill="#d4b098"/>
+      <!-- Long brown hair (loose, disheveled — like Mira's) -->
+      <path d="M 193 110 Q 191 122 193 130 L 196 130 Q 195 120 195 113 Z" fill="#3a2818"/>
+      <path d="M 207 110 Q 209 122 207 130 L 204 130 Q 205 120 205 113 Z" fill="#3a2818"/>
+      <ellipse cx="200" cy="106" rx="7.5" ry="3.5" fill="#3a2818"/>
+      <!-- Tear streak -->
+      <path d="M 196 114 Q 195 117 195 119" stroke="#88aadd" stroke-width="0.5" fill="none" opacity="0.85"/>
+      <!-- Eyes (wide, scared) -->
+      <ellipse cx="197" cy="113" rx="1.4" ry="1" fill="#fff"/>
+      <circle cx="197" cy="113.3" r="0.7" fill="#3a2818"/>
+      <ellipse cx="203" cy="113" rx="1.4" ry="1" fill="#fff"/>
+      <circle cx="203" cy="113.3" r="0.7" fill="#3a2818"/>
+      <!-- Eyebrows (raised in fear) -->
+      <path d="M 195 110 Q 197 109 199 110" stroke="#3a2018" stroke-width="0.7" fill="none"/>
+      <path d="M 201 110 Q 203 109 205 110" stroke="#3a2018" stroke-width="0.7" fill="none"/>
+      <!-- Nose (small) -->
+      <path d="M 200 114 Q 199 116 200 117" stroke="#a48068" stroke-width="0.4" fill="none"/>
+      <!-- Small mouth (parted, on edge of crying) -->
+      <ellipse cx="200" cy="119" rx="1" ry="0.5" fill="#5a2010"/>
+
+      <!-- Wendell Skye digging on left side of grate -->
+      <!-- Boots -->
+      <ellipse cx="58" cy="195" rx="5" ry="2" fill="#0a0603"/>
+      <ellipse cx="80" cy="195" rx="5" ry="2" fill="#0a0603"/>
+      <rect x="54" y="186" width="9" height="9" fill="#1a1008"/>
+      <rect x="76" y="186" width="9" height="9" fill="#1a1008"/>
+      <!-- Trousers -->
+      <rect x="55" y="158" width="9" height="30" fill="#3a2410"/>
+      <rect x="75" y="158" width="9" height="30" fill="#3a2410"/>
+      <!-- Belt -->
+      <rect x="52" y="153" width="36" height="5" fill="#5a3818"/>
+      <!-- Coat (forest green, sleeves rolled up for digging) -->
+      <path d="M 52 105 L 48 158 L 92 158 L 88 105 Z" fill="#3a4820"/>
+      <!-- Coat lapels -->
+      <polygon points="62,108 60,135 66,134" fill="#2a3818"/>
+      <polygon points="78,108 80,135 74,134" fill="#2a3818"/>
+      <!-- Buttons -->
+      <circle cx="70" cy="120" r="1" fill="#aa8838"/>
+      <circle cx="70" cy="130" r="1" fill="#aa8838"/>
+      <circle cx="70" cy="140" r="1" fill="#aa8838"/>
+      <!-- Right arm (raised — gripping shovel high) -->
+      <rect x="84" y="105" width="9" height="20" fill="#3a4820" transform="rotate(15 88 115)"/>
+      <ellipse cx="92" cy="123" rx="4" ry="3" fill="#d4b098" transform="rotate(15 92 123)"/>
+      <!-- Left arm (lower — gripping shovel low) -->
+      <rect x="48" y="120" width="8" height="20" fill="#3a4820" transform="rotate(-10 52 130)"/>
+      <ellipse cx="50" cy="142" rx="4" ry="3" fill="#d4b098"/>
+      <!-- Sweat band on forehead -->
+      <rect x="58" y="84" width="24" height="3" fill="#aa3818"/>
+      <!-- Neck -->
+      <rect x="66" y="92" width="8" height="9" fill="#d4b098"/>
+      <!-- Head -->
+      <ellipse cx="70" cy="86" rx="10" ry="10.5" fill="#d4b098"/>
+      <!-- Bushy beard -->
+      <path d="M 63 89 Q 63 102 70 104 Q 77 102 77 89 Q 75 92 70 92 Q 65 92 63 89 Z" fill="#5a3818"/>
+      <!-- Mustache -->
+      <path d="M 64 88 Q 70 86 76 88" stroke="#5a3818" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Eyes (focused on dig) -->
+      <ellipse cx="66" cy="84" rx="1.5" ry="0.9" fill="#fff"/>
+      <circle cx="66" cy="84.2" r="0.6" fill="#3a2818"/>
+      <ellipse cx="74" cy="84" rx="1.5" ry="0.9" fill="#fff"/>
+      <circle cx="74" cy="84.2" r="0.6" fill="#3a2818"/>
+      <!-- Eyebrows (concentrated) -->
+      <path d="M 63 81 Q 66 80 69 81" stroke="#3a2010" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <path d="M 71 81 Q 74 80 77 81" stroke="#3a2010" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <!-- Nose -->
+      <path d="M 70 85 Q 69 89 70 91" stroke="#a48068" stroke-width="0.5" fill="none"/>
+      <!-- Ears -->
+      <ellipse cx="61" cy="87" rx="1.3" ry="1.7" fill="#c49880"/>
+      <ellipse cx="79" cy="87" rx="1.3" ry="1.7" fill="#c49880"/>
       <!-- Shovel -->
       <line x1="85" y1="115" x2="120" y2="180" stroke="#5a3818" stroke-width="3"/>
       <polygon points="116,178 124,178 124,192 116,192" fill="#5a5060" stroke="#1a1008" stroke-width="0.8"/>
@@ -3202,26 +3456,140 @@ const Illustrations = {
       <ellipse cx="200" cy="155" rx="92" ry="36" fill="#000"/>
       <!-- Cave floor -->
       <rect x="0" y="175" width="400" height="75" fill="#1e1812"/>
-      <!-- Crooke (the villain), arms raised, defeated -->
-      <path d="M 230 130 L 218 200 L 258 200 L 245 130 Z" fill="#3a2818"/>
-      <rect x="225" y="135" width="22" height="40" fill="#4a3220"/>
-      <circle cx="236" cy="120" r="10" fill="#c9a979"/>
-      <ellipse cx="236" cy="115" rx="9" ry="4" fill="#5a3818"/>
-      <circle cx="232" cy="121" r="0.8" fill="#1a1008"/>
-      <circle cx="240" cy="121" r="0.8" fill="#1a1008"/>
-      <path d="M 232 128 Q 236 130 240 128" fill="none" stroke="#5a2018" stroke-width="0.6"/>
-      <!-- Hands raised in surrender -->
-      <rect x="208" y="105" width="14" height="26" fill="#4a3220" rx="3" transform="rotate(-25 215 118)"/>
-      <rect x="248" y="105" width="14" height="26" fill="#4a3220" rx="3" transform="rotate(25 255 118)"/>
-      <circle cx="208" cy="100" r="5" fill="#c9a979"/>
-      <circle cx="262" cy="100" r="5" fill="#c9a979"/>
-      <!-- Constable behind Crooke with shackles -->
-      <path d="M 290 135 L 282 200 L 312 200 L 305 135 Z" fill="#1e2a4a"/>
-      <circle cx="295" cy="125" r="9" fill="#d4b098"/>
-      <ellipse cx="295" cy="119" rx="9" ry="4" fill="#1a1008"/>
-      <!-- Shackles in hand -->
-      <circle cx="288" cy="155" r="4" fill="none" stroke="#5a5060" stroke-width="1.5"/>
-      <circle cx="282" cy="161" r="4" fill="none" stroke="#5a5060" stroke-width="1.5"/>
+      <!-- Salvian Crooke — naturalist / villain, arms raised, defeated -->
+      <!-- Polished boots -->
+      <ellipse cx="227" cy="200" rx="5" ry="2" fill="#0a0603"/>
+      <ellipse cx="248" cy="200" rx="5" ry="2" fill="#0a0603"/>
+      <rect x="223" y="190" width="9" height="10" fill="#1a1008"/>
+      <rect x="244" y="190" width="9" height="10" fill="#1a1008"/>
+      <!-- Tailored trousers (charcoal) -->
+      <rect x="224" y="160" width="9" height="32" fill="#2a2018"/>
+      <rect x="244" y="160" width="9" height="32" fill="#2a2018"/>
+      <!-- Frock coat (long, dark navy/black) -->
+      <path d="M 222 130 L 216 165 L 261 165 L 255 130 Z" fill="#1a1810"/>
+      <!-- Coat tails extending below belt -->
+      <path d="M 218 162 L 215 192 L 222 192 L 224 162 Z" fill="#1a1810"/>
+      <path d="M 259 162 L 262 192 L 255 192 L 253 162 Z" fill="#1a1810"/>
+      <!-- White shirt collar/cravat -->
+      <path d="M 230 130 L 230 142 L 247 142 L 247 130 Z" fill="#eadba0"/>
+      <polygon points="234,130 238,142 234,140" fill="#eadba0"/>
+      <polygon points="243,130 240,140 243,142" fill="#eadba0"/>
+      <!-- Cravat knot (dark red silk) -->
+      <ellipse cx="238" cy="138" rx="5" ry="2.5" fill="#7a1818"/>
+      <!-- Vest (silk, gold trim) -->
+      <path d="M 230 142 L 228 160 L 248 160 L 247 142 Z" fill="#3a2818"/>
+      <!-- Vest buttons (gold) -->
+      <circle cx="238" cy="146" r="0.8" fill="#aa8838"/>
+      <circle cx="238" cy="151" r="0.8" fill="#aa8838"/>
+      <circle cx="238" cy="156" r="0.8" fill="#aa8838"/>
+      <!-- Pocket watch chain across vest -->
+      <path d="M 232 148 Q 236 152 244 148" stroke="#aa8838" stroke-width="0.6" fill="none"/>
+      <!-- Arms raised in surrender (raised diagonally) -->
+      <path d="M 222 130 L 213 105 L 220 102 L 230 128 Z" fill="#1a1810"/>
+      <path d="M 254 130 L 263 105 L 256 102 L 247 128 Z" fill="#1a1810"/>
+      <!-- Coat cuffs -->
+      <rect x="211" y="103" width="11" height="3" fill="#3a3018" transform="rotate(-25 217 105)"/>
+      <rect x="255" y="103" width="11" height="3" fill="#3a3018" transform="rotate(25 261 105)"/>
+      <!-- Hands raised, palms forward -->
+      <ellipse cx="213" cy="98" rx="4" ry="3.5" fill="#c9a979"/>
+      <ellipse cx="263" cy="98" rx="4" ry="3.5" fill="#c9a979"/>
+      <!-- Neck -->
+      <rect x="234" y="113" width="6" height="9" fill="#c9a979"/>
+      <!-- Head -->
+      <ellipse cx="237" cy="106" rx="10" ry="11" fill="#c9a979"/>
+      <!-- Cheek shading -->
+      <ellipse cx="231" cy="110" rx="2" ry="2.5" fill="#a87858" opacity="0.45"/>
+      <ellipse cx="243" cy="110" rx="2" ry="2.5" fill="#a87858" opacity="0.45"/>
+      <!-- Slicked back dark hair -->
+      <path d="M 228 102 Q 226 96 230 94 Q 237 90 244 94 Q 248 96 246 102 L 245 105 Q 237 100 229 105 Z" fill="#1a1208"/>
+      <!-- Receding hairline at temples -->
+      <ellipse cx="231" cy="100" rx="1.5" ry="2" fill="#c9a979"/>
+      <ellipse cx="243" cy="100" rx="1.5" ry="2" fill="#c9a979"/>
+      <!-- Pointed black goatee -->
+      <path d="M 233 116 Q 237 124 241 116 Q 240 119 237 119 Q 234 119 233 116 Z" fill="#1a1208"/>
+      <!-- Thin pencil mustache -->
+      <path d="M 232 113 Q 237 111 242 113" stroke="#1a1208" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <!-- Eyes (wide with shock — caught) -->
+      <ellipse cx="233" cy="106" rx="1.6" ry="1.2" fill="#fff"/>
+      <circle cx="233" cy="106.5" r="0.9" fill="#3a2818"/>
+      <ellipse cx="241" cy="106" rx="1.6" ry="1.2" fill="#fff"/>
+      <circle cx="241" cy="106.5" r="0.9" fill="#3a2818"/>
+      <!-- Sharp eyebrows (drawn down in shock) -->
+      <path d="M 230 102 Q 233 101 236 103" stroke="#1a1208" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M 238 103 Q 241 101 244 102" stroke="#1a1208" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <!-- Hawkish nose -->
+      <path d="M 237 106 Q 235 110 237 113" stroke="#a87858" stroke-width="0.6" fill="none"/>
+      <!-- Mouth (open, agape) -->
+      <ellipse cx="237" cy="116" rx="1.5" ry="0.8" fill="#3a1810"/>
+      <!-- Ears -->
+      <ellipse cx="227" cy="107" rx="1.3" ry="1.8" fill="#b89070"/>
+      <ellipse cx="247" cy="107" rx="1.3" ry="1.8" fill="#b89070"/>
+      <!-- Bead of sweat down brow -->
+      <ellipse cx="233" cy="100" rx="0.5" ry="1" fill="#88aadd" opacity="0.7"/>
+
+      <!-- Constable Gareth Stone behind Crooke with shackles -->
+      <!-- Boots -->
+      <ellipse cx="290" cy="200" rx="4.5" ry="1.8" fill="#0a0603"/>
+      <ellipse cx="305" cy="200" rx="4.5" ry="1.8" fill="#0a0603"/>
+      <rect x="287" y="192" width="8" height="8" fill="#1a1008"/>
+      <rect x="302" y="192" width="8" height="8" fill="#1a1008"/>
+      <!-- Trousers (dark navy with red side stripe) -->
+      <rect x="287" y="160" width="8" height="32" fill="#1e2a4a"/>
+      <rect x="302" y="160" width="8" height="32" fill="#1e2a4a"/>
+      <line x1="291" y1="160" x2="291" y2="192" stroke="#7a1818" stroke-width="0.5"/>
+      <line x1="306" y1="160" x2="306" y2="192" stroke="#7a1818" stroke-width="0.5"/>
+      <!-- Belt with brass buckle -->
+      <rect x="285" y="155" width="28" height="6" fill="#1a1208"/>
+      <rect x="297" y="156" width="5" height="4" fill="#aa8838"/>
+      <!-- Tunic (long navy uniform coat) -->
+      <path d="M 286 130 L 282 158 L 314 158 L 310 130 Z" fill="#1e2a4a"/>
+      <!-- Brass buttons down center -->
+      <circle cx="298" cy="138" r="1" fill="#d4a624"/>
+      <circle cx="298" cy="146" r="1" fill="#d4a624"/>
+      <circle cx="298" cy="154" r="1" fill="#d4a624"/>
+      <!-- Shoulder lanyard -->
+      <line x1="288" y1="130" x2="298" y2="148" stroke="#aa8838" stroke-width="0.7"/>
+      <!-- Right arm (holding shackles) -->
+      <rect x="278" y="132" width="8" height="22" fill="#1e2a4a"/>
+      <ellipse cx="282" cy="156" rx="3.5" ry="2.8" fill="#d4b098"/>
+      <!-- Shackles dangling -->
+      <circle cx="278" cy="162" r="3.5" fill="none" stroke="#7a7080" stroke-width="1.4"/>
+      <circle cx="285" cy="167" r="3.5" fill="none" stroke="#7a7080" stroke-width="1.4"/>
+      <line x1="280" y1="162" x2="284" y2="166" stroke="#7a7080" stroke-width="0.8"/>
+      <!-- Left arm -->
+      <rect x="310" y="132" width="8" height="22" fill="#1e2a4a"/>
+      <ellipse cx="314" cy="156" rx="3.5" ry="2.8" fill="#d4b098"/>
+      <!-- Stiff white collar -->
+      <rect x="295" y="128" width="11" height="4" fill="#eadba0"/>
+      <!-- Neck -->
+      <rect x="297" y="118" width="6" height="10" fill="#d4b098"/>
+      <!-- Head -->
+      <ellipse cx="300" cy="111" rx="9.5" ry="10.5" fill="#d4b098"/>
+      <!-- Bobby helmet (tall navy police helmet, classic Victorian) -->
+      <ellipse cx="300" cy="100" rx="11" ry="3" fill="#1a1208"/>
+      <path d="M 290 100 Q 300 86 310 100 L 310 102 Q 300 92 290 102 Z" fill="#1e2a4a"/>
+      <!-- Helmet brass spike on top -->
+      <circle cx="300" cy="86" r="1.5" fill="#aa8838"/>
+      <line x1="300" y1="84" x2="300" y2="80" stroke="#aa8838" stroke-width="1"/>
+      <!-- Helmet strap chin -->
+      <path d="M 292 110 Q 300 113 308 110" stroke="#1a1208" stroke-width="0.7" fill="none"/>
+      <!-- Mustache (handlebar) -->
+      <path d="M 293 114 Q 296 117 300 115 Q 304 117 307 114" stroke="#3a2810" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Eyes (steely, watchful) -->
+      <ellipse cx="296" cy="111" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="296" cy="111.3" r="0.6" fill="#3a2818"/>
+      <ellipse cx="304" cy="111" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="304" cy="111.3" r="0.6" fill="#3a2818"/>
+      <!-- Eyebrows (firm) -->
+      <path d="M 293 108 Q 296 107 299 108" stroke="#3a2010" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M 301 108 Q 304 107 307 108" stroke="#3a2010" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <!-- Nose -->
+      <path d="M 300 111 Q 299 114 300 116" stroke="#a48068" stroke-width="0.5" fill="none"/>
+      <!-- Mouth (firm line, satisfied) -->
+      <path d="M 297 119 Q 300 118.5 303 119" stroke="#7a3818" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+      <!-- Ears -->
+      <ellipse cx="291" cy="111" rx="1.2" ry="1.7" fill="#b89878"/>
+      <ellipse cx="309" cy="111" rx="1.2" ry="1.7" fill="#b89878"/>
       <!-- Notebook on ground (open) -->
       <rect x="155" y="195" width="40" height="20" fill="#5a3a1c" stroke="#1a1008" stroke-width="1.2"/>
       <rect x="158" y="198" width="34" height="14" fill="#eadba0"/>
