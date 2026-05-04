@@ -3676,59 +3676,76 @@ const Illustrations = {
   // Intro: Muffin reading the letter at his agency desk, sleet on window
   manor_intro() {
     return this.scene('#1a1410', '#070502', `
+      <!-- Wood-paneled wall -->
       <rect x="0" y="0" width="400" height="180" fill="#2a1f12"/>
-      ${[0,80,160,240,320].map(x => `<line x1="${x}" y1="0" x2="${x}" y2="180" stroke="#1a1208" stroke-width="1"/>`).join('')}
+      ${[80, 160, 240, 320].map(x => `<line x1="${x}" y1="0" x2="${x}" y2="180" stroke="#1a1208" stroke-width="0.7" opacity="0.55"/>`).join('')}
+      <!-- Floor -->
       <rect x="0" y="180" width="400" height="70" fill="#3a2818"/>
       <rect x="0" y="180" width="400" height="4" fill="#5a3818"/>
-      <!-- Tall window with sleet -->
-      <rect x="270" y="20" width="120" height="120" fill="#0a0e1a" stroke="#5a3818" stroke-width="3"/>
-      <line x1="330" y1="20" x2="330" y2="140" stroke="#5a3818" stroke-width="2"/>
-      <line x1="270" y1="80" x2="390" y2="80" stroke="#5a3818" stroke-width="2"/>
-      <!-- Distant rooftops -->
-      <polygon points="275,90 290,75 305,82 325,72 325,90" fill="#1a1610" opacity="0.85"/>
-      <polygon points="335,90 350,75 365,80 380,72 385,90" fill="#1a1610" opacity="0.85"/>
-      <!-- Sleet streaks (more diagonal than rain) -->
-      ${[280, 295, 308, 320, 340, 355, 370, 380].map((x, i) => `<line x1="${x}" y1="${25 + (i % 3) * 8}" x2="${x - 9}" y2="${65 + (i % 3) * 8}" stroke="#aaccdd" stroke-width="0.8" opacity="0.5"/>`).join('')}
-      ${[285, 305, 325, 345, 365].map((x, i) => `<line x1="${x}" y1="${85 + (i % 2) * 6}" x2="${x - 8}" y2="${130 + (i % 2) * 6}" stroke="#aaccdd" stroke-width="0.8" opacity="0.45"/>`).join('')}
+      ${[0,1,2,3,4,5].map(i => `<line x1="${i*70}" y1="180" x2="${i*70 + 30}" y2="250" stroke="#2a1810" stroke-width="0.6" opacity="0.5"/>`).join('')}
 
-      <!-- Bookshelf left -->
-      <rect x="10" y="40" width="60" height="110" fill="#3a2818" stroke="#1a1008" stroke-width="1"/>
-      ${[55, 78, 101, 124].map(y => `<rect x="14" y="${y}" width="52" height="3" fill="#1a1008"/>`).join('')}
-      ${[16, 25, 34, 43, 52, 61].map((x, i) => `<rect x="${x}" y="42" width="7" height="14" fill="#${['5a3818','7a3818','3a4818','5a2818','3a2818','7a4828'][i]}" stroke="#1a1008" stroke-width="0.4"/>`).join('')}
-      ${[16, 25, 34, 43, 52, 61].map((x, i) => `<rect x="${x}" y="83" width="7" height="14" fill="#${['7a3818','5a3818','3a4818','5a2818','3a2818','5a3818'][i]}" stroke="#1a1008" stroke-width="0.4"/>`).join('')}
+      <!-- Tall sash window on right with stormy night beyond -->
+      <rect x="290" y="28" width="90" height="118" fill="#0a0e1a" stroke="#5a3818" stroke-width="3"/>
+      <line x1="335" y1="28" x2="335" y2="146" stroke="#5a3818" stroke-width="2"/>
+      <line x1="290" y1="86" x2="380" y2="86" stroke="#5a3818" stroke-width="2"/>
+      <!-- Smooth city skyline silhouette through window -->
+      <path d="M 290 86 L 290 78 L 297 75 L 304 80 L 311 73 L 318 78 L 325 70 L 332 76 L 332 86 Z" fill="#0a0a05"/>
+      <path d="M 335 86 L 335 75 L 342 70 L 349 76 L 356 71 L 363 78 L 370 72 L 378 77 L 380 86 Z" fill="#0a0a05"/>
+      <!-- Window stone sill -->
+      <rect x="287" y="144" width="96" height="6" fill="#3a2818"/>
+      <!-- Sleet streaks (diagonal) -->
+      ${[294, 308, 322, 342, 356, 370].map((x, i) => `<line x1="${x}" y1="${33 + (i % 3) * 7}" x2="${x - 8}" y2="${68 + (i % 3) * 7}" stroke="#aaccdd" stroke-width="0.8" opacity="0.55"/>`).join('')}
+      ${[298, 318, 338, 360].map((x, i) => `<line x1="${x}" y1="${94 + (i % 2) * 5}" x2="${x - 7}" y2="${130 + (i % 2) * 5}" stroke="#aaccdd" stroke-width="0.8" opacity="0.5"/>`).join('')}
 
-      <!-- Desk -->
-      <rect x="80" y="155" width="220" height="32" fill="#5a3a1c" stroke="#2a1408" stroke-width="2"/>
-      <rect x="80" y="155" width="220" height="5" fill="#7a5a30"/>
-      <rect x="86" y="187" width="10" height="50" fill="#3a2410"/>
-      <rect x="284" y="187" width="10" height="50" fill="#3a2410"/>
+      <!-- Bookshelf on left, full height -->
+      <rect x="20" y="40" width="62" height="135" fill="#3a2818" stroke="#1a1008" stroke-width="1.2"/>
+      ${[64, 92, 120, 148].map(y => `<rect x="22" y="${y}" width="58" height="3" fill="#1a1008"/>`).join('')}
+      ${Array.from({length:4},(_,r) => Array.from({length:6},(_,c)=>{const x = 24 + c*9; const y = 46 + r*28; const colors=['5a3818','7a3818','3a4818','5a2818','3a2818','7a4828','5a3018','7a3818','3a4818','5a2818']; return `<rect x="${x}" y="${y}" width="8" height="14" fill="#${colors[(r*6+c)%colors.length]}" stroke="#1a1008" stroke-width="0.4"/>`}).join('')).join('')}
 
-      <!-- Letter -->
-      <rect x="135" y="120" width="135" height="50" fill="#eadba0" stroke="#aa2222" stroke-width="1.2" transform="rotate(-3 202 145)"/>
-      <text x="202" y="135" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic" transform="rotate(-3 202 135)">Detective Muffin —</text>
-      ${[140, 144, 148, 152, 156].map(y => `<line x1="143" y1="${y}" x2="261" y2="${y}" stroke="#3a2010" stroke-width="0.4" opacity="0.55" transform="rotate(-3 202 ${y})"/>`).join('')}
-      <text x="245" y="164" text-anchor="end" fill="#3a2010" font-size="5" font-style="italic" transform="rotate(-3 245 164)">— Rev. Holloway</text>
-      <circle cx="155" cy="160" r="6" fill="#aa2222" stroke="#6a1010" stroke-width="0.6" transform="rotate(-3 155 160)"/>
+      <!-- Small framed portrait on the wall (foreshadow Cassius) -->
+      <rect x="105" y="55" width="40" height="55" fill="#3a2010" stroke="#1a1008" stroke-width="1.2"/>
+      <rect x="109" y="59" width="32" height="47" fill="#5a4828"/>
+      <rect x="109" y="59" width="32" height="47" fill="#7a5a30" opacity="0.3"/>
+      <ellipse cx="125" cy="76" rx="7" ry="8" fill="#d4b098"/>
+      <path d="M 117 84 L 118 105 L 132 105 L 133 84 Z" fill="#3a1818"/>
+      <ellipse cx="125" cy="86" rx="9" ry="3" fill="#7a5a30"/>
+      <text x="125" y="118" text-anchor="middle" fill="#aa8838" font-size="4" font-style="italic">— C. Wren —</text>
 
-      <!-- Candle -->
-      <rect x="100" y="135" width="6" height="20" fill="#eee5c8"/>
-      <rect x="98" y="155" width="10" height="4" fill="#3a2410"/>
-      <ellipse cx="103" cy="131" rx="3" ry="6" fill="#ffcc55"><animate attributeName="ry" values="6;8;6" dur="1.3s" repeatCount="indefinite"/></ellipse>
-      <ellipse cx="103" cy="129" rx="1.5" ry="4" fill="#fff5aa"/>
-      <circle cx="103" cy="140" r="60" fill="#ffaa33" opacity="0.1"/>
+      <!-- Heavy oak desk in foreground (centered) -->
+      <rect x="155" y="155" width="195" height="32" fill="#5a3a1c" stroke="#2a1408" stroke-width="2"/>
+      <rect x="155" y="155" width="195" height="5" fill="#7a5a30"/>
+      <rect x="160" y="187" width="10" height="55" fill="#3a2410"/>
+      <rect x="335" y="187" width="10" height="55" fill="#3a2410"/>
 
-      <!-- Magnifying glass -->
-      <circle cx="115" cy="172" r="11" fill="none" stroke="#E2B714" stroke-width="2.2"/>
-      <circle cx="115" cy="172" r="9" fill="rgba(200,220,255,0.1)"/>
-      <line x1="106" y1="180" x2="98" y2="190" stroke="#E2B714" stroke-width="3" stroke-linecap="round"/>
+      <!-- Letter on desk (smaller, slightly tilted, on the right side of the desk) -->
+      <rect x="225" y="135" width="92" height="34" fill="#eadba0" stroke="#aa2222" stroke-width="1.1" transform="rotate(-4 271 152)"/>
+      <text x="271" y="148" text-anchor="middle" fill="#3a2010" font-size="5" font-style="italic" transform="rotate(-4 271 148)">Detective Muffin —</text>
+      ${[152, 156, 160].map(y => `<line x1="232" y1="${y}" x2="310" y2="${y}" stroke="#3a2010" stroke-width="0.4" opacity="0.55" transform="rotate(-4 271 ${y})"/>`).join('')}
+      <text x="310" y="166" text-anchor="end" fill="#3a2010" font-size="4" font-style="italic" transform="rotate(-4 310 166)">— Rev. Holloway</text>
+      <!-- Wax seal -->
+      <circle cx="237" cy="163" r="4" fill="#aa2222" stroke="#6a1010" stroke-width="0.4" transform="rotate(-4 237 163)"/>
 
-      <!-- Muffin reading -->
-      ${this._miniMuffin(195, 95, 0.55)}
+      <!-- Candle on left side of desk -->
+      <rect x="170" y="138" width="5" height="18" fill="#eee5c8"/>
+      <rect x="168" y="156" width="9" height="3" fill="#3a2410"/>
+      <ellipse cx="172.5" cy="135" rx="2.5" ry="5.5" fill="#ffcc55"><animate attributeName="ry" values="5.5;7;5.5" dur="1.3s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="172.5" cy="133" rx="1.2" ry="3.5" fill="#fff5aa"/>
+      <circle cx="172.5" cy="142" r="55" fill="#ffaa33" opacity="0.09"/>
 
-      <!-- Door cracked open in background -->
-      <rect x="155" y="38" width="40" height="100" fill="#1a1208" stroke="#5a3818" stroke-width="1.5"/>
-      <line x1="155" y1="38" x2="155" y2="138" stroke="#5a3818" stroke-width="3"/>
-      <rect x="160" y="44" width="32" height="92" fill="#0a0e1a"/>
+      <!-- Magnifying glass (right side of desk, partly off the edge) -->
+      <circle cx="335" cy="172" r="9" fill="none" stroke="#E2B714" stroke-width="2"/>
+      <circle cx="335" cy="172" r="7" fill="rgba(200,220,255,0.1)"/>
+      <line x1="342" y1="179" x2="350" y2="190" stroke="#E2B714" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 330 167 Q 332 165 335 166" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" fill="none"/>
+
+      <!-- Quill in inkwell on left of desk -->
+      <rect x="190" y="148" width="8" height="9" fill="#1a1208" rx="1"/>
+      <ellipse cx="194" cy="148" rx="4" ry="1.5" fill="#0a0603"/>
+      <line x1="196" y1="148" x2="208" y2="135" stroke="#5a3a1c" stroke-width="1"/>
+      <path d="M 207 135 L 213 130 L 209 137 Z" fill="#eadba0"/>
+
+      <!-- Muffin sitting at desk, head and shoulders visible above -->
+      ${this._miniMuffin(225, 80, 0.55)}
     `);
   },
 
