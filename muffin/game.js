@@ -98,7 +98,37 @@ const Slots = {
       this._data.activeIndex = 0;
     }
     this.activeIndex = this._data.activeIndex;
+    this._seedPracticeSlotIfNeeded();
     return this._data;
+  },
+
+  // One-time seed: Slot 3 is pre-populated with Case 7 paused at the
+  // cold-spot line-plot question (Clue 11), so the tutor can drop
+  // straight to that math problem for line-plot practice without
+  // walking through the first ten clues. Only seeds once, and skips
+  // if the slot has already been used or deliberately deleted.
+  _seedPracticeSlotIfNeeded() {
+    if (this._data.practiceSeeded) return;
+    if (this._data.slots[2]) {
+      // Slot already in use; just record that we have considered it
+      this._data.practiceSeeded = true;
+      this.persist();
+      return;
+    }
+    this._data.slots[2] = {
+      label: 'Cold-Spot Practice',
+      perCase: {
+        ghost_ravenhollow: {
+          currentProblemIndex: 10,
+          health: 3,
+          solvedClues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        }
+      },
+      createdAt: Date.now(),
+      lastPlayed: Date.now()
+    };
+    this._data.practiceSeeded = true;
+    this.persist();
   },
 
   _migrateFromLegacy() {
@@ -368,6 +398,8 @@ function renderSlotPicker() {
         '<div class="slot-card-title">Empty</div>' +
         '<div class="slot-card-empty-hint">Tap to begin a new game.</div>';
     } else {
+      const slotData = Slots.getSlots()[i] || {};
+      const slotTitle = slotData.label || ('Detective ' + (i + 1));
       const inProg = summary.inProgress;
       const resumeLine = inProg
         ? '<div class="resume-line">▶ Currently: ' + inProg.title + ' — Clue ' + (inProg.currentProblemIndex + 1) + ' of ' + inProg.totalClues + '</div>'
@@ -376,7 +408,7 @@ function renderSlotPicker() {
         '<div class="slot-card-header">' +
           '<span class="slot-card-number">Slot ' + (i + 1) + '</span>' +
         '</div>' +
-        '<div class="slot-card-title">Detective ' + (i + 1) + '</div>' +
+        '<div class="slot-card-title">' + slotTitle + '</div>' +
         '<div class="slot-card-stats">' +
           '<div class="stat-line"><span>Cases solved</span><span>' + summary.solvedCount + ' of ' + summary.totalCases + '</span></div>' +
           resumeLine +
@@ -419,8 +451,10 @@ function renderCaseSelect() {
   const slotLabel = document.getElementById('active-slot-label');
   if (slotLabel) {
     const summary = Slots.summary(Slots.activeIndex);
+    const slotData = Slots.getSlots()[Slots.activeIndex] || {};
+    const slotName = slotData.label || ('Detective ' + (Slots.activeIndex + 1));
     const solvedText = summary.isEmpty ? 'new' : summary.solvedCount + '/' + summary.totalCases + ' solved';
-    slotLabel.textContent = 'Detective ' + (Slots.activeIndex + 1) + ' · ' + solvedText;
+    slotLabel.textContent = slotName + ' · ' + solvedText;
   }
 
   CASES.forEach((c, index) => {
