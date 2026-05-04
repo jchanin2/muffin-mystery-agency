@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Muffin's Mystery Agency</title>
-  <link rel="stylesheet" href="style.css?v=17">
+  <link rel="stylesheet" href="style.css?v=18">
 </head>
 <body>
   <!-- ==================== TITLE SCREEN ==================== -->
@@ -20,11 +20,27 @@
     </div>
   </div>
 
+  <!-- ==================== SLOT PICKER SCREEN ==================== -->
+  <div id="screen-slots" class="screen">
+    <div class="screen-header">
+      <h2>Choose Your Detective</h2>
+      <p class="header-subtitle">Pick a save slot — your progress, your pace.</p>
+    </div>
+    <div id="slots-list" class="slots-list">
+      <!-- Slot cards populated by game.js -->
+    </div>
+    <button id="btn-slots-back" class="btn btn-secondary">Back to Agency</button>
+  </div>
+
   <!-- ==================== CASE SELECT SCREEN ==================== -->
   <div id="screen-cases" class="screen">
     <div class="screen-header">
       <h2>Select a Case</h2>
       <p class="header-subtitle">Choose wisely, detective. Each case grows more dangerous...</p>
+      <div class="active-slot-indicator">
+        <span id="active-slot-label">Detective · Slot 1</span>
+        <button id="btn-switch-slot" class="btn btn-ghost">Switch Detective</button>
+      </div>
     </div>
     <div id="case-list" class="case-list">
       <!-- Cases populated by game.js -->
@@ -161,9 +177,9 @@
   </div>
 
   <!-- Scripts -->
-  <script src="problems.js?v=17"></script>
-  <script src="narratives.js?v=17"></script>
-  <script src="illustrations.js?v=17"></script>
-  <script src="game.js?v=17"></script>
+  <script src="problems.js?v=18"></script>
+  <script src="narratives.js?v=18"></script>
+  <script src="illustrations.js?v=18"></script>
+  <script src="game.js?v=18"></script>
 </body>
 </html>

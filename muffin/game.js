@@ -68,6 +68,182 @@ const Audio = {
 };
 
 // ============================================================
+// SAVE SLOTS — three independent profiles, each tracking which cases
+// are solved AND mid-case progress (current clue, hearts, revealed
+// clue cards) per case. Auto-saved on every clue advance, heart loss,
+// case start, and case completion.
+// ============================================================
+const Slots = {
+  KEY: 'muffin_slots_v1',
+  LEGACY_KEY: 'muffin_agency_progress',
+  NUM_SLOTS: 3,
+  activeIndex: 0,
+  _data: null,
+
+  load() {
+    if (this._data) return this._data;
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (raw) {
+        this._data = JSON.parse(raw);
+      } else {
+        this._migrateFromLegacy();
+      }
+    } catch (e) { /* fall through */ }
+    if (!this._data) this._data = { slots: [null, null, null], activeIndex: 0 };
+    if (!Array.isArray(this._data.slots) || this._data.slots.length !== this.NUM_SLOTS) {
+      this._data.slots = [null, null, null];
+    }
+    if (typeof this._data.activeIndex !== 'number' || this._data.activeIndex < 0 || this._data.activeIndex >= this.NUM_SLOTS) {
+      this._data.activeIndex = 0;
+    }
+    this.activeIndex = this._data.activeIndex;
+    return this._data;
+  },
+
+  _migrateFromLegacy() {
+    const legacy = localStorage.getItem(this.LEGACY_KEY);
+    if (!legacy) return;
+    try {
+      const solvedCases = JSON.parse(legacy);
+      if (Array.isArray(solvedCases) && solvedCases.length) {
+        const perCase = {};
+        for (const id of solvedCases) perCase[id] = { solved: true };
+        this._data = {
+          slots: [
+            { perCase, lastPlayed: Date.now(), createdAt: Date.now() },
+            null,
+            null
+          ],
+          activeIndex: 0
+        };
+        this.persist();
+      }
+    } catch (e) { /* ignore */ }
+  },
+
+  persist() {
+    try { localStorage.setItem(this.KEY, JSON.stringify(this._data)); } catch (e) { /* silent */ }
+  },
+
+  getSlots() { this.load(); return this._data.slots; },
+
+  getActive() { this.load(); return this._data.slots[this.activeIndex]; },
+
+  ensureActive() {
+    this.load();
+    if (!this._data.slots[this.activeIndex]) {
+      this._data.slots[this.activeIndex] = {
+        perCase: {},
+        createdAt: Date.now(),
+        lastPlayed: Date.now()
+      };
+    }
+    return this._data.slots[this.activeIndex];
+  },
+
+  selectSlot(idx) {
+    this.load();
+    this.activeIndex = idx;
+    this._data.activeIndex = idx;
+    this.persist();
+  },
+
+  deleteSlot(idx) {
+    this.load();
+    this._data.slots[idx] = null;
+    this.persist();
+  },
+
+  caseState(caseId) {
+    const slot = this.getActive();
+    if (!slot || !slot.perCase) return null;
+    return slot.perCase[caseId] || null;
+  },
+
+  saveCaseState(caseId, state) {
+    const slot = this.ensureActive();
+    if (!slot.perCase) slot.perCase = {};
+    slot.perCase[caseId] = Object.assign({}, slot.perCase[caseId] || {}, state);
+    slot.lastPlayed = Date.now();
+    this.persist();
+  },
+
+  markCaseSolved(caseId) {
+    const slot = this.ensureActive();
+    if (!slot.perCase) slot.perCase = {};
+    slot.perCase[caseId] = Object.assign({}, slot.perCase[caseId] || {}, {
+      solved: true,
+      // Clear mid-case state so the next entry starts fresh.
+      currentProblemIndex: 0,
+      health: 3,
+      solvedClues: []
+    });
+    slot.lastPlayed = Date.now();
+    this.persist();
+  },
+
+  isCaseSolved(caseId) {
+    const slot = this.getActive();
+    return !!(slot && slot.perCase && slot.perCase[caseId] && slot.perCase[caseId].solved);
+  },
+
+  // Snapshot the current Game state into the active slot for the current case
+  snapshot() {
+    if (!Game.currentCase) return;
+    this.saveCaseState(Game.currentCase.id, {
+      currentProblemIndex: Game.currentProblemIndex,
+      health: Game.health,
+      solvedClues: Array.from(Game.solvedClues || [])
+    });
+  },
+
+  // Try to hydrate Game state from active slot for the given case.
+  // Returns true if mid-case progress was restored.
+  hydrate(caseId) {
+    const cs = this.caseState(caseId);
+    if (cs && !cs.solved && typeof cs.currentProblemIndex === 'number' && cs.currentProblemIndex > 0) {
+      Game.currentProblemIndex = cs.currentProblemIndex;
+      Game.health = (typeof cs.health === 'number') ? cs.health : 3;
+      Game.solvedClues = new Set(cs.solvedClues || []);
+      return true;
+    }
+    return false;
+  },
+
+  // Returns a friendly summary of a slot for the picker UI.
+  summary(idx) {
+    this.load();
+    const slot = this._data.slots[idx];
+    if (!slot) return { isEmpty: true };
+    const allCases = (typeof CASES !== 'undefined') ? CASES : [];
+    const perCase = slot.perCase || {};
+    const solvedCount = Object.values(perCase).filter(c => c.solved).length;
+    let inProgress = null;
+    for (const caseObj of allCases) {
+      const state = perCase[caseObj.id];
+      if (state && !state.solved && typeof state.currentProblemIndex === 'number' && state.currentProblemIndex > 0) {
+        inProgress = {
+          id: caseObj.id,
+          title: caseObj.title,
+          currentProblemIndex: state.currentProblemIndex,
+          totalClues: caseObj.problems.length
+        };
+        break;
+      }
+    }
+    return {
+      isEmpty: false,
+      solvedCount,
+      totalCases: allCases.length,
+      inProgress,
+      lastPlayed: slot.lastPlayed,
+      createdAt: slot.createdAt
+    };
+  }
+};
+
+// ============================================================
 // GAME STATE
 // ============================================================
 const Game = {
@@ -76,37 +252,10 @@ const Game = {
   currentProblemIndex: 0,
   health: 3,
   problems: [],
-  solvedCases: [],
 
-  loadProgress() {
-    try {
-      const saved = localStorage.getItem('muffin_agency_progress');
-      if (saved) {
-        this.solvedCases = JSON.parse(saved);
-      }
-    } catch (e) {
-      this.solvedCases = [];
-    }
-  },
-
-  saveProgress() {
-    try {
-      localStorage.setItem('muffin_agency_progress', JSON.stringify(this.solvedCases));
-    } catch (e) {
-      // Silent fail
-    }
-  },
-
-  isCaseSolved(caseId) {
-    return this.solvedCases.includes(caseId);
-  },
-
-  markCaseSolved(caseId) {
-    if (!this.solvedCases.includes(caseId)) {
-      this.solvedCases.push(caseId);
-      this.saveProgress();
-    }
-  }
+  // Convenience accessors that delegate to the active slot.
+  isCaseSolved(caseId) { return Slots.isCaseSolved(caseId); },
+  markCaseSolved(caseId) { Slots.markCaseSolved(caseId); }
 };
 
 // ============================================================
@@ -185,18 +334,108 @@ function renderMuffinCharacters() {
 }
 
 // ============================================================
+// SLOT PICKER SCREEN
+// ============================================================
+function _formatLastPlayed(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  const now = new Date();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const sameDay = d.toDateString() === now.toDateString();
+  if (sameDay) return 'today';
+  const diff = Math.floor((now - d) / dayMs);
+  if (diff === 1) return 'yesterday';
+  if (diff < 7) return diff + ' days ago';
+  return d.toLocaleDateString();
+}
+
+function renderSlotPicker() {
+  const list = document.getElementById('slots-list');
+  if (!list) return;
+  list.innerHTML = '';
+
+  for (let i = 0; i < Slots.NUM_SLOTS; i++) {
+    const summary = Slots.summary(i);
+    const card = document.createElement('div');
+    const isActive = i === Slots.activeIndex && !summary.isEmpty;
+    card.className = 'slot-card' + (summary.isEmpty ? ' empty' : '') + (isActive ? ' active' : '');
+
+    if (summary.isEmpty) {
+      card.innerHTML =
+        '<div class="slot-card-header">' +
+          '<span class="slot-card-number">Slot ' + (i + 1) + '</span>' +
+        '</div>' +
+        '<div class="slot-card-title">Empty</div>' +
+        '<div class="slot-card-empty-hint">Tap to begin a new game.</div>';
+    } else {
+      const inProg = summary.inProgress;
+      const resumeLine = inProg
+        ? '<div class="resume-line">▶ Currently: ' + inProg.title + ' — Clue ' + (inProg.currentProblemIndex + 1) + ' of ' + inProg.totalClues + '</div>'
+        : '';
+      card.innerHTML =
+        '<div class="slot-card-header">' +
+          '<span class="slot-card-number">Slot ' + (i + 1) + '</span>' +
+        '</div>' +
+        '<div class="slot-card-title">Detective ' + (i + 1) + '</div>' +
+        '<div class="slot-card-stats">' +
+          '<div class="stat-line"><span>Cases solved</span><span>' + summary.solvedCount + ' of ' + summary.totalCases + '</span></div>' +
+          resumeLine +
+        '</div>' +
+        '<div class="slot-card-last-played">Last played ' + _formatLastPlayed(summary.lastPlayed) + '</div>' +
+        '<button class="slot-card-delete" title="Delete this save">✕</button>';
+    }
+
+    // Click anywhere on the card (except delete) selects this slot
+    card.addEventListener('click', (e) => {
+      if (e.target.classList.contains('slot-card-delete')) return;
+      Slots.selectSlot(i);
+      renderCaseSelect();
+      showScreen('cases');
+    });
+
+    const delBtn = card.querySelector('.slot-card-delete');
+    if (delBtn) {
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm('Delete Slot ' + (i + 1) + '? This cannot be undone.')) {
+          Slots.deleteSlot(i);
+          renderSlotPicker();
+        }
+      });
+    }
+
+    list.appendChild(card);
+  }
+}
+
+// ============================================================
 // CASE SELECT SCREEN
 // ============================================================
 function renderCaseSelect() {
   const list = document.getElementById('case-list');
   list.innerHTML = '';
 
+  // Update the active-slot indicator at the top
+  const slotLabel = document.getElementById('active-slot-label');
+  if (slotLabel) {
+    const summary = Slots.summary(Slots.activeIndex);
+    const solvedText = summary.isEmpty ? 'new' : summary.solvedCount + '/' + summary.totalCases + ' solved';
+    slotLabel.textContent = 'Detective ' + (Slots.activeIndex + 1) + ' · ' + solvedText;
+  }
+
   CASES.forEach((c, index) => {
     const card = document.createElement('div');
-    card.className = 'case-card' + (Game.isCaseSolved(c.id) ? ' solved' : '');
+    const isSolved = Game.isCaseSolved(c.id);
+    const slotState = Slots.caseState(c.id);
+    const inProgress = slotState && !slotState.solved && typeof slotState.currentProblemIndex === 'number' && slotState.currentProblemIndex > 0;
+    card.className = 'case-card' + (isSolved ? ' solved' : '');
 
     const diffClass = `difficulty-${c.difficulty}`;
+    const resumeBadge = inProgress
+      ? '<div class="resume-badge">Resume · Clue ' + (slotState.currentProblemIndex + 1) + '/' + c.problems.length + '</div>'
+      : '';
     card.innerHTML = `
+      ${resumeBadge}
       <div class="case-difficulty ${diffClass}">${c.difficulty}</div>
       <div class="case-card-title">Case ${index + 1}: ${c.title}</div>
       <div class="case-card-desc">${c.description}</div>
@@ -213,34 +452,36 @@ function renderCaseSelect() {
 function startCase(caseData) {
   Audio.init();
   Game.currentCase = caseData;
-  Game.currentProblemIndex = 0;
-  Game.health = 3;
-  Game.solvedClues = new Set();
-
-  // Use the fixed story-relevant problems from the case data
   Game.problems = caseData.problems;
+
+  // Try to resume from saved slot state for this case. If there's
+  // saved mid-case progress, hydrate it; otherwise start fresh.
+  const resumed = Slots.hydrate(caseData.id);
+  if (!resumed) {
+    Game.currentProblemIndex = 0;
+    Game.health = 3;
+    Game.solvedClues = new Set();
+  }
+
+  // Persist immediately so the slot records the case is now "started"
+  // even if the player closes the tab before finishing a clue.
+  Slots.snapshot();
 
   // Set up UI
   document.getElementById('game-case-title').textContent = caseData.title;
   document.getElementById('progress-total').textContent = Game.problems.length;
 
-  // Reset hearts
   updateHearts();
-
-  // Build clue cards
   renderClueCards();
 
-  // Remove critical state
   document.getElementById('screen-game').classList.remove('critical');
-
-  // Hide continue button
   document.getElementById('btn-continue').style.display = 'none';
 
-  // Show game screen
   showScreen('game');
 
-  // If the case has an opening narrative, show it before Clue 1.
-  if (caseData.intro) {
+  // Show the intro card only on a FRESH start. If we're resuming a
+  // case mid-stream, skip straight to the current clue.
+  if (caseData.intro && !resumed) {
     showCaseIntro(caseData.intro, () => showProblem());
   } else {
     showProblem();
@@ -277,6 +518,7 @@ function loseHeart() {
     heart.classList.add('hit');
   }
   setTimeout(updateHearts, 500);
+  Slots.snapshot();
 }
 
 // ============================================================
@@ -530,6 +772,7 @@ function handleCorrect(problem) {
   // Reveal clue card and show clue text after a brief delay
   setTimeout(() => {
     revealClueCard(Game.currentProblemIndex);
+    Slots.snapshot();
     Audio.clueReveal();
 
     // Show clue text in narrative
@@ -559,6 +802,7 @@ function handleContinue() {
     handleVictory();
     return;
   }
+  Slots.snapshot();
   const nextChapter = getChapterForIndex(Game.currentProblemIndex);
   // If we've crossed a chapter boundary, show the chapter-break overlay first.
   if (prevChapter && nextChapter && nextChapter.index > prevChapter.index) {
@@ -730,19 +974,31 @@ function returnFromReview() {
 // EVENT LISTENERS
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  Game.loadProgress();
+  Slots.load();
   renderMuffinCharacters();
 
-  // Title screen
+  // Title screen — go to slot picker first (rather than straight to cases)
   document.getElementById('btn-start').addEventListener('click', () => {
     Audio.init();
-    renderCaseSelect();
-    showScreen('cases');
+    renderSlotPicker();
+    showScreen('slots');
   });
 
-  // Case select back button
+  // Slot picker back button
+  const slotsBackBtn = document.getElementById('btn-slots-back');
+  if (slotsBackBtn) slotsBackBtn.addEventListener('click', () => showScreen('title'));
+
+  // Case select back to slot picker (was: back to title)
   document.getElementById('btn-back-title').addEventListener('click', () => {
-    showScreen('title');
+    renderSlotPicker();
+    showScreen('slots');
+  });
+
+  // "Switch Detective" button on case select goes back to slot picker
+  const switchSlotBtn = document.getElementById('btn-switch-slot');
+  if (switchSlotBtn) switchSlotBtn.addEventListener('click', () => {
+    renderSlotPicker();
+    showScreen('slots');
   });
 
   // Submit answer

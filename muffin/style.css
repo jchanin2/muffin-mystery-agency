@@ -343,6 +343,150 @@ body {
   color: var(--text-dim);
 }
 
+/* ============================================================
+   SAVE SLOT PICKER
+   ============================================================ */
+.slots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.slot-card {
+  background: linear-gradient(135deg, var(--navy-light), var(--navy-mid));
+  border: 1px solid rgba(226, 183, 20, 0.25);
+  border-radius: 12px;
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.slot-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(226, 183, 20, 0.18);
+}
+.slot-card.empty {
+  border-style: dashed;
+  border-color: rgba(226, 183, 20, 0.3);
+  background: linear-gradient(135deg, rgba(20, 18, 30, 0.4), rgba(15, 12, 22, 0.6));
+}
+.slot-card.active {
+  border-color: var(--gold-glow, #f2cc5e);
+  box-shadow: 0 0 18px rgba(226, 183, 20, 0.25);
+}
+.slot-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.slot-card-number {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.slot-card-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--gold-glow, #f2cc5e);
+  margin-bottom: 4px;
+}
+.slot-card.empty .slot-card-title {
+  color: var(--text-dim);
+}
+.slot-card-stats {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+.slot-card-stats .stat-line {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.slot-card-stats .resume-line {
+  color: var(--gold-glow, #f2cc5e);
+  font-style: italic;
+  margin-top: 8px;
+}
+.slot-card-last-played {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 8px;
+  font-style: italic;
+}
+.slot-card-empty-hint {
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.slot-card-delete {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: transparent;
+  border: 1px solid rgba(231, 76, 60, 0.4);
+  color: rgba(231, 76, 60, 0.8);
+  font-size: 0.85rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.2s;
+}
+.slot-card-delete:hover {
+  background: rgba(231, 76, 60, 0.15);
+  color: var(--red, #e74c3c);
+  border-color: var(--red, #e74c3c);
+}
+
+/* ============================================================
+   ACTIVE SLOT INDICATOR (top of case-select)
+   ============================================================ */
+.active-slot-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--gold, #E2B714);
+  text-transform: uppercase;
+}
+.active-slot-indicator .btn-ghost {
+  font-size: 0.7rem;
+  padding: 4px 12px;
+  letter-spacing: 0.1em;
+}
+.case-card .resume-badge {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: var(--gold, #E2B714);
+  color: var(--navy, #1a1a2e);
+  font-family: 'Special Elite', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(226, 183, 20, 0.3);
+}
+
 /* Game main layout — vertical storybook flow:
    scene → Detective's Notebook → math problem.
    Story-first reading order; everything full width inside max-width 960. */
