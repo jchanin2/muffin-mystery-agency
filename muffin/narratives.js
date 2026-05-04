@@ -666,5 +666,277 @@ const CASES = [
     ],
     resolution: 'Salvian Crooke is hauled away in irons before dawn, and at the inn that morning, with Petra warm in her mother\'s arms and the village shutters unbolting one by one, Muffin lays the case out from the beginning so that everyone — including Howell Greaves, who never quite believed him — can see how every clue was the same clue, read sideways. Crooke\'s aunt, in the next county, is Petra\'s great-aunt; her will leaves her estate to Petra unless Petra dies before her. The "powder" line in Crooke\'s tidy ledger was phosphor-moss dust, stolen from Mira\'s shelf with the unfamiliar handwriting on the jar. The wolfhound\'s painted hide produced the silver-white glow in moonlight; the same paint produced the yellow-gold eyes; "PAINT" on Tom Reedy\'s slate was Tom telling them so as best a frightened man could. The claw imprint of 600 grams was made by a real wolf paw, dragged and weighted by Crooke himself. The wood-tract south of Wendell\'s hut was spared because Crooke\'s cave hideout lay to the northwest and he had no reason to draw attention there. The 1.5-hour-from-moonrise schedule was a man\'s schedule, not a beast\'s — moonrise was simply Crooke\'s start time. Goody Nye sold him moss without knowing what he meant by it; she is innocent of everything except living strangely. Wendell was tired. Stone was old-scarred. Tom was terrified. Petra was unlucky enough to be loved by an aunt with a fortune. Muffin tucks his magnifying glass into his hat and tips it to the morning. "There was never a beast in this wood," he says quietly. "There was only a man who wanted there to be one."',
     defeatMessage: 'The fog thickens, the trail grows cold, and the next full moon rises with Petra still unfound. But Muffin is no quitter. He returns to the inn, lights a fresh candle, smooths out his case notes, and re-reads every clue from the beginning. Hollowmere is still standing. Petra is still alive. And the math, when read carefully, has only ever pointed in one direction.'
+  },
+
+  // ============================================================
+  // CASE 7: The Ghost of Ravenhollow Manor (Hard, 25 problems, 4 chapters)
+  // Focus: All advanced fraction operations — unlike denominators,
+  //        adding/subtracting 3 fractions, mixed-number addition AND
+  //        subtraction with regrouping AND unlike denominators, missing
+  //        fraction. Plus: line plots with fractional data, multiplication
+  //        as scaling (compare to 1, compare without multiplying), powers
+  //        of 10 (mul/div whole numbers and decimals by 10/100/1000), and
+  //        unit conversion (US customary + time + metric place-value).
+  // Style: Late-1880s gothic-haunted-manor on a windswept moor. Hound-
+  //        of-Baskervilles homage, indoor and claustrophobic. Eccentric
+  //        late lord, frightened young heiress, four red-herring suspects,
+  //        and a doctor with a sealed secondary will.
+  // ============================================================
+  {
+    id: 'ghost_ravenhollow',
+    title: 'The Ghost of Ravenhollow Manor',
+    difficulty: 'hard',
+    description: 'A young heiress is being terrorised by what the staff swears is the vengeful ghost of her late great-uncle. She has five nights until the inheritance transfers — and a sealed secondary will lies in the gallery clock. Muffin must find out who, or what, is behind the haunting before the deadline runs out.',
+    backdrop: 'manor',
+    intro: {
+      title: 'A Letter from the Moor',
+      illustration: 'manor_intro',
+      text: '<p>It is mid-November in the city. Sleet on the roof of the Mystery Agency, a candle burning low. Muffin has just finished filing the last of his case reports when a frantic letter is slid under the door by a soaked messenger boy.</p>' +
+            '<p>The letter is signed by <em>Reverend Thomas Holloway</em>, parson of the village of Ravenhollow on the moor, a full day\'s ride from the city. His charge — a sixteen-year-old heiress named <em>Lady Arabella Wren</em> — has just inherited <em>Ravenhollow Manor</em> from her late great-uncle Lord Cassius Wren. The staff and the villagers swear the manor is haunted. Cold spots in the gallery. Doors slamming. A vase shattered above Arabella\'s bed. And last night her dead mother\'s locket nailed to her bedroom door with a note in the late Cassius\'s own handwriting that read simply: <em>"LEAVE."</em></p>' +
+            '<p class="intro-letter">"Detective — there is more, and I dare not put the worst of it on paper. Arabella has <em>five nights</em> before the inheritance is legally transferred. If she dies, flees, or is declared incompetent before then, the estate passes to a beneficiary named in a sealed <em>secondary will</em> Cassius lodged with his solicitor. We have not been permitted to read it. The girl is brave, Detective, but she is breaking. Please come.<br><span class="intro-letter-sig">— Reverend Thomas Holloway, Ravenhollow</span>"</p>' +
+            '<p>Muffin reads the letter twice. He has heard of Cassius Wren. The Spiritualist Society in the city used to whisper about the eccentric old lord — the cipher-collector, the trick-room builder, the man who spent his last decade obsessed with secret passages and locked-room puzzles. Muffin does not believe in ghosts. But he does believe in young heiresses dying suspiciously close to legal deadlines.</p>' +
+            '<p>He folds the letter, snuffs his candle, and tucks his magnifying glass into the band of his deerstalker.</p>' +
+            '<p>"Saddle the post-coach. We ride for the moor at dawn."</p>' +
+            '<p>By dusk the next day Muffin steps off the coach at the iron gates of Ravenhollow Manor. The moor is silent. Fog comes up off the heather like breath. The lanterns at the manor door burn far lower than he expects.</p>' +
+            '<p class="intro-tagline">The case begins now.</p>',
+      buttonLabel: 'Approach the Manor →'
+    },
+    chapters: [
+      { title: 'Night One — Arrival at Ravenhollow', length: 6 },
+      { title: 'Night Two — The Investigation', length: 7 },
+      { title: 'Night Three — The Hauntings Escalate', length: 6 },
+      { title: 'Night Four — The Reveal', length: 6 }
+    ],
+    problems: [
+      // ============================================================
+      // NIGHT ONE — ARRIVAL AT RAVENHOLLOW
+      // ============================================================
+
+      // Problem 1 — Time conversion: hours+minutes → minutes total
+      {
+        cluePrompt: 'At the gate Muffin is met by <em>Reverend Holloway</em>, a thin man with kind eyes and a wet collar. "Detective. Thank God you came. The post-coach took <em>4 hours and 15 minutes</em> from town — I dared not ride out to fetch you sooner, the staff watch every door. Tell me, Detective, in your trade you must measure everything: how many <em>minutes</em> total is that ride?"',
+        clueReveal: 'Two hundred and fifty-five minutes — over four hours of road through the fog, with no telegraph, no help, no return until tomorrow. Muffin makes a note: if Arabella needs out tonight, there is no out tonight. Whatever begins this evening, it will play out in this house. The gate clangs shut behind them.',
+        question: 'The post-coach takes <em>4 hours and 15 minutes</em>. How many <em>minutes</em> total? (1 hour = 60 minutes)',
+        answer: 255
+      },
+
+      // Problem 2 — Powers of 10: whole × 100
+      {
+        cluePrompt: 'Inside the great hall, an elderly butler — <em>Hawkins</em>, 50 years at Ravenhollow — meets them. He is stern, very tall, very quiet. "The manor has 47 chambers above ground, sir, and exactly <em>10² portraits</em> on its walls. The late Lord Cassius collected them himself." Muffin glances at the dim corridor of frames vanishing into shadow. He needs the count in plain numerals.',
+        clueReveal: 'One hundred portraits — and every one of them, Hawkins says, painted from life by the late Lord Cassius\'s own hand. A man with that obsession knew his house better than anyone. A man with that obsession also kept secrets. Muffin makes a note: <em>Hawkins. 50 years. Knows every wall.</em> The butler does not blink as he turns away.',
+        question: 'Hawkins says the manor has <em>10²</em> portraits hung in its corridors. How many portraits is <em>10²</em>?',
+        answer: 100
+      },
+
+      // Problem 3 — Mixed-number addition (same denominator)
+      {
+        cluePrompt: '<em>Mrs. Pennyfall</em>, the head housekeeper, brings Muffin a cup of tea and her staff-time ledger. "Forty years I\'ve served this family, Detective. I keep every hour. This morning I logged <em>2 1/8 hours</em> polishing the silver, and another <em>1 5/8 hours</em> on the gallery brass after lunch. Add them, would you? My hands are not what they were."',
+        clueReveal: 'Three and three-quarter hours of polishing — Mrs. Pennyfall\'s hands have indeed slowed, but her count is precise. Muffin notes: she had work in the GALLERY this afternoon, the same gallery the maids report cold spots in. Loyal, methodical, present at the scene. Muffin adds her name to his list.',
+        question: 'Add Mrs. Pennyfall\'s morning and afternoon hours: <em>2 1/8 + 1 5/8</em>. Give as a mixed number or fraction.',
+        answer: '15/4',
+        hint: '2 1/8 + 1 5/8'
+      },
+
+      // Problem 4 — US customary volume (pints → cups)
+      {
+        cluePrompt: 'In the late lord\'s study, Muffin opens a heavy crystal decanter — Cassius\'s favourite brandy, Hawkins says, refilled weekly. The butler tells him the decanter holds <em>3 pints</em> when full. Muffin needs the count in cups for the kitchen ledger he means to cross-check. <em>(1 pint = 2 cups)</em>',
+        clueReveal: 'Six cups — a heavy night\'s drink. The kitchen ledger, when Muffin checks it, shows the decanter being refilled <em>twice</em> a week recently — twelve cups\' worth — far more than even an old man with a fondness for brandy could drain. Someone has been pouring it out. The why, Muffin doesn\'t yet know.',
+        question: 'The decanter holds <em>3 pints</em>. How many <em>cups</em> is that? (1 pint = 2 cups)',
+        answer: 6
+      },
+
+      // Problem 5 — Adding fractions with unlike denominators
+      {
+        cluePrompt: 'A young maid named <em>Tilly</em>, eyes very wide, is brought to Muffin in the kitchen. "I heard footsteps in the gallery, sir. Twice. The first set was <em>1/3 hour</em> ago. The second was <em>1/4 hour</em> after that." Muffin needs the total time elapsed since she first heard them, to mark on his timeline.',
+        clueReveal: '7/12 of an hour — about 35 minutes ago. That places the first sound while Mrs. Pennyfall was still polishing the gallery brass. Either Mrs. Pennyfall heard nothing strange, or she was the source. Or — Muffin\'s pencil lifts — someone passed THROUGH the gallery without her seeing them. The math suggests a path, and a path suggests a passage.',
+        question: 'Add <em>1/3 + 1/4</em>. Give your answer as a fraction.',
+        answer: '7/12',
+        hint: '1/3 + 1/4'
+      },
+
+      // Problem 6 — Reading a line plot (fractional data)
+      {
+        cluePrompt: 'In Arabella\'s sitting-room, <em>Dr. Edmund Cray</em> — Cassius\'s longtime physician, charming and immaculate — shows Muffin the dosage chart he has been keeping for Arabella\'s "calming tonic." It is plotted as a line plot of doses over the past week: <em>3 doses of 1/4 tsp, 4 doses of 1/2 tsp, 2 doses of 3/4 tsp, 1 dose of 1 tsp.</em> Muffin needs the most frequent dose value before he can judge the chart.',
+        clueReveal: '1/2 teaspoon — Cray\'s "usual" dose. He prescribes it himself, prepares it himself, administers it himself, and counts the empty vials himself. No one else in the house touches the tonic. Cray\'s smile is warm and untroubled. Muffin makes a note in tiny script: <em>Cray. Privileged access to her cup.</em>',
+        question: 'On Cray\'s line plot of weekly doses, which dose is the <em>MOST FREQUENT</em>? Give your answer as a fraction. (Doses: 1/4 ×3, 1/2 ×4, 3/4 ×2, 1 ×1.)',
+        answer: '1/2'
+      },
+
+      // ============================================================
+      // NIGHT TWO — THE INVESTIGATION
+      // ============================================================
+
+      // Problem 7 — Mixed-number addition with unlike denominators (no regrouping)
+      {
+        cluePrompt: 'At dawn Muffin walks the manor with Hawkins. "East wing is <em>2 1/4 furlongs</em> end-to-end, sir. West wing is <em>3 1/3 furlongs</em>. The late lord measured them himself the year he built the gallery." Muffin needs the total length for his floor-plan.',
+        clueReveal: '5 and 7/12 furlongs of corridor — over half a mile, end to end. A man could move quietly through this much house all night and never be seen if he knew the rhythm of the watch. And Hawkins, who has paced these halls for fifty years, knows that rhythm better than any living soul. Muffin\'s pencil hovers over Hawkins\' name on the suspect list.',
+        question: 'East wing <em>2 1/4</em> furlongs + west wing <em>3 1/3</em> furlongs. Give the total as a mixed number or fraction.',
+        answer: '67/12',
+        hint: '2 1/4 + 3 1/3'
+      },
+
+      // Problem 8 — Subtracting fractions with unlike denominators
+      {
+        cluePrompt: 'In the gallery, Muffin examines the bell-pull cord that is supposed to summon staff to Arabella\'s room. It is now hanging in a strange short loop. Mrs. Pennyfall says it was originally <em>5/6 yard</em>, but she measured it this morning and only <em>1/2 yard</em> remains. Muffin needs to know how much was cut off.',
+        clueReveal: '1/3 yard — about a foot — of bell-cord, severed neatly. Whoever cut it knew exactly which cord controls Arabella\'s summons. That is not a ghost\'s knowledge; that is a houseguest\'s. Muffin pockets the severed end as evidence.',
+        question: '<em>5/6 − 1/2</em>. Give your answer as a simplified fraction.',
+        answer: '1/3',
+        hint: '5/6 − 1/2'
+      },
+
+      // Problem 9 — Solve for missing fraction
+      {
+        cluePrompt: 'In the kitchen, Cook\'s recipe for Arabella\'s evening calming tea calls for exactly <em>7/8 cup</em> of fresh well-water, never measured by anyone but Cook. This morning Cook poured <em>1/4 cup</em> before being interrupted by a "ghostly" crash from the gallery. Muffin needs to know how much was added LATER, by someone else, to fill the recipe — solve <em>1/4 + ? = 7/8</em>.',
+        clueReveal: '5/8 cup — added by an unknown hand while Cook was distracted by the gallery noise. The crash, then, was a deliberate distraction so that whoever added the rest of the water — and very likely something else with it — could do so unseen. The pattern is precise. Whoever did this knew Cook\'s recipe by heart.',
+        question: 'Cook poured <em>1/4 cup</em>; the recipe calls for <em>7/8 cup</em>. How much was added by the unknown hand? Solve <em>1/4 + ? = 7/8</em>.',
+        answer: '5/8',
+        hint: '7/8 − 1/4'
+      },
+
+      // Problem 10 — Multiplying decimals by 100
+      {
+        cluePrompt: 'Dr. Cray hands Muffin his monthly bill at breakfast — neatly itemised, charming as ever. The line for "calming tonic" reads: <em>0.07 pounds per dose, 100 doses prescribed</em>. Muffin needs the total billed amount.',
+        clueReveal: 'Seven pounds — a tidy sum for a single month, but trifling compared to what is at stake in this house. Cray bills as a doctor would bill. The math itself is innocent. What is NOT innocent is the chain of access it implies: he prescribes, he prepares, he administers, and he invoices. Every step touches the tonic. Every dose passes through one set of hands.',
+        question: 'Cray bills <em>0.07 pounds</em> per dose, for <em>100 doses</em>. What is the total in pounds?',
+        answer: 7
+      },
+
+      // Problem 11 — Reading line plot with fractions (interpretation)
+      {
+        cluePrompt: 'Muffin compiles the gallery\'s cold-spot reports onto a line plot of times-since-sunset: <em>3 reports at 1/8 hour</em>, <em>2 reports at 3/8 hour</em>, <em>1 report at 5/8 hour</em>. He needs to know how many TOTAL reports came in WITHIN <em>1/2 hour</em> of sunset — the early window where staff were still in the corridors.',
+        clueReveal: '5 reports — both 1/8 and 3/8 are less than 1/2, so 3 + 2. The remaining lone report at 5/8 came AFTER staff had retired for the night, which means whoever caused it could move freely. The reports cluster early — when staff are still in the halls — to plant witnesses, then trail off to one private incident later. That is not a ghost\'s schedule. That is a stage manager\'s.',
+        question: 'Cold-spot reports: <em>3 at 1/8 hr, 2 at 3/8 hr, 1 at 5/8 hr</em>. How many came in <em>WITHIN 1/2 hour</em> of sunset?',
+        answer: 5
+      },
+
+      // Problem 12 — Mixed-number subtraction (unlike, no regrouping)
+      {
+        cluePrompt: 'In the library, a rare incunabulum is missing from the third shelf. The shelf measures <em>5 7/8 yards</em> end to end. The remaining books fill exactly <em>2 3/4 yards</em>. Muffin needs the empty space — the volume the missing book OCCUPIED, plus the gap left.',
+        clueReveal: '3 1/8 yards of empty shelf — far more than a single book\'s width. Whatever was taken was either many volumes, or covered up to LOOK like a single missing book. Muffin notes: a man pretending to remove only one item, when he removed several, would do so to mask which one was important. <em>Cassius\'s diary, perhaps.</em>',
+        question: 'Shelf is <em>5 7/8 yards</em> long. Books fill <em>2 3/4 yards</em>. How much is empty?',
+        answer: '25/8'
+      },
+
+      // Problem 13 — Multiplication as scaling
+      {
+        cluePrompt: 'In Cassius\'s study, Muffin finds an old ledger noting the value of his estate: <em>12 thousand pounds</em>. Beside it, in the same hand, a curious scribble: "<em>secondary share = 4/5 × 12</em>." Muffin needs the value of <em>4/5 × 12</em> — and then a moment to think about what it means that the answer is LESS than the original 12.',
+        clueReveal: '48/5, or 9 and 3/5 — that is the secondary share in thousands of pounds. <em>Less than 12, because 4/5 is less than 1: multiplying by a fraction less than 1 SHRINKS the number.</em> But 9,600 pounds is a vast sum — the size of inheritance worth committing crimes for. Whoever inherits the secondary share has a powerful motive.',
+        question: 'Calculate <em>4/5 × 12</em>. Give as a mixed number or fraction.',
+        answer: '48/5',
+        hint: '4/5 × 12'
+      },
+
+      // ============================================================
+      // NIGHT THREE — THE HAUNTINGS ESCALATE
+      // ============================================================
+
+      // Problem 14 — Mixed-number subtraction with regrouping AND unlike denominators
+      {
+        cluePrompt: 'In Arabella\'s sitting-room Muffin checks his watch against the haunting log. Tonight\'s "haunting" — a clattering chain on the floor above her bed — lasted <em>7 1/3 hours</em> from first sound to silence. The previous night\'s lasted only <em>3 4/5 hours</em>. Muffin needs the difference.',
+        clueReveal: '3 and 8/15 hours longer tonight — almost three and a half hours more terror. The hauntings are escalating, intensifying, deliberately wearing Arabella down. That is not the pattern of a wandering spirit. That is the pattern of a mortal ENEMY trying to break a sixteen-year-old before the legal deadline. Muffin\'s grip on his pencil tightens.',
+        question: 'Subtract: <em>7 1/3 − 3 4/5</em>. Give as a mixed number or fraction.',
+        answer: '53/15',
+        hint: '7 1/3 − 3 4/5'
+      },
+
+      // Problem 15 — Word problem: subtracting mixed numbers (with regrouping)
+      {
+        cluePrompt: 'Down in the wine cellar, Muffin checks the brandy cask. Three months ago, just before Cassius died, the cellar log shows it held <em>5 1/2 gallons</em>. Today it holds only <em>1 7/8 gallons</em>. No one but Hawkins has the key. Muffin needs to know how much brandy has gone missing.',
+        clueReveal: '3 and 5/8 gallons of brandy — more than a man could drink in three months, and Hawkins drinks none. The brandy was being POURED somewhere, regularly. Muffin recalls Cassius\'s decanter being refilled twice a week. The math says the missing brandy was leaving the cellar through Hawkins\' key — but it was being USED by someone else with access to the decanter. The doctor pours for his patient nightly. Hawkins is innocent of the brandy theft. The doctor is not.',
+        question: 'Cellar held <em>5 1/2 gallons</em>. Now holds <em>1 7/8 gallons</em>. How much is missing?',
+        answer: '29/8'
+      },
+
+      // Problem 16 — Three-fraction addition (unlike denominators)
+      {
+        cluePrompt: 'On Arabella\'s bedside table, Muffin finds Dr. Cray\'s personal dose record for the past three days: <em>Monday 1/2 cup, Tuesday 1/3 cup, Wednesday 1/4 cup</em>. He needs the total tonic given over those three days.',
+        clueReveal: '13/12, or 1 and 1/12 cups in three days — over a CUP of tonic in seventy-two hours. Cray\'s public records show only "low calming dose." His private record, here, shows over a cup. He is dosing her higher than he is ADMITTING. With what? Muffin retrieves a sealed sample of the tonic and pockets it for Mira Vell\'s analysis later.',
+        question: 'Total of three days\' tonic: <em>1/2 + 1/3 + 1/4</em>. Give as a mixed number or fraction.',
+        answer: '13/12',
+        hint: '1/2 + 1/3 + 1/4'
+      },
+
+      // Problem 17 — Reading a line plot / data analysis (mode)
+      {
+        cluePrompt: 'Muffin records the intervals between every reported "haunting" since he arrived. The intervals, in hours: <em>1/4, 1/2, 1/4, 1/8, 1/2, 1/4, 1/8</em>. He plots them on a line plot and looks for the most frequent interval — the rhythm of the schemer.',
+        clueReveal: '1/4 hour — fifteen-minute intervals appear THREE times, more than any other gap. Hauntings on a fifteen-minute clock are not the work of a restless dead man. They are the work of a man with a pocket-watch and a route. Muffin underlines "1/4 hr" in his notebook and steps quietly into the long gallery.',
+        question: 'Of the intervals <em>1/4, 1/2, 1/4, 1/8, 1/2, 1/4, 1/8</em>, which value is <em>MOST FREQUENT</em>?',
+        answer: '1/4'
+      },
+
+      // Problem 18 — Multiplication as scaling (compare to 1)
+      {
+        cluePrompt: 'Pinned inside the cover of Cassius\'s old diary Muffin finds a strange equation in the late lord\'s spidery hand: "<em>secondary cut = 7/8 × 11 acres of the south meadow</em>." Muffin needs the answer — and a moment to feel what it means that <em>7/8</em> is less than 1.',
+        clueReveal: '77/8, or 9 and 5/8 acres — less than the full 11 acres, because multiplying by 7/8 (a fraction less than 1) SHRINKS the original. The "secondary cut" is not the whole estate, but it is enormous. Whoever the secondary beneficiary is, they have been planning to inherit nearly nine and two-thirds acres of the prime south meadow. Muffin slips the diary into his coat.',
+        question: 'Calculate <em>7/8 × 11</em>. Give as a mixed number or fraction.',
+        answer: '77/8',
+        hint: '7/8 × 11'
+      },
+
+      // Problem 19 — Dividing decimals by 1,000
+      {
+        cluePrompt: 'Muffin\'s sealed sample of Arabella\'s tonic, sent down by carrier-pigeon to be analysed at first light, comes back with a single line in Mira Vell\'s handwriting from Hollowmere: <em>"laudanum content this month: 8,400 milligrams."</em> Muffin needs the dose in <em>grams</em> to compare it against medical safety guides. <em>(1 g = 1,000 mg)</em>',
+        clueReveal: '8.4 grams of laudanum in one month — more than four times the safe monthly limit for an adult, prescribed to a sixteen-year-old girl. This is not "calming." This is poisoning at slow tempo. Muffin\'s blood goes cold. He folds the analysis and steps quickly back toward the gallery. The hauntings, the dosage, the "nerves" — none of it is supernatural. All of it is Cray.',
+        question: 'Convert <em>8,400 mg</em> to <em>grams</em>. (1 g = 1,000 mg)',
+        answer: 8.4
+      },
+
+      // ============================================================
+      // NIGHT FOUR — THE REVEAL
+      // ============================================================
+
+      // Problem 20 — Adding mixed numbers with regrouping (unlike denominators)
+      {
+        cluePrompt: 'Behind the gallery clock — exactly where the Reverend\'s letter said the secondary will lay — Muffin finds it. But the will is not what he came for. Tucked alongside it is Cassius\'s own hand-drawn map of the manor\'s hidden passages. The corridor from the doctor\'s guest room to Arabella\'s bedroom is marked: <em>4 5/6 yards</em> through one wall, <em>2 1/2 yards</em> through the next. Muffin needs the total passage length.',
+        clueReveal: '7 and 1/3 yards — a passage barely twenty-two feet long, hidden in the walls between the doctor\'s guest room and Arabella\'s sleeping chamber. Cray could enter Arabella\'s room WITHOUT EVER OPENING A DOOR, leave a "nailed" locket, smash a vase from inside the wall, and be back in his room in under thirty seconds. The "ghost" had a route. The route had a builder. The builder is dead. The user is not.',
+        question: 'Hidden passage: <em>4 5/6 + 2 1/2</em> yards. Give the total as a mixed number or fraction.',
+        answer: '22/3',
+        hint: '4 5/6 + 2 1/2'
+      },
+
+      // Problem 21 — Word problem: subtracting mixed numbers (with regrouping)
+      {
+        cluePrompt: 'Muffin breaks the seal on the secondary will. The estate is recorded as <em>12 1/2 acres</em> in total. Of these, <em>5 3/4 acres</em> are bequeathed to Arabella outright (the manor proper, the gardens, the stable yard). The remainder — every acre of farmland, woodland, mineral right and tenant cottage — passes to a single named "beneficiary of last resort." Muffin needs that remainder.',
+        clueReveal: '6 and 3/4 acres — over half the estate, all of it the income-generating land — to a single secondary beneficiary. Muffin\'s eye drops to the name written on the next line, in Cassius\'s own handwriting. He reads it twice. Then he closes the will, tucks it inside his coat, and walks straight toward the long gallery, where Cray is at this moment pouring Arabella her evening tonic.',
+        question: 'Estate is <em>12 1/2 acres</em>. Arabella inherits <em>5 3/4</em>. How many acres go to the secondary beneficiary?',
+        answer: '27/4'
+      },
+
+      // Problem 22 — Line plot interpretation: total count
+      {
+        cluePrompt: 'Cassius\'s passage-map shows where every secret door opens into the manor. Muffin overlays the staff\'s cold-spot reports on it as a line plot, by yards from the gallery clock: <em>2 reports at 0 yards, 1 at 1/8 yard, 3 at 1/2 yard, 2 at 7/8 yard, 1 at 1 yard</em>. He needs the TOTAL count of cold-spot reports.',
+        clueReveal: '9 cold-spot reports total — and ALL of them within one yard of a hidden passage door. Not one report comes from anywhere ELSE in the manor. The pattern is mathematical, not spectral. Cold air leaks where doors open; doors are opening because someone is using the passages. Cray\'s guest-room door — at 0 yards — is the source of TWO reports alone. The line plot has just convicted him.',
+        question: 'Cold-spot reports: <em>2 at 0 yds, 1 at 1/8 yd, 3 at 1/2 yd, 2 at 7/8 yd, 1 at 1 yd</em>. What is the <em>TOTAL</em> count?',
+        answer: 9
+      },
+
+      // Problem 23 — Multiplication as scaling (the inheritance number)
+      {
+        cluePrompt: 'In the long gallery, Muffin confronts Dr. Cray as the doctor stands beside Arabella\'s tea tray. The will lies open between them. "The estate," Muffin says quietly, "is worth 16,000 pounds. Your secondary share is exactly <em>7/8</em> of it." Cray\'s teacup pauses halfway to his lip. Muffin needs the amount, in pounds, that Cray would inherit if Arabella died before the deadline.',
+        clueReveal: '14,000 pounds — a fortune, by any reckoning, paid out of a child\'s death. Cray sets the teacup down very carefully. Muffin sees the man\'s charm flicker and fail. Constable\'s men, summoned by Holloway in the hour Muffin spent reading the will, are climbing the front steps. There is one calculation left.',
+        question: 'Calculate <em>7/8 × 16,000</em> pounds.',
+        answer: 14000,
+        hint: '7/8 × 16,000'
+      },
+
+      // Problem 24 — Time conversion (deadline subtraction)
+      {
+        cluePrompt: 'The grandfather clock in the gallery reads <em>11:18 PM</em>. The legal inheritance transfer happens at <em>12:00 midnight</em>, when Arabella formally takes the estate and the secondary will is voided forever. Muffin needs to know exactly how many <em>minutes</em> remain.',
+        clueReveal: '42 minutes — less than three quarters of an hour. Cray needed Arabella to be declared incompetent or worse before midnight. He has run out of time. The grandfather clock\'s pendulum keeps swinging, slow and indifferent. Behind him, Cray finally moves — not toward the door, but toward the teacup. Muffin steps between them.',
+        question: 'It is <em>11:18 PM</em>. The deadline is <em>12:00 midnight</em>. How many <em>minutes</em> remain?',
+        answer: 42
+      },
+
+      // Problem 25 — Multi-step climax (scaling × scaling)
+      {
+        cluePrompt: 'Cray\'s notebook, dropped in the scuffle, falls open on the gallery floor. A page of accounts: of his planned <em>14,000-pound haul</em>, exactly <em>5/8</em> would have been kept; the remainder he had promised to two accomplices. And of that 5/8 share, Cray had pre-pledged <em>3/4</em> to a forger in the city to launder the inheritance through false land-deeds. Muffin needs the final figure: how much would Cray <em>actually have kept</em> after the forger was paid?',
+        clueReveal: 'Six thousand five hundred and sixty-two pounds and ten shillings — Cray\'s personal cut of a child\'s death. Muffin reads the figure aloud. Cray sinks against the wall. The constables take him at the door. Arabella, pale but standing, reaches out and steadies the grandfather clock\'s ticking pendulum with one hand. The legal transfer happens nine minutes later, at exactly midnight. The estate is hers. The case is closed.',
+        question: 'Cray\'s gross haul: <em>14,000 pounds</em>. He keeps <em>5/8</em> after one accomplice; of THAT, he pays out <em>3/4</em> to a forger. How much does he end up keeping? Calculate <em>14,000 × 5/8 × (1 − 3/4)</em>.',
+        answer: 2187.5,
+        hint: '14,000 × 5/8 × 1/4'
+      }
+    ],
+    resolution: 'Dr. Edmund Cray is led away in irons under a cold midnight moon. His confession comes within the hour — he was Cassius\'s personal physician for twelve years, copied his handwriting for hundreds of medical notes (which is how he forged the LEAVE warning), and slipped Cassius the laudanum prescription that named "my dear physician" as secondary beneficiary while Cassius was already too weak to read the fine print. Cassius died three months ago; Cray has been preparing his haunting since the burial. Muffin lays it out at the breakfast table the next morning so that Arabella, the Reverend, the staff, and even Hawkins can see: the powder was laudanum in her tonic; the "ghost" was Cray slipping through Cassius\'s own hidden passages; the bell-cord severance, the smashed vase, the locket on the door — all came from inside the wall between the doctor\'s guest room and Arabella\'s sleeping chamber. The cold spots clustered at the passage doors because the passages leaked draft. The escalating haunting hours weren\'t spectral fury but a mortal\'s schedule, growing desperate as the inheritance deadline closed in. Mrs. Pennyfall was just polishing brass; Hawkins was just guarding the family he\'d served fifty years; Eliza Marsh was, as Arabella whispered with a small smile, "the only person in the house who genuinely believed me." The Reverend Holloway weeps quietly into his tea. Arabella offers Muffin a brass key to the manor for whenever he should need shelter on the moor again. He bows, tucks his magnifying glass into his hat, and steps out into a morning that is, for the first time in many days, entirely silent. The ghost was always just a man with a route and a watch.',
+    defeatMessage: 'The hauntings escalate, the doctor is too quick, and Muffin runs out of time before the inheritance window closes. But Arabella is still alive in the gallery. The will is still in the clock. The hidden passages still run between the walls. Muffin returns to the front steps, lights a fresh lantern, smooths out his case file, and re-reads every clue from the beginning. The math, when read carefully, has only ever pointed to one set of hands.'
   }
 ];

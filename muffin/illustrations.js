@@ -3603,6 +3603,1172 @@ const Illustrations = {
     `);
   },
 
+  // ============================================================
+  // CASE 7: The Ghost of Ravenhollow Manor
+  // Palette: candlelit gothic — deep wine reds, wood browns, parchment,
+  // tall windows with stormy night beyond, velvet curtains, grandfather
+  // clocks, family portraits.
+  // ============================================================
+
+  // Helper: small candelabra on a surface
+  _candelabra(x, y) {
+    return `
+      <rect x="${x - 1}" y="${y}" width="2" height="6" fill="#aa8838"/>
+      <rect x="${x - 4}" y="${y + 6}" width="8" height="2" fill="#aa8838"/>
+      <rect x="${x - 1.2}" y="${y - 5}" width="2.5" height="5" fill="#eee5c8"/>
+      <rect x="${x - 4}" y="${y - 5}" width="2.5" height="5" fill="#eee5c8"/>
+      <rect x="${x + 1.5}" y="${y - 5}" width="2.5" height="5" fill="#eee5c8"/>
+      <ellipse cx="${x}" cy="${y - 7}" rx="1.4" ry="3" fill="#ffcc55"><animate attributeName="ry" values="3;4;3" dur="1.2s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="${x - 2.8}" cy="${y - 7}" rx="1.2" ry="2.5" fill="#ffcc55"><animate attributeName="ry" values="2.5;3.4;2.5" dur="1.4s" begin="0.3s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="${x + 2.8}" cy="${y - 7}" rx="1.2" ry="2.5" fill="#ffcc55"><animate attributeName="ry" values="2.5;3.4;2.5" dur="1.5s" begin="0.6s" repeatCount="indefinite"/></ellipse>
+      <circle cx="${x}" cy="${y - 4}" r="22" fill="#ffaa33" opacity="0.06"/>
+    `;
+  },
+
+  // Helper: framed family portrait on a wall
+  _portrait(x, y, w = 28, h = 36) {
+    return `
+      <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#3a2410" stroke="#1a1008" stroke-width="0.8"/>
+      <rect x="${x + 3}" y="${y + 3}" width="${w - 6}" height="${h - 6}" fill="#5a4828"/>
+      <rect x="${x + 3}" y="${y + 3}" width="${w - 6}" height="${h - 6}" fill="#7a5a30" opacity="0.4"/>
+      <ellipse cx="${x + w / 2}" cy="${y + h * 0.35}" rx="${w * 0.18}" ry="${h * 0.13}" fill="#d4b098"/>
+      <path d="M ${x + w / 2 - w * 0.2} ${y + h * 0.55} L ${x + w / 2 - w * 0.18} ${y + h - 4} L ${x + w / 2 + w * 0.18} ${y + h - 4} L ${x + w / 2 + w * 0.2} ${y + h * 0.55} Z" fill="#3a1818"/>
+      <ellipse cx="${x + w / 2}" cy="${y + h * 0.32}" rx="${w * 0.2}" ry="${h * 0.05}" fill="#5a4030"/>
+    `;
+  },
+
+  // Helper: tall arched window with stormy night view
+  _gothicWindow(x, y, w = 50, h = 100) {
+    return `
+      <path d="M ${x} ${y + h} L ${x} ${y + 18} Q ${x + w / 2} ${y - 4} ${x + w} ${y + 18} L ${x + w} ${y + h} Z" fill="#0a1220" stroke="#3a2818" stroke-width="2"/>
+      <line x1="${x + w / 2}" y1="${y + 4}" x2="${x + w / 2}" y2="${y + h}" stroke="#3a2818" stroke-width="1.5"/>
+      <line x1="${x}" y1="${y + 50}" x2="${x + w}" y2="${y + 50}" stroke="#3a2818" stroke-width="1.5"/>
+      ${[ [x + 8, y + 25], [x + w - 18, y + 22], [x + 12, y + 70], [x + w - 25, y + 75], [x + 30, y + 90] ].map(([sx, sy]) => `<line x1="${sx}" y1="${sy}" x2="${sx - 5}" y2="${sy + 18}" stroke="#88aadd" stroke-width="0.5" opacity="0.5"/>`).join('')}
+    `;
+  },
+
+  // Helper: line plot with fractional X-axis
+  _linePlot(cx, cy, points, scale = 1, color = '#3a2010') {
+    // points: array of { label: '1/4', count: 3 }
+    const w = 200 * scale;
+    const h = 90 * scale;
+    const x0 = cx - w / 2;
+    const xAxisY = cy + h / 2;
+    const step = w / (points.length + 1);
+    return `
+      <line x1="${x0}" y1="${xAxisY}" x2="${x0 + w}" y2="${xAxisY}" stroke="${color}" stroke-width="1.2"/>
+      ${points.map((p, i) => {
+        const x = x0 + step * (i + 1);
+        const tickY = xAxisY;
+        const xs = [];
+        for (let j = 0; j < p.count; j++) {
+          xs.push(`<text x="${x}" y="${tickY - 6 - j * 9}" text-anchor="middle" fill="${color}" font-size="${10 * scale}" font-weight="bold">×</text>`);
+        }
+        return `
+          <line x1="${x}" y1="${tickY - 3}" x2="${x}" y2="${tickY + 3}" stroke="${color}" stroke-width="1"/>
+          <text x="${x}" y="${tickY + 13}" text-anchor="middle" fill="${color}" font-size="${8 * scale}" font-style="italic">${p.label}</text>
+          ${xs.join('')}
+        `;
+      }).join('')}
+    `;
+  },
+
+  // Intro: Muffin reading the letter at his agency desk, sleet on window
+  manor_intro() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="180" fill="#2a1f12"/>
+      ${[0,80,160,240,320].map(x => `<line x1="${x}" y1="0" x2="${x}" y2="180" stroke="#1a1208" stroke-width="1"/>`).join('')}
+      <rect x="0" y="180" width="400" height="70" fill="#3a2818"/>
+      <rect x="0" y="180" width="400" height="4" fill="#5a3818"/>
+      <!-- Tall window with sleet -->
+      <rect x="270" y="20" width="120" height="120" fill="#0a0e1a" stroke="#5a3818" stroke-width="3"/>
+      <line x1="330" y1="20" x2="330" y2="140" stroke="#5a3818" stroke-width="2"/>
+      <line x1="270" y1="80" x2="390" y2="80" stroke="#5a3818" stroke-width="2"/>
+      <!-- Distant rooftops -->
+      <polygon points="275,90 290,75 305,82 325,72 325,90" fill="#1a1610" opacity="0.85"/>
+      <polygon points="335,90 350,75 365,80 380,72 385,90" fill="#1a1610" opacity="0.85"/>
+      <!-- Sleet streaks (more diagonal than rain) -->
+      ${[280, 295, 308, 320, 340, 355, 370, 380].map((x, i) => `<line x1="${x}" y1="${25 + (i % 3) * 8}" x2="${x - 9}" y2="${65 + (i % 3) * 8}" stroke="#aaccdd" stroke-width="0.8" opacity="0.5"/>`).join('')}
+      ${[285, 305, 325, 345, 365].map((x, i) => `<line x1="${x}" y1="${85 + (i % 2) * 6}" x2="${x - 8}" y2="${130 + (i % 2) * 6}" stroke="#aaccdd" stroke-width="0.8" opacity="0.45"/>`).join('')}
+
+      <!-- Bookshelf left -->
+      <rect x="10" y="40" width="60" height="110" fill="#3a2818" stroke="#1a1008" stroke-width="1"/>
+      ${[55, 78, 101, 124].map(y => `<rect x="14" y="${y}" width="52" height="3" fill="#1a1008"/>`).join('')}
+      ${[16, 25, 34, 43, 52, 61].map((x, i) => `<rect x="${x}" y="42" width="7" height="14" fill="#${['5a3818','7a3818','3a4818','5a2818','3a2818','7a4828'][i]}" stroke="#1a1008" stroke-width="0.4"/>`).join('')}
+      ${[16, 25, 34, 43, 52, 61].map((x, i) => `<rect x="${x}" y="83" width="7" height="14" fill="#${['7a3818','5a3818','3a4818','5a2818','3a2818','5a3818'][i]}" stroke="#1a1008" stroke-width="0.4"/>`).join('')}
+
+      <!-- Desk -->
+      <rect x="80" y="155" width="220" height="32" fill="#5a3a1c" stroke="#2a1408" stroke-width="2"/>
+      <rect x="80" y="155" width="220" height="5" fill="#7a5a30"/>
+      <rect x="86" y="187" width="10" height="50" fill="#3a2410"/>
+      <rect x="284" y="187" width="10" height="50" fill="#3a2410"/>
+
+      <!-- Letter -->
+      <rect x="135" y="120" width="135" height="50" fill="#eadba0" stroke="#aa2222" stroke-width="1.2" transform="rotate(-3 202 145)"/>
+      <text x="202" y="135" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic" transform="rotate(-3 202 135)">Detective Muffin —</text>
+      ${[140, 144, 148, 152, 156].map(y => `<line x1="143" y1="${y}" x2="261" y2="${y}" stroke="#3a2010" stroke-width="0.4" opacity="0.55" transform="rotate(-3 202 ${y})"/>`).join('')}
+      <text x="245" y="164" text-anchor="end" fill="#3a2010" font-size="5" font-style="italic" transform="rotate(-3 245 164)">— Rev. Holloway</text>
+      <circle cx="155" cy="160" r="6" fill="#aa2222" stroke="#6a1010" stroke-width="0.6" transform="rotate(-3 155 160)"/>
+
+      <!-- Candle -->
+      <rect x="100" y="135" width="6" height="20" fill="#eee5c8"/>
+      <rect x="98" y="155" width="10" height="4" fill="#3a2410"/>
+      <ellipse cx="103" cy="131" rx="3" ry="6" fill="#ffcc55"><animate attributeName="ry" values="6;8;6" dur="1.3s" repeatCount="indefinite"/></ellipse>
+      <ellipse cx="103" cy="129" rx="1.5" ry="4" fill="#fff5aa"/>
+      <circle cx="103" cy="140" r="60" fill="#ffaa33" opacity="0.1"/>
+
+      <!-- Magnifying glass -->
+      <circle cx="115" cy="172" r="11" fill="none" stroke="#E2B714" stroke-width="2.2"/>
+      <circle cx="115" cy="172" r="9" fill="rgba(200,220,255,0.1)"/>
+      <line x1="106" y1="180" x2="98" y2="190" stroke="#E2B714" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Muffin reading -->
+      ${this._miniMuffin(195, 95, 0.55)}
+
+      <!-- Door cracked open in background -->
+      <rect x="155" y="38" width="40" height="100" fill="#1a1208" stroke="#5a3818" stroke-width="1.5"/>
+      <line x1="155" y1="38" x2="155" y2="138" stroke="#5a3818" stroke-width="3"/>
+      <rect x="160" y="44" width="32" height="92" fill="#0a0e1a"/>
+    `);
+  },
+
+  // Scene 1: Manor gate at dusk
+  manor_gate_arrival() {
+    return this.scene('#0a0e1a', '#020403', `
+      <!-- Stormy sky -->
+      <rect x="0" y="0" width="400" height="180" fill="#1a1825"/>
+      ${this._fog(140, 0.32)}
+      ${this._fog(170, 0.4)}
+      <!-- Distant manor silhouette -->
+      <polygon points="100,170 100,80 130,80 130,60 170,40 220,30 270,40 310,60 310,80 340,80 340,170" fill="#0a0a12" stroke="#1a1610" stroke-width="1"/>
+      <!-- Manor windows glowing -->
+      ${[ [140, 110], [165, 110], [200, 100], [235, 100], [275, 110], [305, 110], [150, 140], [180, 140], [240, 140], [290, 140] ].map(([x, y]) => `<rect x="${x}" y="${y}" width="10" height="14" fill="#ffaa55" opacity="0.7"/><line x1="${x + 5}" y1="${y}" x2="${x + 5}" y2="${y + 14}" stroke="#1a1008" stroke-width="0.5"/>`).join('')}
+      <!-- Manor central tower -->
+      <polygon points="200,30 175,15 225,15" fill="#0a0a12"/>
+      <!-- Iron gate (foreground) -->
+      <rect x="0" y="170" width="400" height="80" fill="#0a0a05"/>
+      ${[60, 90, 120, 150, 280, 310, 340].map(x => `<line x1="${x}" y1="100" x2="${x}" y2="200" stroke="#1a1610" stroke-width="2.5"/>`).join('')}
+      <line x1="55" y1="100" x2="155" y2="100" stroke="#1a1610" stroke-width="3"/>
+      <line x1="55" y1="180" x2="155" y2="180" stroke="#1a1610" stroke-width="3"/>
+      <line x1="275" y1="100" x2="345" y2="100" stroke="#1a1610" stroke-width="3"/>
+      <line x1="275" y1="180" x2="345" y2="180" stroke="#1a1610" stroke-width="3"/>
+      <!-- Spear-tips on top -->
+      ${[60, 90, 120, 150, 280, 310, 340].map(x => `<polygon points="${x - 3},100 ${x + 3},100 ${x},94" fill="#1a1610"/>`).join('')}
+
+      <!-- Reverend Holloway (thin man with collar, holding letter) -->
+      <rect x="195" y="180" width="6" height="22" fill="#0a0603"/>
+      <rect x="207" y="180" width="6" height="22" fill="#0a0603"/>
+      <ellipse cx="198" cy="202" rx="4" ry="1.5" fill="#0a0603"/>
+      <ellipse cx="210" cy="202" rx="4" ry="1.5" fill="#0a0603"/>
+      <!-- Long black cassock -->
+      <path d="M 192 130 L 188 195 L 220 195 L 216 130 Z" fill="#0a0603"/>
+      <!-- White clerical collar -->
+      <rect x="201" y="128" width="6" height="3" fill="#eadba0"/>
+      <!-- Arms -->
+      <rect x="186" y="135" width="6" height="32" fill="#0a0603"/>
+      <rect x="216" y="135" width="6" height="32" fill="#0a0603"/>
+      <!-- Hands -->
+      <ellipse cx="189" cy="170" rx="3" ry="2.2" fill="#c9a979"/>
+      <ellipse cx="219" cy="170" rx="3" ry="2.2" fill="#c9a979"/>
+      <!-- Letter being held -->
+      <rect x="184" y="167" width="10" height="8" fill="#eadba0" stroke="#aa2222" stroke-width="0.5"/>
+      <!-- Neck -->
+      <rect x="201" y="120" width="6" height="8" fill="#c9a979"/>
+      <!-- Head (gaunt, kind) -->
+      <ellipse cx="204" cy="115" rx="8" ry="9" fill="#c9a979"/>
+      <!-- Receding light hair -->
+      <path d="M 198 109 Q 204 105 210 109" stroke="#7a6040" stroke-width="3.5" fill="none"/>
+      <!-- Eyes (kind, anxious) -->
+      <ellipse cx="201" cy="115" rx="1.3" ry="0.9" fill="#fff"/>
+      <circle cx="201" cy="115.3" r="0.6" fill="#3a2818"/>
+      <ellipse cx="207" cy="115" rx="1.3" ry="0.9" fill="#fff"/>
+      <circle cx="207" cy="115.3" r="0.6" fill="#3a2818"/>
+      <!-- Worried brows -->
+      <path d="M 199 112 Q 201 111 203 112" stroke="#3a2010" stroke-width="0.8" fill="none"/>
+      <path d="M 205 112 Q 207 111 209 112" stroke="#3a2010" stroke-width="0.8" fill="none"/>
+      <!-- Nose & mouth -->
+      <path d="M 204 116 Q 203 119 204 120" stroke="#a48068" stroke-width="0.4" fill="none"/>
+      <path d="M 202 122 Q 204 121.5 206 122" stroke="#5a2010" stroke-width="0.6" fill="none"/>
+      <!-- Lantern in hand -->
+      <line x1="222" y1="170" x2="225" y2="178" stroke="#3a2410" stroke-width="0.7"/>
+      <rect x="222" y="178" width="8" height="10" fill="#4a3018" stroke="#1a1008" stroke-width="0.5"/>
+      <ellipse cx="226" cy="184" rx="2.5" ry="3.5" fill="#ffcc55"><animate attributeName="ry" values="3.5;4.5;3.5" dur="1.3s" repeatCount="indefinite"/></ellipse>
+      <circle cx="226" cy="184" r="22" fill="#ffaa33" opacity="0.18"/>
+
+      ${this._miniMuffin(70, 165, 0.55)}
+    `);
+  },
+
+  // Scene 2: Great hall with portraits
+  manor_great_hall() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <!-- Wood floor with vanishing-point perspective -->
+      <polygon points="0,250 0,180 160,140 240,140 400,180 400,250" fill="#3a2410"/>
+      ${[0,80,160,240,320].map((x,i) => `<line x1="${x}" y1="250" x2="${160 + i*20}" y2="140" stroke="#2a1808" stroke-width="0.6" opacity="0.6"/>`).join('')}
+      <!-- Long stretch of corridor -->
+      <rect x="0" y="0" width="400" height="180" fill="#1a1008"/>
+      <!-- Wall portraits in receding rows -->
+      ${this._portrait(20, 60, 40, 50)}
+      ${this._portrait(80, 70, 32, 42)}
+      ${this._portrait(130, 78, 26, 34)}
+      ${this._portrait(245, 78, 26, 34)}
+      ${this._portrait(290, 70, 32, 42)}
+      ${this._portrait(340, 60, 40, 50)}
+      <!-- Central archway in distance -->
+      <path d="M 175 140 Q 200 100 225 140 L 225 60 L 175 60 Z" fill="#0a0603"/>
+      <ellipse cx="200" cy="60" rx="25" ry="8" fill="#0a0603"/>
+
+      ${this._candelabra(60, 132)}
+      ${this._candelabra(340, 132)}
+
+      <!-- Hawkins the butler standing in archway -->
+      <rect x="195" y="125" width="4" height="14" fill="#0a0603"/>
+      <rect x="201" y="125" width="4" height="14" fill="#0a0603"/>
+      <path d="M 192 90 L 190 140 L 210 140 L 208 90 Z" fill="#1a1208"/>
+      <rect x="194" y="92" width="12" height="6" fill="#eadba0"/>
+      <rect x="195" y="98" width="10" height="3" fill="#1a1208"/>
+      <ellipse cx="200" cy="84" rx="6" ry="6.5" fill="#c9a979"/>
+      <path d="M 195 80 Q 200 76 205 80" stroke="#a89880" stroke-width="2" fill="none"/>
+      <ellipse cx="198" cy="84" rx="0.8" ry="0.6" fill="#3a2818"/>
+      <ellipse cx="202" cy="84" rx="0.8" ry="0.6" fill="#3a2818"/>
+      <path d="M 198 87 L 202 87" stroke="#5a2010" stroke-width="0.5"/>
+
+      ${this._miniMuffin(40, 200, 0.5)}
+    `);
+  },
+
+  // Scene 3: Mrs. Pennyfall with her ledger
+  manor_pennyfall_log() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <rect x="0" y="180" width="400" height="70" fill="#3a2818"/>
+      ${this._gothicWindow(20, 25, 50, 110)}
+      <!-- Work table -->
+      <rect x="100" y="160" width="240" height="32" fill="#5a3e1e" stroke="#3a2410" stroke-width="1.5"/>
+      <rect x="100" y="160" width="240" height="5" fill="#7a5a30"/>
+      <rect x="106" y="192" width="10" height="50" fill="#3a2410"/>
+      <rect x="324" y="192" width="10" height="50" fill="#3a2410"/>
+
+      <!-- Open ledger book -->
+      <rect x="120" y="120" width="120" height="40" fill="#5a3a1c" stroke="#1a1008" stroke-width="1.5"/>
+      <rect x="124" y="124" width="112" height="32" fill="#eadba0"/>
+      <line x1="180" y1="124" x2="180" y2="156" stroke="#8a6838" stroke-width="1"/>
+      <text x="180" y="135" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">STAFF HOURS</text>
+      <text x="135" y="146" fill="#3a2010" font-size="6">silver</text>
+      <text x="172" y="146" text-anchor="end" fill="#aa2222" font-size="7" font-weight="bold">2 1/8</text>
+      <text x="187" y="146" fill="#3a2010" font-size="6">brass</text>
+      <text x="225" y="146" text-anchor="end" fill="#aa2222" font-size="7" font-weight="bold">1 5/8</text>
+      <text x="180" y="155" text-anchor="middle" fill="#7a1818" font-size="7" font-weight="bold">total = ?</text>
+
+      <!-- Silver polishing kit on side -->
+      <rect x="260" y="148" width="40" height="12" fill="#5a4828"/>
+      <ellipse cx="270" cy="146" rx="6" ry="3" fill="#c4c4c4"/>
+      <ellipse cx="290" cy="146" rx="6" ry="3" fill="#a8a098"/>
+
+      ${this._candelabra(155, 158)}
+
+      <!-- Mrs Pennyfall (older housekeeper, plain dress + apron) -->
+      <ellipse cx="277" cy="200" rx="4.5" ry="1.8" fill="#1a0a04"/>
+      <ellipse cx="293" cy="200" rx="4.5" ry="1.8" fill="#1a0a04"/>
+      <rect x="273" y="192" width="9" height="8" fill="#2a1408"/>
+      <rect x="289" y="192" width="9" height="8" fill="#2a1408"/>
+      <!-- Long dark dress -->
+      <path d="M 268 110 L 263 195 L 305 195 L 300 110 Z" fill="#2a1810"/>
+      <!-- Apron over dress -->
+      <path d="M 270 115 L 267 192 L 300 192 L 297 115 Z" fill="#d4c89a"/>
+      <path d="M 273 115 L 280 109 L 287 109 L 290 115 Z" fill="#d4c89a"/>
+      <rect x="263" y="140" width="42" height="3" fill="#aa8838"/>
+      <!-- Sleeves -->
+      <rect x="265" y="115" width="6" height="38" fill="#2a1810"/>
+      <rect x="297" y="115" width="6" height="38" fill="#2a1810"/>
+      <ellipse cx="268" cy="156" rx="3.5" ry="2.5" fill="#d4b098"/>
+      <ellipse cx="300" cy="156" rx="3.5" ry="2.5" fill="#d4b098"/>
+      <!-- Neck -->
+      <rect x="281" y="103" width="6" height="9" fill="#d4b098"/>
+      <!-- Head -->
+      <ellipse cx="284" cy="96" rx="9" ry="9.5" fill="#d4b098"/>
+      <!-- White-grey hair pulled tight in bun -->
+      <ellipse cx="284" cy="88" rx="8" ry="3" fill="#c8c0b0"/>
+      <ellipse cx="284" cy="83" rx="5" ry="4" fill="#c8c0b0"/>
+      <!-- Tiny round spectacles -->
+      <circle cx="280" cy="96" r="2" fill="none" stroke="#3a2818" stroke-width="0.6"/>
+      <circle cx="288" cy="96" r="2" fill="none" stroke="#3a2818" stroke-width="0.6"/>
+      <line x1="282" y1="96" x2="286" y2="96" stroke="#3a2818" stroke-width="0.5"/>
+      <circle cx="280" cy="96" r="0.5" fill="#3a2818"/>
+      <circle cx="288" cy="96" r="0.5" fill="#3a2818"/>
+      <!-- Eyebrows -->
+      <path d="M 278 92 Q 280 91 282 92" stroke="#a89880" stroke-width="0.7" fill="none"/>
+      <path d="M 286 92 Q 288 91 290 92" stroke="#a89880" stroke-width="0.7" fill="none"/>
+      <!-- Mouth -->
+      <path d="M 282 102 Q 284 102 286 102" stroke="#7a3818" stroke-width="0.6" fill="none"/>
+
+      ${this._miniMuffin(40, 175, 0.55)}
+    `);
+  },
+
+  // Scene 4: Cassius's study with crystal decanter
+  manor_brandy_decanter() {
+    return this.scene('#1a1208', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <rect x="0" y="180" width="400" height="70" fill="#3a2818"/>
+      <!-- Heavy oak desk -->
+      <rect x="60" y="160" width="280" height="34" fill="#5a3a1c" stroke="#2a1408" stroke-width="2"/>
+      <rect x="60" y="160" width="280" height="5" fill="#7a5a30"/>
+      <!-- Dark walls -->
+      <rect x="0" y="0" width="400" height="180" fill="#1a1008"/>
+      <!-- Liquor cabinet behind -->
+      <rect x="240" y="60" width="120" height="100" fill="#3a2410" stroke="#1a1008" stroke-width="1.5"/>
+      ${[80, 100, 120, 140].map(y => `<rect x="244" y="${y}" width="112" height="2" fill="#1a1008"/>`).join('')}
+      <!-- Bottles in cabinet -->
+      ${[252, 268, 284, 300, 316, 332].map((x, i) => `<rect x="${x}" y="${68 + (i % 2) * 22}" width="9" height="${(i % 3 === 0) ? 12 : 16}" fill="#${['5a2818','3a2410','5a3018','7a3818','3a2410','5a2810'][i]}" stroke="#1a1008" stroke-width="0.4" rx="1"/>`).join('')}
+      <!-- Crystal decanter (large, central, on desk) -->
+      <rect x="170" y="125" width="50" height="40" fill="rgba(200,220,255,0.15)" stroke="#aa8838" stroke-width="1.5" rx="3"/>
+      <path d="M 170 125 L 170 110 Q 170 100 195 100 Q 220 100 220 110 L 220 125 Z" fill="rgba(200,220,255,0.18)" stroke="#aa8838" stroke-width="1.5"/>
+      <ellipse cx="195" cy="100" rx="9" ry="3" fill="#aa8838" stroke="#5a3010" stroke-width="0.5"/>
+      <!-- Brandy inside -->
+      <rect x="174" y="138" width="42" height="25" fill="#aa6818" opacity="0.8" rx="2"/>
+      <ellipse cx="195" cy="138" rx="21" ry="3" fill="#cc8838" opacity="0.7"/>
+      <!-- Reflective shine -->
+      <path d="M 178 140 Q 180 152 178 160" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none"/>
+      <!-- Two glasses beside -->
+      <rect x="125" y="140" width="14" height="22" fill="rgba(200,220,255,0.18)" stroke="#aa8838" stroke-width="1" rx="1"/>
+      <rect x="127" y="153" width="10" height="9" fill="#aa6818" opacity="0.7"/>
+      <rect x="245" y="140" width="14" height="22" fill="rgba(200,220,255,0.18)" stroke="#aa8838" stroke-width="1" rx="1"/>
+
+      ${this._candelabra(290, 158)}
+
+      <!-- Pints/cups conversion note in corner -->
+      <rect x="60" y="80" width="80" height="48" fill="#eadba0" stroke="#3a2010" stroke-width="1" transform="rotate(-3 100 104)"/>
+      <text x="100" y="93" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold" transform="rotate(-3 100 93)">DECANTER</text>
+      <text x="100" y="105" text-anchor="middle" fill="#aa2222" font-size="9" font-weight="bold" transform="rotate(-3 100 105)">3 pints</text>
+      <text x="100" y="118" text-anchor="middle" fill="#3a2010" font-size="5" font-style="italic" transform="rotate(-3 100 118)">1 pt = 2 cups</text>
+      <text x="100" y="125" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold" transform="rotate(-3 100 125)">cups = ?</text>
+
+      ${this._miniMuffin(35, 175, 0.55)}
+    `);
+  },
+
+  // Scene 5: Tilly the maid in the kitchen
+  manor_tilly_kitchen() {
+    return this.scene('#1a1208', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <rect x="0" y="180" width="400" height="70" fill="#3a2818"/>
+      <!-- Stone-flag floor -->
+      ${[0,55,110,165,220,275,330].map(x => `<rect x="${x}" y="184" width="53" height="32" fill="#2a1f10" stroke="#1a1008" stroke-width="0.5"/>`).join('')}
+      <!-- Brick wall -->
+      ${Array.from({length:10},(_,r) => Array.from({length:14},(_,c)=>{const x = c*30 + (r%2)*15 - 5; const y = r*15; return `<rect x="${x}" y="${y}" width="28" height="13" fill="#3a2010" stroke="#1a1008" stroke-width="0.4"/>`}).join('')).join('')}
+      <!-- Kitchen hearth on right -->
+      <rect x="280" y="80" width="100" height="100" fill="#0a0603" stroke="#3a2010" stroke-width="2"/>
+      <path d="M 290 90 Q 330 70 370 90 L 370 100 Q 330 80 290 100 Z" fill="#1a1008"/>
+      <!-- Fire glow -->
+      <ellipse cx="330" cy="160" rx="32" ry="14" fill="#aa3818" opacity="0.6"/>
+      <ellipse cx="330" cy="155" rx="22" ry="10" fill="#ffaa33" opacity="0.7">
+        <animate attributeName="rx" values="22;26;22" dur="1.5s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="330" cy="152" rx="14" ry="6" fill="#fff5aa" opacity="0.8"/>
+      <circle cx="330" cy="160" r="60" fill="#ff6633" opacity="0.1"/>
+      <!-- Pots hanging -->
+      ${[300, 325, 350].map((x, i) => `<line x1="${x}" y1="40" x2="${x}" y2="${52 + i*4}" stroke="#3a2010" stroke-width="0.6"/><ellipse cx="${x}" cy="${56 + i*4}" rx="6" ry="3" fill="#3a3018"/>`).join('')}
+
+      <!-- Long kitchen table -->
+      <rect x="20" y="160" width="200" height="32" fill="#5a3a1c" stroke="#3a2410" stroke-width="1.5"/>
+      <rect x="20" y="160" width="200" height="5" fill="#7a5a30"/>
+
+      <!-- Tilly the maid (young, frightened) -->
+      <rect x="92" y="192" width="6" height="8" fill="#1a0a04"/>
+      <rect x="105" y="192" width="6" height="8" fill="#1a0a04"/>
+      <!-- Long simple dress -->
+      <path d="M 88 110 L 84 192 L 116 192 L 112 110 Z" fill="#3a2818"/>
+      <!-- White apron -->
+      <path d="M 90 115 L 87 188 L 113 188 L 110 115 Z" fill="#eadba0"/>
+      <!-- Sleeves -->
+      <rect x="86" y="115" width="6" height="38" fill="#3a2818"/>
+      <rect x="108" y="115" width="6" height="38" fill="#3a2818"/>
+      <ellipse cx="89" cy="156" rx="3" ry="2.2" fill="#d4b098"/>
+      <ellipse cx="111" cy="156" rx="3" ry="2.2" fill="#d4b098"/>
+      <!-- Neck -->
+      <rect x="98" y="103" width="6" height="9" fill="#d4b098"/>
+      <!-- Head -->
+      <ellipse cx="101" cy="96" rx="8" ry="9" fill="#d4b098"/>
+      <!-- Mob cap (white) -->
+      <ellipse cx="101" cy="86" rx="9.5" ry="4" fill="#eadba0"/>
+      <ellipse cx="101" cy="85" rx="7" ry="2" fill="#fff" opacity="0.4"/>
+      <!-- Stray hair -->
+      <path d="M 93 92 Q 91 96 92 100" stroke="#7a4828" stroke-width="0.5" fill="none"/>
+      <path d="M 109 92 Q 111 96 110 100" stroke="#7a4828" stroke-width="0.5" fill="none"/>
+      <!-- Wide scared eyes -->
+      <ellipse cx="98" cy="96" rx="1.5" ry="1.2" fill="#fff"/>
+      <circle cx="98" cy="96.3" r="0.7" fill="#3a2818"/>
+      <ellipse cx="104" cy="96" rx="1.5" ry="1.2" fill="#fff"/>
+      <circle cx="104" cy="96.3" r="0.7" fill="#3a2818"/>
+      <!-- Eyebrows raised -->
+      <path d="M 96 92 Q 98 91 100 92" stroke="#3a2010" stroke-width="0.7" fill="none"/>
+      <path d="M 102 92 Q 104 91 106 92" stroke="#3a2010" stroke-width="0.7" fill="none"/>
+      <!-- Round small mouth (gasp) -->
+      <ellipse cx="101" cy="103" rx="1" ry="0.7" fill="#5a2010"/>
+
+      <!-- Time annotation in air -->
+      <rect x="140" y="100" width="100" height="40" fill="#fff" opacity="0.94" stroke="#aa2222" stroke-width="1" rx="2"/>
+      <text x="190" y="113" text-anchor="middle" fill="#3a2010" font-size="7" font-weight="bold">FOOTSTEPS</text>
+      <text x="155" y="127" fill="#aa2222" font-size="9" font-weight="bold">1/3 hr ago</text>
+      <text x="155" y="137" fill="#aa2222" font-size="9" font-weight="bold">+ 1/4 hr</text>
+
+      ${this._miniMuffin(50, 200, 0.5, true)}
+    `);
+  },
+
+  // Scene 6: Cray's tonic dose line plot
+  manor_cray_lineplot() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <!-- Parchment chart -->
+      <rect x="40" y="30" width="320" height="190" fill="#eadba0" stroke="#6a3818" stroke-width="2.5" rx="3"/>
+      <rect x="46" y="36" width="308" height="178" fill="#f0e0a8" rx="2"/>
+      <text x="200" y="60" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">DR. CRAY — TONIC DOSE CHART</text>
+      <line x1="60" y1="70" x2="340" y2="70" stroke="#8a6838" stroke-width="0.8"/>
+
+      <!-- Line plot -->
+      ${this._linePlot(200, 130, [
+        { label: '1/4', count: 3 },
+        { label: '1/2', count: 4 },
+        { label: '3/4', count: 2 },
+        { label: '1', count: 1 }
+      ], 1.0)}
+      <text x="200" y="195" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">teaspoons per dose</text>
+      <text x="200" y="208" text-anchor="middle" fill="#aa2222" font-size="8" font-weight="bold">most frequent dose = ?</text>
+
+      ${this._miniMuffin(30, 175, 0.55)}
+    `);
+  },
+
+  // Scene 7: Manor floor plan east + west wings
+  manor_wing_floorplan() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <rect x="40" y="30" width="320" height="190" fill="#eadba0" stroke="#6a3818" stroke-width="2.5" rx="3"/>
+      <rect x="46" y="36" width="308" height="178" fill="#f0e0a8" rx="2"/>
+      <text x="200" y="55" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">RAVENHOLLOW — FLOOR PLAN</text>
+
+      <!-- East wing (left side, slightly smaller) -->
+      <rect x="60" y="100" width="100" height="80" fill="none" stroke="#3a2010" stroke-width="1.5"/>
+      <text x="110" y="95" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">East Wing</text>
+      <text x="110" y="145" text-anchor="middle" fill="#aa2222" font-size="11" font-weight="bold">2 1/4 furlongs</text>
+      <!-- East wing room dividers -->
+      <line x1="90" y1="100" x2="90" y2="180" stroke="#3a2010" stroke-width="0.5"/>
+      <line x1="120" y1="100" x2="120" y2="180" stroke="#3a2010" stroke-width="0.5"/>
+      <line x1="60" y1="140" x2="160" y2="140" stroke="#3a2010" stroke-width="0.5"/>
+
+      <!-- Central manor body -->
+      <rect x="170" y="80" width="60" height="120" fill="none" stroke="#3a2010" stroke-width="2"/>
+      <text x="200" y="100" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">main hall</text>
+      <text x="200" y="155" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">gallery</text>
+
+      <!-- West wing (right side, larger) -->
+      <rect x="240" y="90" width="120" height="100" fill="none" stroke="#3a2010" stroke-width="1.5"/>
+      <text x="300" y="85" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">West Wing</text>
+      <text x="300" y="145" text-anchor="middle" fill="#aa2222" font-size="11" font-weight="bold">3 1/3 furlongs</text>
+      <line x1="270" y1="90" x2="270" y2="190" stroke="#3a2010" stroke-width="0.5"/>
+      <line x1="300" y1="90" x2="300" y2="190" stroke="#3a2010" stroke-width="0.5"/>
+      <line x1="330" y1="90" x2="330" y2="190" stroke="#3a2010" stroke-width="0.5"/>
+      <line x1="240" y1="140" x2="360" y2="140" stroke="#3a2010" stroke-width="0.5"/>
+
+      <text x="200" y="207" text-anchor="middle" fill="#7a1818" font-size="9" font-weight="bold">total length = ?</text>
+
+      ${this._miniMuffin(20, 175, 0.45)}
+    `);
+  },
+
+  // Scene 8: Severed bell-pull cord
+  manor_bell_pull() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <!-- Wallpapered wall -->
+      <rect x="0" y="0" width="400" height="220" fill="#3a1818"/>
+      ${Array.from({length:8},(_,r) => Array.from({length:20},(_,c)=>{const x = c*22 + (r%2)*11; const y = r*30 + 12; return `<text x="${x}" y="${y}" fill="#5a2820" font-size="5" opacity="0.3">❀</text>`}).join('')).join('')}
+      <!-- Floor -->
+      <rect x="0" y="220" width="400" height="30" fill="#3a2410"/>
+
+      <!-- Bell mounted on wall -->
+      <rect x="180" y="40" width="40" height="20" fill="#3a2818" stroke="#1a1008" stroke-width="1"/>
+      <ellipse cx="200" cy="55" rx="15" ry="10" fill="#aa8838" stroke="#5a3010" stroke-width="1.2"/>
+      <ellipse cx="200" cy="50" rx="15" ry="6" fill="#cc9938"/>
+      <line x1="200" y1="65" x2="200" y2="73" stroke="#3a2010" stroke-width="1"/>
+      <circle cx="200" cy="75" r="2.5" fill="#aa8838"/>
+      <text x="200" y="32" text-anchor="middle" fill="#eadba0" font-size="5" font-style="italic">— Arabella's bell —</text>
+
+      <!-- Bell pull cord (hanging from bell, severed) -->
+      <line x1="200" y1="77" x2="200" y2="120" stroke="#aa2222" stroke-width="3"/>
+      <!-- Cut end (frayed) -->
+      <path d="M 197 120 L 198 124 L 200 121 L 202 125 L 203 121" stroke="#aa2222" stroke-width="0.7" fill="none"/>
+      <!-- Lower half (fallen on floor) -->
+      <path d="M 196 220 Q 220 215 250 222" stroke="#aa2222" stroke-width="3" fill="none"/>
+
+      <!-- Measurement annotation -->
+      <rect x="252" y="90" width="100" height="60" fill="#fff" opacity="0.94" stroke="#aa2222" stroke-width="1.5" rx="2"/>
+      <text x="302" y="105" text-anchor="middle" fill="#3a2010" font-size="7" font-weight="bold">BELL CORD</text>
+      <line x1="262" y1="111" x2="342" y2="111" stroke="#8a6838" stroke-width="0.5"/>
+      <text x="262" y="124" fill="#3a2010" font-size="7">original:</text>
+      <text x="342" y="124" text-anchor="end" fill="#aa2222" font-size="9" font-weight="bold">5/6 yd</text>
+      <text x="262" y="138" fill="#3a2010" font-size="7">remains:</text>
+      <text x="342" y="138" text-anchor="end" fill="#aa2222" font-size="9" font-weight="bold">1/2 yd</text>
+      <text x="302" y="148" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold">cut = ?</text>
+
+      ${this._miniMuffin(45, 195, 0.55)}
+    `);
+  },
+
+  // Scene 9: Cook's kitchen recipe
+  manor_cook_recipe() {
+    return this.scene('#1a1208', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <!-- Brick kitchen -->
+      ${Array.from({length:7},(_,r) => Array.from({length:14},(_,c)=>{const x = c*30 + (r%2)*15 - 5; const y = r*15; return `<rect x="${x}" y="${y}" width="28" height="13" fill="#3a2010" stroke="#1a1008" stroke-width="0.4"/>`}).join('')).join('')}
+      <rect x="0" y="180" width="400" height="70" fill="#3a2818"/>
+      <!-- Counter -->
+      <rect x="40" y="158" width="320" height="32" fill="#5a3a1c" stroke="#3a2410" stroke-width="1.5"/>
+      <rect x="40" y="158" width="320" height="5" fill="#7a5a30"/>
+
+      <!-- Tea cup -->
+      <ellipse cx="280" cy="155" rx="18" ry="4" fill="#3a2818"/>
+      <path d="M 262 155 Q 262 130 280 130 Q 298 130 298 155" fill="#eadba0" stroke="#3a2010" stroke-width="1"/>
+      <ellipse cx="280" cy="135" rx="16" ry="3" fill="#aa6018" opacity="0.7"/>
+      <!-- Steam -->
+      <path d="M 274 130 Q 272 124 274 118" stroke="#a8a098" stroke-width="0.7" fill="none" opacity="0.7"/>
+      <path d="M 280 130 Q 282 124 280 118" stroke="#a8a098" stroke-width="0.7" fill="none" opacity="0.7"/>
+      <path d="M 286 130 Q 284 124 286 118" stroke="#a8a098" stroke-width="0.7" fill="none" opacity="0.7"/>
+      <!-- Saucer -->
+      <ellipse cx="280" cy="156" rx="22" ry="3" fill="#c4b88a" stroke="#3a2010" stroke-width="0.5"/>
+
+      <!-- Recipe card -->
+      <rect x="60" y="80" width="160" height="80" fill="#eadba0" stroke="#aa2222" stroke-width="1.5" transform="rotate(-3 140 120)"/>
+      <text x="140" y="95" text-anchor="middle" fill="#3a2010" font-size="9" font-weight="bold" transform="rotate(-3 140 95)">CALMING TEA</text>
+      <line x1="70" y1="102" x2="210" y2="102" stroke="#8a6838" stroke-width="0.6" transform="rotate(-3 140 102)"/>
+      <text x="75" y="120" fill="#3a2010" font-size="8" transform="rotate(-3 75 120)">total water:</text>
+      <text x="205" y="120" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" transform="rotate(-3 205 120)">7/8 cup</text>
+      <text x="75" y="140" fill="#3a2010" font-size="8" transform="rotate(-3 75 140)">poured by Cook:</text>
+      <text x="205" y="140" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" transform="rotate(-3 205 140)">1/4 cup</text>
+      <text x="140" y="158" text-anchor="middle" fill="#7a1818" font-size="9" font-weight="bold" transform="rotate(-3 140 158)">added by ? = ?</text>
+
+      ${this._candelabra(330, 156)}
+
+      ${this._miniMuffin(40, 195, 0.55)}
+    `);
+  },
+
+  // Scene 10: Cray's monthly bill
+  manor_cray_bill() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <rect x="40" y="25" width="320" height="200" fill="#eadba0" stroke="#aa2222" stroke-width="2.5" rx="3"/>
+      <rect x="46" y="31" width="308" height="188" fill="#f0e0a8" rx="2"/>
+      <text x="200" y="55" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">DR. EDMUND CRAY — INVOICE</text>
+      <text x="200" y="68" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">Physician to Lord Cassius Wren · presented monthly</text>
+      <line x1="60" y1="78" x2="340" y2="78" stroke="#8a6838" stroke-width="0.7"/>
+
+      <!-- Itemised bill rows -->
+      <text x="70" y="100" fill="#3a2010" font-size="9" font-style="italic">house calls</text>
+      <text x="330" y="100" text-anchor="end" fill="#3a2010" font-size="9">— pounds</text>
+
+      <text x="70" y="125" fill="#3a2010" font-size="9" font-style="italic">consultations</text>
+      <text x="330" y="125" text-anchor="end" fill="#3a2010" font-size="9">— pounds</text>
+
+      <line x1="60" y1="135" x2="340" y2="135" stroke="#8a6838" stroke-width="0.4"/>
+
+      <text x="70" y="155" fill="#aa2222" font-size="10" font-weight="bold">CALMING TONIC</text>
+      <text x="170" y="155" fill="#3a2010" font-size="8" font-style="italic">0.07 pounds × 100 doses</text>
+      <text x="330" y="155" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold">? lb</text>
+
+      <line x1="60" y1="170" x2="340" y2="170" stroke="#3a2010" stroke-width="0.6"/>
+      <text x="70" y="190" fill="#3a2010" font-size="10" font-weight="bold">TOTAL OWING</text>
+      <text x="330" y="190" text-anchor="end" fill="#7a1818" font-size="14" font-weight="bold" font-family="serif">£ ?</text>
+
+      <!-- Wax seal -->
+      <circle cx="295" cy="205" r="9" fill="#aa2222" stroke="#6a1010" stroke-width="0.7"/>
+      <text x="295" y="208" text-anchor="middle" fill="#6a0808" font-size="5" font-weight="bold">EC</text>
+
+      ${this._miniMuffin(310, 185, 0.4, true)}
+    `);
+  },
+
+  // Scene 11: Cold-spot times line plot
+  manor_coldspot_lineplot() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <rect x="40" y="30" width="320" height="190" fill="#eadba0" stroke="#6a3818" stroke-width="2.5" rx="3"/>
+      <rect x="46" y="36" width="308" height="178" fill="#f0e0a8" rx="2"/>
+      <text x="200" y="60" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">COLD-SPOT REPORTS — TIME SINCE SUNSET</text>
+      <line x1="60" y1="70" x2="340" y2="70" stroke="#8a6838" stroke-width="0.8"/>
+
+      ${this._linePlot(200, 130, [
+        { label: '1/8', count: 3 },
+        { label: '3/8', count: 2 },
+        { label: '5/8', count: 1 }
+      ], 1.0)}
+
+      <text x="200" y="195" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">hours past sunset</text>
+      <line x1="180" y1="180" x2="180" y2="172" stroke="#aa2222" stroke-width="0.7" stroke-dasharray="2 2"/>
+      <text x="180" y="172" text-anchor="middle" fill="#aa2222" font-size="6" font-weight="bold">1/2</text>
+      <text x="200" y="208" text-anchor="middle" fill="#7a1818" font-size="8" font-weight="bold">reports within 1/2 hr = ?</text>
+
+      ${this._miniMuffin(30, 175, 0.55)}
+    `);
+  },
+
+  // Scene 12: Library shelf with missing books
+  manor_library_shelf() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <!-- Wood floor -->
+      <rect x="0" y="200" width="400" height="50" fill="#3a2410"/>
+      <!-- Library shelves wall (panel) -->
+      <rect x="20" y="20" width="360" height="190" fill="#3a2410" stroke="#1a1008" stroke-width="2"/>
+      <!-- 4 shelves -->
+      ${[55, 95, 135, 175].map(y => `<rect x="24" y="${y}" width="352" height="4" fill="#1a1008"/>`).join('')}
+
+      <!-- Books on top three shelves (full) -->
+      ${[28, 38, 48, 58, 68, 78, 88, 98, 110, 120, 130, 140, 150, 160, 170, 180, 192, 202, 212, 222, 232, 242, 252, 262, 272, 282, 292, 302, 312, 322, 332, 342, 352, 362].map((x, i) => `<rect x="${x}" y="${24}" width="9" height="29" fill="#${['5a2818','7a3818','3a4818','5a3018','7a4828','3a2818','5a2810'][i % 7]}" stroke="#1a1008" stroke-width="0.3"/>`).join('')}
+      ${[28, 38, 48, 58, 68, 78, 88, 98, 110, 120, 130, 140, 150, 160, 170, 180, 192, 202, 212, 222, 232, 242, 252, 262, 272, 282, 292, 302, 312, 322, 332, 342, 352, 362].map((x, i) => `<rect x="${x}" y="${64}" width="9" height="29" fill="#${['7a3818','3a4818','5a2818','7a4828','3a2818','5a3018','7a3818'][i % 7]}" stroke="#1a1008" stroke-width="0.3"/>`).join('')}
+
+      <!-- THIRD shelf — books on left only, EMPTY GAP on right -->
+      ${[28, 38, 48, 58, 68, 78, 88, 98, 110, 120, 130].map((x, i) => `<rect x="${x}" y="${104}" width="9" height="29" fill="#${['5a3018','7a3818','3a4818','5a2818','7a4828','3a2818'][i % 6]}" stroke="#1a1008" stroke-width="0.3"/>`).join('')}
+      <!-- The empty gap is highlighted -->
+      <rect x="142" y="105" width="220" height="27" fill="#0a0603" opacity="0.7"/>
+      <text x="252" y="124" text-anchor="middle" fill="#aa2222" font-size="7" font-weight="bold" font-style="italic">— missing —</text>
+
+      <!-- Bottom shelf full -->
+      ${[28, 38, 48, 58, 68, 78, 88, 98, 110, 120, 130, 140, 150, 160, 170, 180, 192, 202, 212, 222, 232, 242, 252, 262, 272, 282, 292, 302, 312, 322, 332, 342, 352, 362].map((x, i) => `<rect x="${x}" y="${144}" width="9" height="29" fill="#${['3a2818','5a3018','7a3818','3a4818','5a2818','7a4828'][i % 6]}" stroke="#1a1008" stroke-width="0.3"/>`).join('')}
+
+      <!-- Measurement note -->
+      <rect x="180" y="184" width="170" height="22" fill="#fff" opacity="0.92" stroke="#aa2222" stroke-width="1" rx="2"/>
+      <text x="265" y="195" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">SHELF 5 7/8 yd · BOOKS 2 3/4 yd</text>
+      <text x="265" y="203" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold">empty = ?</text>
+
+      ${this._miniMuffin(45, 195, 0.5)}
+    `);
+  },
+
+  // Scene 13: Cassius's estate ledger
+  manor_cassius_ledger() {
+    return this.scene('#1a1208', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <rect x="40" y="30" width="320" height="190" fill="#5a3a1c" stroke="#1a1008" stroke-width="2.5"/>
+      <rect x="50" y="40" width="300" height="170" fill="#eadba0"/>
+      <line x1="200" y1="40" x2="200" y2="210" stroke="#8a6838" stroke-width="1.5"/>
+
+      <text x="200" y="60" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">CASSIUS'S ESTATE LEDGER</text>
+      <line x1="60" y1="70" x2="340" y2="70" stroke="#8a6838" stroke-width="0.8"/>
+
+      <!-- Left page: estate value -->
+      <text x="120" y="95" text-anchor="middle" fill="#3a2010" font-size="9" font-style="italic">total estate</text>
+      <text x="120" y="125" text-anchor="middle" fill="#aa2222" font-size="22" font-weight="bold" font-family="serif">£12,000</text>
+      <text x="120" y="155" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">(in thousands of pounds)</text>
+
+      <!-- Right page: scribbled secondary share calculation -->
+      <text x="280" y="95" text-anchor="middle" fill="#3a2010" font-size="8" font-style="italic">scribbled, side-margin</text>
+      <text x="280" y="125" text-anchor="middle" fill="#aa2222" font-size="14" font-weight="bold" font-family="serif" font-style="italic">"secondary</text>
+      <text x="280" y="142" text-anchor="middle" fill="#aa2222" font-size="14" font-weight="bold" font-family="serif" font-style="italic">share =</text>
+      <text x="280" y="170" text-anchor="middle" fill="#7a1818" font-size="18" font-weight="bold" font-family="serif">4/5 × 12"</text>
+      <text x="280" y="190" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">— in his own hand</text>
+
+      <!-- Quill in inkwell -->
+      <rect x="60" y="190" width="10" height="14" fill="#1a1208" rx="1"/>
+      <line x1="65" y1="190" x2="78" y2="170" stroke="#5a3a1c" stroke-width="1"/>
+      <path d="M 76 170 L 82 162 L 78 171 Z" fill="#eadba0"/>
+
+      ${this._miniMuffin(355, 200, 0.4, true)}
+    `);
+  },
+
+  // Scene 14: Clock with two haunting durations
+  manor_haunting_clock() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <!-- Wallpaper -->
+      <rect x="0" y="0" width="400" height="220" fill="#3a1818"/>
+      <rect x="0" y="220" width="400" height="30" fill="#3a2410"/>
+
+      <!-- Grandfather clock body -->
+      <rect x="155" y="20" width="90" height="200" fill="#3a2010" stroke="#1a1008" stroke-width="2"/>
+      <polygon points="155,20 200,5 245,20" fill="#1a1008"/>
+      <!-- Clock face -->
+      <circle cx="200" cy="65" r="34" fill="#eadba0" stroke="#1a1008" stroke-width="2"/>
+      <text x="200" y="40" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">XII</text>
+      <text x="226" y="68" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">III</text>
+      <text x="200" y="92" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">VI</text>
+      <text x="174" y="68" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">IX</text>
+      ${[0,1,2,3,4,5,6,7,8,9,10,11].map(h => {
+        const a = (h/12)*Math.PI*2 - Math.PI/2;
+        const x1 = 200 + Math.cos(a)*30, y1 = 65 + Math.sin(a)*30;
+        const x2 = 200 + Math.cos(a)*34, y2 = 65 + Math.sin(a)*34;
+        return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#1a1008" stroke-width="1"/>`;
+      }).join('')}
+      <line x1="200" y1="65" x2="200" y2="48" stroke="#1a1008" stroke-width="2.5"/>
+      <line x1="200" y1="65" x2="220" y2="70" stroke="#1a1008" stroke-width="2"/>
+      <circle cx="200" cy="65" r="2.5" fill="#1a1008"/>
+
+      <!-- Pendulum -->
+      <line x1="200" y1="105" x2="200" y2="195" stroke="#3a2818" stroke-width="1.2"/>
+      <circle cx="200" cy="195" r="14" fill="#aa8838" stroke="#3a2810" stroke-width="1.2"/>
+
+      <!-- Two duration tags floating beside clock -->
+      <rect x="50" y="80" width="80" height="30" fill="#fff" opacity="0.95" stroke="#aa2222" stroke-width="1" rx="2"/>
+      <text x="90" y="93" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">TONIGHT</text>
+      <text x="90" y="105" text-anchor="middle" fill="#aa2222" font-size="11" font-weight="bold">7 1/3 hr</text>
+
+      <rect x="270" y="80" width="80" height="30" fill="#fff" opacity="0.95" stroke="#3a2010" stroke-width="1" rx="2"/>
+      <text x="310" y="93" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">LAST NIGHT</text>
+      <text x="310" y="105" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold">3 4/5 hr</text>
+
+      <!-- Subtraction arrow -->
+      <text x="200" y="220" text-anchor="middle" fill="#7a1818" font-size="10" font-weight="bold">how much longer = ?</text>
+
+      ${this._miniMuffin(40, 195, 0.55)}
+    `);
+  },
+
+  // Scene 15: Wine cellar with depleted brandy
+  manor_wine_cellar() {
+    return this.scene('#0a0603', '#020101', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1008"/>
+      <!-- Stone floor -->
+      <rect x="0" y="180" width="400" height="70" fill="#2a1810"/>
+      ${[0,55,110,165,220,275,330].map(x => `<rect x="${x}" y="184" width="53" height="32" fill="#1a1008" stroke="#0a0603" stroke-width="0.5"/>`).join('')}
+      <!-- Vaulted ceiling -->
+      <path d="M 0 0 L 0 60 Q 200 -30 400 60 L 400 0 Z" fill="#0a0603"/>
+
+      <!-- Wine racks left and right -->
+      <rect x="20" y="40" width="80" height="140" fill="#3a2410" stroke="#1a1008" stroke-width="1.5"/>
+      ${[55, 80, 105, 130, 155].map(y => `<line x1="22" y1="${y}" x2="98" y2="${y}" stroke="#1a1008" stroke-width="1"/>`).join('')}
+      ${Array.from({length:5},(_,r) => Array.from({length:6},(_,c)=>{const x = 25 + c*12; const y = 45 + r*25; return `<rect x="${x}" y="${y}" width="9" height="9" fill="#5a2818" stroke="#3a1810" stroke-width="0.3"/>`}).join('')).join('')}
+
+      <rect x="300" y="40" width="80" height="140" fill="#3a2410" stroke="#1a1008" stroke-width="1.5"/>
+      ${[55, 80, 105, 130, 155].map(y => `<line x1="302" y1="${y}" x2="378" y2="${y}" stroke="#1a1008" stroke-width="1"/>`).join('')}
+      ${Array.from({length:5},(_,r) => Array.from({length:6},(_,c)=>{const x = 305 + c*12; const y = 45 + r*25; return `<rect x="${x}" y="${y}" width="9" height="9" fill="#${['5a2818','3a2410','5a3018'][c%3]}" stroke="#3a1810" stroke-width="0.3"/>`}).join('')).join('')}
+
+      <!-- Big brandy cask center -->
+      <ellipse cx="200" cy="180" rx="60" ry="14" fill="#3a2410"/>
+      <rect x="140" y="80" width="120" height="100" fill="#5a3818" stroke="#3a2010" stroke-width="2" rx="3"/>
+      <ellipse cx="200" cy="80" rx="60" ry="12" fill="#7a5828" stroke="#3a2010" stroke-width="1"/>
+      <!-- Hoops -->
+      ${[105, 135, 160].map(y => `<rect x="138" y="${y}" width="124" height="3" fill="#aa8838"/>`).join('')}
+      <!-- Tap -->
+      <rect x="195" y="180" width="10" height="10" fill="#aa8838"/>
+      <!-- Empty/low brandy level inside (visible through transparency) -->
+      <rect x="142" y="160" width="116" height="20" fill="#7a3010" opacity="0.6"/>
+      <ellipse cx="200" cy="160" rx="58" ry="3" fill="#aa6818" opacity="0.6"/>
+      <!-- Label -->
+      <rect x="170" y="115" width="60" height="22" fill="#eadba0" stroke="#3a2010" stroke-width="0.6"/>
+      <text x="200" y="125" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">CASSIUS'S</text>
+      <text x="200" y="133" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold">PERSONAL</text>
+
+      <!-- Measurement annotation -->
+      <rect x="140" y="200" width="120" height="36" fill="#fff" opacity="0.95" stroke="#aa2222" stroke-width="1.2" rx="2"/>
+      <text x="148" y="213" fill="#3a2010" font-size="7">3 mo ago:</text>
+      <text x="252" y="213" text-anchor="end" fill="#3a2010" font-size="9" font-weight="bold">5 1/2 gal</text>
+      <text x="148" y="225" fill="#3a2010" font-size="7">today:</text>
+      <text x="252" y="225" text-anchor="end" fill="#aa2222" font-size="9" font-weight="bold">1 7/8 gal</text>
+      <text x="200" y="234" text-anchor="middle" fill="#7a1818" font-size="7" font-weight="bold">missing = ?</text>
+
+      <!-- Lantern -->
+      <line x1="100" y1="0" x2="100" y2="22" stroke="#3a2410" stroke-width="0.7"/>
+      <rect x="92" y="22" width="16" height="20" fill="#4a3018" stroke="#1a1008" stroke-width="0.5"/>
+      <ellipse cx="100" cy="32" rx="3" ry="5" fill="#ffcc55"><animate attributeName="ry" values="5;7;5" dur="1.4s" repeatCount="indefinite"/></ellipse>
+      <circle cx="100" cy="32" r="40" fill="#ffaa33" opacity="0.1"/>
+    `);
+  },
+
+  // Scene 16: Three days of tonic doses on bedside
+  manor_arabella_doses() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <!-- Wallpaper -->
+      <rect x="0" y="0" width="400" height="180" fill="#3a2025"/>
+      ${Array.from({length:5},(_,r) => Array.from({length:14},(_,c)=>{const x = c*30 + (r%2)*15; const y = r*30 + 18; return `<text x="${x}" y="${y}" fill="#5a2828" font-size="6" opacity="0.3">✦</text>`}).join('')).join('')}
+      <!-- Bedside table -->
+      <rect x="80" y="158" width="240" height="32" fill="#5a3a1c" stroke="#3a2410" stroke-width="1.5"/>
+      <rect x="80" y="158" width="240" height="5" fill="#7a5a30"/>
+      <rect x="86" y="190" width="10" height="55" fill="#3a2410"/>
+      <rect x="304" y="190" width="10" height="55" fill="#3a2410"/>
+
+      <!-- Three bottles labeled MON/TUE/WED -->
+      ${[ [120, 'MON', '1/2', '#aa6018'], [200, 'TUE', '1/3', '#7a4818'], [280, 'WED', '1/4', '#5a3018'] ].map(([x, day, frac, color]) => `
+        <rect x="${x - 12}" y="100" width="24" height="55" fill="rgba(170,200,255,0.18)" stroke="${color}" stroke-width="1.2" rx="2"/>
+        <rect x="${x - 8}" y="135" width="16" height="20" fill="${color}" opacity="0.7"/>
+        <ellipse cx="${x}" cy="135" rx="8" ry="2" fill="${color}" opacity="0.8"/>
+        <rect x="${x - 6}" y="96" width="12" height="6" fill="#3a2010"/>
+        <rect x="${x - 8}" y="115" width="16" height="14" fill="#eadba0" stroke="#3a2010" stroke-width="0.4"/>
+        <text x="${x}" y="121" text-anchor="middle" fill="#3a2010" font-size="5" font-weight="bold">${day}</text>
+        <text x="${x}" y="128" text-anchor="middle" fill="#aa2222" font-size="6" font-weight="bold">${frac} cup</text>
+      `).join('')}
+
+      <!-- Sum annotation -->
+      <text x="200" y="180" text-anchor="middle" fill="#7a1818" font-size="9" font-weight="bold">total = 1/2 + 1/3 + 1/4 = ?</text>
+
+      ${this._candelabra(50, 156)}
+
+      ${this._miniMuffin(355, 195, 0.4, true)}
+    `);
+  },
+
+  // Scene 17: Haunting interval line plot
+  manor_intervals_plot() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <rect x="40" y="30" width="320" height="190" fill="#eadba0" stroke="#6a3818" stroke-width="2.5" rx="3"/>
+      <rect x="46" y="36" width="308" height="178" fill="#f0e0a8" rx="2"/>
+      <text x="200" y="60" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">HAUNTING INTERVALS — HOURS BETWEEN INCIDENTS</text>
+      <line x1="60" y1="70" x2="340" y2="70" stroke="#8a6838" stroke-width="0.8"/>
+
+      ${this._linePlot(200, 130, [
+        { label: '1/8', count: 2 },
+        { label: '1/4', count: 3 },
+        { label: '1/2', count: 2 }
+      ], 1.0)}
+
+      <text x="200" y="195" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">interval (hours)</text>
+      <text x="200" y="210" text-anchor="middle" fill="#7a1818" font-size="8" font-weight="bold">most frequent interval = ?</text>
+
+      ${this._miniMuffin(30, 175, 0.55)}
+    `);
+  },
+
+  // Scene 18: Cassius's diary scribble
+  manor_cassius_diary() {
+    return this.scene('#1a1208', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#251c10"/>
+      <!-- Open leather-bound diary -->
+      <rect x="40" y="30" width="320" height="190" fill="#3a1810" stroke="#1a0808" stroke-width="2.5" rx="3"/>
+      <rect x="50" y="40" width="300" height="170" fill="#eadba0"/>
+      <line x1="200" y1="40" x2="200" y2="210" stroke="#8a6838" stroke-width="2"/>
+
+      <!-- Left page: handwritten thoughts -->
+      <text x="120" y="60" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">— diary, May 1879 —</text>
+      <line x1="60" y1="68" x2="180" y2="68" stroke="#8a6838" stroke-width="0.5"/>
+      ${[80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190].map(y => `<line x1="60" y1="${y}" x2="180" y2="${y}" stroke="#3a2010" stroke-width="0.3" opacity="0.55" stroke-dasharray="${20 + (y%23)} ${5}"/>`).join('')}
+      <text x="120" y="195" text-anchor="middle" fill="#3a2010" font-size="5" font-style="italic">— signed, C.W.</text>
+
+      <!-- Right page: scribble equation -->
+      <text x="280" y="65" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">scrap pinned to cover</text>
+      <rect x="220" y="80" width="120" height="100" fill="#fffae0" stroke="#aa2222" stroke-width="1" transform="rotate(2 280 130)"/>
+      <text x="280" y="100" text-anchor="middle" fill="#3a2010" font-size="8" font-style="italic" transform="rotate(2 280 100)">"secondary cut</text>
+      <text x="280" y="115" text-anchor="middle" fill="#3a2010" font-size="8" font-style="italic" transform="rotate(2 280 115)">of south meadow:</text>
+      <text x="280" y="145" text-anchor="middle" fill="#7a1818" font-size="18" font-weight="bold" font-family="serif" transform="rotate(2 280 145)">7/8 × 11</text>
+      <text x="280" y="168" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic" transform="rotate(2 280 168)">acres"</text>
+
+      ${this._miniMuffin(355, 195, 0.4, true)}
+    `);
+  },
+
+  // Scene 19: Mira's pigeon-back tonic analysis
+  manor_tonic_analysis() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <!-- Tall window with night sky -->
+      ${this._gothicWindow(280, 30, 80, 130)}
+      <!-- Carrier pigeon flying past window -->
+      <ellipse cx="320" cy="80" rx="6" ry="3" fill="#a8a098"/>
+      <ellipse cx="318" cy="78" rx="3" ry="2" fill="#c8c0b0"/>
+      <line x1="316" y1="80" x2="312" y2="76" stroke="#7a7068" stroke-width="0.5"/>
+      <line x1="316" y1="80" x2="312" y2="84" stroke="#7a7068" stroke-width="0.5"/>
+      <ellipse cx="324" cy="80" rx="2" ry="1" fill="#5a3010"/>
+      <!-- Tiny scroll tied to pigeon's leg -->
+      <rect x="320" y="83" width="3" height="2" fill="#eadba0"/>
+
+      <!-- Desk -->
+      <rect x="20" y="160" width="240" height="32" fill="#5a3a1c" stroke="#3a2410" stroke-width="1.5"/>
+      <rect x="20" y="160" width="240" height="5" fill="#7a5a30"/>
+
+      <!-- Vial of tonic on desk -->
+      <rect x="50" y="125" width="22" height="40" fill="rgba(150,200,180,0.4)" stroke="#3a2010" stroke-width="1" rx="2"/>
+      <rect x="52" y="135" width="18" height="28" fill="#7a8838" opacity="0.6"/>
+      <rect x="48" y="121" width="26" height="6" fill="#3a2010"/>
+      <text x="61" y="146" text-anchor="middle" fill="#7a1818" font-size="4" font-weight="bold">TONIC</text>
+
+      <!-- Pigeon-back analysis paper -->
+      <rect x="100" y="80" width="160" height="80" fill="#eadba0" stroke="#aa2222" stroke-width="1.5" transform="rotate(-3 180 120)"/>
+      <text x="180" y="98" text-anchor="middle" fill="#3a2010" font-size="8" font-weight="bold" font-style="italic" transform="rotate(-3 180 98)">— ANALYSIS, M. VELL —</text>
+      <line x1="110" y1="105" x2="250" y2="105" stroke="#8a6838" stroke-width="0.5" transform="rotate(-3 180 105)"/>
+      <text x="180" y="124" text-anchor="middle" fill="#3a2010" font-size="9" font-style="italic" transform="rotate(-3 180 124)">"laudanum content</text>
+      <text x="180" y="138" text-anchor="middle" fill="#3a2010" font-size="9" font-style="italic" transform="rotate(-3 180 138)">this month:</text>
+      <text x="180" y="156" text-anchor="middle" fill="#7a1818" font-size="13" font-weight="bold" transform="rotate(-3 180 156)">8,400 mg"</text>
+
+      <!-- Conversion target -->
+      <rect x="270" y="170" width="100" height="36" fill="#fff" opacity="0.95" stroke="#aa2222" stroke-width="1" rx="2"/>
+      <text x="320" y="183" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">CONVERT</text>
+      <text x="320" y="198" text-anchor="middle" fill="#7a1818" font-size="9" font-weight="bold">→ ? grams</text>
+      <text x="320" y="205" text-anchor="middle" fill="#3a2010" font-size="5" font-style="italic">(1g = 1,000mg)</text>
+
+      ${this._candelabra(225, 156)}
+
+      ${this._miniMuffin(35, 175, 0.55)}
+    `);
+  },
+
+  // Scene 20: Hidden passage map from clock
+  manor_passage_map() {
+    return this.scene('#0a0603', '#020101', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1008"/>
+      <!-- Aged parchment passage map -->
+      <rect x="40" y="30" width="320" height="190" fill="#d4b878" stroke="#5a3010" stroke-width="2.5" rx="3"/>
+      <text x="200" y="55" text-anchor="middle" fill="#3a1810" font-size="11" font-weight="bold" font-family="serif" font-style="italic">CASSIUS'S HIDDEN PASSAGES</text>
+      <line x1="60" y1="65" x2="340" y2="65" stroke="#8a5018" stroke-width="0.7"/>
+
+      <!-- Outer walls of manor (thick lines) -->
+      <rect x="60" y="80" width="280" height="120" fill="none" stroke="#3a1810" stroke-width="2.5"/>
+      <line x1="200" y1="80" x2="200" y2="200" stroke="#3a1810" stroke-width="2"/>
+      <line x1="60" y1="140" x2="200" y2="140" stroke="#3a1810" stroke-width="1.5"/>
+      <line x1="200" y1="140" x2="340" y2="140" stroke="#3a1810" stroke-width="1.5"/>
+
+      <!-- Room labels -->
+      <text x="130" y="110" text-anchor="middle" fill="#3a1810" font-size="6" font-style="italic">Doctor's Room</text>
+      <text x="130" y="170" text-anchor="middle" fill="#3a1810" font-size="6" font-style="italic">Library</text>
+      <text x="270" y="110" text-anchor="middle" fill="#aa2222" font-size="6" font-weight="bold" font-style="italic">Arabella's Bed</text>
+      <text x="270" y="170" text-anchor="middle" fill="#3a1810" font-size="6" font-style="italic">Gallery</text>
+
+      <!-- Dotted secret passage between Doctor's and Arabella's rooms -->
+      <path d="M 165 100 L 200 100 L 200 100 L 235 100" stroke="#7a1818" stroke-width="2.5" fill="none" stroke-dasharray="4 3"/>
+      <!-- Mark passage segments -->
+      <text x="180" y="93" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold">4 5/6 yd</text>
+      <text x="220" y="93" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold">2 1/2 yd</text>
+      <!-- Door symbols -->
+      <rect x="160" y="98" width="6" height="4" fill="#3a1810"/>
+      <rect x="234" y="98" width="6" height="4" fill="#aa2222"/>
+
+      <!-- Note at bottom -->
+      <text x="200" y="216" text-anchor="middle" fill="#7a1818" font-size="9" font-weight="bold">total length = ?</text>
+
+      ${this._miniMuffin(15, 195, 0.5)}
+    `);
+  },
+
+  // Scene 21: Secondary will document
+  manor_secondary_will() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <!-- Will scroll, broken seal beside -->
+      <rect x="50" y="30" width="300" height="200" fill="#eadba0" stroke="#5a3010" stroke-width="2.5" rx="3"/>
+      <rect x="60" y="40" width="280" height="180" fill="#f0e0a8" rx="2"/>
+
+      <text x="200" y="60" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">— SECONDARY WILL —</text>
+      <text x="200" y="73" text-anchor="middle" fill="#3a2010" font-size="6" font-style="italic">Lord Cassius Wren · sealed January 1879</text>
+      <line x1="80" y1="82" x2="320" y2="82" stroke="#8a6838" stroke-width="0.7"/>
+
+      <text x="80" y="105" fill="#3a2010" font-size="9" font-style="italic">Total estate, on day of transfer:</text>
+      <text x="320" y="105" text-anchor="end" fill="#aa2222" font-size="11" font-weight="bold" font-family="serif">12 1/2 acres</text>
+
+      <text x="80" y="135" fill="#3a2010" font-size="9" font-style="italic">To Lady Arabella Wren:</text>
+      <text x="320" y="135" text-anchor="end" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif">5 3/4 acres</text>
+      <text x="80" y="146" fill="#3a2010" font-size="6" font-style="italic">(manor proper, gardens, stable yard)</text>
+
+      <line x1="80" y1="156" x2="320" y2="156" stroke="#3a2010" stroke-width="0.6"/>
+
+      <text x="80" y="178" fill="#aa2222" font-size="10" font-weight="bold">To beneficiary of last resort:</text>
+      <text x="320" y="178" text-anchor="end" fill="#7a1818" font-size="14" font-weight="bold" font-family="serif">? acres</text>
+      <text x="80" y="190" fill="#3a2010" font-size="6" font-style="italic">(farmland, woodland, mineral right, tenant cottages)</text>
+
+      <!-- Wax seal (broken) -->
+      <circle cx="280" cy="208" r="11" fill="#aa2222" stroke="#6a1010" stroke-width="0.7"/>
+      <line x1="271" y1="201" x2="289" y2="215" stroke="#6a1010" stroke-width="1.5"/>
+      <text x="280" y="212" text-anchor="middle" fill="#6a0808" font-size="6" font-weight="bold">CW</text>
+
+      ${this._miniMuffin(15, 195, 0.5)}
+    `);
+  },
+
+  // Scene 22: Cold-spot overlay on passage map
+  manor_coldspot_overlay() {
+    return this.scene('#1a1410', '#070502', `
+      <rect x="0" y="0" width="400" height="250" fill="#2a1f12"/>
+      <rect x="40" y="30" width="320" height="190" fill="#eadba0" stroke="#6a3818" stroke-width="2.5" rx="3"/>
+      <rect x="46" y="36" width="308" height="178" fill="#f0e0a8" rx="2"/>
+      <text x="200" y="55" text-anchor="middle" fill="#3a2010" font-size="11" font-weight="bold" font-family="serif" font-style="italic">COLD-SPOT REPORTS — DISTANCE FROM CLOCK</text>
+      <line x1="60" y1="65" x2="340" y2="65" stroke="#8a6838" stroke-width="0.8"/>
+
+      ${this._linePlot(200, 130, [
+        { label: '0', count: 2 },
+        { label: '1/8', count: 1 },
+        { label: '1/2', count: 3 },
+        { label: '7/8', count: 2 },
+        { label: '1', count: 1 }
+      ], 1.0)}
+
+      <text x="200" y="195" text-anchor="middle" fill="#3a2010" font-size="7" font-style="italic">yards from gallery clock</text>
+      <text x="200" y="208" text-anchor="middle" fill="#7a1818" font-size="9" font-weight="bold">total reports = ?</text>
+
+      ${this._miniMuffin(30, 175, 0.55)}
+    `);
+  },
+
+  // Scene 23: Long gallery, will between Muffin and Cray
+  manor_will_confrontation() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1008"/>
+      <!-- Vanishing-point gallery -->
+      <polygon points="0,250 0,180 160,140 240,140 400,180 400,250" fill="#3a2410"/>
+      <rect x="0" y="0" width="400" height="180" fill="#1a1008"/>
+      <!-- Portraits -->
+      ${this._portrait(20, 60, 32, 42)}
+      ${this._portrait(80, 70, 26, 34)}
+      ${this._portrait(295, 70, 26, 34)}
+      ${this._portrait(345, 60, 32, 42)}
+      ${this._candelabra(60, 132)}
+      ${this._candelabra(340, 132)}
+
+      <!-- Long table with the open will between the two figures -->
+      <rect x="120" y="170" width="160" height="14" fill="#5a3a1c" stroke="#2a1408" stroke-width="1.5"/>
+      <rect x="120" y="170" width="160" height="3" fill="#7a5a30"/>
+      <!-- Will document open -->
+      <rect x="160" y="160" width="80" height="20" fill="#eadba0" stroke="#aa2222" stroke-width="0.8"/>
+      <text x="200" y="170" text-anchor="middle" fill="#3a2010" font-size="5" font-weight="bold">WILL</text>
+      <text x="200" y="178" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold">7/8 × 16,000</text>
+
+      <!-- Tea tray with cup beside (Cray's tonic source) -->
+      <ellipse cx="265" cy="170" rx="14" ry="3" fill="#3a2010"/>
+      <ellipse cx="265" cy="167" rx="14" ry="2.5" fill="#5a3818"/>
+      <ellipse cx="265" cy="160" rx="6" ry="2" fill="#aa6018" opacity="0.7"/>
+
+      <!-- Dr. Cray on right side, frozen with teacup -->
+      <ellipse cx="278" cy="200" rx="4" ry="1.5" fill="#0a0603"/>
+      <ellipse cx="288" cy="200" rx="4" ry="1.5" fill="#0a0603"/>
+      <rect x="275" y="192" width="7" height="8" fill="#1a1008"/>
+      <rect x="285" y="192" width="7" height="8" fill="#1a1008"/>
+      <rect x="276" y="160" width="7" height="32" fill="#2a2018"/>
+      <rect x="285" y="160" width="7" height="32" fill="#2a2018"/>
+      <rect x="270" y="155" width="24" height="6" fill="#1a1208"/>
+      <path d="M 274 130 L 270 165 L 296 165 L 292 130 Z" fill="#1a1810"/>
+      <path d="M 280 130 L 280 142 L 286 142 L 286 130 Z" fill="#eadba0"/>
+      <ellipse cx="283" cy="138" rx="3" ry="1.5" fill="#7a1818"/>
+      <rect x="270" y="142" width="20" height="13" fill="#3a2818"/>
+      <circle cx="280" cy="146" r="0.6" fill="#aa8838"/>
+      <circle cx="280" cy="150" r="0.6" fill="#aa8838"/>
+      <!-- Right arm holding teacup paused mid-air -->
+      <rect x="290" y="135" width="6" height="20" fill="#1a1810" transform="rotate(-15 293 145)"/>
+      <ellipse cx="295" cy="158" rx="3" ry="2.2" fill="#c9a979"/>
+      <!-- Tiny teacup near hand -->
+      <ellipse cx="297" cy="159" rx="3" ry="1" fill="#eadba0" stroke="#3a2010" stroke-width="0.4"/>
+      <!-- Left arm hanging -->
+      <rect x="266" y="135" width="6" height="20" fill="#1a1810"/>
+      <ellipse cx="269" cy="158" rx="3" ry="2.2" fill="#c9a979"/>
+      <rect x="276" y="118" width="5" height="9" fill="#c9a979"/>
+      <ellipse cx="283" cy="113" rx="8" ry="9" fill="#c9a979"/>
+      <path d="M 276 110 Q 274 105 277 103 Q 283 100 289 103 Q 292 105 290 110" fill="#1a1208"/>
+      <path d="M 281 119 Q 283 124 285 119" fill="#1a1208"/>
+      <path d="M 279 117 Q 283 116 287 117" stroke="#1a1208" stroke-width="0.7" fill="none"/>
+      <ellipse cx="280" cy="113" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="280" cy="113" r="0.6" fill="#3a2818"/>
+      <ellipse cx="286" cy="113" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="286" cy="113" r="0.6" fill="#3a2818"/>
+      <path d="M 278 109 Q 280 108 282 109" stroke="#1a1208" stroke-width="0.7" fill="none"/>
+      <path d="M 284 109 Q 286 108 288 109" stroke="#1a1208" stroke-width="0.7" fill="none"/>
+
+      ${this._miniMuffin(85, 185, 0.55)}
+    `);
+  },
+
+  // Scene 24: Grandfather clock at 11:18
+  manor_grandfather_clock() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1208"/>
+      <rect x="0" y="0" width="400" height="220" fill="#3a1818"/>
+      <rect x="0" y="220" width="400" height="30" fill="#3a2410"/>
+
+      <!-- Grandfather clock -->
+      <rect x="155" y="15" width="90" height="220" fill="#3a2010" stroke="#1a1008" stroke-width="2.5"/>
+      <polygon points="155,15 200,0 245,15" fill="#1a1008"/>
+      <circle cx="200" cy="60" r="40" fill="#eadba0" stroke="#1a1008" stroke-width="2.5"/>
+      <text x="200" y="32" text-anchor="middle" fill="#3a2010" font-size="7" font-weight="bold">XII</text>
+      <text x="230" y="64" text-anchor="middle" fill="#3a2010" font-size="7" font-weight="bold">III</text>
+      <text x="200" y="92" text-anchor="middle" fill="#3a2010" font-size="7" font-weight="bold">VI</text>
+      <text x="170" y="64" text-anchor="middle" fill="#3a2010" font-size="7" font-weight="bold">IX</text>
+      ${[0,1,2,3,4,5,6,7,8,9,10,11].map(h => {
+        const a = (h/12)*Math.PI*2 - Math.PI/2;
+        const x1 = 200 + Math.cos(a)*36, y1 = 60 + Math.sin(a)*36;
+        const x2 = 200 + Math.cos(a)*40, y2 = 60 + Math.sin(a)*40;
+        return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#1a1008" stroke-width="1.2"/>`;
+      }).join('')}
+      <!-- Hands at 11:18 -->
+      <line x1="200" y1="60" x2="194" y2="32" stroke="#1a1008" stroke-width="3"/>
+      <line x1="200" y1="60" x2="218" y2="73" stroke="#1a1008" stroke-width="2.2"/>
+      <circle cx="200" cy="60" r="3" fill="#1a1008"/>
+
+      <!-- Pendulum window with brass weight visible -->
+      <rect x="170" y="115" width="60" height="80" fill="#0a0603" stroke="#5a3010" stroke-width="1.2"/>
+      <line x1="200" y1="115" x2="200" y2="180" stroke="#3a2818" stroke-width="1.2"/>
+      <circle cx="200" cy="180" r="13" fill="#aa8838" stroke="#3a2810" stroke-width="1"/>
+
+      <!-- Time labels -->
+      <rect x="40" y="100" width="80" height="36" fill="#fff" opacity="0.95" stroke="#aa2222" stroke-width="1" rx="2"/>
+      <text x="80" y="113" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">NOW</text>
+      <text x="80" y="128" text-anchor="middle" fill="#aa2222" font-size="11" font-weight="bold">11:18 PM</text>
+
+      <rect x="280" y="100" width="80" height="36" fill="#fff" opacity="0.95" stroke="#7a1818" stroke-width="1" rx="2"/>
+      <text x="320" y="113" text-anchor="middle" fill="#3a2010" font-size="6" font-weight="bold">DEADLINE</text>
+      <text x="320" y="128" text-anchor="middle" fill="#7a1818" font-size="11" font-weight="bold">12:00</text>
+
+      <text x="200" y="240" text-anchor="middle" fill="#7a1818" font-size="10" font-weight="bold">minutes remaining = ?</text>
+    `);
+  },
+
+  // Scene 25: Final capture with notebook
+  manor_final_capture() {
+    return this.scene('#0a0805', '#020201', `
+      <rect x="0" y="0" width="400" height="250" fill="#1a1008"/>
+      <polygon points="0,250 0,180 160,140 240,140 400,180 400,250" fill="#3a2410"/>
+      <rect x="0" y="0" width="400" height="180" fill="#1a1008"/>
+      ${this._portrait(15, 50, 32, 50)}
+      ${this._portrait(60, 60, 28, 38)}
+      ${this._portrait(310, 60, 28, 38)}
+      ${this._portrait(355, 50, 32, 50)}
+      ${this._candelabra(50, 132)}
+      ${this._candelabra(350, 132)}
+
+      <!-- Cray on his knees, defeated -->
+      <ellipse cx="160" cy="220" rx="5" ry="2" fill="#0a0603"/>
+      <ellipse cx="180" cy="220" rx="5" ry="2" fill="#0a0603"/>
+      <rect x="156" y="208" width="9" height="14" fill="#1a1008"/>
+      <rect x="176" y="208" width="9" height="14" fill="#1a1008"/>
+      <rect x="160" y="180" width="22" height="32" fill="#1a1810"/>
+      <rect x="170" y="178" width="11" height="6" fill="#eadba0"/>
+      <ellipse cx="170" cy="172" rx="9" ry="10" fill="#c9a979"/>
+      <path d="M 162 168 Q 170 165 178 168" fill="#1a1208"/>
+      <path d="M 167 178 Q 170 184 173 178" fill="#1a1208"/>
+      <ellipse cx="167" cy="172" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="167" cy="172" r="0.6" fill="#3a2818"/>
+      <ellipse cx="173" cy="172" rx="1.4" ry="0.9" fill="#fff"/>
+      <circle cx="173" cy="172" r="0.6" fill="#3a2818"/>
+      <path d="M 165 168 Q 167 167 169 168" stroke="#1a1208" stroke-width="0.7" fill="none"/>
+      <path d="M 171 168 Q 173 167 175 168" stroke="#1a1208" stroke-width="0.7" fill="none"/>
+
+      <!-- Constable arresting (small, behind) -->
+      <rect x="195" y="195" width="6" height="20" fill="#1e2a4a"/>
+      <rect x="208" y="195" width="6" height="20" fill="#1e2a4a"/>
+      <rect x="190" y="160" width="26" height="38" fill="#1e2a4a"/>
+      <ellipse cx="203" cy="148" rx="9" ry="9.5" fill="#d4b098"/>
+      <ellipse cx="203" cy="138" rx="11" ry="3" fill="#1a1208"/>
+      <path d="M 193 138 Q 203 124 213 138 L 213 140 Q 203 130 193 140 Z" fill="#1e2a4a"/>
+      <circle cx="203" cy="124" r="1.5" fill="#aa8838"/>
+
+      <!-- Notebook dropped on floor in foreground -->
+      <rect x="240" y="218" width="50" height="22" fill="#3a2010" stroke="#1a1008" stroke-width="1" transform="rotate(8 265 229)"/>
+      <rect x="244" y="222" width="42" height="14" fill="#eadba0" transform="rotate(8 265 229)"/>
+      <text x="265" y="231" text-anchor="middle" fill="#7a1818" font-size="6" font-weight="bold" transform="rotate(8 265 231)">14,000 × 5/8</text>
+
+      <!-- Arabella behind, safely standing by clock -->
+      <rect x="305" y="200" width="4" height="14" fill="#1a0a04"/>
+      <rect x="312" y="200" width="4" height="14" fill="#1a0a04"/>
+      <path d="M 302 175 L 300 215 L 320 215 L 318 175 Z" fill="#5a4828"/>
+      <path d="M 304 178 L 302 213 L 318 213 L 316 178 Z" fill="#d4c89a"/>
+      <ellipse cx="310" cy="170" rx="6" ry="7" fill="#d4b098"/>
+      <ellipse cx="310" cy="164" rx="7" ry="3" fill="#3a2818"/>
+      <ellipse cx="308" cy="170" rx="1" ry="0.8" fill="#3a2818"/>
+      <ellipse cx="312" cy="170" rx="1" ry="0.8" fill="#3a2818"/>
+      <path d="M 308 174 Q 310 174 312 174" stroke="#5a2010" stroke-width="0.5"/>
+
+      ${this._miniMuffin(55, 195, 0.65)}
+    `);
+  },
+
 };
 
 // Map scene names to problem indices per case
@@ -3688,5 +4854,36 @@ const SCENE_MAP = {
     'forest_cave_dig',            // 23: Digging out the grate (work)
     'forest_moon_clock',          // 24: Cave wall-clock (time conv)
     'forest_confrontation'        // 25: Final confrontation with Crooke
+  ],
+  ghost_ravenhollow: [
+    // Night One — Arrival at Ravenhollow
+    'manor_gate_arrival',         // 1: Gate at dusk, Holloway meeting (time conv)
+    'manor_great_hall',           // 2: Hawkins shows the portraits (10²)
+    'manor_pennyfall_log',        // 3: Pennyfall's staff-time ledger
+    'manor_brandy_decanter',      // 4: Cassius's study with crystal decanter
+    'manor_tilly_kitchen',        // 5: Tilly the maid in the kitchen
+    'manor_cray_lineplot',        // 6: Cray's tonic dose line plot
+    // Night Two — The Investigation
+    'manor_wing_floorplan',       // 7: Floor plan of east + west wings
+    'manor_bell_pull',            // 8: Severed bell-pull cord in gallery
+    'manor_cook_recipe',          // 9: Kitchen recipe missing measure
+    'manor_cray_bill',            // 10: Cray's tidy monthly bill
+    'manor_coldspot_lineplot',    // 11: Cold-spot times plot
+    'manor_library_shelf',        // 12: Empty shelf where book is missing
+    'manor_cassius_ledger',       // 13: Estate ledger with secondary share
+    // Night Three — The Hauntings Escalate
+    'manor_haunting_clock',       // 14: Two haunting durations on clock
+    'manor_wine_cellar',          // 15: Brandy cask depleted
+    'manor_arabella_doses',       // 16: Three days of tonic doses
+    'manor_intervals_plot',       // 17: Haunting interval line plot
+    'manor_cassius_diary',        // 18: Diary scribble with 7/8 × 11
+    'manor_tonic_analysis',       // 19: Mira's pigeon-back analysis
+    // Night Four — The Reveal
+    'manor_passage_map',          // 20: Hidden passage map from clock
+    'manor_secondary_will',       // 21: Will breaking down acreage
+    'manor_coldspot_overlay',     // 22: Cold-spots overlay on passage map
+    'manor_will_confrontation',   // 23: Long gallery, will between them
+    'manor_grandfather_clock',    // 24: Grandfather clock 11:18
+    'manor_final_capture'         // 25: Cray captured, dropped notebook
   ]
 };
