@@ -112,6 +112,11 @@ body {
   color: #1a1a2e;
 }
 
+.card-tag.atlas {
+  background: #5a8aaa;
+  color: #1a1a2e;
+}
+
 @media (max-width: 700px) {
   .hub-title { font-size: 2rem; }
   .game-cards { flex-direction: column; align-items: center; }
