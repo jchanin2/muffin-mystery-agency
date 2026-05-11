@@ -264,24 +264,29 @@ const Challenges = {
       bin.innerHTML =
         '<div class="classify-bin-label">' + (CATEGORY_LABELS[binCat] || binCat) + '</div>' +
         '<div class="classify-bin-contents"></div>';
-      bin.addEventListener('click', () => {
+      bin.addEventListener('click', (e) => {
+        // Ignore clicks on already-placed mini-shapes inside this bin;
+        // those have their own remove handler.
+        if (e.target.closest('.mini-shape')) return;
         if (!activeShape) {
           status.textContent = 'Click a shape first, then a bin.';
           return;
         }
-        // Drop active shape into this bin
-        placement[activeShape] = binCat;
-        const tile = tray.querySelector('[data-shape="' + activeShape + '"]');
+        // Capture the shape name in a local so the remove handler
+        // doesn't see a later-nulled activeShape.
+        const placedShape = activeShape;
+        placement[placedShape] = binCat;
+        const tile = tray.querySelector('[data-shape="' + placedShape + '"]');
         tile.classList.remove('selected');
         tile.classList.add('placed');
         const mini = document.createElement('div');
         mini.className = 'mini-shape';
-        mini.dataset.shape = activeShape;
-        mini.innerHTML = renderShapeMini(activeShape);
-        // Allow click-to-remove from bin
-        mini.addEventListener('click', (e) => {
-          e.stopPropagation();
-          delete placement[activeShape];
+        mini.dataset.shape = placedShape;
+        mini.title = 'Click to remove';
+        mini.innerHTML = renderShapeMini(placedShape);
+        mini.addEventListener('click', (evt) => {
+          evt.stopPropagation();
+          delete placement[placedShape];
           mini.remove();
           tile.classList.remove('placed');
           status.textContent = 'Click a shape, then click the bin where it belongs.';
