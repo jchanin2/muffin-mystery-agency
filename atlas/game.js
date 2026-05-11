@@ -279,25 +279,26 @@ function _applyChallengeMapAdditions(challenge) {
   if (!challenge) return;
   const m = Game.chapterMap;
   // Add a marker only if there isn't already one at the same coords.
-  const addMarker = (x, y, label) => {
+  const addMarker = (x, y, label, symbol) => {
     const existing = m.markers.find(p => p.x === x && p.y === y);
     if (existing) {
       if (label && !existing.label) existing.label = label;
+      if (symbol && !existing.symbol) existing.symbol = symbol;
     } else {
-      m.markers.push({ x, y, label: label || '' });
+      m.markers.push({ x, y, label: label || '', symbol: symbol || 'dot' });
     }
   };
   switch (challenge.type) {
     case 'gridClick':
-      if (challenge.landmark) addMarker(challenge.target.x, challenge.target.y, challenge.landmark);
+      if (challenge.landmark) addMarker(challenge.target.x, challenge.target.y, challenge.landmark, challenge.markerStyle);
       break;
     case 'identifyPoint':
-      if (challenge.landmark) addMarker(challenge.marker.x, challenge.marker.y, challenge.landmark);
+      if (challenge.landmark) addMarker(challenge.marker.x, challenge.marker.y, challenge.landmark, challenge.markerStyle);
       break;
     case 'plotShape':
       if (!challenge.landmark) break;
       if (challenge.connect === 'line') {
-        challenge.points.forEach((p, i) => addMarker(p[0], p[1], i === 0 ? challenge.landmark : ''));
+        challenge.points.forEach((p, i) => addMarker(p[0], p[1], i === 0 ? challenge.landmark : '', challenge.markerStyle));
       } else {
         m.shapes.push({ points: challenge.points.slice(), label: challenge.landmark });
       }

@@ -44,7 +44,10 @@ const Challenges = {
     const { svgEl } = this._buildGrid(size, container, false, chapterMap);
     // Show the marker but DON'T label it with coordinates — that's
     // exactly what the student is being asked to figure out.
-    this._renderUserMarker(svgEl, size, marker, 'target', { showLabel: false });
+    this._renderUserMarker(svgEl, size, marker, 'target', {
+      showLabel: false,
+      symbol: challenge.markerStyle || 'dot'
+    });
 
     const wrap = document.createElement('div');
     wrap.style.marginTop = '14px';
@@ -69,7 +72,10 @@ const Challenges = {
         if (Number.isNaN(xv) || Number.isNaN(yv)) return { ok: false, message: 'Type both coordinates.' };
         if (xv === marker.x && yv === marker.y) {
           // On success, label the marker so the persistent map shows it as a known landmark.
-          this._renderUserMarker(svgEl, size, marker, 'plotted', { label: challenge.landmark });
+          this._renderUserMarker(svgEl, size, marker, 'plotted', {
+            label: challenge.landmark,
+            symbol: challenge.markerStyle || 'dot'
+          });
           return { ok: true, message: 'Read precisely. Cartographer\'s eye.' };
         }
         return { ok: false, message: 'Not quite — read the grid carefully.' };
@@ -640,10 +646,7 @@ const Challenges = {
       // Markers
       (chapterMap.markers || []).forEach(marker => {
         const px = xToPx(marker.x), py = yToPx(marker.y);
-        const dot = document.createElementNS(ns, 'circle');
-        dot.setAttribute('cx', px); dot.setAttribute('cy', py); dot.setAttribute('r', 5);
-        dot.setAttribute('class', 'plotted-point');
-        svg.appendChild(dot);
+        this._appendMarkerSymbol(svg, px, py, marker.symbol || 'dot', 'plotted-point');
         if (marker.label) {
           const txt = document.createElementNS(ns, 'text');
           txt.setAttribute('x', px + 8); txt.setAttribute('y', py - 6);
@@ -670,26 +673,54 @@ const Challenges = {
   _renderUserMarker(svgEl, size, pt, kind, opts) {
     opts = opts || {};
     const showLabel = (typeof opts.showLabel === 'boolean') ? opts.showLabel : true;
+    const symbol = opts.symbol || 'dot';
     const ns = 'http://www.w3.org/2000/svg';
     if (kind === 'user') {
-      svgEl.querySelectorAll('.user-marker, .user-label').forEach(el => el.remove());
+      svgEl.querySelectorAll('.user-marker, .user-label, .user-symbol').forEach(el => el.remove());
     }
     const px = (pt.x / size) * 320 + 30;
     const py = 330 - (pt.y / size) * 320;
-    const dot = document.createElementNS(ns, 'circle');
-    dot.setAttribute('cx', px); dot.setAttribute('cy', py); dot.setAttribute('r', 6);
-    if (kind === 'plotted') dot.setAttribute('class', 'plotted-point');
-    else if (kind === 'target') dot.setAttribute('class', 'target-marker');
-    else dot.setAttribute('class', 'user-marker');
-    svgEl.appendChild(dot);
+    let cssClass;
+    if (kind === 'plotted') cssClass = 'plotted-point';
+    else if (kind === 'target') cssClass = 'target-marker';
+    else cssClass = 'user-marker';
+    const el = this._appendMarkerSymbol(svgEl, px, py, symbol, cssClass);
+    if (kind === 'user') el.classList.add('user-symbol');
     if (showLabel && opts.label) {
       const lbl = document.createElementNS(ns, 'text');
-      lbl.setAttribute('x', px + 8); lbl.setAttribute('y', py - 6);
+      lbl.setAttribute('x', px + 10); lbl.setAttribute('y', py - 7);
       lbl.setAttribute('class', 'landmark-label');
       if (kind === 'user') lbl.classList.add('user-label');
       lbl.textContent = opts.label;
       svgEl.appendChild(lbl);
     }
+  },
+
+  // Draw either a dot or a 5-pointed star at (px, py) on the given SVG.
+  // Returns the appended element.
+  _appendMarkerSymbol(svgEl, px, py, symbol, cssClass) {
+    const ns = 'http://www.w3.org/2000/svg';
+    let el;
+    if (symbol === 'star') {
+      const outer = 9, inner = 4;
+      const pts = [];
+      for (let i = 0; i < 10; i++) {
+        const r = (i % 2 === 0) ? outer : inner;
+        const angle = (Math.PI / 5) * i - Math.PI / 2;
+        pts.push((px + r * Math.cos(angle)).toFixed(2) + ',' + (py + r * Math.sin(angle)).toFixed(2));
+      }
+      el = document.createElementNS(ns, 'polygon');
+      el.setAttribute('points', pts.join(' '));
+      el.setAttribute('class', cssClass);
+    } else {
+      el = document.createElementNS(ns, 'circle');
+      el.setAttribute('cx', px);
+      el.setAttribute('cy', py);
+      el.setAttribute('r', 6);
+      el.setAttribute('class', cssClass);
+    }
+    svgEl.appendChild(el);
+    return el;
   }
 };
 

@@ -321,6 +321,7 @@ const CHAPTERS = [
         prompt: 'What are the coordinates of the river mouth?',
         marker: { x: 8, y: 6 },
         landmark: 'River Mouth',
+        markerStyle: 'star',
         gridSize: 10
       }
     ]
