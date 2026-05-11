@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foxglove Hollow — A Field Notebook</title>
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+
+  <!-- ==================== TITLE SCREEN ==================== -->
+  <div id="screen-title" class="screen active">
+    <div class="title-content">
+      <div class="title-emblem" id="title-emblem"></div>
+      <h1 class="game-title">Foxglove Hollow<br><span class="title-emph">A Field Notebook</span></h1>
+      <p class="subtitle">Measure · Record · Discover</p>
+      <button id="btn-start" class="btn btn-leaf">Open the Notebook</button>
+      <a href="../" class="btn-link">← Back to Math Adventures</a>
+    </div>
+  </div>
+
+  <!-- ==================== SLOT PICKER ==================== -->
+  <div id="screen-slots" class="screen">
+    <div class="screen-header">
+      <h2>Choose Your Apprentice</h2>
+      <p class="header-subtitle">Pick a save slot — your notebook, your pace.</p>
+    </div>
+    <div id="slots-list" class="slots-list"></div>
+    <button id="btn-slots-back" class="btn btn-secondary">Back to Title</button>
+  </div>
+
+  <!-- ==================== CHAPTER MAP ==================== -->
+  <div id="screen-chapters" class="screen">
+    <div class="screen-header">
+      <h2>The Field Notebook</h2>
+      <div class="active-slot-indicator">
+        <span id="active-slot-label">Apprentice · Slot 1</span>
+        <button id="btn-switch-slot" class="btn btn-ghost">Switch</button>
+      </div>
+    </div>
+    <div id="chapter-list" class="chapter-list"></div>
+    <button id="btn-chapters-back" class="btn btn-secondary">Back to Slots</button>
+  </div>
+
+  <!-- ==================== CHAPTER INTRO OVERLAY ==================== -->
+  <div id="chapter-intro-overlay" class="chapter-intro-overlay" style="display:none;">
+    <div class="chapter-intro-content">
+      <div id="chapter-intro-illustration" class="chapter-intro-illustration"></div>
+      <div class="chapter-intro-flourish">❦</div>
+      <h2 id="chapter-intro-title" class="chapter-intro-title"></h2>
+      <div id="chapter-intro-text" class="chapter-intro-text"></div>
+      <button id="btn-chapter-intro-continue" class="btn btn-leaf">Begin →</button>
+    </div>
+  </div>
+
+  <!-- ==================== CHALLENGE SCREEN ==================== -->
+  <div id="screen-challenge" class="screen">
+    <div class="game-top-bar">
+      <div class="case-title-bar">
+        <button id="btn-game-back" class="btn-nav" title="Back to Notebook">←</button>
+        <span id="game-chapter-title"></span>
+      </div>
+      <div class="progress-indicator">
+        Page <span id="progress-current">1</span> of <span id="progress-total">6</span>
+      </div>
+    </div>
+
+    <div class="game-main">
+      <div id="challenge-story" class="challenge-story"></div>
+      <div id="challenge-prompt" class="challenge-prompt"></div>
+      <div id="challenge-area" class="challenge-area"></div>
+      <div id="challenge-feedback" class="challenge-feedback"></div>
+      <div class="challenge-controls">
+        <button id="btn-check" class="btn btn-leaf">Check</button>
+        <button id="btn-continue" class="btn btn-leaf" style="display:none;">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER COMPLETE ==================== -->
+  <div id="screen-chapter-complete" class="screen">
+    <div class="complete-content">
+      <div class="complete-stamp">PAGE<br>COMPLETE</div>
+      <h2 class="complete-title" id="complete-chapter-title"></h2>
+      <div id="complete-emblem" class="complete-emblem"></div>
+      <div id="complete-text" class="complete-text"></div>
+      <button id="btn-back-to-notebook" class="btn btn-leaf">Back to the Notebook</button>
+    </div>
+  </div>
+
+  <!-- ==================== ALL COMPLETE ==================== -->
+  <div id="screen-final" class="screen">
+    <div class="final-content">
+      <div class="final-stamp">NOTEBOOK<br>FULL</div>
+      <h2 class="final-title">Apprentice No More</h2>
+      <div class="final-text" id="final-text"></div>
+      <button id="btn-final-back" class="btn btn-leaf">Back to the Title</button>
+    </div>
+  </div>
+
+  <!-- Scripts — order matters -->
+  <script src="chapters.js?v=1"></script>
+  <script src="challenges.js?v=1"></script>
+  <script src="game.js?v=1"></script>
+</body>
+</html>
