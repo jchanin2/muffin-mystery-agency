@@ -1,18 +1,7 @@
-// chapters.js — Story content for Captain Cartwright's Atlas. Four
-// chapters of 6 challenges each. Each challenge is a self-contained
-// object that the Challenges runtime knows how to render.
-//
-// Challenge types:
-//   gridClick     — click a point on a grid to plot it
-//   identifyPoint — look at a marked point and type its coordinates
-//   plotShape     — plot multiple points then identify the shape
-//   sortShapes    — click all shapes with a given property
-//   dragClassify  — drag/select shapes into category bins
-//   patternTable  — fill in missing cells of a rules-based table
-//   expression    — evaluate a parenthesised expression
-//   distance      — type the distance between two grid points
-//   perimeterArea — compute perimeter or area of a rectangle
-//   sequence      — extend a numerical pattern (next N terms)
+// chapters.js — Story content for Captain Cartwright's Atlas.
+// Four chapters of 6 challenges each. Each grid-based challenge can
+// declare a `landmark` (or endpointA/endpointB/pathLabel for distance)
+// that gets committed to the chapter's accumulating map on success.
 
 const CHAPTERS = [
   // =========================================================
@@ -23,57 +12,109 @@ const CHAPTERS = [
     title: 'The Garden Estate',
     description: 'Open the captain\'s atlas. Plot the points. Walk his garden.',
     treasure: '🗝️',
+    illustration:
+      '<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg">' +
+      // Sky / dawn gradient
+      '<defs><linearGradient id="g1sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a5868"/><stop offset="1" stop-color="#aa8838"/></linearGradient></defs>' +
+      '<rect width="460" height="140" fill="url(#g1sky)"/>' +
+      '<circle cx="350" cy="60" r="22" fill="#f5e8b8" opacity="0.85"/>' +
+      // Distant hills
+      '<path d="M 0 130 Q 100 100 200 120 Q 320 90 460 110 L 460 140 L 0 140 Z" fill="#3a4828"/>' +
+      // Lawn
+      '<rect x="0" y="138" width="460" height="62" fill="#5a6828"/>' +
+      // Garden wall
+      '<rect x="40" y="120" width="380" height="22" fill="#7a5828" stroke="#3a2010" stroke-width="1"/>' +
+      // Iron gate (centered)
+      '<rect x="200" y="86" width="60" height="56" fill="#1a1208" stroke="#3a2010" stroke-width="1.5"/>' +
+      '<line x1="215" y1="92" x2="215" y2="138" stroke="#5a3818" stroke-width="1"/>' +
+      '<line x1="230" y1="92" x2="230" y2="138" stroke="#5a3818" stroke-width="1"/>' +
+      '<line x1="245" y1="92" x2="245" y2="138" stroke="#5a3818" stroke-width="1"/>' +
+      '<polygon points="200,86 230,72 260,86" fill="#3a2010"/>' +
+      // Apple trees
+      '<line x1="80" y1="138" x2="80" y2="118" stroke="#3a2010" stroke-width="3"/>' +
+      '<circle cx="80" cy="105" r="14" fill="#4a6828"/>' +
+      '<circle cx="76" cy="100" r="2" fill="#aa2222"/><circle cx="84" cy="103" r="2" fill="#aa2222"/>' +
+      '<line x1="380" y1="138" x2="380" y2="118" stroke="#3a2010" stroke-width="3"/>' +
+      '<circle cx="380" cy="105" r="14" fill="#4a6828"/>' +
+      '<circle cx="376" cy="100" r="2" fill="#aa2222"/><circle cx="384" cy="103" r="2" fill="#aa2222"/>' +
+      // Roses on the wall
+      '<circle cx="120" cy="138" r="3" fill="#aa2222"/><circle cx="135" cy="140" r="3" fill="#cc3344"/><circle cx="150" cy="138" r="3" fill="#aa2222"/>' +
+      '<circle cx="320" cy="138" r="3" fill="#cc3344"/><circle cx="335" cy="140" r="3" fill="#aa2222"/><circle cx="350" cy="138" r="3" fill="#cc3344"/>' +
+      // Well (round stone with bucket)
+      '<circle cx="170" cy="160" r="14" fill="#5a4828" stroke="#3a2010" stroke-width="1.5"/>' +
+      '<circle cx="170" cy="160" r="9" fill="#1a1208"/>' +
+      '<line x1="158" y1="148" x2="158" y2="138" stroke="#3a2010" stroke-width="2"/>' +
+      '<line x1="182" y1="148" x2="182" y2="138" stroke="#3a2010" stroke-width="2"/>' +
+      '<line x1="156" y1="138" x2="184" y2="138" stroke="#3a2010" stroke-width="2"/>' +
+      '<line x1="170" y1="138" x2="170" y2="156" stroke="#3a2010" stroke-width="0.7"/>' +
+      // Tea pavilion (small gazebo on the right)
+      '<polygon points="290,168 290,150 320,138 350,150 350,168" fill="#aa8838" stroke="#3a2010" stroke-width="1"/>' +
+      '<polygon points="288,150 320,128 352,150" fill="#7a3818" stroke="#3a2010" stroke-width="1"/>' +
+      '<rect x="305" y="158" width="6" height="10" fill="#3a2010"/>' +
+      '</svg>',
     intro:
-      '<p>You unlock the captain\'s old sea-chest in the back of the agency. Inside, wrapped in oilcloth, lies a leather-bound atlas. Its first page is marked: <em>"For the cartographer who can read me — my fortune lies hidden across these maps."</em></p>' +
-      '<p>The first map shows the captain\'s own garden estate, drawn on a tidy <em>coordinate grid</em>. To follow him you\'ll need to plot points, identify locations, and trace the simple patterns he planted in his rose-beds.</p>' +
+      '<p>You are a young cartographer in a city by the sea, working from a tiny harbour-bookshop your grandfather left you. One stormy afternoon the bell over the door rings and a stranger steps inside, dripping rain, carrying a heavy oilcloth bundle.</p>' +
+      '<p>"For you," the stranger says. "From your grandfather\'s old shipmate. He\'s gone now. Wanted you to have it." She sets the bundle on the counter and is gone before you can ask her name.</p>' +
+      '<p>You unwrap it. Inside lies a battered leather atlas, sea-stained and salt-stiff. The first page is marked in spidery handwriting:</p>' +
+      '<p style="text-align:center;font-family:Cormorant Garamond,serif;font-style:italic;color:#f2cc5e;font-size:1.05rem;">"For the cartographer who can read me — my fortune lies hidden across these maps."<br><span style="font-size:0.85em;">— Captain Hieronymus Cartwright</span></p>' +
+      '<p>You\'ve heard the name. Captain Cartwright was a famous explorer who vanished at sea fifteen years ago. The atlas was thought lost with him. Your grandfather had sailed with him in his youth.</p>' +
+      '<p>You light a fresh candle, sharpen a quill, and turn the page. The first map shows the captain\'s own <em>garden estate</em>, drawn on a tidy coordinate grid. He has begun marking the landmarks for you to find.</p>' +
       '<p>Let\'s open the atlas.</p>',
     outro:
-      '<p>You\'ve walked every path in the garden. The captain left you a small brass key tucked beneath a stone marker — the kind of key that opens a sea-trunk.</p>' +
-      '<p>The next page of the atlas turns of its own accord. <em>Trapezoid Island</em>.</p>',
+      '<p>You\'ve charted every landmark in the captain\'s garden. Beneath the stone marker at the end of the path you uncover a small brass key — the kind that opens a sea-trunk.</p>' +
+      '<p>The next page of the atlas turns of its own accord. <em>Trapezoid Island.</em></p>',
     challenges: [
       {
         type: 'gridClick',
-        story: 'The atlas opens to a sketch of the captain\'s garden. He has marked his <em>tea pavilion</em> with a tidy red dot.',
-        prompt: 'Plot the tea pavilion at <em>(3, 4)</em>.',
+        story: 'The atlas opens to the captain\'s garden estate. He has marked his <em>tea pavilion</em> first, in tidy red ink — a square gazebo at the back of the lawn.',
+        prompt: 'Plot the <em>tea pavilion</em> at <em>(3, 4)</em>.',
         target: { x: 3, y: 4 },
+        landmark: 'Tea Pavilion',
         gridSize: 10
       },
       {
         type: 'identifyPoint',
-        story: 'A second mark in the captain\'s ink — the well from which he drew his morning water.',
+        story: 'A second mark appears in the captain\'s ink — the round stone <em>well</em> from which he drew his morning water. The captain has plotted it; he wants you to read its coordinates back to him.',
         prompt: 'What are the coordinates of the well?',
         marker: { x: 7, y: 2 },
+        landmark: 'Well',
         gridSize: 10
       },
       {
         type: 'gridClick',
-        story: 'The captain\'s rose-bed lies in a sunlit corner. The atlas notes: <em>"Roses, planted at the third column, ninth row."</em>',
-        prompt: 'Plot the rose-bed at <em>(3, 9)</em>.',
+        story: 'The captain\'s rose-bed lies in a sunlit corner under the high garden wall. He notes: <em>"Roses, planted at the third column, ninth row."</em>',
+        prompt: 'Plot the <em>rose-bed</em> at <em>(3, 9)</em>.',
         target: { x: 3, y: 9 },
+        landmark: 'Rose Bed',
         gridSize: 10
       },
       {
         type: 'plotShape',
-        story: 'The captain marks the four corners of his herb-garden. Plot them in order: <em>(1,1) → (5,1) → (5,3) → (1,3)</em>.',
+        story: 'The captain marks the four corners of his herb-garden — a tidy plot in the lawn. Plot them in order: <em>(1,1) → (5,1) → (5,3) → (1,3)</em>.',
         prompt: 'Click the four corners in order. What shape does he draw?',
         points: [[1,1],[5,1],[5,3],[1,3]],
+        landmark: 'Herb Garden',
         gridSize: 10,
         options: ['Square', 'Rectangle', 'Trapezoid', 'Triangle'],
         answer: 'Rectangle'
       },
       {
         type: 'sequence',
-        story: 'The captain planted apple trees in a careful pattern: 2 trees in row one, 4 in row two, 6 in row three. He writes: <em>"Each row, two more than the last."</em>',
+        story: 'In the orchard the captain planted apple trees in a careful pattern: <em>2 trees in row one, 4 in row two, 6 in row three</em>. He writes: <em>"Each row, two more than the last."</em>',
         prompt: 'What are the next THREE numbers in his pattern?',
         sequence: [2, 4, 6],
         next: [8, 10, 12]
       },
       {
         type: 'distance',
-        story: 'The captain hides a brass key. The atlas says: <em>"The key lies on a straight line between the well at (7, 2) and a stone marker at (7, 8)."</em> Walk straight up from one to the other.',
-        prompt: 'How far apart are the well and the stone marker?',
+        story: 'The captain hides a brass key. The atlas says: <em>"The key lies on a straight line between the WELL and a stone marker due north of it."</em> Walk straight up from the well to find the stone marker.',
+        prompt: 'How far apart (in grid units) are the well at (7, 2) and the stone marker at (7, 8)?',
         pointA: [7, 2],
         pointB: [7, 8],
+        endpointA: 'Well',
+        endpointB: 'Stone Marker',
+        pathLabel: '6 paces',
+        landmark: 'Stone Marker',
         answer: 6,
         gridSize: 10
       }
@@ -86,8 +127,39 @@ const CHAPTERS = [
   {
     id: 'trapezoid_island',
     title: 'Trapezoid Island',
-    description: 'Survey the island. Sort his sketches. Measure the plots.',
+    description: 'Survey the island. Sort the captain\'s sketches. Measure the plots.',
     treasure: '⚓',
+    illustration:
+      '<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg">' +
+      // Sky
+      '<defs><linearGradient id="g2sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a8aaa"/><stop offset="1" stop-color="#aaccdd"/></linearGradient></defs>' +
+      '<rect width="460" height="140" fill="url(#g2sky)"/>' +
+      // Sun
+      '<circle cx="370" cy="50" r="18" fill="#f5e8b8"/>' +
+      // Ocean
+      '<rect y="120" width="460" height="80" fill="#5a8aaa"/>' +
+      '<path d="M 0 130 Q 60 124 120 130 Q 180 136 240 130 Q 300 124 360 130 Q 420 136 460 130" stroke="#aaccdd" stroke-width="1" fill="none" opacity="0.7"/>' +
+      '<path d="M 0 145 Q 80 140 160 145 Q 240 150 320 145 Q 400 140 460 145" stroke="#aaccdd" stroke-width="1" fill="none" opacity="0.5"/>' +
+      // Island (trapezoidal)
+      '<polygon points="120,160 340,160 290,118 170,118" fill="#d4a868" stroke="#7a5828" stroke-width="1.5"/>' +
+      '<polygon points="170,118 290,118 280,108 180,108" fill="#aa8838" opacity="0.6"/>' +
+      // Palm trees
+      '<line x1="200" y1="118" x2="195" y2="80" stroke="#3a2010" stroke-width="3"/>' +
+      '<path d="M 195 80 Q 175 70 160 80" stroke="#4a7028" stroke-width="2.5" fill="none"/>' +
+      '<path d="M 195 80 Q 215 68 230 78" stroke="#4a7028" stroke-width="2.5" fill="none"/>' +
+      '<path d="M 195 80 Q 200 60 210 56" stroke="#4a7028" stroke-width="2.5" fill="none"/>' +
+      '<line x1="260" y1="118" x2="265" y2="86" stroke="#3a2010" stroke-width="3"/>' +
+      '<path d="M 265 86 Q 245 76 232 88" stroke="#4a7028" stroke-width="2.5" fill="none"/>' +
+      '<path d="M 265 86 Q 285 74 298 84" stroke="#4a7028" stroke-width="2.5" fill="none"/>' +
+      '<path d="M 265 86 Q 268 64 278 60" stroke="#4a7028" stroke-width="2.5" fill="none"/>' +
+      // Tent (camp)
+      '<polygon points="220,140 250,140 235,118" fill="#aa8838" stroke="#3a2010" stroke-width="1"/>' +
+      '<line x1="235" y1="118" x2="235" y2="140" stroke="#3a2010" stroke-width="0.8"/>' +
+      // Ship in distance
+      '<polygon points="400,135 430,135 425,128 420,135" fill="#3a2010"/>' +
+      '<line x1="425" y1="128" x2="425" y2="116" stroke="#3a2010" stroke-width="1"/>' +
+      '<polygon points="425,118 433,128 425,128" fill="#eadba0"/>' +
+      '</svg>',
     intro:
       '<p>The next pages of the atlas show a tropical island the captain charted himself. He named it <em>Trapezoid Island</em> for the strange four-sided plots of land that cover its interior.</p>' +
       '<p>The captain was a meticulous surveyor. To find his next clue you must sort his sketched shapes, classify the triangles in his survey notes, and measure the rectangular plots he laid out for his expedition camp.</p>',
@@ -103,7 +175,7 @@ const CHAPTERS = [
       },
       {
         type: 'sortShapes',
-        story: 'The captain marks every <em>trapezoid</em> on the island for the local cartography society. Some look obvious. Some have to be looked at carefully.',
+        story: 'The captain marks every <em>trapezoid</em> on the island for the local cartography society. Some look obvious; some have to be looked at carefully.',
         prompt: 'Click <em>all the TRAPEZOIDS</em>.',
         shapes: ['trapezoid_1','rectangle_1','trapezoid_2','square_2','rhombus_2','trapezoid_3'],
         criterion: 'trapezoid'
@@ -147,6 +219,39 @@ const CHAPTERS = [
     title: 'The Riverlands',
     description: 'Follow the captain\'s rules downriver. Read his patterns.',
     treasure: '🧭',
+    illustration:
+      '<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg">' +
+      // Sky
+      '<defs><linearGradient id="g3sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4858"/><stop offset="1" stop-color="#7a8898"/></linearGradient></defs>' +
+      '<rect width="460" height="140" fill="url(#g3sky)"/>' +
+      // Distant mountains
+      '<polygon points="0,140 80,80 140,120 220,70 300,110 380,75 460,130 460,140" fill="#3a4858"/>' +
+      '<polygon points="0,140 60,100 120,135 200,90 270,125 350,95 430,140" fill="#5a6878" opacity="0.7"/>' +
+      // Banks
+      '<rect y="138" width="460" height="62" fill="#5a6828"/>' +
+      // River (winding)
+      '<path d="M 0 175 Q 80 165 140 175 Q 200 185 260 165 Q 320 145 380 160 Q 420 168 460 158 L 460 200 L 0 200 Z" fill="#5a8aaa"/>' +
+      '<path d="M 20 178 Q 100 168 160 178" stroke="#aaccdd" stroke-width="1" fill="none" opacity="0.6"/>' +
+      '<path d="M 220 175 Q 280 168 340 158" stroke="#aaccdd" stroke-width="1" fill="none" opacity="0.6"/>' +
+      // Trees on banks
+      '<line x1="60" y1="155" x2="60" y2="138" stroke="#3a2010" stroke-width="2"/>' +
+      '<polygon points="55,148 65,148 60,128" fill="#3a5818"/>' +
+      '<line x1="200" y1="158" x2="200" y2="142" stroke="#3a2010" stroke-width="2"/>' +
+      '<polygon points="195,150 205,150 200,132" fill="#3a5818"/>' +
+      '<line x1="340" y1="148" x2="340" y2="132" stroke="#3a2010" stroke-width="2"/>' +
+      '<polygon points="335,140 345,140 340,122" fill="#3a5818"/>' +
+      '<line x1="420" y1="153" x2="420" y2="137" stroke="#3a2010" stroke-width="2"/>' +
+      '<polygon points="415,145 425,145 420,127" fill="#3a5818"/>' +
+      // Wooden dock
+      '<rect x="100" y="172" width="38" height="6" fill="#5a3818" stroke="#3a2010" stroke-width="0.7"/>' +
+      '<line x1="105" y1="178" x2="105" y2="186" stroke="#3a2010" stroke-width="1"/>' +
+      '<line x1="120" y1="178" x2="120" y2="186" stroke="#3a2010" stroke-width="1"/>' +
+      '<line x1="135" y1="178" x2="135" y2="186" stroke="#3a2010" stroke-width="1"/>' +
+      // Small boat
+      '<polygon points="260,170 290,170 285,177 265,177" fill="#3a2010"/>' +
+      '<line x1="275" y1="170" x2="275" y2="158" stroke="#3a2010" stroke-width="1"/>' +
+      '<polygon points="275,160 285,170 275,170" fill="#eadba0"/>' +
+      '</svg>',
     intro:
       '<p>Beyond the island the captain charted a long winding river system. To navigate it he left <em>rules</em> — small algebraic patterns that tell you exactly where the next dock, mile-post, or hidden cove lies, given where you came from.</p>' +
       '<p>You\'ll need to read his rules, fill his tables, and graph his sequences along the way.</p>',
@@ -184,6 +289,7 @@ const CHAPTERS = [
         story: 'Plot the four points from the captain\'s y = x × 2 table on the grid: <em>(1,2), (2,4), (3,6), (5,10)</em>.',
         prompt: 'Click the four points in order. What shape does the captain\'s rule trace?',
         points: [[1,2],[2,4],[3,6],[5,10]],
+        landmark: 'Rule y = 2x',
         gridSize: 10,
         options: ['A straight line', 'A square', 'A circle', 'A triangle'],
         answer: 'A straight line',
@@ -214,6 +320,7 @@ const CHAPTERS = [
         story: 'The captain marks the river mouth with a single careful star on the atlas grid.',
         prompt: 'What are the coordinates of the river mouth?',
         marker: { x: 8, y: 6 },
+        landmark: 'River Mouth',
         gridSize: 10
       }
     ]
@@ -227,6 +334,41 @@ const CHAPTERS = [
     title: 'The Citadel Vault',
     description: 'Decode the captain\'s parenthesised cipher. Unlock the vault.',
     treasure: '💰',
+    illustration:
+      '<svg viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg">' +
+      // Stormy sky
+      '<defs><linearGradient id="g4sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1a2a"/><stop offset="1" stop-color="#5a4a48"/></linearGradient></defs>' +
+      '<rect width="460" height="140" fill="url(#g4sky)"/>' +
+      // Moon
+      '<circle cx="80" cy="50" r="20" fill="#eadba0" opacity="0.9"/>' +
+      '<circle cx="76" cy="46" r="3" fill="#c4b888" opacity="0.6"/>' +
+      // Cliffs
+      '<polygon points="0,140 460,140 460,200 0,200" fill="#4a4040"/>' +
+      '<polygon points="0,140 60,80 140,140" fill="#3a3030"/>' +
+      '<polygon points="320,140 400,75 460,140" fill="#3a3030"/>' +
+      // Citadel (centered, tall stone tower)
+      '<rect x="180" y="60" width="100" height="80" fill="#5a4848" stroke="#1a1208" stroke-width="1.5"/>' +
+      '<polygon points="180,60 230,30 280,60" fill="#3a2810"/>' +
+      // Crenellations
+      '<rect x="180" y="56" width="10" height="6" fill="#5a4848"/>' +
+      '<rect x="200" y="56" width="10" height="6" fill="#5a4848"/>' +
+      '<rect x="220" y="56" width="10" height="6" fill="#5a4848"/>' +
+      '<rect x="240" y="56" width="10" height="6" fill="#5a4848"/>' +
+      '<rect x="260" y="56" width="10" height="6" fill="#5a4848"/>' +
+      // Vault door
+      '<rect x="210" y="100" width="40" height="40" fill="#3a2410" stroke="#1a1208" stroke-width="1.5" rx="2"/>' +
+      '<circle cx="230" cy="120" r="6" fill="#aa8838" stroke="#5a3010" stroke-width="1"/>' +
+      // Tower windows
+      '<rect x="190" y="80" width="6" height="12" fill="#ffaa55" opacity="0.7"/>' +
+      '<rect x="264" y="80" width="6" height="12" fill="#ffaa55" opacity="0.7"/>' +
+      // Side towers
+      '<rect x="140" y="90" width="30" height="50" fill="#5a4848" stroke="#1a1208" stroke-width="1.2"/>' +
+      '<polygon points="140,90 155,68 170,90" fill="#3a2810"/>' +
+      '<rect x="290" y="90" width="30" height="50" fill="#5a4848" stroke="#1a1208" stroke-width="1.2"/>' +
+      '<polygon points="290,90 305,68 320,90" fill="#3a2810"/>' +
+      // Lightning
+      '<polyline points="380,30 386,55 378,55 388,90" stroke="#fff5aa" stroke-width="2" fill="none" opacity="0.8"/>' +
+      '</svg>',
     intro:
       '<p>The captain\'s last map shows a windswept stone citadel. Inside is the vault that holds his fortune. The vault\'s lock is engraved with a series of <em>parenthesised expressions</em> — ciphers the captain used so that even his own crew couldn\'t crack the door without his exact instructions.</p>' +
       '<p>One last set of math problems and the treasure is yours.</p>',
@@ -273,6 +415,7 @@ const CHAPTERS = [
         story: 'The vault swings open. Inside, on the captain\'s old desk, lies one final atlas page with a single instruction: <em>"The treasure-chest itself sits at the point (6, 7)."</em>',
         prompt: 'Plot the treasure chest at <em>(6, 7)</em>.',
         target: { x: 6, y: 7 },
+        landmark: 'Treasure',
         gridSize: 10
       }
     ]

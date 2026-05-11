@@ -10,24 +10,24 @@ const Challenges = {
   // ============================================================
   // 1. gridClick — click a point on a coord grid to plot it
   // ============================================================
-  gridClick(challenge, container) {
+  gridClick(challenge, container, chapterMap) {
     const size = challenge.gridSize || 10;
     const target = challenge.target;
-    const { svgEl, getPoint } = this._buildGrid(size, container, true);
+    const { svgEl, getPoint } = this._buildGrid(size, container, true, chapterMap);
     let userPoint = null;
 
     svgEl.addEventListener('click', (e) => {
       const pt = getPoint(e);
       if (!pt) return;
       userPoint = pt;
-      this._renderUserMarker(svgEl, size, pt, 'user');
+      this._renderUserMarker(svgEl, size, pt, 'user', { showLabel: false });
     });
 
     return {
       evaluate: () => {
         if (!userPoint) return { ok: false, message: 'Click a point on the grid first.' };
         if (userPoint.x === target.x && userPoint.y === target.y) {
-          this._renderUserMarker(svgEl, size, target, 'plotted');
+          this._renderUserMarker(svgEl, size, target, 'plotted', { label: challenge.landmark });
           return { ok: true, message: 'Plotted exactly. Well done, cartographer.' };
         }
         return { ok: false, message: 'Not quite — check the x and y values and try again.' };
@@ -38,11 +38,13 @@ const Challenges = {
   // ============================================================
   // 2. identifyPoint — read a marked point's coordinates
   // ============================================================
-  identifyPoint(challenge, container) {
+  identifyPoint(challenge, container, chapterMap) {
     const size = challenge.gridSize || 10;
     const marker = challenge.marker;
-    const { svgEl } = this._buildGrid(size, container, false);
-    this._renderUserMarker(svgEl, size, marker, 'target');
+    const { svgEl } = this._buildGrid(size, container, false, chapterMap);
+    // Show the marker but DON'T label it with coordinates — that's
+    // exactly what the student is being asked to figure out.
+    this._renderUserMarker(svgEl, size, marker, 'target', { showLabel: false });
 
     const wrap = document.createElement('div');
     wrap.style.marginTop = '14px';
@@ -65,7 +67,11 @@ const Challenges = {
         const xv = parseInt(wrap.querySelector('#cx').value, 10);
         const yv = parseInt(wrap.querySelector('#cy').value, 10);
         if (Number.isNaN(xv) || Number.isNaN(yv)) return { ok: false, message: 'Type both coordinates.' };
-        if (xv === marker.x && yv === marker.y) return { ok: true, message: 'Read precisely. Cartographer\'s eye.' };
+        if (xv === marker.x && yv === marker.y) {
+          // On success, label the marker so the persistent map shows it as a known landmark.
+          this._renderUserMarker(svgEl, size, marker, 'plotted', { label: challenge.landmark });
+          return { ok: true, message: 'Read precisely. Cartographer\'s eye.' };
+        }
         return { ok: false, message: 'Not quite — read the grid carefully.' };
       }
     };
@@ -74,10 +80,10 @@ const Challenges = {
   // ============================================================
   // 3. plotShape — plot N points in order, then identify the shape
   // ============================================================
-  plotShape(challenge, container) {
+  plotShape(challenge, container, chapterMap) {
     const size = challenge.gridSize || 10;
     const targets = challenge.points; // [[x,y],...]
-    const { svgEl, getPoint, ns } = this._buildGrid(size, container, true);
+    const { svgEl, getPoint, ns } = this._buildGrid(size, container, true, chapterMap);
     let plotted = []; // points the user has clicked
     let selectedOption = null;
 
@@ -173,7 +179,7 @@ const Challenges = {
   // ============================================================
   // 4. sortShapes — click all shapes matching a criterion
   // ============================================================
-  sortShapes(challenge, container) {
+  sortShapes(challenge, container, chapterMap) {
     const grid = document.createElement('div');
     grid.className = 'shape-grid';
     container.appendChild(grid);
@@ -208,7 +214,7 @@ const Challenges = {
   // ============================================================
   // 5. dragClassify — sort shapes into their named bins
   // ============================================================
-  dragClassify(challenge, container) {
+  dragClassify(challenge, container, chapterMap) {
     const layout = document.createElement('div');
     layout.style.cssText = 'width:100%;display:flex;flex-direction:column;gap:14px;align-items:center;';
     container.appendChild(layout);
@@ -307,7 +313,7 @@ const Challenges = {
   // ============================================================
   // 6. patternTable — fill in missing cells of a rules-based table
   // ============================================================
-  patternTable(challenge, container) {
+  patternTable(challenge, container, chapterMap) {
     const table = document.createElement('table');
     table.className = 'pattern-table';
     const thead = document.createElement('thead');
@@ -359,7 +365,7 @@ const Challenges = {
   // ============================================================
   // 7. expression — type the result of a parenthesised expression
   // ============================================================
-  expression(challenge, container) {
+  expression(challenge, container, chapterMap) {
     const display = document.createElement('div');
     display.className = 'expression-display';
     display.textContent = challenge.expression + ' = ?';
@@ -384,11 +390,13 @@ const Challenges = {
   // ============================================================
   // 8. distance — calculate the gap between two points (Q1, integer)
   // ============================================================
-  distance(challenge, container) {
+  distance(challenge, container, chapterMap) {
     const size = challenge.gridSize || 10;
-    const { svgEl } = this._buildGrid(size, container, false);
-    this._renderUserMarker(svgEl, size, { x: challenge.pointA[0], y: challenge.pointA[1] }, 'target');
-    this._renderUserMarker(svgEl, size, { x: challenge.pointB[0], y: challenge.pointB[1] }, 'target');
+    const { svgEl } = this._buildGrid(size, container, false, chapterMap);
+    // Show endpoints with their landmark names if provided, NOT with
+    // their coordinates — the student is being asked to count the gap.
+    this._renderUserMarker(svgEl, size, { x: challenge.pointA[0], y: challenge.pointA[1] }, 'target', { label: challenge.endpointA || '', showLabel: !!challenge.endpointA });
+    this._renderUserMarker(svgEl, size, { x: challenge.pointB[0], y: challenge.pointB[1] }, 'target', { label: challenge.endpointB || '', showLabel: !!challenge.endpointB });
 
     // Draw a connecting line
     const ns = 'http://www.w3.org/2000/svg';
@@ -424,7 +432,7 @@ const Challenges = {
   // ============================================================
   // 9. perimeterArea — compute perimeter or area of a rectangle
   // ============================================================
-  perimeterArea(challenge, container) {
+  perimeterArea(challenge, container, chapterMap) {
     // Display the rectangle visually
     const ns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
@@ -488,7 +496,7 @@ const Challenges = {
   // ============================================================
   // 10. sequence — type the next N terms of a numerical pattern
   // ============================================================
-  sequence(challenge, container) {
+  sequence(challenge, container, chapterMap) {
     const display = document.createElement('div');
     display.className = 'expression-display';
     display.textContent = challenge.sequence.join(', ') + ', ?, ?, ?';
@@ -523,8 +531,11 @@ const Challenges = {
 
   // ============================================================
   // INTERNAL: build a coordinate grid SVG and helpers
+  // The grid is parchment-styled, with persistent chapterMap items
+  // (markers, shapes, paths) drawn first so each new challenge sees
+  // everything Jacob has plotted earlier in this chapter.
   // ============================================================
-  _buildGrid(size, container, clickable) {
+  _buildGrid(size, container, clickable, chapterMap) {
     const ns = 'http://www.w3.org/2000/svg';
     const wrap = document.createElement('div');
     wrap.className = 'coord-grid';
@@ -542,11 +553,9 @@ const Challenges = {
     // Grid lines
     for (let i = 0; i <= size; i++) {
       const x = xToPx(i);
-      const yStart = yToPx(0);
-      const yEnd = yToPx(size);
       const ln = document.createElementNS(ns, 'line');
-      ln.setAttribute('x1', x); ln.setAttribute('y1', yStart);
-      ln.setAttribute('x2', x); ln.setAttribute('y2', yEnd);
+      ln.setAttribute('x1', x); ln.setAttribute('y1', yToPx(0));
+      ln.setAttribute('x2', x); ln.setAttribute('y2', yToPx(size));
       ln.setAttribute('class', 'grid-line');
       svg.appendChild(ln);
       const lh = document.createElementNS(ns, 'line');
@@ -566,7 +575,7 @@ const Challenges = {
     yAxis.setAttribute('x2', xToPx(0)); yAxis.setAttribute('y2', yToPx(size));
     yAxis.setAttribute('class', 'grid-axis');
     svg.appendChild(yAxis);
-    // Labels
+    // Axis labels
     for (let i = 0; i <= size; i++) {
       const xLbl = document.createElementNS(ns, 'text');
       xLbl.setAttribute('x', xToPx(i)); xLbl.setAttribute('y', yToPx(0) + 14);
@@ -582,6 +591,64 @@ const Challenges = {
       }
     }
 
+    // ===== Render persistent chapterMap (already-completed work) =====
+    if (chapterMap) {
+      // Filled shapes go BEHIND markers and lines
+      (chapterMap.shapes || []).forEach(shape => {
+        const pts = shape.points.map(p => xToPx(p[0]) + ',' + yToPx(p[1])).join(' ');
+        const poly = document.createElementNS(ns, 'polygon');
+        poly.setAttribute('points', pts);
+        poly.setAttribute('class', 'plot-fill');
+        svg.appendChild(poly);
+        if (shape.label) {
+          // Place label at centroid
+          const cx = shape.points.reduce((a, p) => a + xToPx(p[0]), 0) / shape.points.length;
+          const cy = shape.points.reduce((a, p) => a + yToPx(p[1]), 0) / shape.points.length;
+          const txt = document.createElementNS(ns, 'text');
+          txt.setAttribute('x', cx); txt.setAttribute('y', cy);
+          txt.setAttribute('text-anchor', 'middle');
+          txt.setAttribute('class', 'landmark-label');
+          txt.textContent = shape.label;
+          svg.appendChild(txt);
+        }
+      });
+      // Paths
+      (chapterMap.paths || []).forEach(path => {
+        const ax = xToPx(path.from[0]), ay = yToPx(path.from[1]);
+        const bx = xToPx(path.to[0]), by = yToPx(path.to[1]);
+        const ln = document.createElementNS(ns, 'line');
+        ln.setAttribute('x1', ax); ln.setAttribute('y1', ay);
+        ln.setAttribute('x2', bx); ln.setAttribute('y2', by);
+        ln.setAttribute('stroke', '#aa2222');
+        ln.setAttribute('stroke-width', 1.6);
+        ln.setAttribute('stroke-dasharray', '4 3');
+        svg.appendChild(ln);
+        if (path.label) {
+          const mx = (ax + bx) / 2, my = (ay + by) / 2;
+          const txt = document.createElementNS(ns, 'text');
+          txt.setAttribute('x', mx + 6); txt.setAttribute('y', my);
+          txt.setAttribute('class', 'landmark-label');
+          txt.textContent = path.label;
+          svg.appendChild(txt);
+        }
+      });
+      // Markers
+      (chapterMap.markers || []).forEach(marker => {
+        const px = xToPx(marker.x), py = yToPx(marker.y);
+        const dot = document.createElementNS(ns, 'circle');
+        dot.setAttribute('cx', px); dot.setAttribute('cy', py); dot.setAttribute('r', 5);
+        dot.setAttribute('class', 'plotted-point');
+        svg.appendChild(dot);
+        if (marker.label) {
+          const txt = document.createElementNS(ns, 'text');
+          txt.setAttribute('x', px + 8); txt.setAttribute('y', py - 6);
+          txt.setAttribute('class', 'landmark-label');
+          txt.textContent = marker.label;
+          svg.appendChild(txt);
+        }
+      });
+    }
+
     const getPoint = (e) => {
       const rect = svg.getBoundingClientRect();
       const px = ((e.clientX - rect.left) / rect.width) * 360;
@@ -595,9 +662,10 @@ const Challenges = {
     return { svgEl: svg, getPoint, ns };
   },
 
-  _renderUserMarker(svgEl, size, pt, kind) {
+  _renderUserMarker(svgEl, size, pt, kind, opts) {
+    opts = opts || {};
+    const showLabel = (typeof opts.showLabel === 'boolean') ? opts.showLabel : true;
     const ns = 'http://www.w3.org/2000/svg';
-    // Remove existing user marker (only one allowed at a time for gridClick)
     if (kind === 'user') {
       svgEl.querySelectorAll('.user-marker, .user-label').forEach(el => el.remove());
     }
@@ -608,14 +676,15 @@ const Challenges = {
     if (kind === 'plotted') dot.setAttribute('class', 'plotted-point');
     else if (kind === 'target') dot.setAttribute('class', 'target-marker');
     else dot.setAttribute('class', 'user-marker');
-    if (kind === 'user') dot.classList.add('user-marker');
     svgEl.appendChild(dot);
-    const lbl = document.createElementNS(ns, 'text');
-    lbl.setAttribute('x', px + 8); lbl.setAttribute('y', py - 6);
-    lbl.setAttribute('class', 'point-label');
-    if (kind === 'user') lbl.classList.add('user-label');
-    lbl.textContent = '(' + pt.x + ',' + pt.y + ')';
-    svgEl.appendChild(lbl);
+    if (showLabel && opts.label) {
+      const lbl = document.createElementNS(ns, 'text');
+      lbl.setAttribute('x', px + 8); lbl.setAttribute('y', py - 6);
+      lbl.setAttribute('class', 'landmark-label');
+      if (kind === 'user') lbl.classList.add('user-label');
+      lbl.textContent = opts.label;
+      svgEl.appendChild(lbl);
+    }
   }
 };
 

@@ -325,10 +325,29 @@ body {
   margin: auto;
 }
 .chapter-intro-overlay.active .chapter-intro-content { transform: translateY(0); }
+.chapter-intro-illustration {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto 14px;
+  border: 1px solid rgba(170, 136, 56, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.6);
+}
+.chapter-intro-illustration:empty { display: none; }
+.chapter-intro-illustration svg { width: 100%; height: auto; display: block; }
 .chapter-intro-flourish {
   font-size: 1.6rem;
   color: var(--brass-light);
   text-shadow: 0 0 12px rgba(170, 136, 56, 0.5);
+}
+.landmark-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 9px;
+  fill: var(--ink);
+  pointer-events: none;
+  font-weight: 600;
 }
 .chapter-intro-title {
   font-family: 'Cormorant Garamond', serif;

@@ -122,8 +122,16 @@ const Game = {
   currentScreen: 'title',
   currentChapter: null,
   currentChallengeIndex: 0,
-  activeEvaluator: null
+  activeEvaluator: null,
+  // Per-chapter accumulating map state — every grid challenge in a
+  // chapter draws this PLUS its own task; on successful completion
+  // the new landmark is committed here so the next challenge sees it.
+  chapterMap: { markers: [], shapes: [], paths: [] }
 };
+
+function _resetChapterMap() {
+  Game.chapterMap = { markers: [], shapes: [], paths: [] };
+}
 
 function showScreen(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -241,10 +249,17 @@ function renderChapterMap() {
 // ============================================================
 function startChapter(chapter) {
   Game.currentChapter = chapter;
-  // Resume mid-chapter if we have saved progress
+  _resetChapterMap();
+  // Replay any earlier challenges' map additions if resuming mid-chapter
+  // (so the persistent map reflects everything Jacob has already plotted).
   const state = Slots.chapterState(chapter.id);
-  if (state && !state.completed && typeof state.currentChallenge === 'number' && state.currentChallenge > 0) {
-    Game.currentChallengeIndex = state.currentChallenge;
+  const resumeIdx = (state && !state.completed && typeof state.currentChallenge === 'number' && state.currentChallenge > 0)
+    ? state.currentChallenge : 0;
+  for (let i = 0; i < resumeIdx; i++) {
+    _applyChallengeMapAdditions(chapter.challenges[i]);
+  }
+  if (resumeIdx > 0) {
+    Game.currentChallengeIndex = resumeIdx;
     showScreen('challenge');
     renderChallenge();
   } else {
@@ -257,11 +272,55 @@ function startChapter(chapter) {
   }
 }
 
+// Commit a challenge's map additions (the items it would have placed
+// on the persistent map when answered correctly). Used both when the
+// student succeeds AND when resuming mid-chapter to rebuild the map.
+function _applyChallengeMapAdditions(challenge) {
+  if (!challenge) return;
+  const m = Game.chapterMap;
+  // Add a marker only if there isn't already one at the same coords.
+  const addMarker = (x, y, label) => {
+    const existing = m.markers.find(p => p.x === x && p.y === y);
+    if (existing) {
+      if (label && !existing.label) existing.label = label;
+    } else {
+      m.markers.push({ x, y, label: label || '' });
+    }
+  };
+  switch (challenge.type) {
+    case 'gridClick':
+      if (challenge.landmark) addMarker(challenge.target.x, challenge.target.y, challenge.landmark);
+      break;
+    case 'identifyPoint':
+      if (challenge.landmark) addMarker(challenge.marker.x, challenge.marker.y, challenge.landmark);
+      break;
+    case 'plotShape':
+      if (!challenge.landmark) break;
+      if (challenge.connect === 'line') {
+        challenge.points.forEach((p, i) => addMarker(p[0], p[1], i === 0 ? challenge.landmark : ''));
+      } else {
+        m.shapes.push({ points: challenge.points.slice(), label: challenge.landmark });
+      }
+      break;
+    case 'distance':
+      addMarker(challenge.pointA[0], challenge.pointA[1], challenge.endpointA || '');
+      addMarker(challenge.pointB[0], challenge.pointB[1], challenge.endpointB || challenge.landmark || '');
+      m.paths.push({ from: challenge.pointA, to: challenge.pointB, label: challenge.pathLabel || '' });
+      break;
+  }
+}
+
 function showChapterIntro(chapter, onContinue) {
   const overlay = document.getElementById('chapter-intro-overlay');
   if (!overlay) { onContinue(); return; }
   document.getElementById('chapter-intro-title').textContent = chapter.title;
   document.getElementById('chapter-intro-text').innerHTML = chapter.intro;
+  // Render the chapter illustration above the title if provided
+  const illusEl = document.getElementById('chapter-intro-illustration');
+  if (illusEl) {
+    illusEl.innerHTML = chapter.illustration || '';
+    illusEl.style.display = chapter.illustration ? 'block' : 'none';
+  }
   overlay.style.display = 'flex';
   requestAnimationFrame(() => overlay.classList.add('active'));
   const btn = document.getElementById('btn-chapter-intro-continue');
@@ -305,7 +364,7 @@ function renderChallenge() {
     Game.activeEvaluator = null;
     return;
   }
-  Game.activeEvaluator = fn.call(Challenges, challenge, area);
+  Game.activeEvaluator = fn.call(Challenges, challenge, area, Game.chapterMap);
 }
 
 function handleCheck() {
@@ -317,6 +376,8 @@ function handleCheck() {
   if (result.ok) {
     document.getElementById('btn-check').style.display = 'none';
     document.getElementById('btn-continue').style.display = 'inline-block';
+    // Commit this challenge's contribution to the persistent map
+    _applyChallengeMapAdditions(Game.currentChapter.challenges[Game.currentChallengeIndex]);
   }
 }
 
