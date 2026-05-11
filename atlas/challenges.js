@@ -50,19 +50,18 @@ const Challenges = {
     });
 
     const wrap = document.createElement('div');
-    wrap.style.marginTop = '14px';
-    wrap.style.display = 'flex';
-    wrap.style.gap = '8px';
-    wrap.style.alignItems = 'center';
-    wrap.style.fontFamily = 'Special Elite, monospace';
-    wrap.style.fontSize = '1.2rem';
-    wrap.style.color = 'var(--brass-glow)';
-    wrap.innerHTML =
-      '<span>(</span>' +
-      '<input id="cx" type="number" min="0" max="' + size + '" style="width:50px;padding:6px;border:2px solid var(--brass-light);background:rgba(0,0,0,0.3);color:var(--parchment-light);text-align:center;border-radius:3px;font:inherit;">' +
-      '<span>,</span>' +
-      '<input id="cy" type="number" min="0" max="' + size + '" style="width:50px;padding:6px;border:2px solid var(--brass-light);background:rgba(0,0,0,0.3);color:var(--parchment-light);text-align:center;border-radius:3px;font:inherit;">' +
-      '<span>)</span>';
+    wrap.style.cssText = 'margin-top:14px;display:flex;gap:8px;align-items:center;font-family:Special Elite,monospace;font-size:1.2rem;color:var(--brass-glow);';
+    const openParen = document.createElement('span'); openParen.textContent = '(';
+    const comma = document.createElement('span'); comma.textContent = ',';
+    const closeParen = document.createElement('span'); closeParen.textContent = ')';
+    const cxStyle = 'width:50px;padding:6px;border:2px solid var(--brass-light);background:rgba(0,0,0,0.3);color:var(--parchment-light);text-align:center;border-radius:3px;font:inherit;';
+    const cxInp = this._numberInput({ id: 'cx', min: 0, max: size, style: cxStyle });
+    const cyInp = this._numberInput({ id: 'cy', min: 0, max: size, style: cxStyle });
+    wrap.appendChild(openParen);
+    wrap.appendChild(cxInp);
+    wrap.appendChild(comma);
+    wrap.appendChild(cyInp);
+    wrap.appendChild(closeParen);
     container.appendChild(wrap);
 
     return {
@@ -344,10 +343,7 @@ const Challenges = {
       row.forEach((cell, ci) => {
         const td = document.createElement('td');
         if (cell === '?') {
-          const inp = document.createElement('input');
-          inp.type = 'number';
-          inp.dataset.row = ri;
-          inp.dataset.col = ci;
+          const inp = this._numberInput({ dataset: { row: ri, col: ci } });
           inputs.push(inp);
           td.appendChild(inp);
         } else {
@@ -382,10 +378,7 @@ const Challenges = {
     display.textContent = challenge.expression + ' = ?';
     container.appendChild(display);
 
-    const inp = document.createElement('input');
-    inp.type = 'number';
-    inp.className = 'expression-input';
-    inp.placeholder = '?';
+    const inp = this._numberInput({ className: 'expression-input', placeholder: '?' });
     container.appendChild(inp);
 
     return {
@@ -423,11 +416,8 @@ const Challenges = {
     line.setAttribute('stroke-dasharray', '4 3');
     svgEl.appendChild(line);
 
-    const inp = document.createElement('input');
-    inp.type = 'number';
-    inp.className = 'expression-input';
+    const inp = this._numberInput({ className: 'expression-input', placeholder: 'units' });
     inp.style.marginTop = '14px';
-    inp.placeholder = 'units';
     container.appendChild(inp);
 
     return {
@@ -485,11 +475,11 @@ const Challenges = {
     svg.appendChild(hLabel);
     container.appendChild(svg);
 
-    const inp = document.createElement('input');
-    inp.type = 'number';
-    inp.className = 'expression-input';
+    const inp = this._numberInput({
+      className: 'expression-input',
+      placeholder: challenge.mode === 'area' ? 'square paces' : 'paces'
+    });
     inp.style.marginTop = '14px';
-    inp.placeholder = challenge.mode === 'area' ? 'square paces' : 'paces';
     container.appendChild(inp);
 
     return {
@@ -517,12 +507,9 @@ const Challenges = {
     wrap.style.cssText = 'display:flex;gap:8px;margin-top:12px;';
     const inputs = [];
     for (let i = 0; i < challenge.next.length; i++) {
-      const inp = document.createElement('input');
-      inp.type = 'number';
-      inp.className = 'expression-input';
+      const inp = this._numberInput({ className: 'expression-input', placeholder: '?' });
       inp.style.width = '80px';
       inp.style.fontSize = '1.2rem';
-      inp.placeholder = '?';
       wrap.appendChild(inp);
       inputs.push(inp);
     }
@@ -694,6 +681,30 @@ const Challenges = {
       lbl.textContent = opts.label;
       svgEl.appendChild(lbl);
     }
+  },
+
+  // Create a number input with browser autofill turned off and
+  // select-on-focus so existing digits don't accidentally combine
+  // with newly-typed ones (e.g. "8" turning into "08").
+  _numberInput(opts) {
+    opts = opts || {};
+    const inp = document.createElement('input');
+    inp.type = 'number';
+    inp.setAttribute('autocomplete', 'off');
+    inp.setAttribute('autocorrect', 'off');
+    inp.setAttribute('spellcheck', 'false');
+    inp.setAttribute('inputmode', 'decimal');
+    if (opts.className) inp.className = opts.className;
+    if (opts.placeholder) inp.placeholder = opts.placeholder;
+    if (opts.min !== undefined) inp.setAttribute('min', opts.min);
+    if (opts.max !== undefined) inp.setAttribute('max', opts.max);
+    if (opts.id) inp.id = opts.id;
+    if (opts.style) inp.style.cssText = opts.style;
+    if (opts.dataset) {
+      Object.keys(opts.dataset).forEach(k => { inp.dataset[k] = opts.dataset[k]; });
+    }
+    inp.addEventListener('focus', function () { this.select(); });
+    return inp;
   },
 
   // Draw either a dot or a 5-pointed star at (px, py) on the given SVG.
