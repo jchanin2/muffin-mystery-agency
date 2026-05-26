@@ -228,12 +228,28 @@ const ITEMS = {
   ironwood_circlet: { id: 'ironwood_circlet', name: 'Ironwood Circlet', slot: 'accessory', desc: 'Cool against the brow. +1 Insight.', effect: { insight: 1 } },
   golems_core:      { id: 'golems_core',      name: 'Golem\'s Core',    slot: 'accessory', desc: 'A pulsing cube of crystal pulled from a fallen golem. +5 HP, +1 Precision.', effect: { stamina: 1, precision: 1 } },
 
+  // ---------- act II shop (port + net-mender) ----------
+  brass_sextant:    { id: 'brass_sextant',    name: 'Brass Sextant',    slot: 'accessory', desc: 'Mira\'s spare. Lets you measure the angles between answers.', effect: { precision: 2, insight: 1 } },
+  pearled_circlet:  { id: 'pearled_circlet',  name: 'Pearled Circlet',  slot: 'accessory', desc: 'Three small pearls set in driftwood. Calms the racing heart.', effect: { wisdom: 2, stamina: 1 } },
+  kelp_charm:       { id: 'kelp_charm',       name: 'Knot of Kelp',     slot: 'accessory', desc: 'Knotted in fractions: 1/2, 1/4, 1/8. Each knot is a small luck.', effect: { luck: 2, speed: 1 } },
+  saltskin_jerkin:  { id: 'saltskin_jerkin',  name: 'Saltskin Jerkin',  slot: 'armor', desc: 'Cured in brine. Resists strike and stain alike.', effect: { stamina: 3, speed: 1 } },
+  netcaster_cloak:  { id: 'netcaster_cloak',  name: 'Netcaster\'s Cloak', slot: 'armor', desc: 'Threaded with fisher-knots. +5 HP, +1 Insight.', effect: { stamina: 1, insight: 1, bonusHp: 5 } },
+
+  // ---------- act II loot drops ----------
+  tide_blade:       { id: 'tide_blade',       name: 'Tide-Blade',       slot: 'weapon', desc: 'Curved, blue-edged, whispers like surf. Bites fraction-warped foes.', effect: { precision: 3, bonusVsTopic: { fraction_times_fraction: 4, fraction_times_whole: 3 } } },
+  coral_staff:      { id: 'coral_staff',      name: 'Coral Staff',      slot: 'weapon', desc: 'Pale pink coral, still cool from the sea.', effect: { wisdom: 2, insight: 1, bonusVsTopic: { divide_whole_by_unit_fraction: 4 } } },
+  half_kings_horn:  { id: 'half_kings_horn',  name: 'The Half-King\'s Horn', slot: 'accessory', desc: 'A spiral of bone. Calls a wave when blown. +2 to every stat (lightly).', effect: { precision: 2, stamina: 2, wisdom: 1, luck: 1, bonusHp: 10 } },
+  sextant_of_wholeness: { id: 'sextant_of_wholeness', name: 'Sextant of Wholeness', slot: 'accessory', desc: 'Reforged from three island-pieces. The needle always finds the whole.', effect: { precision: 2, insight: 2, bonusTimer: 2 } },
+  navigators_locket: { id: 'navigators_locket', name: 'Navigator\'s Locket', slot: 'accessory', desc: 'A small portrait of someone far away. A reminder.', effect: { wisdom: 1, stamina: 2, luck: 1 } },
+
   // ---------- consumables ----------
   minor_potion:     { id: 'minor_potion',     name: 'Minor Healing Draught', slot: 'consumable', desc: 'Restores 15 HP.',              effect: { heal: 15 } },
   greater_potion:   { id: 'greater_potion',   name: 'Greater Healing Draught', slot: 'consumable', desc: 'Restores 35 HP.',            effect: { heal: 35 } },
   mana_phial:       { id: 'mana_phial',       name: 'Mana Phial',           slot: 'consumable', desc: 'Restores 2 spell slots.',       effect: { restoreMp: 2 } },
   scroll_of_sight:  { id: 'scroll_of_sight',  name: 'Scroll of Sight',      slot: 'consumable', desc: 'One-time use: reveals the answer to the next problem.', effect: { reveal: true } },
-  scroll_of_clemency: { id: 'scroll_of_clemency', name: 'Scroll of Clemency', slot: 'consumable', desc: 'Skip the current problem, no damage to either side.', effect: { skip: true } }
+  scroll_of_clemency: { id: 'scroll_of_clemency', name: 'Scroll of Clemency', slot: 'consumable', desc: 'Skip the current problem, no damage to either side.', effect: { skip: true } },
+  smoked_kipper:    { id: 'smoked_kipper',    name: 'Smoked Kipper', slot: 'consumable', desc: 'A salty snack from the docks. Restores 20 HP.', effect: { heal: 20 } },
+  brine_phial:      { id: 'brine_phial',      name: 'Brine Phial', slot: 'consumable', desc: 'Stinging blue brew. Restores 3 spell slots.', effect: { restoreMp: 3 } }
 };
 
 // ------------------------------------------------------
@@ -250,8 +266,16 @@ const TOPICS = {
   volume_side_length:   { unit: 1, name: 'Missing side length' },
 
   // ---------- Units 2 & 3: Fractions ----------
-  fractions_multiply:   { unit: 2, name: 'Multiplying fractions' },
-  fractions_divide:     { unit: 3, name: 'Dividing fractions' },
+  fractions_multiply:           { unit: 2, name: 'Multiplying fractions' },
+  fractions_divide:             { unit: 3, name: 'Dividing fractions' },
+  fractions_as_division:        { unit: 2, name: 'Fractions as division' },
+  fraction_times_whole:         { unit: 2, name: 'Fraction × whole' },
+  fraction_times_fraction:      { unit: 3, name: 'Fraction × fraction' },
+  mixed_number_multiply:        { unit: 2, name: 'Mixed number × whole' },
+  area_fractional_sides:        { unit: 2, name: 'Area with fractional sides' },
+  divide_unit_fraction_by_whole:{ unit: 3, name: 'Unit fraction ÷ whole' },
+  divide_whole_by_unit_fraction:{ unit: 3, name: 'Whole ÷ unit fraction' },
+  compare_products_scaling:     { unit: 3, name: 'Compare products (scaling)' },
 
   // ---------- Unit 4: Multi-digit ----------
   multidigit_multiply:  { unit: 4, name: 'Multi-digit multiplication' },
@@ -293,6 +317,29 @@ const SHOPS = {
       { itemId: 'quarrymans_belt', price: 60 },
       { itemId: 'hourglass_charm', price: 70 }
     ]
+  },
+  goren_salt_worn: {
+    keeperId: 'goren',
+    keeperName: 'Goren Saltbeard',
+    keeperLine: '"A sailor without supplies is a sailor lost. Take what you need, pay what\'s fair."',
+    stock: [
+      { itemId: 'smoked_kipper',   price: 14 },
+      { itemId: 'greater_potion',  price: 32 },
+      { itemId: 'brine_phial',     price: 38 },
+      { itemId: 'scroll_of_sight', price: 22 }
+    ]
+  },
+  netmender_shed: {
+    keeperId: 'gull',
+    keeperName: 'Aunt Gull',
+    keeperLine: '"Mira\'s little one is back, I see. Bring me anything that needs mending — or buy. I keep what the sea returns."',
+    stock: [
+      { itemId: 'kelp_charm',      price: 50 },
+      { itemId: 'pearled_circlet', price: 65 },
+      { itemId: 'saltskin_jerkin', price: 80 },
+      { itemId: 'netcaster_cloak', price: 95 },
+      { itemId: 'brass_sextant',   price: 110 }
+    ]
   }
 };
 
@@ -330,6 +377,83 @@ const ENEMIES = {
     ],
     goldDrop: [40, 55], xpDrop: 120,
     guaranteedLoot: ['hollowed_blade']
+  },
+  // ---------- Act II — Fractured Isles ----------
+  brine_sprite: {
+    id: 'brine_sprite', name: 'Brine Sprite',
+    hp: 32, attack: 8, spriteId: 'brine_sprite',
+    topic: 'fraction_times_whole', difficulty: 'easy',
+    goldDrop: [5, 10], xpDrop: 28
+  },
+  splitwhelk: {
+    id: 'splitwhelk', name: 'Splitwhelk',
+    hp: 44, attack: 9, spriteId: 'splitwhelk',
+    topic: 'fractions_as_division', difficulty: 'easy',
+    goldDrop: [7, 12], xpDrop: 34
+  },
+  tide_imp: {
+    id: 'tide_imp', name: 'Tide-Imp',
+    hp: 50, attack: 10, spriteId: 'tide_imp',
+    topic: 'fraction_times_fraction', difficulty: 'medium',
+    goldDrop: [9, 14], xpDrop: 42
+  },
+  coral_golem: {
+    id: 'coral_golem', name: 'Coral Golem',
+    hp: 64, attack: 11, spriteId: 'coral_golem',
+    topic: 'area_fractional_sides', difficulty: 'medium',
+    goldDrop: [12, 18], xpDrop: 52
+  },
+  // Mini-bosses on each island
+  halves_warden: {
+    id: 'halves_warden', name: 'Warden of Halves',
+    hp: 110, attack: 13, spriteId: 'halves_warden',
+    isBoss: true,
+    phases: [
+      { topic: 'fraction_times_whole',  difficulty: 'medium', say: '"Half of you. Half again. Until nothing."' },
+      { topic: 'fractions_as_division', difficulty: 'medium', say: '"Show me what one piece looks like."' },
+      { topic: 'compare_products_scaling', difficulty: 'medium', say: '"Less than the whole. Always less."' }
+    ],
+    goldDrop: [40, 55], xpDrop: 110,
+    guaranteedLoot: ['tide_blade']
+  },
+  thirds_seer: {
+    id: 'thirds_seer', name: 'Seer of Thirds',
+    hp: 120, attack: 13, spriteId: 'thirds_seer',
+    isBoss: true,
+    phases: [
+      { topic: 'divide_unit_fraction_by_whole', difficulty: 'medium', say: '"A third of a third of a third. Do you still know yourself?"' },
+      { topic: 'fraction_times_fraction', difficulty: 'medium', say: '"Multiply. Then multiply again. Smaller. Smaller."' },
+      { topic: 'mixed_number_multiply',  difficulty: 'medium', say: '"Mix it with the whole. Lose the line."' }
+    ],
+    goldDrop: [45, 60], xpDrop: 120,
+    guaranteedLoot: ['coral_staff']
+  },
+  pieces_collector: {
+    id: 'pieces_collector', name: 'The Pieces-Collector',
+    hp: 130, attack: 14, spriteId: 'pieces_collector',
+    isBoss: true,
+    phases: [
+      { topic: 'divide_whole_by_unit_fraction', difficulty: 'medium', say: '"How many pieces of you are there? Tell me. I want them all."' },
+      { topic: 'area_fractional_sides', difficulty: 'medium', say: '"A piece this wide. A piece this tall. Multiply."' },
+      { topic: 'compare_products_scaling', difficulty: 'hard',   say: '"Larger, smaller, the same. Choose."' }
+    ],
+    goldDrop: [50, 65], xpDrop: 130,
+    guaranteedLoot: ['navigators_locket']
+  },
+  // Final Act II boss
+  half_king: {
+    id: 'half_king', name: 'The Half-King',
+    hp: 200, attack: 16, spriteId: 'half_king',
+    isBoss: true,
+    phases: [
+      { topic: 'fraction_times_whole',  difficulty: 'easy',   say: '"You walked here on water. Now walk in halves."' },
+      { topic: 'fraction_times_fraction', difficulty: 'medium', say: '"A piece of a piece. That is all anything ever was."' },
+      { topic: 'divide_whole_by_unit_fraction', difficulty: 'medium', say: '"How many of me. Tell me — how many of ME!"' },
+      { topic: 'mixed_number_multiply', difficulty: 'hard',   say: '"You count badly when you are afraid."' },
+      { topic: 'area_fractional_sides', difficulty: 'hard',   say: '"One last piece. Mine, or yours. Choose."' }
+    ],
+    goldDrop: [100, 150], xpDrop: 360,
+    guaranteedLoot: ['half_kings_horn', 'sextant_of_wholeness']
   },
   // Act I final boss
   hollowed_one: {

@@ -266,20 +266,31 @@ const Game = {
     render();
   },
 
+  // Decide where the active hero should land based on questNode + currentAct
+  _routeForHero() {
+    const h = Game.hero;
+    if (!h) return;
+    const node = h.questNode;
+    if (!node || node === 'opening_cutscene') return Act1.beginOpening();
+    // Act II nodes
+    if (h.currentAct === 2) return Act2.openPortHub();
+    // Default: Act I town hub
+    return Act1.openTownHub();
+  },
+
   // Resume from a save slot
   continueFromSlot() {
     const slot = Slots.getActive();
     if (!slot || !slot.hero) return false;
     Game.hero = slot.hero;
+    // Backfill flags introduced in later patches
+    if (!Game.hero.flags) Game.hero.flags = {};
+    if (typeof Game.hero.currentAct !== 'number') Game.hero.currentAct = 1;
     // Initialize hp/mp if null
     const d = Engine.effectiveDerived(Game.hero);
     if (Game.hero.hp === null || Game.hero.hp === undefined) Game.hero.hp = d.maxHp;
     if (Game.hero.mp === null || Game.hero.mp === undefined) Game.hero.mp = d.maxMp;
-    // Route based on questNode
-    const node = Game.hero.questNode;
-    if (!node || node === 'opening_cutscene') { Act1.beginOpening(); return true; }
-    // Default: open town hub
-    Act1.openTownHub();
+    Game._routeForHero();
     return true;
   }
 };
@@ -354,6 +365,10 @@ function renderSlotPicker() {
   }
 }
 
+if (typeof window !== 'undefined') {
+  window.Game = Game; window.Slots = Slots; window.showScreen = showScreen;
+}
+
 // --------------------------------------------------------
 // DOM EVENT WIRING
 // --------------------------------------------------------
@@ -388,13 +403,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   document.getElementById('btn-open-character').addEventListener('click', () => Game.openCharacterSheet());
-  document.getElementById('btn-character-back').addEventListener('click', () => Act1.openTownHub());
+  document.getElementById('btn-character-back').addEventListener('click', () => Game._routeForHero());
 
   // shop
   document.getElementById('btn-shop-back').addEventListener('click', () => Shop.leave());
 
   // act complete
-  document.getElementById('btn-act-continue').addEventListener('click', () => Act1.openTownHub());
+  document.getElementById('btn-act-continue').addEventListener('click', () => Game._routeForHero());
 
   // close modal backdrop
   const layer = document.getElementById('modal-layer');

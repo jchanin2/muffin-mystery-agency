@@ -115,6 +115,7 @@ const Act1 = {
     if (node === 'after_foreman') return 'Choose your path — descend to the void, or surface to track the corruption.';
     if (node === 'before_hollowed') return 'Face The Hollowed One in the heart of the Quarry.';
     if (node === 'act1_complete') return 'Act I complete. Rest, prepare, and return to Lysara to begin Act II.';
+    if (node === 'act2_complete') return 'Act II complete. Rest in Numeria — Act III will open when Lysara sends for you.';
     return 'Find the missing page of the Numerian Codex.';
   },
 
@@ -138,7 +139,7 @@ const Act1 = {
     locs.push({
       name: 'Lysara\'s Tower',
       desc: 'The scholar\'s study. Maps, books, and a glowing orb.',
-      badge: node === 'town_hub_first' ? 'QUEST' : (node === 'act1_complete' ? 'RETURN' : null),
+      badge: node === 'town_hub_first' ? 'QUEST' : ((node === 'act1_complete' || node === 'act2_complete') ? 'RETURN' : null),
       action: () => Act1.enterLysara()
     });
 
@@ -152,8 +153,8 @@ const Act1 = {
       name: 'The Sundered Quarry',
       desc: node === 'town_hub_first'
         ? 'Closed to you — speak with Lysara first.'
-        : (node === 'act1_complete' ? 'A quiet, empty pit, the corruption gone.' : 'The abandoned quarry, mouth like a wound in the earth.'),
-      disabled: node === 'town_hub_first' || node === 'act1_complete',
+        : (node === 'act1_complete' || node === 'act2_complete' ? 'A quiet, empty pit, the corruption gone.' : 'The abandoned quarry, mouth like a wound in the earth.'),
+      disabled: node === 'town_hub_first' || node === 'act1_complete' || node === 'act2_complete',
       action: () => Act1.enterQuarry()
     });
 
@@ -262,11 +263,24 @@ const Act1 = {
         ]
       });
     } else if (node === 'act1_complete') {
-      // post-act conversation
+      // post-Act I conversation — leads into Act II
       Story.show({
         illustration: 'lysaraStudy',
         speaker: 'Lysara',
-        text: '<p>She takes the page in both hands, holds it up to the candlelight, and exhales a breath she has been holding for three years.</p><p>"It is the right page. It is undamaged." She looks up. "Five more, ' + Game.hero.name + '. And I think the next is somewhere very wet."</p><p>"But first — rest. You have earned it. Act II begins when you are ready."</p>',
+        text: '<p>She takes the page in both hands, holds it up to the candlelight, and exhales a breath she has been holding for three years.</p><p>"It is the right page. It is undamaged." She looks up. "Five more, ' + Game.hero.name + '. And I think the next is somewhere very wet."</p>',
+        choices: [
+          { text: 'I\'m ready. Tell me where to go.', tag: 'ACT II', go: () => Act2.beginOpening() },
+          { text: 'Not yet. I need to rest.', go: () => Act1.openTownHub() }
+        ]
+      });
+    } else if (node === 'act2_complete') {
+      // post-Act II conversation — Act III preview
+      Story.show({
+        illustration: 'lysaraStudy',
+        speaker: 'Lysara',
+        text: '<p>She lays the salt-wet page beside the first, and they hum quietly together. "Two of six. ' + Game.hero.name + ', you have done in three months what I could not have done in three years."</p>' +
+              '<p>"Page Three I have not pinpointed yet. The compass points <em>north</em>, into the war-marches. There is something stirring in the iron foundries up there — I will have a fix soon. Rest. Trade. Equip. When I send for you again, the road will be hard."</p>' +
+              '<p style="color:#a890c0;font-style:italic;">(Act III is coming in the next build. For now, rest and explore.)</p>',
         choices: [
           { text: 'Return to the village.', go: () => Act1.openTownHub() }
         ]

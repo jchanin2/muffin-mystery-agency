@@ -56,6 +56,8 @@ const Engine = {
       if (it.effect.bonusHp) maxHp += it.effect.bonusHp;
       if (it.effect.bonusTimer) timerSec += it.effect.bonusTimer;
     });
+    // companion bonus: Mira grants +1 Insight (free hint) while she travels with you
+    if (hero.flags && hero.flags.miraBound) hints += 1;
     return {
       maxHp: maxHp,
       maxMp: maxMpFor(s),

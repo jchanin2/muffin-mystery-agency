@@ -10,23 +10,52 @@ const _pick = arr => arr[Math.floor(Math.random() * arr.length)];
 const _shuffle = arr => arr.slice().sort(() => Math.random() - 0.5);
 
 // ------------------------------------------------------
-// Answer checking
+// Answer checking — handles whole, decimal, fraction, mixed-number
 // ------------------------------------------------------
+function _parseFraction(str) {
+  // Returns [num, den] or null. Handles: "3/4", "16 1/2", "-3/4", whole "12".
+  const t = String(str).trim();
+  const mm = t.match(/^(-?\d+)[\s_-]+(\d+)\s*\/\s*(\d+)$/);
+  if (mm) {
+    const w = parseInt(mm[1], 10), n = parseInt(mm[2], 10), d = parseInt(mm[3], 10);
+    if (d === 0) return null;
+    const sign = w < 0 ? -1 : 1;
+    return [sign * (Math.abs(w) * d + n), d];
+  }
+  const fm = t.match(/^(-?\d+)\s*\/\s*(\d+)$/);
+  if (fm) {
+    const n = parseInt(fm[1], 10), d = parseInt(fm[2], 10);
+    if (d === 0) return null;
+    return [n, d];
+  }
+  const wm = t.match(/^(-?\d+)$/);
+  if (wm) return [parseInt(wm[1], 10), 1];
+  return null;
+}
 function checkAnswer(userAnswer, correctAnswer) {
   if (userAnswer === null || userAnswer === undefined) return false;
-  const u = String(userAnswer).trim().toLowerCase().replace(/\s+/g, '');
-  const c = String(correctAnswer).toLowerCase().replace(/\s+/g, '');
-  if (u === c) return true;
-  // numeric tolerance
-  const un = parseFloat(u);
-  const cn = parseFloat(c);
-  if (!isNaN(un) && !isNaN(cn) && Math.abs(un - cn) < 0.0001) return true;
-  // fraction equivalence (a/b)
-  if (u.includes('/') && c.includes('/')) {
-    const [un2, ud2] = u.split('/').map(Number);
-    const [cn2, cd2] = c.split('/').map(Number);
-    if (ud2 && cd2 && un2 * cd2 === cn2 * ud2) return true;
+  const uRaw = String(userAnswer).trim().toLowerCase();
+  const cRaw = String(correctAnswer).trim().toLowerCase();
+  if (uRaw === cRaw) return true;
+  // Try fraction/mixed parse for both sides — cross compare
+  const uf = _parseFraction(uRaw);
+  const cf = _parseFraction(cRaw);
+  if (uf && cf) {
+    return uf[0] * cf[1] === cf[0] * uf[1];
   }
+  // mixed types: decimal vs fraction
+  const toNum = (s, parsed) => {
+    if (parsed) return parsed[0] / parsed[1];
+    const n = parseFloat(s.replace(/\s+/g, ''));
+    return isNaN(n) ? null : n;
+  };
+  const un = toNum(uRaw, uf);
+  const cn = toNum(cRaw, cf);
+  if (un !== null && cn !== null && Math.abs(un - cn) < 0.0001) return true;
+  // strip spaces for residual comparison
+  const u = uRaw.replace(/\s+/g, '');
+  const c = cRaw.replace(/\s+/g, '');
+  if (u === c) return true;
   return false;
 }
 
@@ -303,6 +332,237 @@ function gen_fractions_multiply(difficulty) {
 }
 
 // ======================================================
+// UNIT 2 & 3: FRACTIONS
+// ======================================================
+
+// helper: gcd & simplify
+function _gcd(a, b) { a = Math.abs(a); b = Math.abs(b); return b ? _gcd(b, a % b) : a; }
+function _simplify(n, d) {
+  const g = _gcd(n, d) || 1;
+  return [n / g, d / g];
+}
+function _fracStr(n, d) {
+  if (d === 1) return String(n);
+  const [sn, sd] = _simplify(n, d);
+  if (sd === 1) return String(sn);
+  // mixed-number form for improper
+  if (sn > sd) {
+    const whole = Math.floor(sn / sd);
+    const rem = sn % sd;
+    if (rem === 0) return String(whole);
+    return whole + ' ' + rem + '/' + sd;
+  }
+  return sn + '/' + sd;
+}
+
+// Fractions as division: a/b = a ÷ b
+function gen_fractions_as_division(difficulty) {
+  // pick a clean a/b with whole-number quotient or simple decimal
+  let a, b;
+  if (difficulty === 'easy') {
+    const choices = [[6,2],[8,4],[10,5],[12,3],[12,4],[15,3],[16,4],[20,5],[14,2],[18,6]];
+    [a, b] = _pick(choices);
+  } else {
+    const choices = [[7,4],[9,4],[11,4],[3,4],[5,8],[7,8],[3,8],[5,2],[11,2],[13,4]];
+    [a, b] = _pick(choices);
+  }
+  let ans;
+  if (a % b === 0) ans = String(a / b);
+  else {
+    // express as mixed number if improper, else simple fraction
+    if (a > b) {
+      const w = Math.floor(a / b);
+      const r = a % b;
+      const [sn, sd] = _simplify(r, b);
+      ans = w + ' ' + sn + '/' + sd;
+    } else {
+      const [sn, sd] = _simplify(a, b);
+      ans = sn + '/' + sd;
+    }
+  }
+  return {
+    question: 'A fraction is the same as a division. What is ' + a + ' ÷ ' + b + ' written as a fraction (or mixed number)?',
+    answer: ans,
+    hint: a + '/' + b + ' — simplify or express as a mixed number.',
+    topic: 'fractions_as_division',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// Fraction × whole, simple case
+function gen_fraction_times_whole(difficulty) {
+  let n, d, w;
+  if (difficulty === 'easy') {
+    d = _pick([2,3,4,5]);
+    n = _pick([1,2,3].filter(x => x < d));
+    w = _pick([2,3,4,5,6,8,10].filter(x => x % d === 0));
+    if (!w) w = d * 2;
+  } else if (difficulty === 'medium') {
+    d = _pick([3,4,5,6,8]);
+    n = _pick([1,2,3,4,5].filter(x => x < d));
+    w = _pick([6,8,9,10,12,15,16,18]);
+  } else {
+    d = _pick([4,6,8,10]);
+    n = _pick([3,5,7,9].filter(x => x < d));
+    w = _pick([12,15,18,20,24,30]);
+  }
+  const total = n * w;
+  const ans = (total % d === 0) ? String(total / d) : _fracStr(total, d);
+  return {
+    question: 'What is ' + n + '/' + d + ' × ' + w + '?',
+    answer: ans,
+    hint: '(' + n + ' × ' + w + ') ÷ ' + d,
+    topic: 'fraction_times_whole',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// Fraction × fraction
+function gen_fraction_times_fraction(difficulty) {
+  let n1, d1, n2, d2;
+  if (difficulty === 'easy') {
+    n1 = _R(1, 2); d1 = _R(2, 4);
+    n2 = _R(1, 2); d2 = _R(2, 4);
+  } else if (difficulty === 'medium') {
+    n1 = _R(1, 4); d1 = _R(2, 6);
+    n2 = _R(1, 4); d2 = _R(2, 6);
+  } else {
+    n1 = _R(2, 6); d1 = _R(3, 9);
+    n2 = _R(2, 6); d2 = _R(3, 9);
+  }
+  // ensure proper fractions
+  if (n1 >= d1) n1 = d1 - 1;
+  if (n2 >= d2) n2 = d2 - 1;
+  if (n1 < 1) n1 = 1;
+  if (n2 < 1) n2 = 1;
+  const [sn, sd] = _simplify(n1 * n2, d1 * d2);
+  const ans = sd === 1 ? String(sn) : (sn + '/' + sd);
+  return {
+    question: 'What is ' + n1 + '/' + d1 + ' × ' + n2 + '/' + d2 + '? (simplify)',
+    answer: ans,
+    hint: 'Multiply tops, multiply bottoms, then simplify.',
+    topic: 'fraction_times_fraction',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// Mixed number × whole
+function gen_mixed_number_multiply(difficulty) {
+  let w, n, d, m;
+  if (difficulty === 'easy') {
+    w = _R(2, 4); n = 1; d = 2; m = _R(2, 4);
+  } else if (difficulty === 'medium') {
+    w = _R(2, 5); d = _pick([2,3,4]);
+    n = _pick([1,2,3].filter(x => x < d));
+    m = _R(2, 6);
+  } else {
+    w = _R(2, 6); d = _pick([3,4,5,6]);
+    n = _pick([1,2,3,4,5].filter(x => x < d));
+    m = _R(3, 8);
+  }
+  // Simplify the fractional part for display ("6 2/4" → "6 1/2")
+  const [sn, sd] = _simplify(n, d);
+  n = sn; d = sd;
+  // (w + n/d) × m  = wm + nm/d
+  const numerator = (w * d + n) * m;
+  const ans = (numerator % d === 0) ? String(numerator / d) : _fracStr(numerator, d);
+  return {
+    question: 'What is ' + w + ' ' + n + '/' + d + ' × ' + m + '?  (answer as mixed number or fraction)',
+    answer: ans,
+    hint: 'Convert ' + w + ' ' + n + '/' + d + ' to ' + (w * d + n) + '/' + d + ', then × ' + m + '.',
+    topic: 'mixed_number_multiply',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// Area with fractional side lengths
+function gen_area_fractional_sides(difficulty) {
+  let n1, d1, n2, d2;
+  if (difficulty === 'easy') {
+    n1 = 1; d1 = _pick([2,3,4]);
+    n2 = 1; d2 = _pick([2,3,4]);
+  } else if (difficulty === 'medium') {
+    d1 = _pick([2,3,4,5]); n1 = _R(1, d1 - 1);
+    d2 = _pick([2,3,4,5]); n2 = _R(1, d2 - 1);
+  } else {
+    d1 = _pick([3,4,5,6,8]); n1 = _R(1, d1 - 1);
+    d2 = _pick([3,4,5,6,8]); n2 = _R(1, d2 - 1);
+  }
+  const [sn, sd] = _simplify(n1 * n2, d1 * d2);
+  const ans = sd === 1 ? String(sn) : (sn + '/' + sd);
+  return {
+    question: 'A rectangle has width ' + n1 + '/' + d1 + ' and height ' + n2 + '/' + d2 + '. What is its area? (simplify)',
+    answer: ans,
+    hint: 'Area = width × height = ' + n1 + '/' + d1 + ' × ' + n2 + '/' + d2,
+    topic: 'area_fractional_sides',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// Unit fraction ÷ whole number
+function gen_divide_unit_fraction_by_whole(difficulty) {
+  let d, w;
+  if (difficulty === 'easy') { d = _pick([2,3,4]); w = _R(2, 4); }
+  else if (difficulty === 'medium') { d = _pick([2,3,4,5]); w = _R(2, 6); }
+  else { d = _pick([3,4,5,6,8]); w = _R(3, 8); }
+  // (1/d) ÷ w = 1 / (d*w)
+  const newD = d * w;
+  return {
+    question: 'What is 1/' + d + ' ÷ ' + w + '?',
+    answer: '1/' + newD,
+    hint: 'Dividing by ' + w + ' is the same as multiplying by 1/' + w + ': 1/' + d + ' × 1/' + w,
+    topic: 'divide_unit_fraction_by_whole',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// Whole ÷ unit fraction
+function gen_divide_whole_by_unit_fraction(difficulty) {
+  let w, d;
+  if (difficulty === 'easy') { w = _R(2, 6); d = _pick([2,3,4]); }
+  else if (difficulty === 'medium') { w = _R(3, 10); d = _pick([2,3,4,5]); }
+  else { w = _R(5, 15); d = _pick([3,4,5,6,8]); }
+  // w ÷ (1/d) = w * d
+  return {
+    question: 'What is ' + w + ' ÷ 1/' + d + '?',
+    answer: String(w * d),
+    hint: 'Dividing by 1/' + d + ' = multiplying by ' + d + ': ' + w + ' × ' + d,
+    topic: 'divide_whole_by_unit_fraction',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// Compare products without multiplying (multiplication as scaling)
+function gen_compare_products_scaling(difficulty) {
+  let w, n, d;
+  if (difficulty === 'easy') { w = _R(4, 20); d = _pick([2,3,4]); n = _pick([1,3,5].filter(x => x !== d && x < d + 2)); }
+  else { w = _R(6, 30); d = _pick([3,4,5,6]); n = _pick([1,2,3,5,7].filter(x => x !== d)); }
+  // compare (n/d) × w  to  w
+  const compareTo = w;
+  const product = (n / d) * w;
+  let answer;
+  if (n < d) answer = 'less';
+  else if (n > d) answer = 'greater';
+  else answer = 'equal';
+  return {
+    question: 'Without multiplying, which is bigger: ' + n + '/' + d + ' × ' + w + ' OR ' + w + ' ?  (answer: less, greater, or equal)',
+    answer: answer,
+    hint: 'If the fraction is less than 1, scaling makes it smaller. If greater than 1, larger. If = 1, same.',
+    options: _shuffle(['less', 'greater', 'equal']),
+    topic: 'compare_products_scaling',
+    difficulty: difficulty,
+    format: 'mc'
+  };
+}
+
+// ======================================================
 // DISPATCH
 // ======================================================
 const GENERATORS = {
@@ -315,7 +575,16 @@ const GENERATORS = {
   multidigit_multiply: gen_multidigit_multiply,
   multidigit_divide: gen_multidigit_divide,
   decimals_add: gen_decimals_add,
-  fractions_multiply: gen_fractions_multiply
+  fractions_multiply: gen_fractions_multiply,
+  // Act II
+  fractions_as_division: gen_fractions_as_division,
+  fraction_times_whole: gen_fraction_times_whole,
+  fraction_times_fraction: gen_fraction_times_fraction,
+  mixed_number_multiply: gen_mixed_number_multiply,
+  area_fractional_sides: gen_area_fractional_sides,
+  divide_unit_fraction_by_whole: gen_divide_unit_fraction_by_whole,
+  divide_whole_by_unit_fraction: gen_divide_whole_by_unit_fraction,
+  compare_products_scaling: gen_compare_products_scaling
 };
 
 function generateProblem(topic, difficulty) {
