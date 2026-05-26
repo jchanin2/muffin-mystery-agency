@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realms of Mathematica II — The Numerian Codex</title>
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+
+  <!-- ==================== TITLE ==================== -->
+  <div id="screen-title" class="screen active">
+    <div class="title-content">
+      <div class="title-emblem" id="title-emblem"></div>
+      <div class="title-supertitle">Realms of Mathematica</div>
+      <h1 class="title-main">II<span class="title-numeral-dot">·</span>The Numerian Codex</h1>
+      <p class="title-subtitle">A sequel adventure · Solo hero · Six acts</p>
+      <button id="btn-start" class="btn btn-gold">Enter the Realm</button>
+      <a href="../" class="btn-link">← Back to Math Adventures</a>
+    </div>
+  </div>
+
+  <!-- ==================== SLOT PICKER ==================== -->
+  <div id="screen-slots" class="screen">
+    <div class="screen-header">
+      <h2>Choose Your Hero</h2>
+      <p class="header-subtitle">Three save slots. Three possible legends.</p>
+    </div>
+    <div id="slots-list" class="slots-list"></div>
+    <button id="btn-slots-back" class="btn btn-secondary">Back to Title</button>
+  </div>
+
+  <!-- ==================== HERO CREATION ==================== -->
+  <div id="screen-creation" class="screen">
+    <div class="creation-frame">
+      <div class="creation-progress">
+        <div class="creation-step-bar">
+          <span class="step-pip" data-step="1">Name</span>
+          <span class="step-pip" data-step="2">Class</span>
+          <span class="step-pip" data-step="3">Heritage</span>
+          <span class="step-pip" data-step="4">Stats</span>
+          <span class="step-pip" data-step="5">Feat</span>
+          <span class="step-pip" data-step="6">Summary</span>
+        </div>
+      </div>
+      <div id="creation-body" class="creation-body"></div>
+      <div class="creation-controls">
+        <button id="btn-create-back" class="btn btn-secondary">← Back</button>
+        <button id="btn-create-next" class="btn btn-gold">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CUTSCENE ==================== -->
+  <div id="screen-cutscene" class="screen">
+    <div class="cutscene-frame">
+      <div id="cutscene-illustration" class="cutscene-illustration"></div>
+      <div class="cutscene-text-panel">
+        <div id="cutscene-speaker" class="cutscene-speaker"></div>
+        <div id="cutscene-text" class="cutscene-text"></div>
+      </div>
+      <button id="btn-cutscene-next" class="btn btn-gold">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ==================== TOWN HUB ==================== -->
+  <div id="screen-hub" class="screen">
+    <div class="hub-frame">
+      <div class="hub-topbar">
+        <div class="hero-banner">
+          <div id="hero-portrait-mini" class="hero-portrait-mini"></div>
+          <div class="hero-banner-info">
+            <div class="hero-name-line" id="hero-name-line">—</div>
+            <div class="hero-class-line" id="hero-class-line">—</div>
+          </div>
+        </div>
+        <div class="hub-stats">
+          <div class="hub-stat" title="Stamina (HP)"><span class="hub-stat-icon">❤</span><span id="hub-hp">—</span></div>
+          <div class="hub-stat" title="Wisdom (Spell Slots)"><span class="hub-stat-icon">✦</span><span id="hub-mp">—</span></div>
+          <div class="hub-stat" title="Gold"><span class="hub-stat-icon">⛁</span><span id="hub-gold">0</span></div>
+          <div class="hub-stat" title="Experience"><span class="hub-stat-icon">▲</span><span id="hub-xp">0</span></div>
+          <button id="btn-open-character" class="btn btn-ghost">Character</button>
+          <button id="btn-hub-quit" class="btn btn-ghost" title="Save and return to title">⌂</button>
+        </div>
+      </div>
+      <div class="hub-main">
+        <div id="hub-illustration" class="hub-illustration"></div>
+        <div class="hub-locations" id="hub-locations"></div>
+      </div>
+      <div class="hub-quest-strip">
+        <div class="hub-quest-label">Active Quest</div>
+        <div id="hub-quest-text" class="hub-quest-text">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHARACTER SHEET ==================== -->
+  <div id="screen-character" class="screen">
+    <div class="sheet-frame">
+      <button id="btn-character-back" class="btn-corner-back">← Back</button>
+      <div class="sheet-header">
+        <div id="sheet-portrait" class="sheet-portrait"></div>
+        <div class="sheet-name-block">
+          <h2 id="sheet-name">—</h2>
+          <div class="sheet-subline" id="sheet-subline">—</div>
+        </div>
+      </div>
+      <div class="sheet-grid">
+        <div class="sheet-section">
+          <h3>Stats</h3>
+          <div id="sheet-stats" class="sheet-stats"></div>
+        </div>
+        <div class="sheet-section">
+          <h3>Equipped</h3>
+          <div id="sheet-equipped" class="sheet-equipped"></div>
+        </div>
+        <div class="sheet-section">
+          <h3>Inventory</h3>
+          <div id="sheet-inventory" class="sheet-inventory"></div>
+        </div>
+        <div class="sheet-section">
+          <h3>Mastery</h3>
+          <div id="sheet-mastery" class="sheet-mastery"></div>
+        </div>
+      </div>
+      <div class="sheet-section sheet-feats-section">
+        <h3>Feats &amp; Abilities</h3>
+        <div id="sheet-feats" class="sheet-feats"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== STORY NODE ==================== -->
+  <div id="screen-story" class="screen">
+    <div class="story-frame">
+      <div id="story-illustration" class="story-illustration"></div>
+      <div class="story-panel">
+        <div id="story-speaker" class="story-speaker"></div>
+        <div id="story-text" class="story-text"></div>
+        <div id="story-choices" class="story-choices"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== COMBAT ==================== -->
+  <div id="screen-combat" class="screen">
+    <div class="combat-frame">
+      <div class="combat-arena">
+        <div class="combat-side combat-side-hero">
+          <div id="combat-hero-portrait" class="combat-portrait"></div>
+          <div class="combat-name" id="combat-hero-name">—</div>
+          <div class="combat-bar">
+            <div class="bar-label">HP</div>
+            <div class="bar-track"><div id="combat-hero-hp-fill" class="bar-fill bar-hp"></div></div>
+            <div class="bar-numbers" id="combat-hero-hp-num">—</div>
+          </div>
+          <div class="combat-bar">
+            <div class="bar-label">MP</div>
+            <div class="bar-track"><div id="combat-hero-mp-fill" class="bar-fill bar-mp"></div></div>
+            <div class="bar-numbers" id="combat-hero-mp-num">—</div>
+          </div>
+        </div>
+        <div class="combat-mid">
+          <div id="combat-vs" class="combat-vs">VS</div>
+          <div id="combat-banner" class="combat-banner"></div>
+        </div>
+        <div class="combat-side combat-side-enemy">
+          <div id="combat-enemy-sprite" class="combat-portrait combat-enemy-portrait"></div>
+          <div class="combat-name" id="combat-enemy-name">—</div>
+          <div class="combat-bar">
+            <div class="bar-label">HP</div>
+            <div class="bar-track"><div id="combat-enemy-hp-fill" class="bar-fill bar-hp"></div></div>
+            <div class="bar-numbers" id="combat-enemy-hp-num">—</div>
+          </div>
+          <div id="combat-enemy-phase" class="combat-phase"></div>
+        </div>
+      </div>
+
+      <div class="combat-problem-frame">
+        <div id="combat-problem-prompt" class="combat-problem-prompt"></div>
+        <div id="combat-problem-area" class="combat-problem-area"></div>
+        <div id="combat-timer-row" class="combat-timer-row">
+          <div class="combat-timer-track"><div id="combat-timer-fill" class="combat-timer-fill"></div></div>
+          <div class="combat-timer-label" id="combat-timer-label">—</div>
+        </div>
+      </div>
+
+      <div class="combat-controls">
+        <button id="btn-combat-attack" class="btn btn-attack">Strike</button>
+        <button id="btn-combat-hint" class="btn btn-hint" title="Spend an Insight to reveal a hint">Hint (<span id="combat-hint-count">0</span>)</button>
+        <button id="btn-combat-spell" class="btn btn-spell">Cast Spell</button>
+        <button id="btn-combat-item" class="btn btn-item">Item</button>
+        <button id="btn-combat-flee" class="btn btn-ghost">Flee</button>
+      </div>
+
+      <div id="combat-popup-layer" class="combat-popup-layer"></div>
+      <div id="combat-log" class="combat-log"></div>
+    </div>
+  </div>
+
+  <!-- ==================== SHOP ==================== -->
+  <div id="screen-shop" class="screen">
+    <div class="shop-frame">
+      <button id="btn-shop-back" class="btn-corner-back">← Leave</button>
+      <div class="shop-header">
+        <div id="shop-keeper-portrait" class="shop-keeper-portrait"></div>
+        <div class="shop-keeper-info">
+          <h2 id="shop-keeper-name">—</h2>
+          <div class="shop-keeper-line" id="shop-keeper-line">—</div>
+        </div>
+        <div class="shop-gold">
+          <span class="hub-stat-icon">⛁</span>
+          <span id="shop-gold">0</span> gold
+        </div>
+      </div>
+      <div id="shop-items" class="shop-items"></div>
+    </div>
+  </div>
+
+  <!-- ==================== ACT COMPLETE ==================== -->
+  <div id="screen-act-complete" class="screen">
+    <div class="act-complete-frame">
+      <div class="act-stamp" id="act-stamp">ACT I COMPLETE</div>
+      <div id="act-complete-illustration" class="act-complete-illustration"></div>
+      <h2 class="act-complete-title" id="act-complete-title">—</h2>
+      <div id="act-complete-text" class="act-complete-text"></div>
+      <div class="act-complete-rewards" id="act-complete-rewards"></div>
+      <button id="btn-act-continue" class="btn btn-gold">Return to Numeria</button>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL LAYER ==================== -->
+  <div id="modal-layer" class="modal-layer" style="display:none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-frame">
+      <div id="modal-title" class="modal-title"></div>
+      <div id="modal-body" class="modal-body"></div>
+      <div id="modal-actions" class="modal-actions"></div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST LAYER ==================== -->
+  <div id="toast-layer" class="toast-layer"></div>
+
+  <!-- Scripts (order matters) -->
+  <script src="data.js?v=1"></script>
+  <script src="art.js?v=1"></script>
+  <script src="problems.js?v=1"></script>
+  <script src="engine.js?v=1"></script>
+  <script src="creation.js?v=1"></script>
+  <script src="act1.js?v=1"></script>
+  <script src="game.js?v=1"></script>
+</body>
+</html>

@@ -78,6 +78,11 @@ body {
   box-shadow: 0 12px 40px rgba(212, 166, 36, 0.18);
 }
 
+.chronicle-card:hover {
+  border-color: #a890c0;
+  box-shadow: 0 12px 40px rgba(168, 144, 192, 0.22);
+}
+
 .card-icon {
   margin-bottom: 16px;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
@@ -91,6 +96,7 @@ body {
 .muffin-card .card-title { color: #e2b714; }
 .quest-card .card-title { color: #e8a030; }
 .clockwork-card .card-title { color: #d4a624; }
+.chronicle-card .card-title { color: #a890c0; }
 
 .card-desc {
   font-size: 0.9rem;
@@ -130,6 +136,11 @@ body {
 
 .card-tag.clockmaker {
   background: #d4a624;
+  color: #1a1a2e;
+}
+
+.card-tag.chronicle {
+  background: #a890c0;
   color: #1a1a2e;
 }
 
