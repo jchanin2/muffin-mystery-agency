@@ -117,7 +117,8 @@ const Act1 = {
     if (node === 'act1_complete') return 'Act I complete. Rest, prepare, and return to Lysara to begin Act II.';
     if (node === 'act2_complete') return 'Act II complete. Visit Lysara\'s Tower to begin Act III — the Iron Foundries.';
     if (node === 'act3_complete') return 'Act III complete. Visit Lysara\'s Tower to begin Act IV — the Deep Vaults.';
-    if (node === 'act4_complete') return 'Act IV complete. Rest in Numeria — Act V will open when Lysara sends for you.';
+    if (node === 'act4_complete') return 'Act IV complete. Visit Lysara\'s Tower to begin Act V — Concord.';
+    if (node === 'act5_complete') return 'Act V complete. Visit Lysara\'s Tower to begin the final act.';
     return 'Find the missing page of the Numerian Codex.';
   },
 
@@ -141,7 +142,7 @@ const Act1 = {
     locs.push({
       name: 'Lysara\'s Tower',
       desc: 'The scholar\'s study. Maps, books, and a glowing orb.',
-      badge: node === 'town_hub_first' ? 'QUEST' : ((node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete' || node === 'act4_complete') ? 'RETURN' : null),
+      badge: node === 'town_hub_first' ? 'QUEST' : ((node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete' || node === 'act4_complete' || node === 'act5_complete') ? 'RETURN' : null),
       action: () => Act1.enterLysara()
     });
 
@@ -300,12 +301,24 @@ const Act1 = {
         ]
       });
     } else if (node === 'act4_complete') {
-      // post-Act IV conversation — Act V preview
+      // post-Act IV conversation — leads into Act V
       Story.show({
         illustration: 'lysaraStudy',
         speaker: 'Lysara',
-        text: '<p>Four pages, humming a chord that rattles the teacups. "Two left," she says softly. "And the fifth points <em>outward</em> — across the border, to the free cities, where the next page has set every market and every measure at war with itself. Fractions and conversions, ' + Game.hero.name + '. The math of trade and treaty."</p>' +
-              '<p style="color:#a890c0;font-style:italic;">(Act V — More Fractions &amp; Conversions — is coming in the next build. For now, rest, spend your gold, and explore.)</p>',
+        text: '<p>Four pages, humming a chord that rattles the teacups. "Two left," she says softly. "The fifth points <em>outward</em> — across the border to <em>Concord</em>, the free trade-city, where the page has set every market and every measure at war with itself. A half is bigger than a third in one street and smaller in the next. If it spreads, every treaty in the realm collapses."</p>' +
+              '<p>"Unlike fractions, mixed numbers, powers of ten, conversions — the math of trade and treaty, ' + Game.hero.name + '. Find the common ground. Mira knows the roads to Concord better than anyone alive."</p>',
+        choices: [
+          { text: 'I\'m ready. To Concord.', tag: 'ACT V', go: () => Act5.beginOpening() },
+          { text: 'Not yet. I need to prepare.', go: () => Act1.openTownHub() }
+        ]
+      });
+    } else if (node === 'act5_complete') {
+      // post-Act V conversation — Act VI preview
+      Story.show({
+        illustration: 'lysaraStudy',
+        speaker: 'Lysara',
+        text: '<p>Five pages now, and the chord they hum is almost a voice. "One left," Lysara whispers. "And the last reading points <em>up</em> — into the sky itself, to the old <em>Sky-Bridge</em> above Numeria, a lattice of star-iron laid out like a vast coordinate grid. The sixth page is at its summit. And ' + Game.hero.name + '... I think whatever has been corrupting these pages will be waiting there, in person, when the Codex is whole."</p>' +
+              '<p style="color:#a890c0;font-style:italic;">(The final act — the Coordinate Grid, with interactive plotting, and the true final boss — is next. For now, rest, spend everything, and prepare for the end.)</p>',
         choices: [
           { text: 'Return to the village.', go: () => Act1.openTownHub() }
         ]

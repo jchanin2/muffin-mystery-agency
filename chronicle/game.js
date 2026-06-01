@@ -272,10 +272,11 @@ const Game = {
     if (!h) return;
     const node = h.questNode;
     if (!node || node === 'opening_cutscene') return Act1.beginOpening();
-    // Act II / III / IV hubs
+    // Act II–V hubs
     if (h.currentAct === 2) return Act2.openPortHub();
     if (h.currentAct === 3) return Act3.openFoundryTown();
     if (h.currentAct === 4) return Act4.openUndermarket();
+    if (h.currentAct === 5) return Act5.openConcord();
     // Default: Act I town hub
     return Act1.openTownHub();
   },

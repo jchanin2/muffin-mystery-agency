@@ -897,6 +897,203 @@ function gen_decimal_place_value(difficulty) {
 }
 
 // ======================================================
+// UNIT 6: MORE FRACTIONS & CONVERSIONS
+// ======================================================
+
+function gen_frac_add_unlike(difficulty) {
+  let d1, d2;
+  if (difficulty === 'easy') { const pairs = [[2,4],[2,3],[3,6],[2,6],[4,8],[3,4]]; [d1, d2] = _pick(pairs); }
+  else if (difficulty === 'medium') { const pairs = [[3,4],[4,6],[2,5],[3,5],[4,5],[6,8],[2,8]]; [d1, d2] = _pick(pairs); }
+  else { const pairs = [[3,8],[5,6],[4,9],[6,8],[3,10],[5,8],[4,6]]; [d1, d2] = _pick(pairs); }
+  const n1 = _R(1, d1 - 1), n2 = _R(1, d2 - 1);
+  const num = n1 * d2 + n2 * d1, den = d1 * d2;
+  const ans = _fracStr(num, den);
+  return {
+    question: 'What is ' + n1 + '/' + d1 + ' + ' + n2 + '/' + d2 + '? (give a fraction or mixed number, simplified)',
+    answer: ans,
+    hint: 'Find a common denominator (' + (d1 * d2) + ' always works), rewrite both, then add.',
+    topic: 'frac_add_unlike',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_frac_subtract_unlike(difficulty) {
+  let d1, d2;
+  if (difficulty === 'easy') { const pairs = [[2,4],[2,3],[3,6],[4,8],[3,4]]; [d1, d2] = _pick(pairs); }
+  else if (difficulty === 'medium') { const pairs = [[3,4],[4,6],[2,5],[3,5],[6,8],[4,5]]; [d1, d2] = _pick(pairs); }
+  else { const pairs = [[3,8],[5,6],[4,9],[5,8],[3,10]]; [d1, d2] = _pick(pairs); }
+  // build a > b
+  let a = { n: _R(1, d1 - 1), d: d1 }, b = { n: _R(1, d2 - 1), d: d2 };
+  let an = a.n * b.d, bn = b.n * a.d, den = a.d * b.d;
+  if (an < bn) { const t = a; a = b; b = t; an = a.n * b.d; bn = b.n * a.d; }
+  if (an === bn) { a.n = Math.min(a.d - 1, a.n + 1); an = a.n * b.d; }
+  const num = an - bn;
+  const ans = num === 0 ? '0' : _fracStr(num, den);
+  return {
+    question: 'What is ' + a.n + '/' + a.d + ' − ' + b.n + '/' + b.d + '? (simplify)',
+    answer: ans,
+    hint: 'Common denominator ' + den + ': ' + an + '/' + den + ' − ' + bn + '/' + den + '.',
+    topic: 'frac_subtract_unlike',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_mixed_number_add_sub(difficulty) {
+  const add = Math.random() < 0.5;
+  let d1, d2, w1, w2;
+  if (difficulty === 'easy') { d1 = 2; d2 = 4; w1 = _R(1, 3); w2 = _R(1, 3); }
+  else if (difficulty === 'medium') { const pairs = [[3,4],[2,4],[4,6],[3,6]]; [d1, d2] = _pick(pairs); w1 = _R(1, 4); w2 = _R(1, 4); }
+  else { const pairs = [[3,4],[4,6],[5,6],[3,8],[4,5]]; [d1, d2] = _pick(pairs); w1 = _R(2, 5); w2 = _R(1, 4); }
+  const n1 = _R(1, d1 - 1), n2 = _R(1, d2 - 1);
+  // improper totals
+  const imp1 = (w1 * d1 + n1) * d2;
+  const imp2 = (w2 * d2 + n2) * d1;
+  const den = d1 * d2;
+  if (add) {
+    const num = imp1 + imp2;
+    return {
+      question: 'What is ' + w1 + ' ' + n1 + '/' + d1 + ' + ' + w2 + ' ' + n2 + '/' + d2 + '? (mixed number, simplified)',
+      answer: _fracStr(num, den),
+      hint: 'Add whole parts, then add fractions over a common denominator (' + den + ').',
+      topic: 'mixed_number_add_sub',
+      difficulty: difficulty,
+      format: 'input'
+    };
+  }
+  // subtraction: ensure first ≥ second
+  let big = { w: w1, n: n1, d: d1, imp: imp1 }, small = { w: w2, n: n2, d: d2, imp: imp2 };
+  if (big.imp < small.imp) { const t = big; big = small; small = t; }
+  const num = big.imp - small.imp;
+  const ans = num === 0 ? '0' : _fracStr(num, den);
+  return {
+    question: 'What is ' + big.w + ' ' + big.n + '/' + big.d + ' − ' + small.w + ' ' + small.n + '/' + small.d + '? (simplify)',
+    answer: ans,
+    hint: 'Use common denominator ' + den + '. You may need to regroup (borrow) one whole.',
+    topic: 'mixed_number_add_sub',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_powers_of_10(difficulty) {
+  const mult = Math.random() < 0.5;
+  const powers = difficulty === 'easy' ? [10, 100] : (difficulty === 'medium' ? [10, 100, 1000] : [100, 1000]);
+  const p = _pick(powers);
+  if (mult) {
+    // base can be whole or 1-2 dp decimal
+    let base;
+    if (difficulty === 'easy') base = _R(2, 99);
+    else if (difficulty === 'medium') base = _roundp(_R(11, 980) / 10, 1);
+    else base = _roundp(_R(105, 990) / 100, 2);
+    const ans = _roundp(base * p, 3);
+    const shift = String(p).length - 1;
+    return {
+      question: 'What is ' + base + ' × ' + p + '?',
+      answer: String(ans),
+      hint: 'Multiplying by ' + p + ' shifts every digit ' + shift + ' place' + (shift === 1 ? '' : 's') + ' to the LEFT.',
+      topic: 'powers_of_10',
+      difficulty: difficulty,
+      format: 'input'
+    };
+  }
+  // division: make it clean
+  let ans;
+  if (difficulty === 'easy') ans = _R(2, 99);
+  else if (difficulty === 'medium') ans = _roundp(_R(11, 980) / 10, 1);
+  else ans = _roundp(_R(105, 990) / 100, 2);
+  const dividend = _roundp(ans * p, 3);
+  return {
+    question: 'What is ' + dividend + ' ÷ ' + p + '?',
+    answer: String(ans),
+    hint: 'Dividing by ' + p + ' shifts every digit ' + (String(p).length - 1) + ' place' + ((String(p).length - 1) === 1 ? '' : 's') + ' to the RIGHT.',
+    topic: 'powers_of_10',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_metric_convert(difficulty) {
+  // families with factors
+  const families = [
+    { unitBig: 'm', unitSmall: 'cm', factor: 100, name: 'length' },
+    { unitBig: 'km', unitSmall: 'm', factor: 1000, name: 'length' },
+    { unitBig: 'cm', unitSmall: 'mm', factor: 10, name: 'length' },
+    { unitBig: 'L', unitSmall: 'mL', factor: 1000, name: 'volume' },
+    { unitBig: 'kg', unitSmall: 'g', factor: 1000, name: 'mass' }
+  ];
+  let pool;
+  if (difficulty === 'easy') pool = families.filter(f => f.factor <= 100);
+  else pool = families;
+  const f = _pick(pool);
+  const bigToSmall = Math.random() < 0.5;
+  if (bigToSmall) {
+    let amount;
+    if (difficulty === 'easy') amount = _R(2, 20);
+    else if (difficulty === 'medium') amount = _roundp(_R(11, 90) / 10, 1);
+    else amount = _roundp(_R(105, 950) / 100, 2);
+    const ans = _roundp(amount * f.factor, 2);
+    return {
+      question: 'Convert: ' + amount + ' ' + f.unitBig + ' = ? ' + f.unitSmall,
+      answer: String(ans),
+      hint: '1 ' + f.unitBig + ' = ' + f.factor + ' ' + f.unitSmall + '. Multiply by ' + f.factor + '.',
+      topic: 'metric_convert',
+      difficulty: difficulty,
+      format: 'input'
+    };
+  }
+  // small to big — keep clean
+  let bigAmount;
+  if (difficulty === 'easy') bigAmount = _R(2, 20);
+  else if (difficulty === 'medium') bigAmount = _roundp(_R(11, 90) / 10, 1);
+  else bigAmount = _roundp(_R(105, 950) / 100, 2);
+  const smallAmount = _roundp(bigAmount * f.factor, 2);
+  return {
+    question: 'Convert: ' + smallAmount + ' ' + f.unitSmall + ' = ? ' + f.unitBig,
+    answer: String(bigAmount),
+    hint: '1 ' + f.unitBig + ' = ' + f.factor + ' ' + f.unitSmall + '. Divide by ' + f.factor + '.',
+    topic: 'metric_convert',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_convert_time(difficulty) {
+  const kinds = [
+    { big: 'minute', small: 'second', factor: 60 },
+    { big: 'hour', small: 'minute', factor: 60 },
+    { big: 'day', small: 'hour', factor: 24 },
+    { big: 'week', small: 'day', factor: 7 }
+  ];
+  let pool = difficulty === 'easy' ? kinds.slice(0, 2) : kinds;
+  const k = _pick(pool);
+  const bigToSmall = Math.random() < 0.5;
+  if (bigToSmall) {
+    const amount = difficulty === 'hard' ? _R(3, 12) : _R(2, 8);
+    const ans = amount * k.factor;
+    return {
+      question: 'How many ' + k.small + 's are in ' + amount + ' ' + k.big + 's?',
+      answer: String(ans),
+      hint: '1 ' + k.big + ' = ' + k.factor + ' ' + k.small + 's. Multiply ' + amount + ' × ' + k.factor + '.',
+      topic: 'convert_time',
+      difficulty: difficulty,
+      format: 'input'
+    };
+  }
+  const bigAmount = _R(2, 9);
+  const smallAmount = bigAmount * k.factor;
+  return {
+    question: 'How many ' + k.big + 's are in ' + smallAmount + ' ' + k.small + 's?',
+    answer: String(bigAmount),
+    hint: '1 ' + k.big + ' = ' + k.factor + ' ' + k.small + 's. Divide ' + smallAmount + ' ÷ ' + k.factor + '.',
+    topic: 'convert_time',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// ======================================================
 // DISPATCH
 // ======================================================
 const GENERATORS = {
@@ -934,7 +1131,14 @@ const GENERATORS = {
   divide_by_decimal: gen_divide_by_decimal,
   round_decimal: gen_round_decimal,
   compare_decimals: gen_compare_decimals,
-  decimal_place_value: gen_decimal_place_value
+  decimal_place_value: gen_decimal_place_value,
+  // Act V (Unit 6)
+  frac_add_unlike: gen_frac_add_unlike,
+  frac_subtract_unlike: gen_frac_subtract_unlike,
+  mixed_number_add_sub: gen_mixed_number_add_sub,
+  powers_of_10: gen_powers_of_10,
+  metric_convert: gen_metric_convert,
+  convert_time: gen_convert_time
 };
 
 function generateProblem(topic, difficulty) {

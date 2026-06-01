@@ -296,6 +296,21 @@ const ITEMS = {
   keepers_ledger:   { id: 'keepers_ledger',   name: 'The Keeper\'s Ledger', slot: 'accessory', desc: 'Every coin ever counted, balanced to the thousandth. +2 Wisdom, +2 Insight.', effect: { wisdom: 2, insight: 2 } },
   deepvault_medal:  { id: 'deepvault_medal',  name: 'Deep-Vault Medal',  slot: 'accessory', desc: 'For those who went down and came back up. +2 Stamina, +10 HP.', effect: { stamina: 2, bonusHp: 10 } },
 
+  // ---------- act V shop (market + guild outfitter) ----------
+  balance_glaive:   { id: 'balance_glaive',   name: 'Balance-Glaive',   slot: 'weapon', desc: 'A polearm tipped with twin scale-pans. Cuts true once weighed.', effect: { precision: 3, wisdom: 1 } },
+  tally_wand:       { id: 'tally_wand',       name: 'Tally-Wand',       slot: 'weapon', desc: 'A merchant\'s counting-rod that sparks with reckoning.', effect: { wisdom: 2, insight: 1 } },
+  guild_tabard:     { id: 'guild_tabard',     name: 'Guild Tabard',     slot: 'armor', desc: 'Quartered in the colors of every guild. Respected, and padded.', effect: { stamina: 3, luck: 1 } },
+  merchants_finery: { id: 'merchants_finery', name: 'Merchant\'s Finery', slot: 'armor', desc: 'Fine cloth, hidden mail. +1 Wisdom, +1 Luck, +6 HP.', effect: { wisdom: 1, luck: 1, bonusHp: 6 } },
+  common_denom_ring:{ id: 'common_denom_ring',name: 'Common-Denominator Ring', slot: 'accessory', desc: 'Brings any two fractions to common ground. Sharpens fraction sums.', effect: { insight: 1, bonusVsTopic: { frac_add_unlike: 4, frac_subtract_unlike: 4, mixed_number_add_sub: 3 } } },
+  power_loop:       { id: 'power_loop',       name: 'Loop of Powers',   slot: 'accessory', desc: 'Ten beads, then a hundred, then a thousand. Sharpens powers of 10.', effect: { precision: 1, bonusVsTopic: { powers_of_10: 4, metric_convert: 3 } } },
+  traders_chain:    { id: 'traders_chain',    name: 'Trader\'s Chain',   slot: 'accessory', desc: 'Links of a dozen mints. +2 Luck and a little extra coin.', effect: { luck: 2, bonusTimer: 1 } },
+
+  // ---------- act V loot drops ----------
+  accord_blade:     { id: 'accord_blade',     name: 'The Accord-Blade',  slot: 'weapon', desc: 'Forged from the treaty-seals of every guild. Ends arguments.', effect: { precision: 4, wisdom: 1, bonusVsTopic: { convert_time: 3, metric_convert: 3 } } },
+  babel_key:        { id: 'babel_key',        name: 'The Babel-Key',     slot: 'accessory', desc: 'A key that fits every lock and speaks every measure. +2 Wisdom, +2 Insight.', effect: { wisdom: 2, insight: 2 } },
+  concord_medal:    { id: 'concord_medal',    name: 'Medal of Concord',  slot: 'accessory', desc: 'For the one who made the cities agree. +2 Precision, +12 HP.', effect: { precision: 2, bonusHp: 12 } },
+  unity_charm:      { id: 'unity_charm',      name: 'Charm of Unity',    slot: 'accessory', desc: 'Three guild-tokens fused into one. +1 to several stats.', effect: { precision: 1, wisdom: 1, luck: 1, stamina: 1 } },
+
   // ---------- consumables ----------
   minor_potion:     { id: 'minor_potion',     name: 'Minor Healing Draught', slot: 'consumable', desc: 'Restores 15 HP.',              effect: { heal: 15 } },
   greater_potion:   { id: 'greater_potion',   name: 'Greater Healing Draught', slot: 'consumable', desc: 'Restores 35 HP.',            effect: { heal: 35 } },
@@ -307,7 +322,9 @@ const ITEMS = {
   ration_tin:       { id: 'ration_tin',       name: 'Army Ration Tin', slot: 'consumable', desc: 'Dense, salty, filling. Restores 28 HP.', effect: { heal: 28 } },
   oil_flask:        { id: 'oil_flask',        name: 'Flask of Quenching Oil', slot: 'consumable', desc: 'Restores 40 HP — the good stuff.', effect: { heal: 40 } },
   candied_fig:      { id: 'candied_fig',      name: 'Candied Fig', slot: 'consumable', desc: 'A sweet from the Undermarket. Restores 22 HP.', effect: { heal: 22 } },
-  lamp_oil_draught: { id: 'lamp_oil_draught', name: 'Lamp-Oil Draught', slot: 'consumable', desc: 'Bitter, bright. Restores 3 spell slots.', effect: { restoreMp: 3 } }
+  lamp_oil_draught: { id: 'lamp_oil_draught', name: 'Lamp-Oil Draught', slot: 'consumable', desc: 'Bitter, bright. Restores 3 spell slots.', effect: { restoreMp: 3 } },
+  spiced_wine:      { id: 'spiced_wine',      name: 'Cup of Spiced Wine', slot: 'consumable', desc: 'Warm and restorative (watered, for a hero). Restores 26 HP.', effect: { heal: 26 } },
+  guild_tonic:      { id: 'guild_tonic',      name: 'Guild Tonic', slot: 'consumable', desc: 'A clarifying draught. Restores 4 spell slots.', effect: { restoreMp: 4 } }
 };
 
 // ------------------------------------------------------
@@ -357,8 +374,14 @@ const TOPICS = {
   compare_decimals:          { unit: 5, name: 'Comparing decimals' },
   decimal_place_value:       { unit: 5, name: 'Decimal place value' },
 
-  // ---------- Unit 6 & 7 ----------
+  // ---------- Unit 6 ----------
   powers_of_10:         { unit: 6, name: 'Powers of 10' },
+  frac_add_unlike:      { unit: 6, name: 'Adding unlike fractions' },
+  frac_subtract_unlike: { unit: 6, name: 'Subtracting unlike fractions' },
+  mixed_number_add_sub: { unit: 6, name: 'Adding & subtracting mixed numbers' },
+  metric_convert:       { unit: 6, name: 'Metric conversions' },
+  convert_time:         { unit: 6, name: 'Time conversions' },
+  // ---------- Unit 7 ----------
   coords_q1:            { unit: 7, name: 'Coordinates (Q1)' }
 };
 
@@ -457,6 +480,30 @@ const SHOPS = {
       { itemId: 'assayers_loupe',  price: 140 },
       { itemId: 'decimal_abacus',  price: 140 },
       { itemId: 'lucky_decicoin',  price: 95 }
+    ]
+  },
+  concord_market: {
+    keeperId: 'marketer_quill',
+    keeperName: 'Marketer Quill',
+    keeperLine: '"Welcome to Concord! Best prices in the free cities — when the cities can agree what a price IS. Spiced wine? A glaive? Speak up, friend."',
+    stock: [
+      { itemId: 'spiced_wine',     price: 20 },
+      { itemId: 'oil_flask',       price: 40 },
+      { itemId: 'guild_tonic',     price: 42 },
+      { itemId: 'balance_glaive',  price: 140 },
+      { itemId: 'guild_tabard',    price: 120 }
+    ]
+  },
+  guild_outfitter: {
+    keeperId: 'outfitter_bex',
+    keeperName: 'Outfitter Bex',
+    keeperLine: '"Every guild, every measure, all under one roof — that\'s how Concord used to work. Help me put it back together and I\'ll kit you out proper."',
+    stock: [
+      { itemId: 'tally_wand',        price: 135 },
+      { itemId: 'merchants_finery',  price: 135 },
+      { itemId: 'common_denom_ring', price: 150 },
+      { itemId: 'power_loop',        price: 150 },
+      { itemId: 'traders_chain',     price: 95 }
     ]
   }
 };
@@ -704,6 +751,77 @@ const ENEMIES = {
     ],
     goldDrop: [140, 190], xpDrop: 480,
     guaranteedLoot: ['deepvault_medal', 'hollow_coin']
+  },
+  // ---------- Act V — Concord, the Measureless City ----------
+  tare_wisp: {
+    id: 'tare_wisp', name: 'Tare-Wisp',
+    hp: 50, attack: 11, spriteId: 'tare_wisp',
+    topic: 'metric_convert', difficulty: 'easy',
+    goldDrop: [8, 13], xpDrop: 46
+  },
+  tally_gremlin: {
+    id: 'tally_gremlin', name: 'Tally-Gremlin',
+    hp: 58, attack: 12, spriteId: 'tally_gremlin',
+    topic: 'frac_add_unlike', difficulty: 'medium',
+    goldDrop: [9, 15], xpDrop: 54
+  },
+  zero_sprite: {
+    id: 'zero_sprite', name: 'Zero-Sprite',
+    hp: 64, attack: 13, spriteId: 'zero_sprite',
+    topic: 'powers_of_10', difficulty: 'medium',
+    goldDrop: [10, 17], xpDrop: 60
+  },
+  // District mini-bosses
+  the_misweigher: {
+    id: 'the_misweigher', name: 'The Misweigher',
+    hp: 205, attack: 15, spriteId: 'the_misweigher',
+    isBoss: true,
+    phases: [
+      { topic: 'metric_convert', difficulty: 'medium', say: '"A gram is a kilogram if I say so. Convert, and I will cheat you."' },
+      { topic: 'convert_time',   difficulty: 'medium', say: '"An hour is sixty minutes. Or six. Are you SURE?"' },
+      { topic: 'powers_of_10',   difficulty: 'hard',   say: '"Move the point. Wrong way. There. Now you owe me."' }
+    ],
+    goldDrop: [60, 80], xpDrop: 165,
+    guaranteedLoot: ['accord_blade']
+  },
+  the_sunderer: {
+    id: 'the_sunderer', name: 'The Sunderer',
+    hp: 215, attack: 15, spriteId: 'the_sunderer',
+    isBoss: true,
+    phases: [
+      { topic: 'frac_add_unlike',      difficulty: 'medium', say: '"Different denominators. You\'ll never make them agree."' },
+      { topic: 'frac_subtract_unlike', difficulty: 'medium', say: '"Take a piece away. Now they REALLY don\'t match."' },
+      { topic: 'mixed_number_add_sub', difficulty: 'hard',   say: '"Wholes and pieces, all jumbled. Sort THAT."' }
+    ],
+    goldDrop: [65, 85], xpDrop: 165,
+    guaranteedLoot: ['common_denom_ring']
+  },
+  the_decimator: {
+    id: 'the_decimator', name: 'The Decimator',
+    hp: 220, attack: 16, spriteId: 'the_decimator',
+    isBoss: true,
+    phases: [
+      { topic: 'powers_of_10',   difficulty: 'medium', say: '"Times ten. Times a hundred. Watch your zeros vanish."' },
+      { topic: 'metric_convert', difficulty: 'medium', say: '"Kilo to milli, a million times smaller. Keep up."' },
+      { topic: 'frac_add_unlike',difficulty: 'hard',   say: '"Now a fraction, just to break your rhythm."' }
+    ],
+    goldDrop: [65, 85], xpDrop: 165,
+    guaranteedLoot: ['power_loop']
+  },
+  // Act V final boss
+  babel_engine: {
+    id: 'babel_engine', name: 'The Babel-Engine',
+    hp: 410, attack: 18, spriteId: 'babel_engine',
+    isBoss: true,
+    phases: [
+      { topic: 'frac_add_unlike',      difficulty: 'easy',   say: '"I AM EVERY MEASURE AT ONCE. ADD, IF YOU CAN AGREE WITH YOURSELF."' },
+      { topic: 'mixed_number_add_sub', difficulty: 'medium', say: '"WHOLES. PIECES. NEITHER. BOTH."' },
+      { topic: 'powers_of_10',         difficulty: 'medium', say: '"I MULTIPLY MEANINGS BY TEN. BY A HUNDRED."' },
+      { topic: 'metric_convert',       difficulty: 'hard',   say: '"NAME MY UNITS. YOU CANNOT. THERE ARE TOO MANY."' },
+      { topic: 'convert_time',         difficulty: 'hard',   say: '"TIME ITSELF I WILL RECKON WRONG. STOP ME."' }
+    ],
+    goldDrop: [150, 200], xpDrop: 520,
+    guaranteedLoot: ['concord_medal', 'babel_key']
   },
   // Act I final boss
   hollowed_one: {
