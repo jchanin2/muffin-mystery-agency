@@ -563,6 +563,173 @@ function gen_compare_products_scaling(difficulty) {
 }
 
 // ======================================================
+// UNIT 4: MULTI-DIGIT MULTIPLICATION & DIVISION
+// ======================================================
+
+// Round a number to its greatest place value (38 -> 40, 412 -> 400)
+function _roundLead(n) {
+  if (n < 10) return n;
+  const mag = Math.pow(10, String(Math.floor(n)).length - 1);
+  return Math.round(n / mag) * mag;
+}
+
+function gen_estimate_product(difficulty) {
+  let a, b;
+  if (difficulty === 'easy') { a = _R(21, 89); b = _R(3, 9); }
+  else if (difficulty === 'medium') { a = _R(21, 89); b = _R(11, 49); }
+  else { a = _R(120, 890); b = _R(11, 39); }
+  const est = _roundLead(a) * _roundLead(b);
+  const options = _shuffle([
+    String(est),
+    String(est + _roundLead(b) * (_roundLead(a) >= 100 ? 100 : 10)),
+    String(Math.max(1, est - _roundLead(a) * (_roundLead(b) >= 10 ? 10 : 1))),
+    String(_roundLead(a) * b)
+  ].filter((v, i, arr) => arr.indexOf(v) === i));
+  // ensure the correct one is present
+  if (options.indexOf(String(est)) < 0) options[0] = String(est);
+  return {
+    question: 'Estimate ' + a + ' × ' + b + ' by rounding each number to its greatest place value.',
+    answer: String(est),
+    hint: 'Round to ' + _roundLead(a) + ' × ' + _roundLead(b) + '.',
+    options: options,
+    topic: 'estimate_product',
+    difficulty: difficulty,
+    format: 'mc'
+  };
+}
+
+function gen_estimate_quotient(difficulty) {
+  // compatible numbers: pick divisor d and a round-ish quotient q, dividend close to d*q
+  let d, q;
+  if (difficulty === 'easy') { d = _R(2, 9); q = _pick([20, 30, 40, 50, 60, 70, 80, 90]); }
+  else if (difficulty === 'medium') { d = _R(3, 9); q = _pick([30, 40, 50, 60, 70, 80, 90, 100, 200]); }
+  else { d = _R(11, 29); q = _pick([20, 30, 40, 50, 60, 70, 80, 90]); }
+  const compatible = d * q;
+  const dividend = compatible + _pick([-1, 1, 2, -2, 3, -3, 4, 5]);
+  const options = _shuffle([String(q), String(q + 10), String(Math.max(1, q - 10)), String(q * (d <= 9 ? 2 : 1) + 5)]
+    .filter((v, i, arr) => arr.indexOf(v) === i));
+  if (options.indexOf(String(q)) < 0) options[0] = String(q);
+  return {
+    question: 'Estimate ' + dividend + ' ÷ ' + d + ' using compatible numbers (a nearby number that divides evenly).',
+    answer: String(q),
+    hint: 'Think: ' + compatible + ' ÷ ' + d + ' = ' + q + '. ' + dividend + ' is close to ' + compatible + '.',
+    options: options,
+    topic: 'estimate_quotient',
+    difficulty: difficulty,
+    format: 'mc'
+  };
+}
+
+function gen_partial_products(difficulty) {
+  let tens, ones, b;
+  if (difficulty === 'easy') { tens = _R(1, 4) * 10; ones = _R(1, 9); b = _R(3, 9); }
+  else { tens = _R(2, 8) * 10; ones = _R(1, 9); b = _R(4, 9); }
+  const a = tens + ones;
+  // ask for one of the partial products
+  const askTens = Math.random() < 0.5;
+  if (askTens) {
+    return {
+      question: 'To find ' + a + ' × ' + b + ', break it apart: (' + tens + ' × ' + b + ') + (' + ones + ' × ' + b + '). What is ' + tens + ' × ' + b + '?',
+      answer: String(tens * b),
+      hint: tens + ' × ' + b,
+      topic: 'partial_products',
+      difficulty: difficulty,
+      format: 'input'
+    };
+  }
+  return {
+    question: 'Using partial products, ' + a + ' × ' + b + ' = (' + tens + ' × ' + b + ') + (' + ones + ' × ' + b + '). What is the FULL product?',
+    answer: String(a * b),
+    hint: 'Add the two partial products: ' + (tens * b) + ' + ' + (ones * b) + '.',
+    topic: 'partial_products',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_multidigit_multiply_word(difficulty) {
+  let a, b;
+  if (difficulty === 'easy') { a = _R(12, 30); b = _R(3, 9); }
+  else if (difficulty === 'medium') { a = _R(15, 60); b = _R(11, 25); }
+  else { a = _R(110, 480); b = _R(12, 30); }
+  const scenes = [
+    () => ({ q: 'Each forge-crate holds ' + a + ' iron ingots. A wagon carries ' + b + ' crates. How many ingots in all?', }),
+    () => ({ q: 'A foundry worker rivets ' + a + ' bolts an hour. How many bolts after ' + b + ' hours?', }),
+    () => ({ q: 'Each war-banner needs ' + a + ' threads of gold. The quartermaster orders ' + b + ' banners. How many threads of gold?', }),
+    () => ({ q: 'A coal-cart holds ' + a + ' lumps. The furnace devours ' + b + ' carts a day. How many lumps a day?', })
+  ];
+  return {
+    question: _pick(scenes)().q,
+    answer: String(a * b),
+    hint: a + ' × ' + b,
+    topic: 'multidigit_multiply_word',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_multidigit_divide_word(difficulty) {
+  let q, d;
+  if (difficulty === 'easy') { q = _R(4, 12); d = _R(3, 8); }
+  else if (difficulty === 'medium') { q = _R(8, 30); d = _R(6, 15); }
+  else { q = _R(12, 40); d = _R(14, 28); }
+  const remainder = Math.random() < 0.4;
+  if (remainder) {
+    const r = _R(1, d - 1);
+    const total = q * d + r;
+    return {
+      question: total + ' bolts are packed ' + d + ' to a box. How many bolts are LEFT OVER after filling every full box?',
+      answer: String(r),
+      hint: total + ' ÷ ' + d + ' has a remainder. ' + d + ' × ' + q + ' = ' + (q * d) + ', so ' + total + ' − ' + (q * d) + ' = ?',
+      topic: 'multidigit_divide_word',
+      difficulty: difficulty,
+      format: 'input'
+    };
+  }
+  const total = q * d;
+  const scenes = [
+    () => ({ q: total + ' ingots are shared equally among ' + d + ' forges. How many ingots per forge?' }),
+    () => ({ q: total + ' rivets are packed ' + d + ' to a pouch. How many full pouches?' }),
+    () => ({ q: 'The march covers ' + total + ' miles in ' + d + ' equal days. How many miles per day?' })
+  ];
+  return {
+    question: _pick(scenes)().q,
+    answer: String(q),
+    hint: total + ' ÷ ' + d,
+    topic: 'multidigit_divide_word',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_unknown_factor(difficulty) {
+  let a, q;
+  if (difficulty === 'easy') { a = _R(3, 9); q = _R(11, 30); }
+  else if (difficulty === 'medium') { a = _R(6, 15); q = _R(12, 40); }
+  else { a = _R(12, 25); q = _R(15, 60); }
+  const product = a * q;
+  // randomly hide which factor
+  if (Math.random() < 0.5) {
+    return {
+      question: a + ' × ? = ' + product + '. What is the missing factor?',
+      answer: String(q),
+      hint: 'Divide: ' + product + ' ÷ ' + a,
+      topic: 'unknown_factor',
+      difficulty: difficulty,
+      format: 'input'
+    };
+  }
+  return {
+    question: '? × ' + a + ' = ' + product + '. What is the missing factor?',
+    answer: String(q),
+    hint: 'Divide: ' + product + ' ÷ ' + a,
+    topic: 'unknown_factor',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+// ======================================================
 // DISPATCH
 // ======================================================
 const GENERATORS = {
@@ -584,7 +751,14 @@ const GENERATORS = {
   area_fractional_sides: gen_area_fractional_sides,
   divide_unit_fraction_by_whole: gen_divide_unit_fraction_by_whole,
   divide_whole_by_unit_fraction: gen_divide_whole_by_unit_fraction,
-  compare_products_scaling: gen_compare_products_scaling
+  compare_products_scaling: gen_compare_products_scaling,
+  // Act III (Unit 4)
+  estimate_product: gen_estimate_product,
+  estimate_quotient: gen_estimate_quotient,
+  partial_products: gen_partial_products,
+  multidigit_multiply_word: gen_multidigit_multiply_word,
+  multidigit_divide_word: gen_multidigit_divide_word,
+  unknown_factor: gen_unknown_factor
 };
 
 function generateProblem(topic, difficulty) {

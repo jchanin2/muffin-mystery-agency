@@ -632,9 +632,11 @@ const Art = {
         '<line x1="12" y1="20" x2="40" y2="80" stroke="#3a2010" stroke-width="1.5" stroke-dasharray="3 2"/>' +
         '<line x1="188" y1="20" x2="160" y2="80" stroke="#3a2010" stroke-width="1.5" stroke-dasharray="3 2"/>';
     } else {
-      // try Act II sprites
+      // try Act II / Act III sprites
       const act2 = this._enemyAct2(spriteId);
+      const act3 = act2 ? null : this._enemyAct3(spriteId);
       if (act2) inner = act2;
+      else if (act3) inner = act3;
       else inner = '<rect x="60" y="60" width="80" height="100" fill="#5a4838"/>';
     }
     return '<svg width="' + size + '" height="' + size * (250/200) + '" viewBox="' + vb + '" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>';
@@ -2257,6 +2259,729 @@ const Art = {
   },
 
   // --------------------------------------------------------
+  // ACT III — NPC PORTRAITS
+  // --------------------------------------------------------
+  serjeant_vol(size) {
+    const w = size || 80;
+    return '<svg width="' + w + '" height="' + w + '" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><radialGradient id="vol-bg"><stop offset="0" stop-color="#5a4838"/><stop offset="1" stop-color="#2a1810"/></radialGradient></defs>' +
+      '<circle cx="50" cy="50" r="48" fill="url(#vol-bg)"/>' +
+      // helmet
+      '<path d="M 28 44 Q 50 18 72 44 L 72 50 L 28 50 Z" fill="#6a6058" stroke="#1a1008" stroke-width="2"/>' +
+      '<rect x="26" y="44" width="48" height="6" fill="#4a4038" stroke="#1a1008" stroke-width="1"/>' +
+      '<polygon points="48,20 52,20 50,12" fill="#aa3838"/>' +
+      // face
+      '<ellipse cx="50" cy="58" rx="16" ry="17" fill="#cc9a70" stroke="#3a2010" stroke-width="0.8"/>' +
+      // ears
+      '<ellipse cx="34" cy="58" rx="3" ry="4" fill="#cc9a70"/>' +
+      '<ellipse cx="66" cy="58" rx="3" ry="4" fill="#cc9a70"/>' +
+      // scar
+      '<line x1="60" y1="50" x2="64" y2="66" stroke="#a86850" stroke-width="1.2"/>' +
+      // eyes (hard stare)
+      '<ellipse cx="44" cy="56" rx="1.6" ry="2" fill="#1a1008"/>' +
+      '<ellipse cx="56" cy="56" rx="1.6" ry="2" fill="#1a1008"/>' +
+      '<line x1="39" y1="52" x2="48" y2="53" stroke="#3a2010" stroke-width="1.6"/>' +
+      '<line x1="52" y1="53" x2="61" y2="52" stroke="#3a2010" stroke-width="1.6"/>' +
+      // stern mouth + stubble
+      '<path d="M 44 68 L 56 68" stroke="#3a2010" stroke-width="1.4"/>' +
+      '<path d="M 40 64 Q 50 74 60 64" fill="none" stroke="#5a4838" stroke-width="0.5" opacity="0.6"/>' +
+      // gorget
+      '<path d="M 30 80 Q 50 90 70 80 L 74 96 L 26 96 Z" fill="#4a4038" stroke="#1a1008" stroke-width="1"/>' +
+      '<circle cx="50" cy="84" r="2.5" fill="#d4a624"/>' +
+    '</svg>';
+  },
+
+  tinker_pell(size) {
+    const w = size || 80;
+    return '<svg width="' + w + '" height="' + w + '" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><radialGradient id="pell-bg"><stop offset="0" stop-color="#3a5868"/><stop offset="1" stop-color="#1a2838"/></radialGradient></defs>' +
+      '<circle cx="50" cy="50" r="48" fill="url(#pell-bg)"/>' +
+      // wild hair
+      '<path d="M 28 44 Q 30 20 50 22 Q 70 20 72 44 Q 64 36 50 38 Q 36 36 28 44 Z" fill="#a89878"/>' +
+      '<path d="M 26 40 L 20 34 M 74 40 L 80 34 M 30 30 L 28 22 M 70 30 L 72 22" stroke="#a89878" stroke-width="2"/>' +
+      // face
+      '<ellipse cx="50" cy="54" rx="16" ry="17" fill="#e0b888" stroke="#3a2010" stroke-width="0.8"/>' +
+      '<ellipse cx="34" cy="54" rx="3" ry="4" fill="#e0b888"/>' +
+      '<ellipse cx="66" cy="54" rx="3" ry="4" fill="#e0b888"/>' +
+      // goggles pushed up on forehead
+      '<circle cx="42" cy="42" r="6" fill="#2a3848" stroke="#bfa050" stroke-width="2"/>' +
+      '<circle cx="58" cy="42" r="6" fill="#2a3848" stroke="#bfa050" stroke-width="2"/>' +
+      '<circle cx="42" cy="42" r="2.5" fill="#88c4d8"/>' +
+      '<circle cx="58" cy="42" r="2.5" fill="#88c4d8"/>' +
+      '<line x1="48" y1="42" x2="52" y2="42" stroke="#bfa050" stroke-width="1.5"/>' +
+      // bright eyes
+      '<ellipse cx="44" cy="56" rx="2" ry="2.4" fill="#1a1008"/>' +
+      '<ellipse cx="56" cy="56" rx="2" ry="2.4" fill="#1a1008"/>' +
+      '<circle cx="44.6" cy="55.2" r="0.7" fill="#fff"/>' +
+      '<circle cx="56.6" cy="55.2" r="0.7" fill="#fff"/>' +
+      // grin
+      '<path d="M 42 64 Q 50 70 58 64" stroke="#3a2010" stroke-width="1.2" fill="none"/>' +
+      // collar + tools
+      '<path d="M 30 80 Q 50 90 70 80 L 74 96 L 26 96 Z" fill="#5a4828" stroke="#1a1008" stroke-width="1"/>' +
+      '<rect x="40" y="80" width="3" height="12" fill="#888"/>' +
+      '<rect x="56" y="80" width="3" height="12" fill="#bfa050"/>' +
+    '</svg>';
+  },
+
+  // --------------------------------------------------------
+  // ACT III — ENEMY SPRITES
+  // --------------------------------------------------------
+  _enemyAct3(spriteId) {
+    if (spriteId === 'cog_sprite') {
+      return (
+        '<ellipse cx="100" cy="238" rx="34" ry="6" fill="rgba(0,0,0,0.45)"/>' +
+        // floating gear body
+        '<g transform="translate(100,140)">' +
+        '<circle r="40" fill="#7a6048" stroke="#2a1810" stroke-width="2"/>' +
+        (() => { let s=''; for(let i=0;i<8;i++){const a=i*45*Math.PI/180;const x=Math.cos(a)*46,y=Math.sin(a)*46;s+='<rect x="'+(x-5)+'" y="'+(y-5)+'" width="10" height="10" fill="#7a6048" stroke="#2a1810" stroke-width="1" transform="rotate('+(i*45)+' '+x+' '+y+')"/>';} return s; })() +
+        '<circle r="26" fill="#9a7a52"/>' +
+        // single glowing eye
+        '<circle r="11" fill="#1a1008"/>' +
+        '<circle r="6" fill="#f0a838"/>' +
+        '<circle r="2.5" cy="-1" fill="#fff"/>' +
+        '</g>' +
+        // little arms
+        '<line x1="64" y1="150" x2="48" y2="170" stroke="#5a4838" stroke-width="4" stroke-linecap="round"/>' +
+        '<line x1="136" y1="150" x2="152" y2="170" stroke="#5a4838" stroke-width="4" stroke-linecap="round"/>' +
+        // sparks
+        '<circle cx="60" cy="120" r="1.5" fill="#f0d27a"/>' +
+        '<circle cx="146" cy="128" r="1.5" fill="#f0a838"/>'
+      );
+    }
+    if (spriteId === 'bolt_hound') {
+      return (
+        '<ellipse cx="100" cy="240" rx="70" ry="8" fill="rgba(0,0,0,0.5)"/>' +
+        // body
+        '<rect x="58" y="150" width="84" height="40" rx="8" fill="#6a6058" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="64" y="156" width="72" height="10" fill="#8a8078"/>' +
+        // plates
+        '<line x1="84" y1="150" x2="84" y2="190" stroke="#2a1810" stroke-width="1"/>' +
+        '<line x1="108" y1="150" x2="108" y2="190" stroke="#2a1810" stroke-width="1"/>' +
+        // head
+        '<polygon points="142,156 178,148 180,178 144,184" fill="#7a6858" stroke="#1a1008" stroke-width="2"/>' +
+        // jaw
+        '<polygon points="160,176 182,176 178,186 162,186" fill="#5a4838" stroke="#1a1008" stroke-width="1"/>' +
+        '<line x1="164" y1="176" x2="164" y2="186" stroke="#2a1810" stroke-width="0.8"/>' +
+        '<line x1="172" y1="176" x2="172" y2="186" stroke="#2a1810" stroke-width="0.8"/>' +
+        // eye
+        '<circle cx="160" cy="162" r="4" fill="#1a1008"/>' +
+        '<circle cx="160" cy="162" r="2" fill="#cc3030"/>' +
+        // ear antenna
+        '<line x1="150" y1="148" x2="146" y2="134" stroke="#2a1810" stroke-width="2"/>' +
+        '<circle cx="146" cy="132" r="2.5" fill="#f0a838"/>' +
+        // legs (piston)
+        '<rect x="66" y="190" width="8" height="44" fill="#4a4038" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="90" y="190" width="8" height="44" fill="#4a4038" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="114" y="190" width="8" height="44" fill="#4a4038" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="130" y="190" width="8" height="44" fill="#4a4038" stroke="#1a1008" stroke-width="1"/>' +
+        // tail
+        '<line x1="58" y1="160" x2="34" y2="150" stroke="#5a4838" stroke-width="5" stroke-linecap="round"/>' +
+        '<polygon points="34,150 26,144 30,156" fill="#7a6858"/>'
+      );
+    }
+    if (spriteId === 'slag_crawler') {
+      return (
+        '<ellipse cx="100" cy="240" rx="80" ry="9" fill="rgba(0,0,0,0.55)"/>' +
+        // molten segmented body
+        '<ellipse cx="48" cy="205" rx="22" ry="16" fill="#5a3018" stroke="#1a0808" stroke-width="2"/>' +
+        '<ellipse cx="84" cy="205" rx="24" ry="18" fill="#6a3818" stroke="#1a0808" stroke-width="2"/>' +
+        '<ellipse cx="120" cy="205" rx="22" ry="16" fill="#5a3018" stroke="#1a0808" stroke-width="2"/>' +
+        '<ellipse cx="150" cy="206" rx="18" ry="13" fill="#4a2810" stroke="#1a0808" stroke-width="1.5"/>' +
+        // molten cracks (glowing)
+        '<path d="M 38 200 Q 48 196 58 202" stroke="#f0a838" stroke-width="2" fill="none"/>' +
+        '<path d="M 74 198 Q 84 194 96 200" stroke="#f0d27a" stroke-width="2.5" fill="none"/>' +
+        '<path d="M 112 200 Q 120 196 130 202" stroke="#f0a838" stroke-width="2" fill="none"/>' +
+        // head
+        '<polygon points="20,200 36,186 50,192 48,216 34,222" fill="#7a4818" stroke="#1a0808" stroke-width="2"/>' +
+        '<circle cx="32" cy="198" r="3" fill="#1a0808"/>' +
+        '<circle cx="32" cy="198" r="1.5" fill="#f0d27a"/>' +
+        // mandibles
+        '<polygon points="20,202 12,200 20,208" fill="#3a2010"/>' +
+        '<polygon points="20,210 12,212 22,214" fill="#3a2010"/>' +
+        // back spines
+        '<polygon points="78,187 86,174 94,187" fill="#3a2010"/>' +
+        '<polygon points="112,189 120,178 128,189" fill="#3a2010"/>' +
+        // legs
+        '<g stroke="#2a1810" stroke-width="2.5">' +
+        '<line x1="60" y1="218" x2="56" y2="232"/><line x1="84" y1="220" x2="84" y2="234"/><line x1="108" y1="218" x2="112" y2="232"/><line x1="132" y1="218" x2="136" y2="230"/>' +
+        '</g>'
+      );
+    }
+    if (spriteId === 'forge_sentinel') {
+      return (
+        '<ellipse cx="100" cy="242" rx="60" ry="8" fill="rgba(0,0,0,0.55)"/>' +
+        // legs
+        '<rect x="74" y="196" width="20" height="44" fill="#4a4038" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="106" y="196" width="20" height="44" fill="#4a4038" stroke="#1a1008" stroke-width="2"/>' +
+        // torso (riveted plate)
+        '<rect x="60" y="120" width="80" height="80" rx="6" fill="#6a6058" stroke="#1a1008" stroke-width="2.5"/>' +
+        '<rect x="68" y="128" width="64" height="16" fill="#8a8078"/>' +
+        // rivets
+        '<circle cx="66" cy="126" r="2" fill="#3a3028"/><circle cx="134" cy="126" r="2" fill="#3a3028"/><circle cx="66" cy="194" r="2" fill="#3a3028"/><circle cx="134" cy="194" r="2" fill="#3a3028"/>' +
+        // furnace chest (glowing grate)
+        '<rect x="84" y="150" width="32" height="34" fill="#1a0808" stroke="#2a1810" stroke-width="1.5"/>' +
+        '<rect x="88" y="154" width="24" height="26" fill="#cc4818"/>' +
+        '<line x1="88" y1="162" x2="112" y2="162" stroke="#1a0808" stroke-width="1.5"/>' +
+        '<line x1="88" y1="170" x2="112" y2="170" stroke="#1a0808" stroke-width="1.5"/>' +
+        // arms with hammer
+        '<rect x="40" y="128" width="20" height="60" fill="#5a4838" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="140" y="128" width="20" height="50" fill="#5a4838" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="150" y="100" width="22" height="16" fill="#3a3838" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<rect x="158" y="116" width="6" height="64" fill="#3a2010"/>' +
+        // head
+        '<rect x="80" y="90" width="40" height="34" rx="4" fill="#7a6858" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="86" y="102" width="28" height="6" fill="#1a0808"/>' +
+        '<rect x="90" y="103" width="6" height="4" fill="#f0a838"/>' +
+        '<rect x="104" y="103" width="6" height="4" fill="#f0a838"/>' +
+        // chimney
+        '<rect x="94" y="80" width="12" height="12" fill="#3a2818"/>' +
+        '<ellipse cx="100" cy="78" rx="6" ry="3" fill="rgba(120,120,120,0.5)"/>'
+      );
+    }
+    if (spriteId === 'quartermaster_construct') {
+      return (
+        '<ellipse cx="100" cy="244" rx="78" ry="10" fill="rgba(0,0,0,0.6)"/>' +
+        // tall ledger-body
+        '<rect x="64" y="120" width="72" height="100" rx="4" fill="#5a4838" stroke="#1a1008" stroke-width="2.5"/>' +
+        // open ledger chest
+        '<rect x="74" y="140" width="52" height="40" fill="#f0e3bd" stroke="#3a2010" stroke-width="1.5"/>' +
+        '<line x1="100" y1="140" x2="100" y2="180" stroke="#aa8838" stroke-width="1"/>' +
+        '<line x1="80" y1="150" x2="96" y2="150" stroke="#3a2010" stroke-width="0.6"/>' +
+        '<line x1="80" y1="158" x2="96" y2="158" stroke="#3a2010" stroke-width="0.6"/>' +
+        '<line x1="104" y1="150" x2="120" y2="150" stroke="#3a2010" stroke-width="0.6"/>' +
+        '<text x="112" y="172" text-anchor="middle" fill="#5a1818" font-family="Cinzel" font-size="9">÷</text>' +
+        // abacus arms
+        '<rect x="34" y="130" width="30" height="70" rx="3" fill="#3a2818" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<line x1="38" y1="142" x2="60" y2="142" stroke="#5a4838" stroke-width="1"/>' +
+        '<line x1="38" y1="156" x2="60" y2="156" stroke="#5a4838" stroke-width="1"/>' +
+        '<line x1="38" y1="170" x2="60" y2="170" stroke="#5a4838" stroke-width="1"/>' +
+        '<line x1="38" y1="184" x2="60" y2="184" stroke="#5a4838" stroke-width="1"/>' +
+        '<circle cx="44" cy="142" r="2.5" fill="#d4a624"/><circle cx="52" cy="142" r="2.5" fill="#d4a624"/>' +
+        '<circle cx="44" cy="156" r="2.5" fill="#bfa050"/><circle cx="56" cy="156" r="2.5" fill="#bfa050"/>' +
+        '<circle cx="48" cy="170" r="2.5" fill="#d4a624"/>' +
+        '<circle cx="44" cy="184" r="2.5" fill="#bfa050"/><circle cx="52" cy="184" r="2.5" fill="#bfa050"/><circle cx="60" cy="184" r="2.5" fill="#bfa050"/>' +
+        '<rect x="136" y="130" width="30" height="70" rx="3" fill="#3a2818" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<line x1="140" y1="142" x2="162" y2="142" stroke="#5a4838" stroke-width="1"/>' +
+        '<line x1="140" y1="156" x2="162" y2="156" stroke="#5a4838" stroke-width="1"/>' +
+        '<line x1="140" y1="170" x2="162" y2="170" stroke="#5a4838" stroke-width="1"/>' +
+        '<circle cx="146" cy="142" r="2.5" fill="#d4a624"/><circle cx="154" cy="156" r="2.5" fill="#bfa050"/><circle cx="150" cy="170" r="2.5" fill="#d4a624"/>' +
+        // head — narrow with visor
+        '<rect x="82" y="84" width="36" height="40" rx="3" fill="#6a6058" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="86" y="98" width="28" height="6" fill="#1a0808"/>' +
+        '<rect x="90" y="99" width="5" height="4" fill="#88c4d8"/>' +
+        '<rect x="105" y="99" width="5" height="4" fill="#88c4d8"/>' +
+        // stamp crown
+        '<rect x="92" y="76" width="16" height="10" fill="#3a2818" stroke="#1a1008" stroke-width="1"/>' +
+        '<text x="100" y="84" text-anchor="middle" fill="#d4a624" font-family="Cinzel" font-size="7">QM</text>' +
+        // legs
+        '<rect x="74" y="220" width="16" height="24" fill="#4a4038" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="110" y="220" width="16" height="24" fill="#4a4038" stroke="#1a1008" stroke-width="2"/>'
+      );
+    }
+    if (spriteId === 'siege_breaker') {
+      return (
+        '<ellipse cx="100" cy="244" rx="92" ry="11" fill="rgba(0,0,0,0.6)"/>' +
+        // tracked base
+        '<rect x="30" y="206" width="140" height="30" rx="6" fill="#3a3028" stroke="#1a1008" stroke-width="2.5"/>' +
+        '<circle cx="48" cy="236" r="9" fill="#2a2018" stroke="#1a1008" stroke-width="2"/>' +
+        '<circle cx="80" cy="238" r="9" fill="#2a2018" stroke="#1a1008" stroke-width="2"/>' +
+        '<circle cx="120" cy="238" r="9" fill="#2a2018" stroke="#1a1008" stroke-width="2"/>' +
+        '<circle cx="152" cy="236" r="9" fill="#2a2018" stroke="#1a1008" stroke-width="2"/>' +
+        // hull
+        '<rect x="46" y="130" width="108" height="80" rx="6" fill="#6a5848" stroke="#1a1008" stroke-width="2.5"/>' +
+        '<polygon points="46,130 154,130 144,144 56,144" fill="#7a6858"/>' +
+        // multiply sigil
+        '<rect x="80" y="158" width="40" height="34" fill="#3a2818" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<text x="100" y="184" text-anchor="middle" fill="#f0a838" font-family="Cinzel" font-size="22">×</text>' +
+        // great ram/cannon
+        '<rect x="150" y="150" width="44" height="26" fill="#4a4038" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="190" y="156" width="8" height="14" fill="#1a0808"/>' +
+        '<polygon points="150,150 162,138 162,188 150,176" fill="#5a4838" stroke="#1a1008" stroke-width="1.5"/>' +
+        // smokestacks
+        '<rect x="58" y="106" width="12" height="26" fill="#3a2818" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<rect x="78" y="100" width="12" height="32" fill="#3a2818" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<ellipse cx="64" cy="102" rx="8" ry="4" fill="rgba(120,120,120,0.5)"/>' +
+        '<ellipse cx="84" cy="96" rx="9" ry="4" fill="rgba(120,120,120,0.5)"/>' +
+        // head/cabin
+        '<rect x="100" y="96" width="38" height="36" rx="3" fill="#7a6858" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="106" y="108" width="26" height="8" fill="#1a0808"/>' +
+        '<rect x="110" y="109" width="6" height="6" fill="#cc3030"/>' +
+        '<rect x="122" y="109" width="6" height="6" fill="#cc3030"/>'
+      );
+    }
+    if (spriteId === 'foundry_mind') {
+      return (
+        '<defs>' +
+          '<radialGradient id="fm-core" cx="0.5" cy="0.5" r="0.6">' +
+            '<stop offset="0" stop-color="#f0d27a"/>' +
+            '<stop offset="0.5" stop-color="#f0843a"/>' +
+            '<stop offset="1" stop-color="#7a1808"/>' +
+          '</radialGradient>' +
+        '</defs>' +
+        '<ellipse cx="100" cy="244" rx="96" ry="13" fill="rgba(0,0,0,0.7)"/>' +
+        // great furnace housing
+        '<polygon points="24,230 36,90 164,90 176,230" fill="#3a2818" stroke="#1a0808" stroke-width="3"/>' +
+        '<polygon points="36,90 164,90 156,104 44,104" fill="#5a4030"/>' +
+        // pipes/arms reaching out
+        '<path d="M 36 130 Q 8 130 10 180" fill="none" stroke="#4a4038" stroke-width="8"/>' +
+        '<path d="M 164 130 Q 192 130 190 180" fill="none" stroke="#4a4038" stroke-width="8"/>' +
+        '<path d="M 40 110 Q 16 96 18 70" fill="none" stroke="#4a4038" stroke-width="6"/>' +
+        '<path d="M 160 110 Q 184 96 182 70" fill="none" stroke="#4a4038" stroke-width="6"/>' +
+        // gears on the housing
+        '<g transform="translate(54,210)"><circle r="14" fill="#5a4838" stroke="#1a1008" stroke-width="1.5"/>' +
+        (() => { let s=''; for(let i=0;i<8;i++){const a=i*45*Math.PI/180;s+='<rect x="'+(Math.cos(a)*16-3)+'" y="'+(Math.sin(a)*16-3)+'" width="6" height="6" fill="#5a4838" stroke="#1a1008" stroke-width="0.8"/>';} return s; })() +
+        '<circle r="5" fill="#3a2818"/></g>' +
+        '<g transform="translate(146,210)"><circle r="14" fill="#5a4838" stroke="#1a1008" stroke-width="1.5"/>' +
+        (() => { let s=''; for(let i=0;i<8;i++){const a=i*45*Math.PI/180;s+='<rect x="'+(Math.cos(a)*16-3)+'" y="'+(Math.sin(a)*16-3)+'" width="6" height="6" fill="#5a4838" stroke="#1a1008" stroke-width="0.8"/>';} return s; })() +
+        '<circle r="5" fill="#3a2818"/></g>' +
+        // glowing core (the "face")
+        '<circle cx="100" cy="160" r="50" fill="#1a0808" stroke="#2a1810" stroke-width="3"/>' +
+        '<circle cx="100" cy="160" r="40" fill="url(#fm-core)"/>' +
+        // grate bars over core
+        '<line x1="70" y1="140" x2="130" y2="140" stroke="#1a0808" stroke-width="3"/>' +
+        '<line x1="64" y1="160" x2="136" y2="160" stroke="#1a0808" stroke-width="3"/>' +
+        '<line x1="70" y1="180" x2="130" y2="180" stroke="#1a0808" stroke-width="3"/>' +
+        // eyes within the fire
+        '<ellipse cx="86" cy="152" rx="5" ry="7" fill="#1a0808"/>' +
+        '<ellipse cx="114" cy="152" rx="5" ry="7" fill="#1a0808"/>' +
+        '<circle cx="86" cy="152" r="2" fill="#f0d27a"/>' +
+        '<circle cx="114" cy="152" r="2" fill="#f0d27a"/>' +
+        // jagged mouth
+        '<polygon points="80,176 88,170 96,176 104,170 112,176 120,170 120,184 80,184" fill="#1a0808"/>' +
+        // numerals floating up from the chimney heat
+        '<text x="100" y="84" text-anchor="middle" fill="#f0a838" font-family="Cinzel" font-size="12" opacity="0.8">× ÷</text>' +
+        // top chimneys
+        '<rect x="60" y="64" width="16" height="28" fill="#2a1810" stroke="#1a0808" stroke-width="2"/>' +
+        '<rect x="124" y="64" width="16" height="28" fill="#2a1810" stroke="#1a0808" stroke-width="2"/>' +
+        '<ellipse cx="68" cy="62" rx="11" ry="5" fill="rgba(140,120,100,0.5)"/>' +
+        '<ellipse cx="132" cy="62" rx="11" ry="5" fill="rgba(140,120,100,0.5)"/>' +
+        // ember sparks
+        '<circle cx="100" cy="120" r="1.5" fill="#f0d27a"/>' +
+        '<circle cx="120" cy="110" r="1.5" fill="#f0a838"/>' +
+        '<circle cx="80" cy="112" r="1.5" fill="#f0a838"/>'
+      );
+    }
+    return null;
+  },
+
+  // --------------------------------------------------------
+  // ACT III — SCENE ILLUSTRATIONS
+  // --------------------------------------------------------
+  warMarchRoad() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><linearGradient id="wm-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a5868"/><stop offset="0.6" stop-color="#a88868"/><stop offset="1" stop-color="#caa878"/></linearGradient></defs>' +
+      '<rect width="800" height="240" fill="url(#wm-sky)"/>' +
+      // smoke on the horizon (the foundries)
+      '<ellipse cx="600" cy="150" rx="120" ry="40" fill="#5a4838" opacity="0.5"/>' +
+      '<rect x="560" y="120" width="14" height="40" fill="#2a1810"/>' +
+      '<rect x="590" y="110" width="14" height="50" fill="#2a1810"/>' +
+      '<rect x="620" y="124" width="14" height="36" fill="#2a1810"/>' +
+      '<path d="M 567 120 Q 560 100 572 84" stroke="rgba(90,72,56,0.6)" stroke-width="6" fill="none"/>' +
+      '<path d="M 597 110 Q 590 88 602 70" stroke="rgba(90,72,56,0.6)" stroke-width="7" fill="none"/>' +
+      // hills
+      '<polygon points="0,200 160,150 320,190 480,150 640,185 800,150 800,240 0,240" fill="#5a4838"/>' +
+      // muddy road
+      '<polygon points="320,360 360,200 440,200 560,360" fill="#4a3828"/>' +
+      '<polygon points="350,360 380,220 420,220 480,360" fill="#3a2818"/>' +
+      // ruts
+      '<line x1="380" y1="220" x2="360" y2="360" stroke="#2a1810" stroke-width="2"/>' +
+      '<line x1="420" y1="220" x2="470" y2="360" stroke="#2a1810" stroke-width="2"/>' +
+      // ground
+      '<rect y="240" width="800" height="120" fill="#5a4830"/>' +
+      // broken war machine (left)
+      '<g transform="translate(120,250)">' +
+        '<rect x="0" y="0" width="70" height="40" rx="4" fill="#5a4838" stroke="#1a1008" stroke-width="2" transform="rotate(-8)"/>' +
+        '<circle cx="10" cy="48" r="14" fill="#3a3028" stroke="#1a1008" stroke-width="2"/>' +
+        '<circle cx="58" cy="50" r="14" fill="#3a3028" stroke="#1a1008" stroke-width="2"/>' +
+        '<line x1="40" y1="0" x2="60" y2="-30" stroke="#4a4038" stroke-width="5"/>' +
+        '<rect x="56" y="-40" width="18" height="12" fill="#3a3838" transform="rotate(20 60 -34)"/>' +
+        // rust
+        '<circle cx="30" cy="14" r="3" fill="#7a3818" opacity="0.6"/>' +
+      '</g>' +
+      // signpost pointing to foundries
+      '<g transform="translate(640,250)">' +
+        '<line x1="0" y1="0" x2="0" y2="60" stroke="#3a2010" stroke-width="3"/>' +
+        '<polygon points="0,4 44,4 52,12 44,20 0,20" fill="#5a3818" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<text x="20" y="16" fill="#d4a624" font-family="IM Fell English SC" font-size="8">FOUNDRIES</text>' +
+      '</g>' +
+      // crows
+      '<path d="M 200 90 Q 208 84 216 90 Q 208 86 200 90" fill="#1a0808"/>' +
+      '<path d="M 260 70 Q 268 64 276 70 Q 268 66 260 70" fill="#1a0808"/>' +
+      // marching silhouettes
+      '<g transform="translate(400,300)" opacity="0.85">' +
+        '<rect x="-3" y="0" width="6" height="22" fill="#1a0808"/><ellipse cx="0" cy="-3" rx="4" ry="5" fill="#1a0808"/><line x1="5" y1="-8" x2="5" y2="14" stroke="#1a0808" stroke-width="1.5"/>' +
+      '</g>' +
+      '<g transform="translate(430,308)" opacity="0.8">' +
+        '<rect x="-3" y="0" width="6" height="20" fill="#1a0808"/><ellipse cx="0" cy="-3" rx="4" ry="5" fill="#1a0808"/>' +
+      '</g>' +
+    '</svg>';
+  },
+
+  cinderforgeTown() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><linearGradient id="cf-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3a48"/><stop offset="1" stop-color="#8a5838"/></linearGradient></defs>' +
+      '<rect width="800" height="240" fill="url(#cf-sky)"/>' +
+      // hazy red sun
+      '<circle cx="180" cy="120" r="34" fill="#e07838" opacity="0.7"/>' +
+      // distant smokestacks
+      '<g opacity="0.8">' +
+        '<rect x="40" y="120" width="16" height="100" fill="#2a1810"/>' +
+        '<rect x="70" y="140" width="16" height="80" fill="#2a1810"/>' +
+        '<rect x="720" y="110" width="18" height="110" fill="#2a1810"/>' +
+        '<rect x="750" y="130" width="16" height="90" fill="#2a1810"/>' +
+        '<path d="M 48 120 Q 42 100 54 84" stroke="rgba(90,72,56,0.6)" stroke-width="6" fill="none"/>' +
+        '<path d="M 728 110 Q 722 88 736 72" stroke="rgba(90,72,56,0.6)" stroke-width="7" fill="none"/>' +
+      '</g>' +
+      // palisade wall
+      '<rect y="170" width="800" height="20" fill="#3a2818"/>' +
+      '<g fill="#4a3018">' +
+        '<polygon points="40,170 56,170 48,158"/>' +
+        '<polygon points="120,170 136,170 128,158"/>' +
+        '<polygon points="200,170 216,170 208,158"/>' +
+        '<polygon points="600,170 616,170 608,158"/>' +
+        '<polygon points="700,170 716,170 708,158"/>' +
+      '</g>' +
+      // ground
+      '<rect y="190" width="800" height="170" fill="#4a3828"/>' +
+      // tavern/quartermaster depot (left)
+      '<g transform="translate(70,170)">' +
+        '<rect x="0" y="0" width="150" height="120" fill="#5a4030" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="-8" y="-16" width="166" height="18" fill="#3a2818" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="56" y="70" width="36" height="50" fill="#2a1810"/>' +
+        '<rect x="16" y="24" width="28" height="26" fill="#ffaa55" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<rect x="106" y="24" width="28" height="26" fill="#ffaa55" stroke="#1a1008" stroke-width="1.5"/>' +
+        // banner
+        '<polygon points="20,2 20,40 36,32 36,2" fill="#7a2828"/>' +
+        '<text x="74" y="-3" text-anchor="middle" fill="#d4a624" font-family="IM Fell English SC" font-size="9">DEPOT</text>' +
+      '</g>' +
+      // artificer workshop (right)
+      '<g transform="translate(560,180)">' +
+        '<rect x="0" y="0" width="150" height="110" fill="#4a4438" stroke="#1a1008" stroke-width="2"/>' +
+        '<polygon points="-8,2 75,-30 158,2" fill="#3a3428" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="58" y="62" width="34" height="48" fill="#2a1810"/>' +
+        // gear sign
+        '<g transform="translate(120,-12)"><circle r="10" fill="#bfa050" stroke="#1a1008" stroke-width="1.5"/>' +
+          (() => { let s=''; for(let i=0;i<8;i++){const a=i*45*Math.PI/180;s+='<rect x="'+(Math.cos(a)*11-2)+'" y="'+(Math.sin(a)*11-2)+'" width="4" height="4" fill="#bfa050"/>';} return s; })() +
+          '<circle r="3" fill="#3a2818"/></g>' +
+        '<rect x="18" y="24" width="26" height="24" fill="#88c4d8" stroke="#1a1008" stroke-width="1.5"/>' +
+      '</g>' +
+      // central forge fire (town square)
+      '<g transform="translate(400,250)">' +
+        '<rect x="-30" y="20" width="60" height="40" fill="#3a2818" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="-22" y="10" width="44" height="14" fill="#cc4818"/>' +
+        '<polygon points="-16,10 -8,-14 0,-2 8,-20 16,-2 20,-12 22,10" fill="#f0843a"/>' +
+        '<polygon points="-8,10 -2,-6 4,2 10,-10 14,10" fill="#f0d27a"/>' +
+        '<circle cx="0" cy="0" r="50" fill="#f0843a" opacity="0.12"/>' +
+      '</g>' +
+      // townsfolk silhouettes
+      '<g transform="translate(320,300)" opacity="0.85"><rect x="-3" y="0" width="6" height="22" fill="#1a0808"/><ellipse cx="0" cy="-3" rx="4" ry="5" fill="#1a0808"/></g>' +
+      '<g transform="translate(486,306)" opacity="0.85"><rect x="-3" y="0" width="6" height="20" fill="#1a0808"/><ellipse cx="0" cy="-3" rx="4" ry="5" fill="#1a0808"/></g>' +
+      // floating embers
+      '<circle cx="420" cy="200" r="1.5" fill="#f0a838"/><circle cx="380" cy="180" r="1.5" fill="#f0d27a"/><circle cx="450" cy="220" r="1.5" fill="#f0a838"/>' +
+    '</svg>';
+  },
+
+  quartermasterDepot() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<rect width="800" height="360" fill="#3a2c20"/>' +
+      '<rect width="800" height="90" fill="#2a1c14"/>' +
+      // beams
+      '<rect x="0" y="88" width="800" height="6" fill="#1a1008"/>' +
+      '<line x1="200" y1="0" x2="200" y2="88" stroke="#1a1008" stroke-width="4"/>' +
+      '<line x1="600" y1="0" x2="600" y2="88" stroke="#1a1008" stroke-width="4"/>' +
+      // floor
+      '<polygon points="0,270 800,270 760,360 40,360" fill="#4a3828"/>' +
+      // shelves of crates (back)
+      '<g transform="translate(40,120)">' +
+        '<rect x="0" y="0" width="240" height="150" fill="#3a2818" stroke="#1a1008" stroke-width="2"/>' +
+        '<line x1="0" y1="50" x2="240" y2="50" stroke="#1a1008" stroke-width="2"/>' +
+        '<line x1="0" y1="100" x2="240" y2="100" stroke="#1a1008" stroke-width="2"/>' +
+        // crates
+        '<rect x="8" y="8" width="40" height="38" fill="#6a4a28" stroke="#1a1008" stroke-width="1"/><text x="28" y="32" text-anchor="middle" fill="#d4a624" font-family="Cinzel" font-size="10">×</text>' +
+        '<rect x="54" y="8" width="40" height="38" fill="#6a4a28" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="100" y="8" width="40" height="38" fill="#5a3a20" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="150" y="8" width="40" height="38" fill="#6a4a28" stroke="#1a1008" stroke-width="1"/><text x="170" y="32" text-anchor="middle" fill="#d4a624" font-family="Cinzel" font-size="10">÷</text>' +
+        '<rect x="196" y="8" width="38" height="38" fill="#5a3a20" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="14" y="58" width="44" height="40" fill="#5a3a20" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="64" y="58" width="44" height="40" fill="#6a4a28" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="120" y="58" width="44" height="40" fill="#5a3a20" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="176" y="58" width="44" height="40" fill="#6a4a28" stroke="#1a1008" stroke-width="1"/>' +
+        // barrels bottom
+        '<rect x="10" y="108" width="30" height="40" rx="3" fill="#7a5828" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="50" y="108" width="30" height="40" rx="3" fill="#7a5828" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="150" y="108" width="30" height="40" rx="3" fill="#7a5828" stroke="#1a1008" stroke-width="1"/>' +
+      '</g>' +
+      // weapon rack (right)
+      '<g transform="translate(560,130)">' +
+        '<rect x="0" y="0" width="200" height="140" fill="#4a3828" stroke="#1a1008" stroke-width="2"/>' +
+        '<line x1="0" y1="20" x2="200" y2="20" stroke="#1a1008" stroke-width="2"/>' +
+        '<line x1="30" y1="20" x2="30" y2="140" stroke="#3a2818" stroke-width="3"/>' +
+        '<line x1="36" y1="24" x2="36" y2="130" stroke="#b8c0c8" stroke-width="3"/>' +
+        '<line x1="80" y1="24" x2="80" y2="130" stroke="#5a3818" stroke-width="4"/>' +
+        '<rect x="70" y="20" width="22" height="16" fill="#3a3838" stroke="#1a1008" stroke-width="1"/>' +
+        '<line x1="130" y1="24" x2="130" y2="130" stroke="#5a3818" stroke-width="3"/>' +
+        '<polygon points="118,28 142,22 148,40 124,46" fill="#888" stroke="#1a1008" stroke-width="1"/>' +
+        '<polygon points="170,30 186,24 188,120 172,124" fill="#6a6058" stroke="#1a1008" stroke-width="1.5"/>' +
+      '</g>' +
+      // counter (front)
+      '<g transform="translate(300,260)">' +
+        '<rect x="0" y="0" width="200" height="18" fill="#5a4030" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<rect x="0" y="18" width="200" height="60" fill="#3a2818" stroke="#1a1008" stroke-width="1.5"/>' +
+        // ledger + scale
+        '<rect x="20" y="-14" width="30" height="20" fill="#f0e3bd" stroke="#3a2010" stroke-width="1"/>' +
+        '<line x1="120" y1="-26" x2="180" y2="-26" stroke="#3a3838" stroke-width="2"/>' +
+        '<line x1="150" y1="-26" x2="150" y2="-6" stroke="#3a3838" stroke-width="1.5"/>' +
+        '<path d="M 120 -26 L 114 -16 L 126 -16 Z" fill="none" stroke="#3a3838" stroke-width="1"/>' +
+        '<path d="M 180 -26 L 174 -16 L 186 -16 Z" fill="none" stroke="#3a3838" stroke-width="1"/>' +
+      '</g>' +
+      // hanging lantern
+      '<g transform="translate(400,90)"><line x1="0" y1="0" x2="0" y2="20" stroke="#1a1008" stroke-width="1"/><rect x="-8" y="20" width="16" height="20" fill="#5a3818" stroke="#1a1008" stroke-width="1"/><rect x="-6" y="22" width="12" height="14" fill="#ffcc55"/><circle cx="0" cy="32" r="36" fill="#ffaa33" opacity="0.16"/></g>' +
+    '</svg>';
+  },
+
+  artificerWorkshop() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<rect width="800" height="360" fill="#2c3038"/>' +
+      '<rect width="800" height="90" fill="#1c2028"/>' +
+      '<polygon points="0,270 800,270 760,360 40,360" fill="#3a3e44"/>' +
+      // big blueprint on the wall
+      '<g transform="translate(60,110)">' +
+        '<rect x="0" y="0" width="200" height="150" fill="#2a4858" stroke="#1a2838" stroke-width="2"/>' +
+        '<g stroke="#6aa0c0" stroke-width="0.6" opacity="0.7">' +
+          '<line x1="0" y1="30" x2="200" y2="30"/><line x1="0" y1="60" x2="200" y2="60"/><line x1="0" y1="90" x2="200" y2="90"/><line x1="0" y1="120" x2="200" y2="120"/>' +
+          '<line x1="40" y1="0" x2="40" y2="150"/><line x1="80" y1="0" x2="80" y2="150"/><line x1="120" y1="0" x2="120" y2="150"/><line x1="160" y1="0" x2="160" y2="150"/>' +
+        '</g>' +
+        // a drawn gear + equation
+        '<circle cx="70" cy="70" r="28" fill="none" stroke="#a8d0e0" stroke-width="1.5"/>' +
+        '<circle cx="70" cy="70" r="8" fill="none" stroke="#a8d0e0" stroke-width="1.5"/>' +
+        '<circle cx="130" cy="100" r="16" fill="none" stroke="#a8d0e0" stroke-width="1.5"/>' +
+        '<text x="100" y="135" fill="#a8d0e0" font-family="Cinzel" font-size="10">24 × 13 = ?</text>' +
+      '</g>' +
+      // workbench with gears + tools (center/front)
+      '<g transform="translate(300,250)">' +
+        '<rect x="0" y="0" width="220" height="16" fill="#4a4438" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<rect x="8" y="16" width="10" height="60" fill="#3a3428"/>' +
+        '<rect x="202" y="16" width="10" height="60" fill="#3a3428"/>' +
+        // gears on bench
+        '<g transform="translate(40,-8)"><circle r="18" fill="#bfa050" stroke="#1a1008" stroke-width="1.5"/>' +
+          (() => { let s=''; for(let i=0;i<10;i++){const a=i*36*Math.PI/180;s+='<rect x="'+(Math.cos(a)*20-3)+'" y="'+(Math.sin(a)*20-3)+'" width="6" height="6" fill="#bfa050" stroke="#1a1008" stroke-width="0.6"/>';} return s; })() +
+          '<circle r="6" fill="#3a2818"/></g>' +
+        '<g transform="translate(78,4)"><circle r="11" fill="#9a8040" stroke="#1a1008" stroke-width="1.5"/>' +
+          (() => { let s=''; for(let i=0;i<8;i++){const a=i*45*Math.PI/180;s+='<rect x="'+(Math.cos(a)*13-2)+'" y="'+(Math.sin(a)*13-2)+'" width="4" height="4" fill="#9a8040"/>';} return s; })() +
+          '<circle r="3" fill="#3a2818"/></g>' +
+        // tools
+        '<line x1="140" y1="-6" x2="160" y2="-6" stroke="#3a3838" stroke-width="3"/>' +
+        '<rect x="158" y="-9" width="10" height="6" fill="#5a4838"/>' +
+        '<line x1="180" y1="-10" x2="190" y2="2" stroke="#888" stroke-width="2"/>' +
+        // springs
+        '<path d="M 110 -4 q 4 -6 8 0 q 4 6 8 0 q 4 -6 8 0" fill="none" stroke="#888" stroke-width="1.5"/>' +
+      '</g>' +
+      // shelf of small inventions (right)
+      '<g transform="translate(580,120)">' +
+        '<rect x="0" y="0" width="180" height="140" fill="#3a3e44" stroke="#1a1008" stroke-width="2"/>' +
+        '<line x1="0" y1="46" x2="180" y2="46" stroke="#1a1008" stroke-width="2"/>' +
+        '<line x1="0" y1="92" x2="180" y2="92" stroke="#1a1008" stroke-width="2"/>' +
+        // gizmos
+        '<circle cx="30" cy="28" r="12" fill="#bfa050" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="60" y="14" width="24" height="28" fill="#88c4d8" stroke="#1a1008" stroke-width="1"/>' +
+        '<polygon points="110,40 122,14 134,40" fill="#9a8040" stroke="#1a1008" stroke-width="1"/>' +
+        '<circle cx="160" cy="28" r="10" fill="#cc6838" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="14" y="58" width="30" height="28" fill="#5a4838" stroke="#1a1008" stroke-width="1"/>' +
+        '<circle cx="80" cy="72" r="13" fill="#bfa050" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="120" y="58" width="44" height="28" fill="#3a4858" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="20" y="104" width="40" height="30" fill="#6a5838" stroke="#1a1008" stroke-width="1"/>' +
+        '<circle cx="100" cy="118" r="14" fill="#9a8040" stroke="#1a1008" stroke-width="1"/>' +
+      '</g>' +
+      // ceiling lamp (electric-ish blue)
+      '<g transform="translate(400,90)"><line x1="0" y1="0" x2="0" y2="16" stroke="#1a1008" stroke-width="1"/><circle cx="0" cy="22" r="8" fill="#88c4d8"/><circle cx="0" cy="22" r="30" fill="#88c4d8" opacity="0.14"/></g>' +
+    '</svg>';
+  },
+
+  foundryExterior() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><linearGradient id="fe-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1c28"/><stop offset="1" stop-color="#7a3818"/></linearGradient></defs>' +
+      '<rect width="800" height="240" fill="url(#fe-sky)"/>' +
+      // the great foundry — huge dark structure
+      '<polygon points="80,240 80,120 200,80 360,110 360,240" fill="#2a2018" stroke="#1a1008" stroke-width="3"/>' +
+      '<polygon points="360,240 360,90 540,70 700,110 720,240" fill="#332620" stroke="#1a1008" stroke-width="3"/>' +
+      // many chimneys belching fire
+      '<g>' +
+        '<rect x="120" y="60" width="22" height="60" fill="#1a1008"/>' +
+        '<rect x="200" y="40" width="24" height="80" fill="#1a1008"/>' +
+        '<rect x="300" y="56" width="22" height="64" fill="#1a1008"/>' +
+        '<rect x="460" y="36" width="26" height="74" fill="#1a1008"/>' +
+        '<rect x="560" y="48" width="24" height="62" fill="#1a1008"/>' +
+        '<rect x="640" y="58" width="22" height="56" fill="#1a1008"/>' +
+        // fire tops
+        '<polygon points="124,60 131,40 138,60" fill="#f0843a"/>' +
+        '<polygon points="205,40 212,16 219,40" fill="#f0843a"/>' +
+        '<polygon points="304,56 311,38 318,56" fill="#f0843a"/>' +
+        '<polygon points="465,36 473,12 481,36" fill="#f0843a"/>' +
+        '<polygon points="564,48 571,28 578,48" fill="#f0843a"/>' +
+        // smoke
+        '<path d="M 131 40 Q 124 20 136 4" stroke="rgba(90,72,56,0.55)" stroke-width="6" fill="none"/>' +
+        '<path d="M 212 16 Q 205 -2 218 -16" stroke="rgba(90,72,56,0.55)" stroke-width="7" fill="none"/>' +
+        '<path d="M 473 12 Q 466 -6 480 -20" stroke="rgba(90,72,56,0.55)" stroke-width="7" fill="none"/>' +
+      '</g>' +
+      // glowing windows grid
+      '<g fill="#f0a838">' +
+        '<rect x="110" y="150" width="16" height="20"/><rect x="140" y="150" width="16" height="20"/><rect x="170" y="150" width="16" height="20"/>' +
+        '<rect x="110" y="185" width="16" height="20"/><rect x="170" y="185" width="16" height="20"/>' +
+        '<rect x="420" y="140" width="18" height="24"/><rect x="455" y="140" width="18" height="24"/><rect x="490" y="140" width="18" height="24"/><rect x="560" y="150" width="18" height="24"/>' +
+        '<rect x="420" y="180" width="18" height="24"/><rect x="490" y="180" width="18" height="24"/>' +
+      '</g>' +
+      // great gate (entrance) glowing
+      '<g transform="translate(400,170)">' +
+        '<path d="M -50 70 L -50 10 Q -50 -24 0 -24 Q 50 -24 50 10 L 50 70 Z" fill="#1a0808" stroke="#3a1810" stroke-width="3"/>' +
+        '<rect x="-56" y="6" width="6" height="64" fill="#3a2818"/>' +
+        '<rect x="50" y="6" width="6" height="64" fill="#3a2818"/>' +
+        '<polygon points="-12,-24 12,-24 14,-16 -14,-16" fill="#5a4838"/>' +
+        '<text x="0" y="-16" text-anchor="middle" fill="#f0a838" font-family="Cinzel" font-size="7">×÷</text>' +
+        // inner glow
+        '<ellipse cx="0" cy="60" rx="40" ry="12" fill="#cc4818" opacity="0.5"/>' +
+      '</g>' +
+      // ground + rails
+      '<rect y="240" width="800" height="120" fill="#2a1c14"/>' +
+      '<line x1="0" y1="300" x2="800" y2="300" stroke="#3a2818" stroke-width="2"/>' +
+      '<line x1="0" y1="312" x2="800" y2="312" stroke="#3a2818" stroke-width="2"/>' +
+      '<g stroke="#1a1008" stroke-width="1">' + (() => { let s=''; for(let x=20;x<800;x+=40){s+='<line x1="'+x+'" y1="298" x2="'+x+'" y2="314"/>';} return s; })() + '</g>' +
+      // ore cart
+      '<g transform="translate(180,288)"><rect x="0" y="0" width="56" height="24" fill="#4a3828" stroke="#1a1008" stroke-width="1.5"/><circle cx="12" cy="26" r="6" fill="#2a2018"/><circle cx="44" cy="26" r="6" fill="#2a2018"/><polygon points="8,-6 18,-10 26,-4" fill="#6a6058"/></g>' +
+      // ember rain
+      '<circle cx="300" cy="120" r="1.5" fill="#f0a838"/><circle cx="500" cy="100" r="1.5" fill="#f0d27a"/><circle cx="620" cy="140" r="1.5" fill="#f0a838"/><circle cx="250" cy="160" r="1.2" fill="#f0843a"/>' +
+    '</svg>';
+  },
+
+  foundryInterior() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><radialGradient id="fi-glow" cx="0.5" cy="0.7" r="0.7"><stop offset="0" stop-color="#f0843a" stop-opacity="0.4"/><stop offset="1" stop-color="#1a0808" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="800" height="360" fill="#1a1410"/>' +
+      '<rect width="800" height="360" fill="url(#fi-glow)"/>' +
+      // back wall with pipes
+      '<rect width="800" height="200" fill="#2a2018"/>' +
+      '<g stroke="#3a3028" stroke-width="8" fill="none">' +
+        '<path d="M 0 40 L 300 40 Q 320 40 320 60 L 320 120"/>' +
+        '<path d="M 800 60 L 500 60 Q 480 60 480 80 L 480 130"/>' +
+        '<path d="M 0 90 L 200 90"/>' +
+      '</g>' +
+      '<circle cx="320" cy="40" r="6" fill="#5a4838"/><circle cx="480" cy="60" r="6" fill="#5a4838"/>' +
+      // molten channel along the floor
+      '<polygon points="0,300 800,300 800,330 0,330" fill="#1a0808"/>' +
+      '<polygon points="0,306 800,306 800,324 0,324" fill="#cc4818"/>' +
+      '<polygon points="0,310 800,310 800,320 0,320" fill="#f0843a"/>' +
+      '<path d="M 0 315 Q 100 311 200 315 T 400 315 T 600 315 T 800 315" stroke="#f0d27a" stroke-width="2" fill="none" opacity="0.7"/>' +
+      // floor
+      '<rect y="330" width="800" height="30" fill="#2a1c14"/>' +
+      // big cauldron pouring (left)
+      '<g transform="translate(120,140)">' +
+        '<path d="M -40 0 Q -40 50 0 54 Q 40 50 40 0 Z" fill="#3a3028" stroke="#1a1008" stroke-width="2.5"/>' +
+        '<ellipse cx="0" cy="0" rx="40" ry="10" fill="#5a4838" stroke="#1a1008" stroke-width="2"/>' +
+        '<ellipse cx="0" cy="0" rx="32" ry="7" fill="#f0843a"/>' +
+        // pour
+        '<path d="M 36 4 Q 56 40 50 160" stroke="#f0a838" stroke-width="6" fill="none"/>' +
+        // chain
+        '<line x1="-30" y1="-6" x2="-40" y2="-60" stroke="#3a2818" stroke-width="2" stroke-dasharray="3 2"/>' +
+        '<line x1="30" y1="-6" x2="40" y2="-60" stroke="#3a2818" stroke-width="2" stroke-dasharray="3 2"/>' +
+      '</g>' +
+      // conveyor with parts (center)
+      '<g transform="translate(360,250)">' +
+        '<rect x="0" y="0" width="280" height="14" fill="#3a3028" stroke="#1a1008" stroke-width="2"/>' +
+        '<circle cx="14" cy="7" r="9" fill="#5a4838" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<circle cx="266" cy="7" r="9" fill="#5a4838" stroke="#1a1008" stroke-width="1.5"/>' +
+        // parts on belt
+        '<rect x="40" y="-16" width="20" height="16" fill="#6a6058" stroke="#1a1008" stroke-width="1"/>' +
+        '<circle cx="110" cy="-8" r="9" fill="#bfa050" stroke="#1a1008" stroke-width="1"/>' +
+        '<rect x="160" y="-16" width="20" height="16" fill="#6a6058" stroke="#1a1008" stroke-width="1"/>' +
+        '<circle cx="220" cy="-8" r="9" fill="#9a8040" stroke="#1a1008" stroke-width="1"/>' +
+        // support legs
+        '<rect x="20" y="14" width="6" height="60" fill="#3a2818"/>' +
+        '<rect x="254" y="14" width="6" height="60" fill="#3a2818"/>' +
+      '</g>' +
+      // giant gear turning (right back)
+      '<g transform="translate(680,150)"><circle r="60" fill="#3a3028" stroke="#1a1008" stroke-width="3"/>' +
+        (() => { let s=''; for(let i=0;i<12;i++){const a=i*30*Math.PI/180;s+='<rect x="'+(Math.cos(a)*64-7)+'" y="'+(Math.sin(a)*64-7)+'" width="14" height="14" fill="#3a3028" stroke="#1a1008" stroke-width="1.5" transform="rotate('+(i*30)+' '+(Math.cos(a)*64)+' '+(Math.sin(a)*64)+')"/>';} return s; })() +
+        '<circle r="40" fill="#4a4038"/><circle r="12" fill="#1a1008"/></g>' +
+      // hanging lamps
+      '<g transform="translate(300,40)"><line x1="0" y1="0" x2="0" y2="18" stroke="#1a1008" stroke-width="1"/><rect x="-7" y="18" width="14" height="16" fill="#5a3818"/><rect x="-5" y="20" width="10" height="11" fill="#ffcc55"/><circle cy="28" r="30" fill="#ffaa33" opacity="0.14"/></g>' +
+      // embers
+      '<circle cx="200" cy="200" r="1.5" fill="#f0a838"/><circle cx="420" cy="180" r="1.5" fill="#f0d27a"/><circle cx="560" cy="210" r="1.5" fill="#f0a838"/>' +
+    '</svg>';
+  },
+
+  foundryMindCore() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><radialGradient id="fmc-glow" cx="0.5" cy="0.45" r="0.6"><stop offset="0" stop-color="#f0843a" stop-opacity="0.5"/><stop offset="0.6" stop-color="#7a1808" stop-opacity="0.3"/><stop offset="1" stop-color="#0a0404" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="800" height="360" fill="#140a08"/>' +
+      '<rect width="800" height="360" fill="url(#fmc-glow)"/>' +
+      // vaulted machine walls
+      '<polygon points="0,0 120,0 80,200 0,220" fill="#2a1c14" stroke="#1a0808" stroke-width="2"/>' +
+      '<polygon points="800,0 680,0 720,200 800,220" fill="#2a1c14" stroke="#1a0808" stroke-width="2"/>' +
+      // huge pipes converging
+      '<g stroke="#3a3028" stroke-width="14" fill="none">' +
+        '<path d="M 40 40 Q 200 80 360 160"/>' +
+        '<path d="M 760 40 Q 600 80 440 160"/>' +
+        '<path d="M 80 320 Q 200 280 340 200"/>' +
+        '<path d="M 720 320 Q 600 280 460 200"/>' +
+      '</g>' +
+      // floor grating
+      '<polygon points="0,280 800,280 760,360 40,360" fill="#1a1008"/>' +
+      '<g stroke="#3a2818" stroke-width="1.5">' + (() => { let s=''; for(let x=60;x<780;x+=44){s+='<line x1="'+x+'" y1="284" x2="'+(x-20)+'" y2="356"/>';} for(let y=292;y<356;y+=18){s+='<line x1="40" y1="'+y+'" x2="760" y2="'+y+'"/>';} return s; })() + '</g>' +
+      // molten pits glowing through grate
+      '<ellipse cx="200" cy="330" rx="60" ry="14" fill="#cc4818" opacity="0.5"/>' +
+      '<ellipse cx="600" cy="330" rx="60" ry="14" fill="#cc4818" opacity="0.5"/>' +
+      // central dais where the boss sits
+      '<ellipse cx="400" cy="300" rx="120" ry="26" fill="#2a1c14" stroke="#1a0808" stroke-width="2"/>' +
+      '<ellipse cx="400" cy="296" rx="100" ry="20" fill="#3a2818"/>' +
+      '<ellipse cx="400" cy="294" rx="70" ry="12" fill="#5a4030"/>' +
+      // hanging chains
+      '<line x1="260" y1="0" x2="300" y2="120" stroke="#3a2818" stroke-width="2" stroke-dasharray="4 3"/>' +
+      '<line x1="540" y1="0" x2="500" y2="120" stroke="#3a2818" stroke-width="2" stroke-dasharray="4 3"/>' +
+      // floating numerals in the heat
+      '<text x="320" y="120" fill="#f0a838" font-family="Cinzel" font-size="16" opacity="0.5">×</text>' +
+      '<text x="470" y="100" fill="#f0a838" font-family="Cinzel" font-size="16" opacity="0.5">÷</text>' +
+      '<text x="400" y="80" fill="#f0d27a" font-family="Cinzel" font-size="14" opacity="0.4">= ?</text>' +
+      // ember rain
+      '<circle cx="300" cy="160" r="1.5" fill="#f0a838"/><circle cx="500" cy="150" r="1.5" fill="#f0d27a"/><circle cx="420" cy="120" r="1.5" fill="#f0a838"/><circle cx="360" cy="180" r="1.2" fill="#f0843a"/>' +
+    '</svg>';
+  },
+
+  foundryDawn() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><linearGradient id="fd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4868"/><stop offset="0.5" stop-color="#c8a0a0"/><stop offset="1" stop-color="#f0d2a4"/></linearGradient></defs>' +
+      '<rect width="800" height="240" fill="url(#fd-sky)"/>' +
+      // soft dawn sun
+      '<circle cx="400" cy="200" r="70" fill="#f0d27a" opacity="0.85"/>' +
+      '<circle cx="400" cy="200" r="110" fill="#f0d27a" opacity="0.2"/>' +
+      // the foundry — now quiet, chimneys cold (only thin white steam)
+      '<polygon points="80,240 80,130 220,100 380,130 380,240" fill="#3a3038" opacity="0.9"/>' +
+      '<polygon points="380,240 380,120 560,100 720,130 720,240" fill="#43383c" opacity="0.9"/>' +
+      '<g fill="#2a2028">' +
+        '<rect x="140" y="80" width="20" height="50"/><rect x="220" y="64" width="22" height="66"/><rect x="320" y="78" width="20" height="52"/><rect x="480" y="64" width="24" height="66"/><rect x="580" y="76" width="22" height="54"/>' +
+      '</g>' +
+      // thin white steam (not fire)
+      '<path d="M 150 80 Q 146 60 154 44" stroke="rgba(240,240,240,0.5)" stroke-width="4" fill="none"/>' +
+      '<path d="M 231 64 Q 227 44 235 28" stroke="rgba(240,240,240,0.5)" stroke-width="5" fill="none"/>' +
+      '<path d="M 491 64 Q 487 44 495 28" stroke="rgba(240,240,240,0.45)" stroke-width="5" fill="none"/>' +
+      // a single banner raised on the gate
+      '<line x1="400" y1="140" x2="400" y2="96" stroke="#bfa050" stroke-width="2"/>' +
+      '<polygon points="400,98 432,108 428,124 400,116" fill="#d4a624"/>' +
+      // ground
+      '<rect y="240" width="800" height="120" fill="#3a3028"/>' +
+      // grass returning at the edges
+      '<g stroke="#5a7848" stroke-width="2">' +
+        '<line x1="40" y1="300" x2="40" y2="290"/><line x1="46" y1="302" x2="44" y2="292"/><line x1="52" y1="300" x2="54" y2="290"/>' +
+        '<line x1="760" y1="300" x2="760" y2="290"/><line x1="766" y1="302" x2="764" y2="292"/><line x1="754" y1="300" x2="756" y2="290"/>' +
+      '</g>' +
+      // two figures looking at the dawn
+      '<g transform="translate(360,300)" opacity="0.9"><rect x="-3" y="0" width="6" height="24" fill="#2a1810"/><ellipse cx="0" cy="-4" rx="5" ry="6" fill="#2a1810"/></g>' +
+      '<g transform="translate(420,304)" opacity="0.9"><rect x="-3" y="0" width="6" height="22" fill="#2a1810"/><ellipse cx="0" cy="-4" rx="4" ry="5" fill="#2a1810"/></g>' +
+      // birds
+      '<path d="M 200 80 Q 208 74 216 80 Q 208 76 200 80" fill="#2a1810"/>' +
+      '<path d="M 560 70 Q 568 64 576 70 Q 568 66 560 70" fill="#2a1810"/>' +
+    '</svg>';
+  },
+
+  // --------------------------------------------------------
   // ITEM ICONS — small 40x40 svgs
   // --------------------------------------------------------
   itemIcon(itemId) {
@@ -2296,7 +3021,21 @@ const Art = {
       sextant_of_wholeness: '<circle cx="20" cy="22" r="12" fill="rgba(212,166,36,0.18)" stroke="#d4a624" stroke-width="2"/><polygon points="20,10 24,22 20,34 16,22" fill="#d4a624"/><polygon points="8,22 20,18 32,22 20,26" fill="#d4a624"/><circle cx="20" cy="22" r="2" fill="#fff"/>',
       navigators_locket: '<ellipse cx="20" cy="22" rx="8" ry="10" fill="#bfa050" stroke="#3a2010" stroke-width="1.5"/><line x1="12" y1="10" x2="28" y2="10" stroke="#bfa050" stroke-width="0.8"/><text x="20" y="25" text-anchor="middle" fill="#1a1008" font-family="Cinzel" font-size="8">∞</text>',
       smoked_kipper:    '<ellipse cx="20" cy="22" rx="14" ry="6" fill="#7a5828" stroke="#3a1808" stroke-width="1"/><polygon points="34,20 38,22 34,24" fill="#7a5828" stroke="#3a1808" stroke-width="1"/><circle cx="10" cy="21" r="1" fill="#fff"/><circle cx="10" cy="21" r="0.5" fill="#1a1008"/>',
-      brine_phial:      '<rect x="16" y="6" width="8" height="6" fill="#5a3818"/><path d="M 14 12 L 14 30 Q 14 34 20 34 Q 26 34 26 30 L 26 12 Z" fill="#3a7898" stroke="#1a2838" stroke-width="1.5"/><ellipse cx="18" cy="18" rx="2" ry="3" fill="#88c4d8"/>'
+      brine_phial:      '<rect x="16" y="6" width="8" height="6" fill="#5a3818"/><path d="M 14 12 L 14 30 Q 14 34 20 34 Q 26 34 26 30 L 26 12 Z" fill="#3a7898" stroke="#1a2838" stroke-width="1.5"/><ellipse cx="18" cy="18" rx="2" ry="3" fill="#88c4d8"/>',
+      // Act III
+      forge_hammer:     '<line x1="20" y1="14" x2="20" y2="36" stroke="#5a3818" stroke-width="3"/><rect x="10" y="6" width="20" height="12" rx="2" fill="#5a5a5a" stroke="#1a1008" stroke-width="1.5"/><rect x="8" y="8" width="4" height="8" fill="#3a3a3a"/>',
+      repeater_sling:   '<path d="M 10 10 Q 20 6 30 10" fill="none" stroke="#5a3818" stroke-width="2"/><path d="M 10 10 L 18 24 L 22 24 L 30 10" fill="none" stroke="#7a5828" stroke-width="1.5"/><circle cx="20" cy="26" r="3" fill="#888"/>',
+      plated_brigandine:'<polygon points="10,8 30,8 32,32 8,32" fill="#5a5a5a" stroke="#1a1008" stroke-width="1.5"/><circle cx="14" cy="13" r="1.4" fill="#3a3a3a"/><circle cx="26" cy="13" r="1.4" fill="#3a3a3a"/><circle cx="14" cy="27" r="1.4" fill="#3a3a3a"/><circle cx="26" cy="27" r="1.4" fill="#3a3a3a"/><line x1="20" y1="8" x2="20" y2="32" stroke="#3a3a3a" stroke-width="0.8"/>',
+      artificer_vest:   '<polygon points="10,8 30,8 32,33 8,33" fill="#4a4438" stroke="#1a1008" stroke-width="1.5"/><rect x="13" y="16" width="6" height="8" fill="#3a3428"/><rect x="21" y="16" width="6" height="8" fill="#3a3428"/><circle cx="16" cy="12" r="1.2" fill="#bfa050"/>',
+      abacus_ring:      '<circle cx="20" cy="20" r="11" fill="none" stroke="#bfa050" stroke-width="2.5"/><line x1="9" y1="16" x2="31" y2="16" stroke="#3a2818" stroke-width="0.8"/><line x1="9" y1="24" x2="31" y2="24" stroke="#3a2818" stroke-width="0.8"/><circle cx="15" cy="16" r="1.6" fill="#d4a624"/><circle cx="24" cy="24" r="1.6" fill="#d4a624"/>',
+      ledger_seal:      '<rect x="10" y="10" width="20" height="22" fill="#5a3a20" stroke="#1a1008" stroke-width="1.5"/><rect x="13" y="13" width="14" height="16" fill="#f0e3bd"/><text x="20" y="25" text-anchor="middle" fill="#5a1818" font-family="Cinzel" font-size="11">÷</text>',
+      cinder_charm:     '<circle cx="20" cy="22" r="9" fill="#1a0808" stroke="#5a3818" stroke-width="1.5"/><circle cx="20" cy="22" r="5" fill="#f0843a"/><circle cx="20" cy="21" r="2" fill="#f0d27a"/><line x1="20" y1="8" x2="20" y2="13" stroke="#5a3818" stroke-width="1.5"/>',
+      multipliers_edge: '<line x1="20" y1="6" x2="20" y2="30" stroke="#cc8838" stroke-width="4" stroke-linecap="round"/><line x1="20" y1="6" x2="20" y2="30" stroke="#f0d27a" stroke-width="1.5"/><rect x="14" y="28" width="12" height="3" fill="#5a3818"/><text x="30" y="14" fill="#f0a838" font-family="Cinzel" font-size="9">×</text>',
+      dividing_engine:  '<rect x="10" y="12" width="20" height="18" rx="2" fill="#5a4838" stroke="#1a1008" stroke-width="1.5"/><circle cx="16" cy="21" r="4" fill="#bfa050"/><circle cx="26" cy="17" r="2.5" fill="#9a8040"/><text x="20" y="36" text-anchor="middle" fill="#bfa050" font-family="Cinzel" font-size="8">÷</text>',
+      warmarch_medal:   '<polygon points="20,6 24,16 20,14 16,16" fill="#aa3838"/><circle cx="20" cy="24" r="9" fill="#d4a624" stroke="#3a2010" stroke-width="1.5"/><text x="20" y="28" text-anchor="middle" fill="#5a3010" font-family="Cinzel" font-size="9">★</text>',
+      sabotage_kit:     '<rect x="9" y="14" width="22" height="16" rx="2" fill="#3a3028" stroke="#1a1008" stroke-width="1.5"/><line x1="14" y1="14" x2="14" y2="10" stroke="#888" stroke-width="1.5"/><circle cx="14" cy="9" r="2" fill="#888"/><rect x="20" y="18" width="8" height="3" fill="#bfa050"/>',
+      ration_tin:       '<rect x="11" y="12" width="18" height="20" rx="2" fill="#7a6048" stroke="#1a1008" stroke-width="1.5"/><ellipse cx="20" cy="12" rx="9" ry="2.5" fill="#9a8060"/><line x1="13" y1="20" x2="27" y2="20" stroke="#5a4838" stroke-width="0.8"/>',
+      oil_flask:        '<rect x="16" y="6" width="8" height="6" fill="#3a2010"/><path d="M 13 12 L 13 30 Q 13 34 20 34 Q 27 34 27 30 L 27 12 Z" fill="#caa030" stroke="#3a2010" stroke-width="1.5"/><ellipse cx="18" cy="18" rx="2" ry="3" fill="#f0d27a"/><text x="20" y="29" text-anchor="middle" fill="#5a3818" font-family="Cinzel" font-size="8">+</text>'
     };
     const inner = map[itemId] || '<rect x="8" y="8" width="24" height="24" fill="#5a3818" stroke="#3a2010" stroke-width="1.5"/>';
     return '<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +

@@ -115,7 +115,8 @@ const Act1 = {
     if (node === 'after_foreman') return 'Choose your path — descend to the void, or surface to track the corruption.';
     if (node === 'before_hollowed') return 'Face The Hollowed One in the heart of the Quarry.';
     if (node === 'act1_complete') return 'Act I complete. Rest, prepare, and return to Lysara to begin Act II.';
-    if (node === 'act2_complete') return 'Act II complete. Rest in Numeria — Act III will open when Lysara sends for you.';
+    if (node === 'act2_complete') return 'Act II complete. Visit Lysara\'s Tower to begin Act III — the Iron Foundries.';
+    if (node === 'act3_complete') return 'Act III complete. Rest in Numeria — Act IV will open when Lysara sends for you.';
     return 'Find the missing page of the Numerian Codex.';
   },
 
@@ -139,7 +140,7 @@ const Act1 = {
     locs.push({
       name: 'Lysara\'s Tower',
       desc: 'The scholar\'s study. Maps, books, and a glowing orb.',
-      badge: node === 'town_hub_first' ? 'QUEST' : ((node === 'act1_complete' || node === 'act2_complete') ? 'RETURN' : null),
+      badge: node === 'town_hub_first' ? 'QUEST' : ((node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete') ? 'RETURN' : null),
       action: () => Act1.enterLysara()
     });
 
@@ -153,8 +154,8 @@ const Act1 = {
       name: 'The Sundered Quarry',
       desc: node === 'town_hub_first'
         ? 'Closed to you — speak with Lysara first.'
-        : (node === 'act1_complete' || node === 'act2_complete' ? 'A quiet, empty pit, the corruption gone.' : 'The abandoned quarry, mouth like a wound in the earth.'),
-      disabled: node === 'town_hub_first' || node === 'act1_complete' || node === 'act2_complete',
+        : (node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete' ? 'A quiet, empty pit, the corruption gone.' : 'The abandoned quarry, mouth like a wound in the earth.'),
+      disabled: node === 'town_hub_first' || node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete',
       action: () => Act1.enterQuarry()
     });
 
@@ -274,13 +275,24 @@ const Act1 = {
         ]
       });
     } else if (node === 'act2_complete') {
-      // post-Act II conversation — Act III preview
+      // post-Act II conversation — leads into Act III
       Story.show({
         illustration: 'lysaraStudy',
         speaker: 'Lysara',
         text: '<p>She lays the salt-wet page beside the first, and they hum quietly together. "Two of six. ' + Game.hero.name + ', you have done in three months what I could not have done in three years."</p>' +
-              '<p>"Page Three I have not pinpointed yet. The compass points <em>north</em>, into the war-marches. There is something stirring in the iron foundries up there — I will have a fix soon. Rest. Trade. Equip. When I send for you again, the road will be hard."</p>' +
-              '<p style="color:#a890c0;font-style:italic;">(Act III is coming in the next build. For now, rest and explore.)</p>',
+              '<p>"Page Three is pinned at last. The compass points <em>north</em>, into the war-marches — to the <em>Iron Foundries</em> of Cinderforge. Something there has woken the old war-machines, and it counts its army in the thousands. Multiplication and division, ' + Game.hero.name + '. The math of armies. Mira will see you up the King\'s Road."</p>',
+        choices: [
+          { text: 'I\'m ready. March north.', tag: 'ACT III', go: () => Act3.beginOpening() },
+          { text: 'Not yet. I need to prepare.', go: () => Act1.openTownHub() }
+        ]
+      });
+    } else if (node === 'act3_complete') {
+      // post-Act III conversation — Act IV preview
+      Story.show({
+        illustration: 'lysaraStudy',
+        speaker: 'Lysara',
+        text: '<p>Three pages now rest on the desk, humming in chorus. "Halfway, ' + Game.hero.name + '. Halfway." She rubs her eyes. "The next is the strangest reading yet — it points <em>down</em>, beneath the old city, into the Deep Vaults where the merchants of Numeria once hid their fortunes in tenths and hundredths."</p>' +
+              '<p style="color:#a890c0;font-style:italic;">(Act IV — Decimals — is coming in the next build. For now, rest, spend your gold, and explore.)</p>',
         choices: [
           { text: 'Return to the village.', go: () => Act1.openTownHub() }
         ]
@@ -314,7 +326,7 @@ const Act1 = {
       text: '<p>You step into the open patch behind Dorrick\'s forge. A straw-dummy stands in a circle of chalk, and a small slate leans against the wall.</p>' + masteryLine,
       choices: [
         { text: 'Practice ' + (top ? topicName : 'a mixed set') + ' (5 problems)', go: () => Act1._runTraining(topic) },
-        { text: 'Back to the village.', go: () => Act1.openTownHub() }
+        { text: 'Back.', go: () => Game._routeForHero() }
       ]
     });
   },
@@ -383,7 +395,7 @@ const Act1 = {
     UI.openModal({
       title: passed ? 'Training Complete' : 'Training Done',
       body: '<p>You answered <strong>' + session.correct + ' of ' + session.total + '</strong> correctly.</p>' + reward + '<p style="font-style:italic;color:#c8b078;">Topic mastery has been recorded.</p>',
-      actions: [{ label: 'Back to the Village', kind: 'gold', click: () => { UI.closeModal(); Act1.openTownHub(); } }]
+      actions: [{ label: 'Done', kind: 'gold', click: () => { UI.closeModal(); Game._routeForHero(); } }]
     });
   },
 

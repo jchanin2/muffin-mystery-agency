@@ -266,6 +266,21 @@ const ITEMS = {
   sextant_of_wholeness: { id: 'sextant_of_wholeness', name: 'Sextant of Wholeness', slot: 'accessory', desc: 'Reforged from three island-pieces. The needle always finds the whole.', effect: { precision: 2, insight: 2, bonusTimer: 2 } },
   navigators_locket: { id: 'navigators_locket', name: 'Navigator\'s Locket', slot: 'accessory', desc: 'A small portrait of someone far away. A reminder.', effect: { wisdom: 1, stamina: 2, luck: 1 } },
 
+  // ---------- act III shop (quartermaster + artificer) ----------
+  forge_hammer:     { id: 'forge_hammer',     name: 'Forge-Hammer',     slot: 'weapon', desc: 'A smith\'s maul reforged for war. Heavy, certain.', effect: { precision: 3, stamina: 1 } },
+  repeater_sling:   { id: 'repeater_sling',   name: 'Repeater Sling',   slot: 'weapon', desc: 'Clockwork sling that loads itself. Quick and lucky.', effect: { speed: 2, luck: 2 } },
+  plated_brigandine:{ id: 'plated_brigandine',name: 'Plated Brigandine',slot: 'armor', desc: 'Iron plates riveted into leather. Soaks blows.', effect: { stamina: 4 } },
+  artificer_vest:   { id: 'artificer_vest',   name: 'Artificer\'s Vest', slot: 'armor', desc: 'Pockets of tools and chalk. +1 Insight, +1 Wisdom.', effect: { insight: 1, wisdom: 1, bonusHp: 5 } },
+  abacus_ring:      { id: 'abacus_ring',      name: 'Abacus Ring',      slot: 'accessory', desc: 'Beads click as you reckon. Sharpens multiplication.', effect: { precision: 1, insight: 1, bonusVsTopic: { multidigit_multiply: 3, partial_products: 3 } } },
+  ledger_seal:      { id: 'ledger_seal',      name: 'Quartermaster\'s Seal', slot: 'accessory', desc: 'A division stamp of the war-march. Cuts foes down to size.', effect: { precision: 1, bonusVsTopic: { multidigit_divide: 3, multidigit_divide_word: 3 } } },
+  cinder_charm:     { id: 'cinder_charm',     name: 'Cinder Charm',     slot: 'accessory', desc: 'A warm ember that never dies. +12 HP.', effect: { bonusHp: 12 } },
+
+  // ---------- act III loot drops ----------
+  multipliers_edge: { id: 'multipliers_edge', name: 'The Multiplier\'s Edge', slot: 'weapon', desc: 'Pried from the Foundry-Mind. Each strike reckons in the thousands.', effect: { precision: 4, luck: 1, bonusVsTopic: { multidigit_multiply: 4, estimate_product: 3 } } },
+  dividing_engine:  { id: 'dividing_engine',  name: 'The Dividing Engine', slot: 'accessory', desc: 'A brass core that splits any number cleanly. +2 Wisdom, +1 Insight.', effect: { wisdom: 2, insight: 1, bonusTimer: 2 } },
+  warmarch_medal:   { id: 'warmarch_medal',   name: 'War-March Medal',   slot: 'accessory', desc: 'Awarded for the Foundry. +2 Precision, +10 HP.', effect: { precision: 2, bonusHp: 10 } },
+  sabotage_kit:     { id: 'sabotage_kit',     name: 'Saboteur\'s Kit',   slot: 'accessory', desc: 'Lockpicks, fuses, chalk. +2 Speed, +1 Luck.', effect: { speed: 2, luck: 1 } },
+
   // ---------- consumables ----------
   minor_potion:     { id: 'minor_potion',     name: 'Minor Healing Draught', slot: 'consumable', desc: 'Restores 15 HP.',              effect: { heal: 15 } },
   greater_potion:   { id: 'greater_potion',   name: 'Greater Healing Draught', slot: 'consumable', desc: 'Restores 35 HP.',            effect: { heal: 35 } },
@@ -273,7 +288,9 @@ const ITEMS = {
   scroll_of_sight:  { id: 'scroll_of_sight',  name: 'Scroll of Sight',      slot: 'consumable', desc: 'One-time use: reveals the answer to the next problem.', effect: { reveal: true } },
   scroll_of_clemency: { id: 'scroll_of_clemency', name: 'Scroll of Clemency', slot: 'consumable', desc: 'Skip the current problem, no damage to either side.', effect: { skip: true } },
   smoked_kipper:    { id: 'smoked_kipper',    name: 'Smoked Kipper', slot: 'consumable', desc: 'A salty snack from the docks. Restores 20 HP.', effect: { heal: 20 } },
-  brine_phial:      { id: 'brine_phial',      name: 'Brine Phial', slot: 'consumable', desc: 'Stinging blue brew. Restores 3 spell slots.', effect: { restoreMp: 3 } }
+  brine_phial:      { id: 'brine_phial',      name: 'Brine Phial', slot: 'consumable', desc: 'Stinging blue brew. Restores 3 spell slots.', effect: { restoreMp: 3 } },
+  ration_tin:       { id: 'ration_tin',       name: 'Army Ration Tin', slot: 'consumable', desc: 'Dense, salty, filling. Restores 28 HP.', effect: { heal: 28 } },
+  oil_flask:        { id: 'oil_flask',        name: 'Flask of Quenching Oil', slot: 'consumable', desc: 'Restores 40 HP — the good stuff.', effect: { heal: 40 } }
 };
 
 // ------------------------------------------------------
@@ -302,8 +319,14 @@ const TOPICS = {
   compare_products_scaling:     { unit: 3, name: 'Compare products (scaling)' },
 
   // ---------- Unit 4: Multi-digit ----------
-  multidigit_multiply:  { unit: 4, name: 'Multi-digit multiplication' },
-  multidigit_divide:    { unit: 4, name: 'Multi-digit division' },
+  multidigit_multiply:       { unit: 4, name: 'Multi-digit multiplication' },
+  multidigit_divide:         { unit: 4, name: 'Multi-digit division' },
+  estimate_product:          { unit: 4, name: 'Estimating products' },
+  estimate_quotient:         { unit: 4, name: 'Estimating quotients' },
+  partial_products:          { unit: 4, name: 'Partial products' },
+  multidigit_multiply_word:  { unit: 4, name: 'Multiplication word problems' },
+  multidigit_divide_word:    { unit: 4, name: 'Division word problems' },
+  unknown_factor:            { unit: 4, name: 'Missing factor' },
 
   // ---------- Unit 5: Decimals ----------
   decimals_add:         { unit: 5, name: 'Adding decimals' },
@@ -363,6 +386,30 @@ const SHOPS = {
       { itemId: 'saltskin_jerkin', price: 80 },
       { itemId: 'netcaster_cloak', price: 95 },
       { itemId: 'brass_sextant',   price: 110 }
+    ]
+  },
+  quartermaster_depot: {
+    keeperId: 'serjeant_vol',
+    keeperName: 'Serjeant Vol',
+    keeperLine: '"Supplies are counted, soldier. Take what you can pay for and don\'t waste my powder."',
+    stock: [
+      { itemId: 'ration_tin',    price: 16 },
+      { itemId: 'oil_flask',     price: 40 },
+      { itemId: 'brine_phial',   price: 38 },
+      { itemId: 'forge_hammer',  price: 95 },
+      { itemId: 'plated_brigandine', price: 110 }
+    ]
+  },
+  artificer_workshop: {
+    keeperId: 'tinker_pell',
+    keeperName: 'Tinker Pell',
+    keeperLine: '"Numbers are just machines, friend. Wind them right and they do the work for you. Here — let me show you my wares."',
+    stock: [
+      { itemId: 'repeater_sling',  price: 100 },
+      { itemId: 'artificer_vest',  price: 120 },
+      { itemId: 'abacus_ring',     price: 130 },
+      { itemId: 'ledger_seal',     price: 130 },
+      { itemId: 'cinder_charm',    price: 85 }
     ]
   }
 };
@@ -478,6 +525,72 @@ const ENEMIES = {
     ],
     goldDrop: [100, 150], xpDrop: 360,
     guaranteedLoot: ['half_kings_horn', 'sextant_of_wholeness']
+  },
+  // ---------- Act III — The Iron Foundries ----------
+  cog_sprite: {
+    id: 'cog_sprite', name: 'Cog-Sprite',
+    hp: 40, attack: 9, spriteId: 'cog_sprite',
+    topic: 'estimate_product', difficulty: 'easy',
+    goldDrop: [6, 11], xpDrop: 34
+  },
+  bolt_hound: {
+    id: 'bolt_hound', name: 'Bolt-Hound',
+    hp: 52, attack: 11, spriteId: 'bolt_hound',
+    topic: 'multidigit_multiply', difficulty: 'medium',
+    goldDrop: [8, 14], xpDrop: 44
+  },
+  slag_crawler: {
+    id: 'slag_crawler', name: 'Slag-Crawler',
+    hp: 60, attack: 12, spriteId: 'slag_crawler',
+    topic: 'multidigit_divide', difficulty: 'medium',
+    goldDrop: [10, 16], xpDrop: 52
+  },
+  forge_sentinel: {
+    id: 'forge_sentinel', name: 'Forge-Sentinel',
+    hp: 74, attack: 13, spriteId: 'forge_sentinel',
+    topic: 'partial_products', difficulty: 'medium',
+    goldDrop: [12, 20], xpDrop: 64
+  },
+  // Mini-boss — SABOTAGE route (division-focused)
+  quartermaster_construct: {
+    id: 'quartermaster_construct', name: 'The Quartermaster-Construct',
+    hp: 195, attack: 14, spriteId: 'quartermaster_construct',
+    isBoss: true,
+    phases: [
+      { topic: 'multidigit_divide',      difficulty: 'medium', say: '"DIVIDE. ALLOCATE. RATION. You are a rounding error."' },
+      { topic: 'estimate_quotient',      difficulty: 'medium', say: '"ESTIMATE YOUR ODDS. THEY ARE POOR."' },
+      { topic: 'multidigit_divide_word', difficulty: 'hard',   say: '"REMAINDER: ONE. YOU."' }
+    ],
+    goldDrop: [55, 75], xpDrop: 150,
+    guaranteedLoot: ['dividing_engine']
+  },
+  // Mini-boss — ASSAULT route (multiplication-focused)
+  siege_breaker: {
+    id: 'siege_breaker', name: 'The Siege-Breaker',
+    hp: 210, attack: 16, spriteId: 'siege_breaker',
+    isBoss: true,
+    phases: [
+      { topic: 'multidigit_multiply',      difficulty: 'medium', say: '"MORE. ALWAYS MORE. MULTIPLY THE RUIN."' },
+      { topic: 'multidigit_multiply_word', difficulty: 'medium', say: '"COUNT MY LEGIONS, LITTLE ONE."' },
+      { topic: 'estimate_product',         difficulty: 'hard',   say: '"YOU CANNOT EVEN GUESS HOW MANY."' }
+    ],
+    goldDrop: [55, 75], xpDrop: 150,
+    guaranteedLoot: ['multipliers_edge']
+  },
+  // Act III final boss
+  foundry_mind: {
+    id: 'foundry_mind', name: 'The Foundry-Mind',
+    hp: 380, attack: 17, spriteId: 'foundry_mind',
+    isBoss: true,
+    phases: [
+      { topic: 'estimate_product',         difficulty: 'easy',   say: '"I AM THE SUM OF EVERY FORGE. ESTIMATE ME, IF YOU DARE."' },
+      { topic: 'multidigit_multiply',      difficulty: 'medium', say: '"MULTIPLY. I FEED ON FACTORS."' },
+      { topic: 'multidigit_divide',        difficulty: 'medium', say: '"DIVIDE ME, THEN. SEE WHAT REMAINS."' },
+      { topic: 'partial_products',         difficulty: 'hard',   say: '"BREAK ME APART. EVERY PART STILL BURNS."' },
+      { topic: 'multidigit_divide_word',   difficulty: 'hard',   say: '"ONE LAST RECKONING. MAKE IT EXACT."' }
+    ],
+    goldDrop: [120, 170], xpDrop: 420,
+    guaranteedLoot: ['warmarch_medal']
   },
   // Act I final boss
   hollowed_one: {
