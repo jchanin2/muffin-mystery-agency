@@ -116,7 +116,8 @@ const Act1 = {
     if (node === 'before_hollowed') return 'Face The Hollowed One in the heart of the Quarry.';
     if (node === 'act1_complete') return 'Act I complete. Rest, prepare, and return to Lysara to begin Act II.';
     if (node === 'act2_complete') return 'Act II complete. Visit Lysara\'s Tower to begin Act III — the Iron Foundries.';
-    if (node === 'act3_complete') return 'Act III complete. Rest in Numeria — Act IV will open when Lysara sends for you.';
+    if (node === 'act3_complete') return 'Act III complete. Visit Lysara\'s Tower to begin Act IV — the Deep Vaults.';
+    if (node === 'act4_complete') return 'Act IV complete. Rest in Numeria — Act V will open when Lysara sends for you.';
     return 'Find the missing page of the Numerian Codex.';
   },
 
@@ -140,7 +141,7 @@ const Act1 = {
     locs.push({
       name: 'Lysara\'s Tower',
       desc: 'The scholar\'s study. Maps, books, and a glowing orb.',
-      badge: node === 'town_hub_first' ? 'QUEST' : ((node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete') ? 'RETURN' : null),
+      badge: node === 'town_hub_first' ? 'QUEST' : ((node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete' || node === 'act4_complete') ? 'RETURN' : null),
       action: () => Act1.enterLysara()
     });
 
@@ -154,8 +155,8 @@ const Act1 = {
       name: 'The Sundered Quarry',
       desc: node === 'town_hub_first'
         ? 'Closed to you — speak with Lysara first.'
-        : (node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete' ? 'A quiet, empty pit, the corruption gone.' : 'The abandoned quarry, mouth like a wound in the earth.'),
-      disabled: node === 'town_hub_first' || node === 'act1_complete' || node === 'act2_complete' || node === 'act3_complete',
+        : (node !== 'in_quarry_entry' && node !== 'before_foreman' && node !== 'after_foreman' && node !== 'branch_descend' && node !== 'branch_surface' && node !== 'before_hollowed' ? 'A quiet, empty pit, the corruption gone.' : 'The abandoned quarry, mouth like a wound in the earth.'),
+      disabled: node !== 'in_quarry_entry' && node !== 'before_foreman' && node !== 'after_foreman' && node !== 'branch_descend' && node !== 'branch_surface' && node !== 'before_hollowed',
       action: () => Act1.enterQuarry()
     });
 
@@ -287,12 +288,24 @@ const Act1 = {
         ]
       });
     } else if (node === 'act3_complete') {
-      // post-Act III conversation — Act IV preview
+      // post-Act III conversation — leads into Act IV
       Story.show({
         illustration: 'lysaraStudy',
         speaker: 'Lysara',
-        text: '<p>Three pages now rest on the desk, humming in chorus. "Halfway, ' + Game.hero.name + '. Halfway." She rubs her eyes. "The next is the strangest reading yet — it points <em>down</em>, beneath the old city, into the Deep Vaults where the merchants of Numeria once hid their fortunes in tenths and hundredths."</p>' +
-              '<p style="color:#a890c0;font-style:italic;">(Act IV — Decimals — is coming in the next build. For now, rest, spend your gold, and explore.)</p>',
+        text: '<p>Three pages now rest on the desk, humming in chorus. "Halfway, ' + Game.hero.name + '. Halfway." She rubs her eyes. "The next reading is the strangest yet — it points <em>down</em>, beneath the old city, into the <em>Deep Vaults</em> where the merchant-princes of the first Numeria hid their fortunes in tenths and hundredths of a coin."</p>' +
+              '<p>"Something down there has been <em>skimming</em> — a sliver of value off everything, so small no one notices, until a whole city is poor. Decimals, ' + Game.hero.name + '. The little places where wealth quietly goes missing. Mira knows a way down through the old market well."</p>',
+        choices: [
+          { text: 'I\'m ready. Take me down.', tag: 'ACT IV', go: () => Act4.beginOpening() },
+          { text: 'Not yet. I need to prepare.', go: () => Act1.openTownHub() }
+        ]
+      });
+    } else if (node === 'act4_complete') {
+      // post-Act IV conversation — Act V preview
+      Story.show({
+        illustration: 'lysaraStudy',
+        speaker: 'Lysara',
+        text: '<p>Four pages, humming a chord that rattles the teacups. "Two left," she says softly. "And the fifth points <em>outward</em> — across the border, to the free cities, where the next page has set every market and every measure at war with itself. Fractions and conversions, ' + Game.hero.name + '. The math of trade and treaty."</p>' +
+              '<p style="color:#a890c0;font-style:italic;">(Act V — More Fractions &amp; Conversions — is coming in the next build. For now, rest, spend your gold, and explore.)</p>',
         choices: [
           { text: 'Return to the village.', go: () => Act1.openTownHub() }
         ]

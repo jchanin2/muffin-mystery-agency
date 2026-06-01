@@ -730,6 +730,173 @@ function gen_unknown_factor(difficulty) {
 }
 
 // ======================================================
+// UNIT 5: DECIMAL OPERATIONS
+// ======================================================
+function _roundp(n, p) { const m = Math.pow(10, p); return Math.round(n * m) / m; }
+
+function gen_decimals_subtract(difficulty) {
+  let places, a, b;
+  if (difficulty === 'easy') { places = 1; a = _R(20, 99) / 10; b = _R(5, 19) / 10; }
+  else if (difficulty === 'medium') { places = 2; a = _R(200, 999) / 100; b = _R(50, 199) / 100; }
+  else { places = 2; a = _R(500, 1999) / 100; b = _R(100, 499) / 100; }
+  if (b > a) { const t = a; a = b; b = t; }
+  a = _roundp(a, places); b = _roundp(b, places);
+  const ans = _roundp(a - b, places);
+  return {
+    question: 'What is ' + a + ' − ' + b + '?',
+    answer: String(ans),
+    hint: 'Line up the decimal points, then subtract.',
+    topic: 'decimals_subtract',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_decimals_multiply_whole(difficulty) {
+  let dec, w, places;
+  if (difficulty === 'easy') { places = 1; dec = _R(2, 9) / 10; w = _R(2, 9); }
+  else if (difficulty === 'medium') { places = 1; dec = _R(11, 49) / 10; w = _R(3, 12); }
+  else { places = 2; dec = _R(15, 95) / 100; w = _R(4, 20); }
+  dec = _roundp(dec, places);
+  const ans = _roundp(dec * w, places);
+  return {
+    question: 'What is ' + dec + ' × ' + w + '?',
+    answer: String(ans),
+    hint: 'Multiply as whole numbers (' + Math.round(dec * Math.pow(10, places)) + ' × ' + w + '), then place the decimal point ' + places + ' spot' + (places > 1 ? 's' : '') + ' in.',
+    topic: 'decimals_multiply_whole',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_decimals_multiply(difficulty) {
+  let a, b;
+  if (difficulty === 'easy') { a = _R(2, 9) / 10; b = _R(2, 9) / 10; }       // tenths × tenths
+  else if (difficulty === 'medium') { a = _R(11, 19) / 10; b = _R(2, 9) / 10; }
+  else { a = _R(11, 49) / 10; b = _R(11, 29) / 10; }
+  a = _roundp(a, 1); b = _roundp(b, 1);
+  const ans = _roundp(a * b, 2);
+  return {
+    question: 'What is ' + a + ' × ' + b + '?',
+    answer: String(ans),
+    hint: 'Multiply ' + Math.round(a * 10) + ' × ' + Math.round(b * 10) + ', then place TWO decimal digits.',
+    topic: 'decimals_multiply',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_decimals_divide_whole(difficulty) {
+  // (decimal quotient) × whole = decimal dividend
+  let q, w, places;
+  if (difficulty === 'easy') { places = 1; q = _R(2, 9) / 10; w = _R(2, 9); }
+  else if (difficulty === 'medium') { places = 1; q = _R(11, 39) / 10; w = _R(3, 9); }
+  else { places = 2; q = _R(15, 85) / 100; w = _R(4, 12); }
+  q = _roundp(q, places);
+  const dividend = _roundp(q * w, places + 1);
+  return {
+    question: 'What is ' + dividend + ' ÷ ' + w + '?',
+    answer: String(q),
+    hint: 'Divide as usual; the decimal point in the answer lines up above the one in ' + dividend + '.',
+    topic: 'decimals_divide_whole',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_divide_by_decimal(difficulty) {
+  let answer, divisor;
+  if (difficulty === 'easy') { answer = _R(2, 12); divisor = _pick([0.5, 0.2, 0.25]); }
+  else if (difficulty === 'medium') { answer = _R(5, 30); divisor = _pick([0.2, 0.4, 0.5, 0.25]); }
+  else { answer = _R(8, 40); divisor = _pick([0.25, 0.05, 0.125, 0.4]); }
+  let dividend = _roundp(answer * divisor, 3);
+  // ensure dividend is a whole number for a clean "whole ÷ decimal"
+  if (dividend !== Math.floor(dividend)) {
+    answer = _R(4, 20); divisor = _pick([0.5, 0.25, 0.2]);
+    dividend = _roundp(answer * divisor, 3);
+  }
+  return {
+    question: 'What is ' + dividend + ' ÷ ' + divisor + '?',
+    answer: String(answer),
+    hint: 'How many ' + divisor + 's fit into ' + dividend + '? (Tip: multiply both by ' + (divisor.toString().split('.')[1].length === 1 ? 10 : 100) + '.)',
+    topic: 'divide_by_decimal',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_round_decimal(difficulty) {
+  let n, place, placeName, ans;
+  if (difficulty === 'easy') { n = _R(100, 999) / 100; place = 1; placeName = 'tenth'; }
+  else if (difficulty === 'medium') { n = _R(1000, 9999) / 1000; place = 2; placeName = 'hundredth'; }
+  else { n = _R(1000, 9999) / 1000; place = (Math.random() < 0.5 ? 0 : 1); placeName = place === 0 ? 'whole number' : 'tenth'; }
+  ans = _roundp(n, place);
+  const ansStr = place === 0 ? String(Math.round(n)) : String(ans);
+  return {
+    question: 'Round ' + n + ' to the nearest ' + placeName + '.',
+    answer: ansStr,
+    hint: 'Look at the digit just to the right of the ' + placeName + ' place. 5 or more rounds up.',
+    topic: 'round_decimal',
+    difficulty: difficulty,
+    format: 'input'
+  };
+}
+
+function gen_compare_decimals(difficulty) {
+  let a, b, places;
+  if (difficulty === 'easy') { places = 1; a = _R(1, 9) / 10; b = _R(1, 9) / 10; }
+  else if (difficulty === 'medium') { places = 2; a = _R(10, 99) / 100; b = _R(10, 99) / 100; }
+  else { places = 3; a = _R(100, 999) / 1000; b = _R(100, 999) / 1000; }
+  // occasionally make them tricky (e.g., 0.7 vs 0.65)
+  if (Math.random() < 0.5) { a = _roundp(_R(1, 9) / 10, 1); b = _roundp(_R(10, 99) / 100, 2); }
+  a = _roundp(a, 3); b = _roundp(b, 3);
+  if (a === b) b = _roundp(b + 0.1, 3);
+  const greater = a > b ? a : b;
+  return {
+    question: 'Which is greater: ' + a + ' or ' + b + '?',
+    answer: String(greater),
+    hint: 'Compare place by place: tenths first, then hundredths, then thousandths.',
+    options: _shuffle([String(a), String(b)]),
+    topic: 'compare_decimals',
+    difficulty: difficulty,
+    format: 'mc'
+  };
+}
+
+function gen_decimal_place_value(difficulty) {
+  // build a decimal and ask the VALUE of a chosen digit
+  let digits, places;
+  if (difficulty === 'easy') { places = 2; }
+  else if (difficulty === 'medium') { places = 3; }
+  else { places = 3; }
+  const whole = _R(1, 9);
+  const frac = [];
+  for (let i = 0; i < places; i++) frac.push(_R(1, 9));
+  const numStr = whole + '.' + frac.join('');
+  // pick a fractional position to ask about
+  const pos = _R(1, places); // 1=tenths,2=hundredths,3=thousandths
+  const digit = frac[pos - 1];
+  const placeNames = { 1: 'tenths', 2: 'hundredths', 3: 'thousandths' };
+  const value = _roundp(digit / Math.pow(10, pos), pos);
+  const options = _shuffle([
+    String(value),
+    String(digit),
+    String(_roundp(digit / Math.pow(10, pos - 1), pos)),
+    String(_roundp(digit / Math.pow(10, pos + 1), pos + 1))
+  ].filter((v, i, arr) => arr.indexOf(v) === i));
+  if (options.indexOf(String(value)) < 0) options[0] = String(value);
+  return {
+    question: 'In ' + numStr + ', what is the VALUE of the digit in the ' + placeNames[pos] + ' place?',
+    answer: String(value),
+    hint: 'The ' + placeNames[pos] + ' digit is ' + digit + '. Its value is ' + digit + ' × ' + (1 / Math.pow(10, pos)) + '.',
+    options: options,
+    topic: 'decimal_place_value',
+    difficulty: difficulty,
+    format: 'mc'
+  };
+}
+
+// ======================================================
 // DISPATCH
 // ======================================================
 const GENERATORS = {
@@ -758,7 +925,16 @@ const GENERATORS = {
   partial_products: gen_partial_products,
   multidigit_multiply_word: gen_multidigit_multiply_word,
   multidigit_divide_word: gen_multidigit_divide_word,
-  unknown_factor: gen_unknown_factor
+  unknown_factor: gen_unknown_factor,
+  // Act IV (Unit 5)
+  decimals_subtract: gen_decimals_subtract,
+  decimals_multiply_whole: gen_decimals_multiply_whole,
+  decimals_multiply: gen_decimals_multiply,
+  decimals_divide_whole: gen_decimals_divide_whole,
+  divide_by_decimal: gen_divide_by_decimal,
+  round_decimal: gen_round_decimal,
+  compare_decimals: gen_compare_decimals,
+  decimal_place_value: gen_decimal_place_value
 };
 
 function generateProblem(topic, difficulty) {

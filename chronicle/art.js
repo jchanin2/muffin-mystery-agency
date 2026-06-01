@@ -632,11 +632,13 @@ const Art = {
         '<line x1="12" y1="20" x2="40" y2="80" stroke="#3a2010" stroke-width="1.5" stroke-dasharray="3 2"/>' +
         '<line x1="188" y1="20" x2="160" y2="80" stroke="#3a2010" stroke-width="1.5" stroke-dasharray="3 2"/>';
     } else {
-      // try Act II / Act III sprites
+      // try Act II / III / IV sprites
       const act2 = this._enemyAct2(spriteId);
       const act3 = act2 ? null : this._enemyAct3(spriteId);
+      const act4 = (act2 || act3) ? null : this._enemyAct4(spriteId);
       if (act2) inner = act2;
       else if (act3) inner = act3;
+      else if (act4) inner = act4;
       else inner = '<rect x="60" y="60" width="80" height="100" fill="#5a4838"/>';
     }
     return '<svg width="' + size + '" height="' + size * (250/200) + '" viewBox="' + vb + '" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>';
@@ -2982,6 +2984,413 @@ const Art = {
   },
 
   // --------------------------------------------------------
+  // ACT IV — NPC PORTRAITS
+  // --------------------------------------------------------
+  keeper_sable(size) {
+    const w = size || 80;
+    return '<svg width="' + w + '" height="' + w + '" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><radialGradient id="sab-bg"><stop offset="0" stop-color="#4a4030"/><stop offset="1" stop-color="#1a1408"/></radialGradient></defs>' +
+      '<circle cx="50" cy="50" r="48" fill="url(#sab-bg)"/>' +
+      // neat dark hair, parted, in a bun
+      '<path d="M 30 44 Q 50 22 70 44 Q 60 36 50 38 Q 40 36 30 44 Z" fill="#2a2018"/>' +
+      '<circle cx="50" cy="26" r="7" fill="#2a2018"/>' +
+      // face
+      '<ellipse cx="50" cy="54" rx="16" ry="18" fill="#caa478" stroke="#3a2010" stroke-width="0.8"/>' +
+      '<ellipse cx="34" cy="54" rx="3" ry="4" fill="#caa478"/>' +
+      '<ellipse cx="66" cy="54" rx="3" ry="4" fill="#caa478"/>' +
+      // half-moon spectacles
+      '<path d="M 38 56 Q 44 62 50 56" fill="none" stroke="#bfa050" stroke-width="1"/>' +
+      '<path d="M 50 56 Q 56 62 62 56" fill="none" stroke="#bfa050" stroke-width="1"/>' +
+      '<ellipse cx="44" cy="53" rx="1.5" ry="2" fill="#1a1008"/>' +
+      '<ellipse cx="56" cy="53" rx="1.5" ry="2" fill="#1a1008"/>' +
+      // calm mouth
+      '<path d="M 44 64 Q 50 67 56 64" stroke="#3a2010" stroke-width="1" fill="none"/>' +
+      // high collar + coin brooch
+      '<path d="M 32 80 Q 50 90 68 80 L 72 96 L 28 96 Z" fill="#3a3020" stroke="#1a1008" stroke-width="1"/>' +
+      '<circle cx="50" cy="84" r="3" fill="#d4a624" stroke="#3a2010" stroke-width="0.6"/>' +
+      '<text x="50" y="86.5" text-anchor="middle" fill="#3a2010" font-family="Cinzel" font-size="4">·01</text>' +
+    '</svg>';
+  },
+
+  assayer_fenn(size) {
+    const w = size || 80;
+    return '<svg width="' + w + '" height="' + w + '" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><radialGradient id="fenn-bg"><stop offset="0" stop-color="#3a4438"/><stop offset="1" stop-color="#141a14"/></radialGradient></defs>' +
+      '<circle cx="50" cy="50" r="48" fill="url(#fenn-bg)"/>' +
+      // bald with side hair
+      '<ellipse cx="50" cy="42" rx="17" ry="16" fill="#d0b088"/>' +
+      '<path d="M 33 46 Q 32 56 36 64 L 40 60 Q 36 52 38 46 Z" fill="#8a8078"/>' +
+      '<path d="M 67 46 Q 68 56 64 64 L 60 60 Q 64 52 62 46 Z" fill="#8a8078"/>' +
+      // face
+      '<ellipse cx="50" cy="52" rx="16" ry="17" fill="#d0b088" stroke="#3a2010" stroke-width="0.8"/>' +
+      // jeweler\'s loupe over one eye
+      '<circle cx="56" cy="52" r="6" fill="#1a2820" stroke="#bfa050" stroke-width="2"/>' +
+      '<circle cx="56" cy="52" r="2.5" fill="#88c4d8" opacity="0.7"/>' +
+      '<ellipse cx="44" cy="52" rx="1.6" ry="2" fill="#1a1008"/>' +
+      // brows
+      '<line x1="39" y1="48" x2="48" y2="48" stroke="#5a5048" stroke-width="1.2"/>' +
+      // thin mustache + mouth
+      '<path d="M 44 62 L 56 62" stroke="#5a5048" stroke-width="1.4"/>' +
+      '<path d="M 45 66 Q 50 69 55 66" stroke="#3a2010" stroke-width="1" fill="none"/>' +
+      // collar + tiny balance scale pin
+      '<path d="M 32 80 Q 50 90 68 80 L 72 96 L 28 96 Z" fill="#2a3328" stroke="#1a1008" stroke-width="1"/>' +
+      '<line x1="44" y1="86" x2="56" y2="86" stroke="#bfa050" stroke-width="1"/>' +
+      '<line x1="50" y1="84" x2="50" y2="88" stroke="#bfa050" stroke-width="1"/>' +
+      '<path d="M 44 86 l -2 3 l 4 0 z" fill="#bfa050"/>' +
+      '<path d="M 56 86 l -2 3 l 4 0 z" fill="#bfa050"/>' +
+    '</svg>';
+  },
+
+  // --------------------------------------------------------
+  // ACT IV — ENEMY SPRITES
+  // --------------------------------------------------------
+  _enemyAct4(spriteId) {
+    if (spriteId === 'coin_mite') {
+      return (
+        '<ellipse cx="100" cy="236" rx="34" ry="6" fill="rgba(0,0,0,0.45)"/>' +
+        // body — a big coin on legs
+        '<g transform="translate(100,150)">' +
+        '<ellipse cx="0" cy="0" rx="44" ry="44" fill="#d4a624" stroke="#7a5818" stroke-width="3"/>' +
+        '<ellipse cx="0" cy="0" rx="34" ry="34" fill="#e8c44a"/>' +
+        '<circle r="34" fill="none" stroke="#7a5818" stroke-width="1" stroke-dasharray="2 3"/>' +
+        // face stamped on coin
+        '<ellipse cx="-12" cy="-6" rx="4" ry="5" fill="#1a1008"/>' +
+        '<ellipse cx="12" cy="-6" rx="4" ry="5" fill="#1a1008"/>' +
+        '<circle cx="-11" cy="-7" r="1" fill="#fff"/><circle cx="13" cy="-7" r="1" fill="#fff"/>' +
+        '<path d="M -12 10 Q 0 18 12 10" stroke="#7a5818" stroke-width="2" fill="none"/>' +
+        '<text x="0" y="-18" text-anchor="middle" fill="#7a5818" font-family="Cinzel" font-size="8">0.1</text>' +
+        '</g>' +
+        // little legs + arms
+        '<line x1="84" y1="188" x2="78" y2="214" stroke="#7a5818" stroke-width="4" stroke-linecap="round"/>' +
+        '<line x1="116" y1="188" x2="122" y2="214" stroke="#7a5818" stroke-width="4" stroke-linecap="round"/>' +
+        '<line x1="58" y1="150" x2="40" y2="166" stroke="#7a5818" stroke-width="3.5" stroke-linecap="round"/>' +
+        '<line x1="142" y1="150" x2="160" y2="166" stroke="#7a5818" stroke-width="3.5" stroke-linecap="round"/>'
+      );
+    }
+    if (spriteId === 'ledger_shade') {
+      return (
+        '<ellipse cx="100" cy="240" rx="46" ry="7" fill="rgba(0,0,0,0.5)"/>' +
+        // floating tattered ledger-cloak
+        '<path d="M 60 120 Q 100 96 140 120 L 150 230 Q 130 214 120 230 Q 110 214 100 230 Q 90 214 80 230 Q 70 214 50 230 Z" fill="#2a2840" stroke="#14122a" stroke-width="2"/>' +
+        // open book at center
+        '<path d="M 76 150 Q 100 142 124 150 L 124 178 Q 100 170 76 178 Z" fill="#3a3858" stroke="#14122a" stroke-width="1.5"/>' +
+        '<path d="M 78 152 Q 100 146 100 150 L 100 174 Q 100 168 78 174 Z" fill="#e8e0c8"/>' +
+        '<path d="M 122 152 Q 100 146 100 150 L 100 174 Q 100 168 122 174 Z" fill="#e8e0c8"/>' +
+        '<line x1="82" y1="158" x2="96" y2="156" stroke="#3a2010" stroke-width="0.5"/>' +
+        '<line x1="82" y1="164" x2="96" y2="162" stroke="#3a2010" stroke-width="0.5"/>' +
+        '<text x="112" y="166" text-anchor="middle" fill="#7a1818" font-family="Cinzel" font-size="6">−</text>' +
+        // hood + glowing eyes
+        '<path d="M 76 118 Q 100 92 124 118 L 120 138 Q 100 126 80 138 Z" fill="#14122a" stroke="#0a0818" stroke-width="1.5"/>' +
+        '<ellipse cx="90" cy="122" rx="3" ry="4" fill="#88c4d8"/>' +
+        '<ellipse cx="110" cy="122" rx="3" ry="4" fill="#88c4d8"/>' +
+        // wispy hands
+        '<path d="M 60 150 Q 48 156 50 172" fill="none" stroke="#3a3858" stroke-width="4" stroke-linecap="round"/>' +
+        '<path d="M 140 150 Q 152 156 150 172" fill="none" stroke="#3a3858" stroke-width="4" stroke-linecap="round"/>'
+      );
+    }
+    if (spriteId === 'tarnish_ooze') {
+      return (
+        '<ellipse cx="100" cy="240" rx="64" ry="9" fill="rgba(0,0,0,0.5)"/>' +
+        // puddle body
+        '<path d="M 40 230 Q 30 180 60 170 Q 70 140 100 150 Q 130 140 140 170 Q 170 180 160 230 Z" fill="#5a6850" stroke="#2a3424" stroke-width="2"/>' +
+        // tarnish sheen
+        '<path d="M 60 200 Q 100 188 140 200" stroke="#8aa078" stroke-width="3" fill="none" opacity="0.6"/>' +
+        '<ellipse cx="78" cy="186" rx="6" ry="3" fill="#3a4830" opacity="0.7"/>' +
+        '<ellipse cx="122" cy="190" rx="7" ry="3" fill="#3a4830" opacity="0.7"/>' +
+        // coins half-dissolved in the ooze
+        '<circle cx="70" cy="214" r="6" fill="#9a7a2a" stroke="#5a4818" stroke-width="1" opacity="0.8"/>' +
+        '<circle cx="120" cy="218" r="5" fill="#9a7a2a" stroke="#5a4818" stroke-width="1" opacity="0.8"/>' +
+        '<circle cx="100" cy="222" r="4" fill="#9a7a2a" stroke="#5a4818" stroke-width="1" opacity="0.7"/>' +
+        // eyes
+        '<ellipse cx="86" cy="168" rx="5" ry="6" fill="#1a1008"/>' +
+        '<ellipse cx="114" cy="168" rx="5" ry="6" fill="#1a1008"/>' +
+        '<circle cx="87" cy="166" r="1.4" fill="#aaccaa"/><circle cx="115" cy="166" r="1.4" fill="#aaccaa"/>' +
+        // drippy mouth
+        '<path d="M 86 180 Q 100 190 114 180" stroke="#2a3424" stroke-width="2" fill="none"/>' +
+        '<path d="M 100 188 Q 98 196 102 200" stroke="#5a6850" stroke-width="3" fill="none"/>'
+      );
+    }
+    if (spriteId === 'vault_sentinel') {
+      return (
+        '<ellipse cx="100" cy="242" rx="58" ry="8" fill="rgba(0,0,0,0.55)"/>' +
+        // a great round vault-door given legs
+        '<rect x="76" y="196" width="18" height="44" fill="#3a3830" stroke="#1a1808" stroke-width="2"/>' +
+        '<rect x="106" y="196" width="18" height="44" fill="#3a3830" stroke="#1a1808" stroke-width="2"/>' +
+        '<circle cx="100" cy="150" r="58" fill="#5a5848" stroke="#1a1808" stroke-width="3"/>' +
+        '<circle cx="100" cy="150" r="48" fill="#6a6858" stroke="#1a1808" stroke-width="1.5"/>' +
+        '<circle cx="100" cy="150" r="36" fill="none" stroke="#3a3830" stroke-width="2" stroke-dasharray="3 4"/>' +
+        // vault wheel-handle (its "face")
+        '<g stroke="#3a3830" stroke-width="5">' +
+        '<line x1="100" y1="122" x2="100" y2="178"/>' +
+        '<line x1="72" y1="150" x2="128" y2="150"/>' +
+        '<line x1="80" y1="130" x2="120" y2="170"/>' +
+        '<line x1="80" y1="170" x2="120" y2="130"/>' +
+        '</g>' +
+        '<circle cx="100" cy="150" r="9" fill="#d4a624" stroke="#3a2010" stroke-width="1.5"/>' +
+        // glowing eye-slots
+        '<rect x="84" y="138" width="8" height="4" fill="#88c4d8"/>' +
+        '<rect x="108" y="138" width="8" height="4" fill="#88c4d8"/>' +
+        // arms (bolt-levers)
+        '<rect x="38" y="146" width="24" height="8" fill="#4a4838" stroke="#1a1808" stroke-width="1.5"/>' +
+        '<rect x="138" y="146" width="24" height="8" fill="#4a4838" stroke="#1a1808" stroke-width="1.5"/>'
+      );
+    }
+    if (spriteId === 'the_auditor') {
+      return (
+        '<ellipse cx="100" cy="244" rx="76" ry="10" fill="rgba(0,0,0,0.6)"/>' +
+        // tall stern figure with abacus-spine
+        '<rect x="70" y="118" width="60" height="106" rx="4" fill="#3a3850" stroke="#14122a" stroke-width="2.5"/>' +
+        // rows of beads down the chest (place-value columns)
+        (() => { let s=''; const cols=[78,90,102,114]; cols.forEach((x,ci)=>{ s+='<line x1="'+x+'" y1="128" x2="'+x+'" y2="214" stroke="#2a2840" stroke-width="2"/>'; for(let r=0;r<4;r++){ s+='<circle cx="'+x+'" cy="'+(136+r*20)+'" r="3" fill="'+(((ci+r)%2)?'#d4a624':'#88c4d8')+'"/>'; } }); return s; })() +
+        // tenths/hundredths labels
+        '<text x="100" y="232" text-anchor="middle" fill="#88c4d8" font-family="Cinzel" font-size="7">. 1 0 0</text>' +
+        // arms holding a quill + ledger
+        '<rect x="40" y="130" width="30" height="14" fill="#3a3850" stroke="#14122a" stroke-width="1.5" transform="rotate(-12 55 137)"/>' +
+        '<rect x="130" y="130" width="30" height="14" fill="#3a3850" stroke="#14122a" stroke-width="1.5" transform="rotate(12 145 137)"/>' +
+        '<line x1="36" y1="120" x2="30" y2="100" stroke="#5a5878" stroke-width="2"/>' + // quill
+        '<path d="M 30 100 Q 26 96 30 92" fill="none" stroke="#88c4d8" stroke-width="2"/>' +
+        // narrow head with monocle
+        '<rect x="84" y="86" width="32" height="36" rx="3" fill="#4a4860" stroke="#14122a" stroke-width="2"/>' +
+        '<circle cx="94" cy="102" r="6" fill="none" stroke="#bfa050" stroke-width="1.5"/>' +
+        '<ellipse cx="94" cy="102" rx="2" ry="2.5" fill="#88c4d8"/>' +
+        '<ellipse cx="108" cy="102" rx="2" ry="2.5" fill="#88c4d8"/>' +
+        '<path d="M 90 114 L 110 114" stroke="#14122a" stroke-width="1.5"/>' +
+        // tall scholar\'s cap
+        '<polygon points="84,86 116,86 100,68" fill="#2a2840" stroke="#14122a" stroke-width="1.5"/>' +
+        // legs
+        '<rect x="78" y="224" width="14" height="18" fill="#2a2840"/>' +
+        '<rect x="108" y="224" width="14" height="18" fill="#2a2840"/>'
+      );
+    }
+    if (spriteId === 'coin_hoard') {
+      return (
+        '<ellipse cx="100" cy="246" rx="92" ry="11" fill="rgba(0,0,0,0.6)"/>' +
+        // a great heap of coins forming a creature
+        '<path d="M 20 240 Q 30 170 80 160 Q 100 120 120 160 Q 170 170 180 240 Z" fill="#b8902a" stroke="#6a4818" stroke-width="2.5"/>' +
+        // individual coins in the pile
+        (() => { let s=''; const pts=[[50,210],[70,224],[95,214],[120,226],[150,210],[60,188],[100,196],[140,190],[80,206],[118,204],[40,228],[160,228],[100,176]]; pts.forEach((p,i)=>{ s+='<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="9" ry="9" fill="'+((i%2)?'#d4a624':'#e8c44a')+'" stroke="#6a4818" stroke-width="1"/>'; }); return s; })() +
+        // gem accents
+        '<polygon points="64,200 70,196 76,200 70,208" fill="#cc4878"/>' +
+        '<polygon points="132,198 138,194 144,198 138,206" fill="#3a78b8"/>' +
+        // face emerging at the top of the hoard
+        '<ellipse cx="100" cy="150" rx="30" ry="26" fill="#caa030" stroke="#6a4818" stroke-width="2"/>' +
+        '<ellipse cx="89" cy="146" rx="5" ry="7" fill="#1a1008"/>' +
+        '<ellipse cx="111" cy="146" rx="5" ry="7" fill="#1a1008"/>' +
+        '<circle cx="90" cy="144" r="1.6" fill="#f0d27a"/><circle cx="112" cy="144" r="1.6" fill="#f0d27a"/>' +
+        // greedy grin full of coins
+        '<path d="M 84 160 Q 100 176 116 160 L 112 168 Q 100 178 88 168 Z" fill="#1a1008"/>' +
+        '<rect x="90" y="161" width="4" height="6" fill="#e8c44a"/><rect x="98" y="162" width="4" height="6" fill="#e8c44a"/><rect x="106" y="161" width="4" height="6" fill="#e8c44a"/>' +
+        // grasping arms of coins
+        '<path d="M 70 160 Q 44 150 40 124" fill="none" stroke="#b8902a" stroke-width="9" stroke-linecap="round"/>' +
+        '<path d="M 130 160 Q 156 150 160 124" fill="none" stroke="#b8902a" stroke-width="9" stroke-linecap="round"/>' +
+        '<circle cx="40" cy="122" r="7" fill="#d4a624" stroke="#6a4818" stroke-width="1"/>' +
+        '<circle cx="160" cy="122" r="7" fill="#d4a624" stroke="#6a4818" stroke-width="1"/>'
+      );
+    }
+    if (spriteId === 'tithe_master') {
+      return (
+        '<defs>' +
+          '<radialGradient id="tm-core" cx="0.5" cy="0.5" r="0.6">' +
+            '<stop offset="0" stop-color="#0a0a14"/>' +
+            '<stop offset="0.7" stop-color="#1a1828"/>' +
+            '<stop offset="1" stop-color="#3a3858"/>' +
+          '</radialGradient>' +
+        '</defs>' +
+        '<ellipse cx="100" cy="246" rx="96" ry="13" fill="rgba(0,0,0,0.7)"/>' +
+        // towering cloaked figure of coins and shadow
+        '<path d="M 44 240 Q 30 150 70 120 Q 100 70 130 120 Q 170 150 156 240 Z" fill="#1a1828" stroke="#0a0814" stroke-width="3"/>' +
+        // coin-scale trim down the cloak
+        (() => { let s=''; for(let y=140;y<236;y+=22){ for(let x=64;x<140;x+=24){ s+='<ellipse cx="'+(x + ((y/22)%2?10:0))+'" cy="'+y+'" rx="7" ry="7" fill="#3a3450" stroke="#6a5818" stroke-width="0.8" opacity="0.85"/>'; } } return s; })() +
+        // the great hollow coin where the face should be
+        '<circle cx="100" cy="128" r="46" fill="#7a5818" stroke="#3a2808" stroke-width="3"/>' +
+        '<circle cx="100" cy="128" r="36" fill="#caa030" stroke="#3a2808" stroke-width="1.5"/>' +
+        '<circle cx="100" cy="128" r="18" fill="url(#tm-core)" stroke="#3a2808" stroke-width="2"/>' +
+        // void eyes inside the hole
+        '<ellipse cx="92" cy="124" rx="3" ry="5" fill="#cc4878"/>' +
+        '<ellipse cx="108" cy="124" rx="3" ry="5" fill="#cc4878"/>' +
+        '<circle cx="92" cy="122" r="1" fill="#fff" opacity="0.7"/>' +
+        '<circle cx="108" cy="122" r="1" fill="#fff" opacity="0.7"/>' +
+        // engraved value around the coin
+        '<text x="100" y="98" text-anchor="middle" fill="#3a2808" font-family="Cinzel" font-size="7">0.001</text>' +
+        '<text x="100" y="166" text-anchor="middle" fill="#3a2808" font-family="Cinzel" font-size="7">∞</text>' +
+        // crown of floating coins
+        '<circle cx="62" cy="92" r="6" fill="#d4a624" stroke="#3a2808" stroke-width="1"/>' +
+        '<circle cx="80" cy="78" r="6" fill="#d4a624" stroke="#3a2808" stroke-width="1"/>' +
+        '<circle cx="100" cy="72" r="6" fill="#d4a624" stroke="#3a2808" stroke-width="1"/>' +
+        '<circle cx="120" cy="78" r="6" fill="#d4a624" stroke="#3a2808" stroke-width="1"/>' +
+        '<circle cx="138" cy="92" r="6" fill="#d4a624" stroke="#3a2808" stroke-width="1"/>' +
+        // grasping shadow-hands
+        '<path d="M 56 150 Q 28 150 22 196" fill="none" stroke="#1a1828" stroke-width="10" stroke-linecap="round"/>' +
+        '<path d="M 144 150 Q 172 150 178 196" fill="none" stroke="#1a1828" stroke-width="10" stroke-linecap="round"/>' +
+        // falling coins
+        '<circle cx="40" cy="210" r="3" fill="#d4a624"/><circle cx="166" cy="206" r="3" fill="#d4a624"/><circle cx="30" cy="170" r="2" fill="#d4a624"/>'
+      );
+    }
+    return null;
+  },
+
+  // --------------------------------------------------------
+  // ACT IV — SCENE ILLUSTRATIONS
+  // --------------------------------------------------------
+  vaultDescent() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><radialGradient id="vd-glow" cx="0.5" cy="0.2" r="0.9"><stop offset="0" stop-color="#d4a624" stop-opacity="0.22"/><stop offset="1" stop-color="#0a0808" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="800" height="360" fill="#100c0a"/>' +
+      '<rect width="800" height="360" fill="url(#vd-glow)"/>' +
+      // stone shaft walls converging downward
+      '<polygon points="0,0 260,0 360,360 0,360" fill="#2a2018" stroke="#1a1408" stroke-width="2"/>' +
+      '<polygon points="800,0 540,0 440,360 800,360" fill="#2a2018" stroke="#1a1408" stroke-width="2"/>' +
+      '<polygon points="260,0 540,0 440,360 360,360" fill="#1a1410"/>' +
+      // brick courses on side walls
+      '<g stroke="#1a1408" stroke-width="1" opacity="0.6">' +
+        '<line x1="0" y1="60" x2="300" y2="60"/><line x1="0" y1="120" x2="320" y2="120"/><line x1="0" y1="180" x2="340" y2="180"/><line x1="0" y1="240" x2="360" y2="240"/>' +
+        '<line x1="800" y1="60" x2="520" y2="60"/><line x1="800" y1="120" x2="500" y2="120"/><line x1="800" y1="180" x2="480" y2="180"/><line x1="800" y1="240" x2="460" y2="240"/>' +
+      '</g>' +
+      // descending spiral stair (center)
+      (() => { let s=''; for(let i=0;i<9;i++){ const y=40+i*36; const wsteps=120-i*8; const cx=400+(i%2?14:-14); s+='<polygon points="'+(cx-wsteps/2)+','+y+' '+(cx+wsteps/2)+','+y+' '+(cx+wsteps/2-8)+','+(y+14)+' '+(cx-wsteps/2+8)+','+(y+14)+'" fill="'+((i%2)?'#4a3a28':'#3a2c1c')+'" stroke="#1a1408" stroke-width="1.5"/>'; } return s; })() +
+      // hanging lanterns down the shaft
+      '<g transform="translate(150,80)"><rect x="-7" y="0" width="14" height="16" fill="#5a3818" stroke="#1a1008" stroke-width="1"/><rect x="-5" y="2" width="10" height="11" fill="#ffcc55"/><circle cy="8" r="26" fill="#ffaa33" opacity="0.16"/></g>' +
+      '<g transform="translate(650,140)"><rect x="-7" y="0" width="14" height="16" fill="#5a3818" stroke="#1a1008" stroke-width="1"/><rect x="-5" y="2" width="10" height="11" fill="#ffcc55"/><circle cy="8" r="26" fill="#ffaa33" opacity="0.16"/></g>' +
+      // faint coin-glint at the bottom of the shaft
+      '<ellipse cx="400" cy="350" rx="70" ry="14" fill="#d4a624" opacity="0.25"/>' +
+      '<circle cx="384" cy="348" r="3" fill="#d4a624"/><circle cx="408" cy="352" r="3" fill="#e8c44a"/><circle cx="420" cy="346" r="2" fill="#d4a624"/>' +
+    '</svg>';
+  },
+
+  undermarket() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><radialGradient id="um-glow" cx="0.5" cy="0.5" r="0.8"><stop offset="0" stop-color="#d4a624" stop-opacity="0.16"/><stop offset="1" stop-color="#100c0a" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="800" height="360" fill="#1a1410"/>' +
+      // great vaulted cavern ceiling
+      '<path d="M 0 120 Q 200 30 400 40 Q 600 30 800 120 L 800 0 L 0 0 Z" fill="#2a2018" stroke="#1a1408" stroke-width="2"/>' +
+      // stalactites
+      '<polygon points="160,60 168,60 164,92" fill="#3a2c1c"/><polygon points="320,46 330,46 325,86" fill="#3a2c1c"/><polygon points="500,48 510,48 505,84" fill="#3a2c1c"/><polygon points="640,62 648,62 644,90" fill="#3a2c1c"/>' +
+      '<rect width="800" height="360" fill="url(#um-glow)"/>' +
+      // floor
+      '<rect y="270" width="800" height="90" fill="#2a2118"/>' +
+      '<g stroke="#1a1408" stroke-width="1" opacity="0.5">' + (() => { let s=''; for(let x=0;x<800;x+=60){s+='<line x1="'+x+'" y1="270" x2="'+(x-30)+'" y2="360"/>';} s+='<line x1="40" y1="310" x2="760" y2="310"/>'; return s; })() + '</g>' +
+      // market stalls (left) with striped awning
+      '<g transform="translate(70,150)">' +
+        '<rect x="0" y="40" width="150" height="90" fill="#3a2c1c" stroke="#1a1008" stroke-width="2"/>' +
+        '<polygon points="-10,40 160,40 150,16 0,16" fill="#7a3838"/>' +
+        '<g fill="#a85050">' + (() => { let s=''; for(let i=0;i<7;i++){s+='<polygon points="'+(i*23-6)+',40 '+(i*23+6)+',40 '+(i*23+2)+',18 '+(i*23-2)+',18"/>';} return s; })() + '</g>' +
+        // coins/goods on the counter
+        '<rect x="10" y="40" width="130" height="10" fill="#5a4830"/>' +
+        '<circle cx="30" cy="38" r="5" fill="#d4a624"/><circle cx="44" cy="38" r="5" fill="#e8c44a"/><circle cx="58" cy="36" r="5" fill="#d4a624"/>' +
+        '<rect x="90" y="28" width="14" height="14" fill="#88c4d8" stroke="#1a1008" stroke-width="1"/>' +
+        '<text x="74" y="64" text-anchor="middle" fill="#d4a624" font-family="IM Fell English SC" font-size="8">KEEPER</text>' +
+      '</g>' +
+      // assayer office (right) with hanging scale
+      '<g transform="translate(560,150)">' +
+        '<rect x="0" y="40" width="150" height="90" fill="#2a3328" stroke="#1a1008" stroke-width="2"/>' +
+        '<polygon points="-8,42 75,14 158,42" fill="#1c241c" stroke="#1a1008" stroke-width="2"/>' +
+        '<rect x="58" y="80" width="34" height="50" fill="#14180e"/>' +
+        // big balance scale sign
+        '<line x1="40" y1="20" x2="110" y2="20" stroke="#bfa050" stroke-width="2"/>' +
+        '<line x1="75" y1="14" x2="75" y2="22" stroke="#bfa050" stroke-width="2"/>' +
+        '<path d="M 40 20 L 32 32 L 48 32 Z" fill="none" stroke="#bfa050" stroke-width="1.5"/>' +
+        '<path d="M 110 20 L 102 32 L 118 32 Z" fill="none" stroke="#bfa050" stroke-width="1.5"/>' +
+        '<text x="75" y="60" text-anchor="middle" fill="#bfa050" font-family="IM Fell English SC" font-size="8">ASSAYER</text>' +
+      '</g>' +
+      // central brazier
+      '<g transform="translate(400,260)">' +
+        '<rect x="-8" y="0" width="16" height="36" fill="#3a2818" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<ellipse cx="0" cy="0" rx="16" ry="6" fill="#5a4830" stroke="#1a1008" stroke-width="1.5"/>' +
+        '<polygon points="-12,-2 -4,-18 0,-6 6,-22 10,-6 14,-14" fill="#f0a838"/>' +
+        '<polygon points="-6,-2 0,-14 4,-4 8,-16 10,-2" fill="#f0d27a"/>' +
+        '<circle cx="0" cy="-6" r="44" fill="#f0a838" opacity="0.12"/>' +
+      '</g>' +
+      // shoppers (silhouettes)
+      '<g transform="translate(320,300)" opacity="0.85"><rect x="-3" y="0" width="6" height="22" fill="#0e0a08"/><ellipse cx="0" cy="-3" rx="4" ry="5" fill="#0e0a08"/></g>' +
+      '<g transform="translate(470,304)" opacity="0.85"><rect x="-3" y="0" width="6" height="20" fill="#0e0a08"/><ellipse cx="0" cy="-3" rx="4" ry="5" fill="#0e0a08"/></g>' +
+      // floating coin motes
+      '<circle cx="250" cy="150" r="2" fill="#d4a624" opacity="0.7"/><circle cx="540" cy="130" r="2" fill="#e8c44a" opacity="0.7"/>' +
+    '</svg>';
+  },
+
+  vaultHall() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><radialGradient id="vh-glow" cx="0.5" cy="0.55" r="0.7"><stop offset="0" stop-color="#d4a624" stop-opacity="0.18"/><stop offset="1" stop-color="#0c0a08" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="800" height="360" fill="#14100c"/>' +
+      '<rect width="800" height="360" fill="url(#vh-glow)"/>' +
+      // back wall lined with safe-deposit doors
+      '<rect y="40" width="800" height="230" fill="#241c14"/>' +
+      (() => { let s=''; for(let r=0;r<3;r++){ for(let c=0;c<10;c++){ const x=30+c*76, y=56+r*70; s+='<rect x="'+x+'" y="'+y+'" width="60" height="54" fill="#3a2e1e" stroke="#1a1408" stroke-width="1.5"/>'; s+='<rect x="'+(x+4)+'" y="'+(y+4)+'" width="52" height="46" fill="#4a3a26"/>'; s+='<circle cx="'+(x+30)+'" cy="'+(y+27)+'" r="6" fill="#bfa050" stroke="#1a1408" stroke-width="1"/>'; s+='<line x1="'+(x+30)+'" y1="'+(y+21)+'" x2="'+(x+30)+'" y2="'+(y+33)+'" stroke="#1a1408" stroke-width="1"/>'; s+='<line x1="'+(x+24)+'" y1="'+(y+27)+'" x2="'+(x+36)+'" y2="'+(y+27)+'" stroke="#1a1408" stroke-width="1"/>'; } } return s; })() +
+      // one door hanging open, coins spilling
+      '<rect x="334" y="126" width="60" height="54" fill="#1a1208" stroke="#1a1408" stroke-width="1.5"/>' +
+      '<rect x="392" y="126" width="8" height="54" fill="#4a3a26" stroke="#1a1408" stroke-width="1"/>' +
+      '<path d="M 344 178 Q 360 184 380 180" stroke="#d4a624" stroke-width="3" fill="none"/>' +
+      '<circle cx="350" cy="182" r="4" fill="#d4a624"/><circle cx="364" cy="186" r="4" fill="#e8c44a"/><circle cx="378" cy="184" r="3" fill="#d4a624"/>' +
+      // floor
+      '<polygon points="0,270 800,270 760,360 40,360" fill="#241c14"/>' +
+      '<g stroke="#1a1408" stroke-width="1" opacity="0.5">' + (() => { let s=''; for(let x=60;x<780;x+=60){s+='<line x1="'+x+'" y1="274" x2="'+(x-26)+'" y2="356"/>';} for(let y=290;y<356;y+=20){s+='<line x1="40" y1="'+y+'" x2="760" y2="'+y+'"/>';} return s; })() + '</g>' +
+      // two iron columns
+      '<g transform="translate(170,150)"><rect x="-12" y="0" width="24" height="120" fill="#3a2e1e" stroke="#1a1408" stroke-width="2"/><rect x="-16" y="-6" width="32" height="8" fill="#4a3a26"/><rect x="-16" y="118" width="32" height="10" fill="#2a2014"/></g>' +
+      '<g transform="translate(630,150)"><rect x="-12" y="0" width="24" height="120" fill="#3a2e1e" stroke="#1a1408" stroke-width="2"/><rect x="-16" y="-6" width="32" height="8" fill="#4a3a26"/><rect x="-16" y="118" width="32" height="10" fill="#2a2014"/></g>' +
+      // scattered coins on floor
+      '<circle cx="120" cy="320" r="5" fill="#d4a624"/><circle cx="700" cy="324" r="5" fill="#e8c44a"/><circle cx="500" cy="332" r="4" fill="#d4a624"/>' +
+      // hanging chandelier of candles
+      '<g transform="translate(400,40)"><line x1="0" y1="0" x2="0" y2="20" stroke="#1a1008" stroke-width="1.5"/><ellipse cx="0" cy="24" rx="40" ry="6" fill="none" stroke="#5a4830" stroke-width="2"/><rect x="-34" y="18" width="4" height="8" fill="#f0e3bd"/><rect x="-2" y="16" width="4" height="10" fill="#f0e3bd"/><rect x="30" y="18" width="4" height="8" fill="#f0e3bd"/><ellipse cx="-32" cy="16" rx="2" ry="4" fill="#ffcc55"/><ellipse cx="0" cy="14" rx="2" ry="4" fill="#ffcc55"/><ellipse cx="32" cy="16" rx="2" ry="4" fill="#ffcc55"/><circle cy="24" r="50" fill="#ffaa33" opacity="0.1"/></g>' +
+    '</svg>';
+  },
+
+  vaultHeart() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><radialGradient id="vhrt-glow" cx="0.5" cy="0.42" r="0.6"><stop offset="0" stop-color="#cc4878" stop-opacity="0.35"/><stop offset="0.6" stop-color="#3a2808" stop-opacity="0.3"/><stop offset="1" stop-color="#0a0604" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="800" height="360" fill="#0e0a06"/>' +
+      '<rect width="800" height="360" fill="url(#vhrt-glow)"/>' +
+      // vast circular vault door behind (the great seal)
+      '<circle cx="400" cy="150" r="150" fill="#241c10" stroke="#14100a" stroke-width="4"/>' +
+      '<circle cx="400" cy="150" r="120" fill="#2e2414" stroke="#14100a" stroke-width="2"/>' +
+      '<circle cx="400" cy="150" r="90" fill="none" stroke="#4a3a1e" stroke-width="3" stroke-dasharray="4 6"/>' +
+      '<circle cx="400" cy="150" r="60" fill="none" stroke="#4a3a1e" stroke-width="2"/>' +
+      // great locking spokes
+      '<g stroke="#4a3a1e" stroke-width="6">' + (() => { let s=''; for(let i=0;i<8;i++){const a=i*45*Math.PI/180; s+='<line x1="'+(400+Math.cos(a)*60)+'" y1="'+(150+Math.sin(a)*60)+'" x2="'+(400+Math.cos(a)*118)+'" y2="'+(150+Math.sin(a)*118)+'"/>';} return s; })() + '</g>' +
+      '<circle cx="400" cy="150" r="18" fill="#7a5818" stroke="#14100a" stroke-width="2"/>' +
+      '<text x="400" y="154" text-anchor="middle" fill="#d4a624" font-family="Cinzel" font-size="10">·</text>' +
+      // mounds of treasure flanking
+      '<path d="M 0 300 Q 60 240 140 260 Q 200 244 240 300 Z" fill="#b8902a" stroke="#6a4818" stroke-width="2"/>' +
+      '<path d="M 560 300 Q 620 244 680 260 Q 760 240 800 300 Z" fill="#b8902a" stroke="#6a4818" stroke-width="2"/>' +
+      (() => { let s=''; const pts=[[40,288],[80,276],[120,286],[170,272],[210,288],[600,288],[640,274],[690,284],[730,272],[760,288]]; pts.forEach((p,i)=>{ s+='<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="9" ry="9" fill="'+((i%2)?'#d4a624':'#e8c44a')+'" stroke="#6a4818" stroke-width="1"/>'; }); return s; })() +
+      // floor
+      '<polygon points="0,300 800,300 760,360 40,360" fill="#1a120a"/>' +
+      // pedestal at center-front where the Hollow Coin waits
+      '<g transform="translate(400,300)">' +
+        '<rect x="-26" y="0" width="52" height="30" fill="#2e2414" stroke="#14100a" stroke-width="2"/>' +
+        '<polygon points="-26,0 26,0 20,-10 -20,-10" fill="#3e3018"/>' +
+        '<ellipse cx="0" cy="-14" rx="14" ry="14" fill="#7a5818" stroke="#3a2808" stroke-width="2"/>' +
+        '<circle cx="0" cy="-14" r="6" fill="#0a0606"/>' + // hollow center
+        '<circle cx="0" cy="-14" r="20" fill="#cc4878" opacity="0.25"/>' +
+      '</g>' +
+      // dust + coin motes
+      '<circle cx="300" cy="120" r="1.5" fill="#d4a624"/><circle cx="500" cy="110" r="1.5" fill="#e8c44a"/><circle cx="420" cy="90" r="1.5" fill="#cc4878"/>' +
+    '</svg>';
+  },
+
+  vaultTreasury() {
+    return '<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><radialGradient id="vt-glow" cx="0.5" cy="0.4" r="0.8"><stop offset="0" stop-color="#f0d27a" stop-opacity="0.4"/><stop offset="1" stop-color="#1a120a" stop-opacity="0"/></radialGradient></defs>' +
+      '<rect width="800" height="360" fill="#1a120a"/>' +
+      '<rect width="800" height="360" fill="url(#vt-glow)"/>' +
+      // a shaft of clean daylight breaking in from above (the seal lifted)
+      '<polygon points="340,0 460,0 520,260 280,260" fill="#f0d27a" opacity="0.18"/>' +
+      '<polygon points="370,0 430,0 470,260 330,260" fill="#f0e3bd" opacity="0.16"/>' +
+      // restored vault — coins flowing back into open boxes
+      '<rect y="40" width="800" height="220" fill="#2a2014"/>' +
+      (() => { let s=''; for(let c=0;c<10;c++){ const x=30+c*76, y=90; s+='<rect x="'+x+'" y="'+y+'" width="60" height="54" fill="#3a2e1e" stroke="#1a1408" stroke-width="1.5"/>'; s+='<rect x="'+(x+4)+'" y="'+(y+4)+'" width="52" height="46" fill="#caa030" opacity="0.5"/>'; s+='<circle cx="'+(x+18)+'" cy="'+(y+30)+'" r="5" fill="#d4a624"/><circle cx="'+(x+34)+'" cy="'+(y+34)+'" r="5" fill="#e8c44a"/><circle cx="'+(x+48)+'" cy="'+(y+30)+'" r="5" fill="#d4a624"/>'; } return s; })() +
+      // floor heaped with gold
+      '<rect y="260" width="800" height="100" fill="#2a2014"/>' +
+      '<path d="M 0 300 Q 200 270 400 290 Q 600 270 800 300 L 800 360 L 0 360 Z" fill="#b8902a"/>' +
+      (() => { let s=''; for(let i=0;i<22;i++){ const x=30+i*36, y=300+ (i%3)*12; s+='<ellipse cx="'+x+'" cy="'+y+'" rx="9" ry="9" fill="'+((i%2)?'#d4a624':'#e8c44a')+'" stroke="#6a4818" stroke-width="1"/>'; } return s; })() +
+      // two figures standing in the light
+      '<g transform="translate(380,300)" opacity="0.9"><rect x="-3" y="0" width="6" height="24" fill="#2a1810"/><ellipse cx="0" cy="-4" rx="5" ry="6" fill="#2a1810"/></g>' +
+      '<g transform="translate(420,304)" opacity="0.9"><rect x="-3" y="0" width="6" height="22" fill="#2a1810"/><ellipse cx="0" cy="-4" rx="4" ry="5" fill="#2a1810"/></g>' +
+      // sparkles
+      '<circle cx="300" cy="140" r="1.5" fill="#fff"/><circle cx="500" cy="120" r="1.5" fill="#fff"/><circle cx="400" cy="100" r="1.5" fill="#f0d27a"/>' +
+    '</svg>';
+  },
+
+  // --------------------------------------------------------
   // ITEM ICONS — small 40x40 svgs
   // --------------------------------------------------------
   itemIcon(itemId) {
@@ -3035,7 +3444,21 @@ const Art = {
       warmarch_medal:   '<polygon points="20,6 24,16 20,14 16,16" fill="#aa3838"/><circle cx="20" cy="24" r="9" fill="#d4a624" stroke="#3a2010" stroke-width="1.5"/><text x="20" y="28" text-anchor="middle" fill="#5a3010" font-family="Cinzel" font-size="9">★</text>',
       sabotage_kit:     '<rect x="9" y="14" width="22" height="16" rx="2" fill="#3a3028" stroke="#1a1008" stroke-width="1.5"/><line x1="14" y1="14" x2="14" y2="10" stroke="#888" stroke-width="1.5"/><circle cx="14" cy="9" r="2" fill="#888"/><rect x="20" y="18" width="8" height="3" fill="#bfa050"/>',
       ration_tin:       '<rect x="11" y="12" width="18" height="20" rx="2" fill="#7a6048" stroke="#1a1008" stroke-width="1.5"/><ellipse cx="20" cy="12" rx="9" ry="2.5" fill="#9a8060"/><line x1="13" y1="20" x2="27" y2="20" stroke="#5a4838" stroke-width="0.8"/>',
-      oil_flask:        '<rect x="16" y="6" width="8" height="6" fill="#3a2010"/><path d="M 13 12 L 13 30 Q 13 34 20 34 Q 27 34 27 30 L 27 12 Z" fill="#caa030" stroke="#3a2010" stroke-width="1.5"/><ellipse cx="18" cy="18" rx="2" ry="3" fill="#f0d27a"/><text x="20" y="29" text-anchor="middle" fill="#5a3818" font-family="Cinzel" font-size="8">+</text>'
+      oil_flask:        '<rect x="16" y="6" width="8" height="6" fill="#3a2010"/><path d="M 13 12 L 13 30 Q 13 34 20 34 Q 27 34 27 30 L 27 12 Z" fill="#caa030" stroke="#3a2010" stroke-width="1.5"/><ellipse cx="18" cy="18" rx="2" ry="3" fill="#f0d27a"/><text x="20" y="29" text-anchor="middle" fill="#5a3818" font-family="Cinzel" font-size="8">+</text>',
+      // Act IV
+      coinblade:        '<line x1="20" y1="6" x2="20" y2="30" stroke="#d4a624" stroke-width="4" stroke-linecap="round"/><line x1="20" y1="6" x2="20" y2="30" stroke="#f0d27a" stroke-width="1.5"/><rect x="14" y="29" width="12" height="3" fill="#5a3818"/><circle cx="30" cy="12" r="3" fill="#d4a624" stroke="#7a5818" stroke-width="0.8"/>',
+      assayers_scale:   '<line x1="20" y1="8" x2="20" y2="34" stroke="#7a5828" stroke-width="2.5"/><line x1="10" y1="12" x2="30" y2="12" stroke="#bfa050" stroke-width="2"/><path d="M 10 12 L 6 20 L 14 20 Z" fill="none" stroke="#bfa050" stroke-width="1"/><path d="M 30 12 L 26 20 L 34 20 Z" fill="none" stroke="#bfa050" stroke-width="1"/>',
+      vault_mail:       '<polygon points="10,8 30,8 32,32 8,32" fill="#5a5848" stroke="#1a1408" stroke-width="1.5"/><circle cx="15" cy="14" r="2" fill="none" stroke="#3a3830" stroke-width="1"/><circle cx="25" cy="14" r="2" fill="none" stroke="#3a3830" stroke-width="1"/><circle cx="20" cy="22" r="2" fill="none" stroke="#3a3830" stroke-width="1"/>',
+      archivists_coat:  '<polygon points="10,8 30,8 32,33 8,33" fill="#3a3020" stroke="#1a1408" stroke-width="1.5"/><rect x="14" y="16" width="5" height="8" fill="#2a2014"/><rect x="21" y="16" width="5" height="8" fill="#2a2014"/><circle cx="20" cy="11" r="1.4" fill="#d4a624"/>',
+      assayers_loupe:   '<circle cx="18" cy="20" r="9" fill="none" stroke="#bfa050" stroke-width="2.5"/><circle cx="18" cy="20" r="5" fill="#88c4d8" opacity="0.6"/><line x1="25" y1="27" x2="32" y2="34" stroke="#5a4830" stroke-width="2.5"/>',
+      decimal_abacus:   '<rect x="9" y="12" width="22" height="18" rx="1.5" fill="#5a3818" stroke="#1a1008" stroke-width="1.5"/><line x1="9" y1="18" x2="31" y2="18" stroke="#3a2010" stroke-width="0.8"/><line x1="9" y1="24" x2="31" y2="24" stroke="#3a2010" stroke-width="0.8"/><circle cx="15" cy="18" r="1.6" fill="#d4a624"/><circle cx="22" cy="18" r="1.6" fill="#d4a624"/><circle cx="26" cy="24" r="1.6" fill="#88c4d8"/><line x1="20" y1="12" x2="20" y2="30" stroke="#cc4878" stroke-width="0.6"/>',
+      lucky_decicoin:   '<circle cx="20" cy="20" r="11" fill="#d4a624" stroke="#7a5818" stroke-width="1.5"/><circle cx="20" cy="20" r="8" fill="#e8c44a"/><text x="20" y="24" text-anchor="middle" fill="#7a5818" font-family="Cinzel" font-size="8">.99</text>',
+      tithe_breaker:    '<line x1="20" y1="6" x2="20" y2="30" stroke="#caa030" stroke-width="4" stroke-linecap="round"/><line x1="20" y1="6" x2="20" y2="30" stroke="#cc4878" stroke-width="1.4"/><rect x="14" y="29" width="12" height="3" fill="#3a2808"/><circle cx="20" cy="13" r="2" fill="#0a0606"/>',
+      hollow_coin:      '<circle cx="20" cy="20" r="12" fill="#7a5818" stroke="#3a2808" stroke-width="1.5"/><circle cx="20" cy="20" r="8" fill="#caa030"/><circle cx="20" cy="20" r="3.5" fill="#0a0606"/><circle cx="20" cy="20" r="3.5" fill="none" stroke="#cc4878" stroke-width="0.8"/>',
+      keepers_ledger:   '<rect x="9" y="8" width="22" height="26" fill="#3a2e1e" stroke="#1a1408" stroke-width="1.5"/><rect x="11" y="10" width="18" height="22" fill="#e8e0c8"/><line x1="14" y1="16" x2="26" y2="16" stroke="#7a1818" stroke-width="0.6"/><line x1="14" y1="20" x2="26" y2="20" stroke="#3a2010" stroke-width="0.5"/><line x1="14" y1="24" x2="26" y2="24" stroke="#3a2010" stroke-width="0.5"/>',
+      deepvault_medal:  '<polygon points="20,6 24,15 20,13 16,15" fill="#5a4830"/><circle cx="20" cy="23" r="9" fill="#bfa050" stroke="#3a2808" stroke-width="1.5"/><text x="20" y="27" text-anchor="middle" fill="#3a2808" font-family="Cinzel" font-size="9">▼</text>',
+      candied_fig:      '<ellipse cx="20" cy="23" rx="9" ry="10" fill="#6a3858" stroke="#3a1838" stroke-width="1.5"/><path d="M 20 13 L 20 9 L 23 7" fill="none" stroke="#5a7838" stroke-width="1.5"/><circle cx="17" cy="21" r="1" fill="#e0b0c8"/><circle cx="23" cy="25" r="1" fill="#e0b0c8"/>',
+      lamp_oil_draught: '<rect x="16" y="6" width="8" height="6" fill="#5a3818"/><path d="M 14 12 L 14 30 Q 14 34 20 34 Q 26 34 26 30 L 26 12 Z" fill="#c8b030" stroke="#3a2808" stroke-width="1.5"/><ellipse cx="18" cy="18" rx="2" ry="3" fill="#f0e0a0"/>'
     };
     const inner = map[itemId] || '<rect x="8" y="8" width="24" height="24" fill="#5a3818" stroke="#3a2010" stroke-width="1.5"/>';
     return '<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +

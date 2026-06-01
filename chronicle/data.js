@@ -281,6 +281,21 @@ const ITEMS = {
   warmarch_medal:   { id: 'warmarch_medal',   name: 'War-March Medal',   slot: 'accessory', desc: 'Awarded for the Foundry. +2 Precision, +10 HP.', effect: { precision: 2, bonusHp: 10 } },
   sabotage_kit:     { id: 'sabotage_kit',     name: 'Saboteur\'s Kit',   slot: 'accessory', desc: 'Lockpicks, fuses, chalk. +2 Speed, +1 Luck.', effect: { speed: 2, luck: 1 } },
 
+  // ---------- act IV shop (vault-keeper + assayer) ----------
+  coinblade:        { id: 'coinblade',        name: 'Coinblade',        slot: 'weapon', desc: 'A sword edged with shaved coin-rims. Sharp to the hundredth.', effect: { precision: 3, luck: 1 } },
+  assayers_scale:   { id: 'assayers_scale',   name: 'Assayer\'s Scale', slot: 'weapon', desc: 'A balance-staff that weighs an enemy\'s worth — then takes it.', effect: { wisdom: 2, insight: 1 } },
+  vault_mail:       { id: 'vault_mail',       name: 'Vault Mail',       slot: 'armor', desc: 'Chain woven from old strongbox links. Heavy, sure.', effect: { stamina: 4 } },
+  archivists_coat:  { id: 'archivists_coat',  name: 'Archivist\'s Coat', slot: 'armor', desc: 'Deep pockets, ink-stained. +1 Insight, +1 Wisdom, +5 HP.', effect: { insight: 1, wisdom: 1, bonusHp: 5 } },
+  assayers_loupe:   { id: 'assayers_loupe',   name: 'Assayer\'s Loupe',  slot: 'accessory', desc: 'A jeweler\'s lens. You see every digit\'s true place.', effect: { insight: 1, bonusVsTopic: { compare_decimals: 3, round_decimal: 3, decimal_place_value: 3 } } },
+  decimal_abacus:   { id: 'decimal_abacus',   name: 'Decimal Abacus',   slot: 'accessory', desc: 'Beads sliding past a tiny painted point. Sharpens decimal sums.', effect: { precision: 1, bonusVsTopic: { decimals_add: 3, decimals_subtract: 3, decimals_multiply: 3 } } },
+  lucky_decicoin:   { id: 'lucky_decicoin',   name: 'Lucky Deci-Coin',  slot: 'accessory', desc: 'A coin worth exactly 0.99. Almost whole. Almost. +2 Luck.', effect: { luck: 2, bonusTimer: 1 } },
+
+  // ---------- act IV loot drops ----------
+  tithe_breaker:    { id: 'tithe_breaker',    name: 'The Tithe-Breaker', slot: 'weapon', desc: 'Forged from the Hollow Coin. It gives back what was taken.', effect: { precision: 4, wisdom: 1, bonusVsTopic: { decimals_multiply: 4, divide_by_decimal: 4 } } },
+  hollow_coin:      { id: 'hollow_coin',      name: 'The Hollow Coin',   slot: 'accessory', desc: 'A coin with nothing in the middle. Powerful, and a little cold. +3 Precision, +3 Luck.', effect: { precision: 3, luck: 3 } },
+  keepers_ledger:   { id: 'keepers_ledger',   name: 'The Keeper\'s Ledger', slot: 'accessory', desc: 'Every coin ever counted, balanced to the thousandth. +2 Wisdom, +2 Insight.', effect: { wisdom: 2, insight: 2 } },
+  deepvault_medal:  { id: 'deepvault_medal',  name: 'Deep-Vault Medal',  slot: 'accessory', desc: 'For those who went down and came back up. +2 Stamina, +10 HP.', effect: { stamina: 2, bonusHp: 10 } },
+
   // ---------- consumables ----------
   minor_potion:     { id: 'minor_potion',     name: 'Minor Healing Draught', slot: 'consumable', desc: 'Restores 15 HP.',              effect: { heal: 15 } },
   greater_potion:   { id: 'greater_potion',   name: 'Greater Healing Draught', slot: 'consumable', desc: 'Restores 35 HP.',            effect: { heal: 35 } },
@@ -290,7 +305,9 @@ const ITEMS = {
   smoked_kipper:    { id: 'smoked_kipper',    name: 'Smoked Kipper', slot: 'consumable', desc: 'A salty snack from the docks. Restores 20 HP.', effect: { heal: 20 } },
   brine_phial:      { id: 'brine_phial',      name: 'Brine Phial', slot: 'consumable', desc: 'Stinging blue brew. Restores 3 spell slots.', effect: { restoreMp: 3 } },
   ration_tin:       { id: 'ration_tin',       name: 'Army Ration Tin', slot: 'consumable', desc: 'Dense, salty, filling. Restores 28 HP.', effect: { heal: 28 } },
-  oil_flask:        { id: 'oil_flask',        name: 'Flask of Quenching Oil', slot: 'consumable', desc: 'Restores 40 HP — the good stuff.', effect: { heal: 40 } }
+  oil_flask:        { id: 'oil_flask',        name: 'Flask of Quenching Oil', slot: 'consumable', desc: 'Restores 40 HP — the good stuff.', effect: { heal: 40 } },
+  candied_fig:      { id: 'candied_fig',      name: 'Candied Fig', slot: 'consumable', desc: 'A sweet from the Undermarket. Restores 22 HP.', effect: { heal: 22 } },
+  lamp_oil_draught: { id: 'lamp_oil_draught', name: 'Lamp-Oil Draught', slot: 'consumable', desc: 'Bitter, bright. Restores 3 spell slots.', effect: { restoreMp: 3 } }
 };
 
 // ------------------------------------------------------
@@ -329,10 +346,16 @@ const TOPICS = {
   unknown_factor:            { unit: 4, name: 'Missing factor' },
 
   // ---------- Unit 5: Decimals ----------
-  decimals_add:         { unit: 5, name: 'Adding decimals' },
-  decimals_subtract:    { unit: 5, name: 'Subtracting decimals' },
-  decimals_multiply:    { unit: 5, name: 'Multiplying decimals' },
-  decimals_divide:      { unit: 5, name: 'Dividing decimals' },
+  decimals_add:              { unit: 5, name: 'Adding decimals' },
+  decimals_subtract:         { unit: 5, name: 'Subtracting decimals' },
+  decimals_multiply:         { unit: 5, name: 'Multiplying decimals' },
+  decimals_multiply_whole:   { unit: 5, name: 'Decimal × whole number' },
+  decimals_divide:           { unit: 5, name: 'Dividing decimals' },
+  decimals_divide_whole:     { unit: 5, name: 'Decimal ÷ whole number' },
+  divide_by_decimal:         { unit: 5, name: 'Dividing by a decimal' },
+  round_decimal:             { unit: 5, name: 'Rounding decimals' },
+  compare_decimals:          { unit: 5, name: 'Comparing decimals' },
+  decimal_place_value:       { unit: 5, name: 'Decimal place value' },
 
   // ---------- Unit 6 & 7 ----------
   powers_of_10:         { unit: 6, name: 'Powers of 10' },
@@ -410,6 +433,30 @@ const SHOPS = {
       { itemId: 'abacus_ring',     price: 130 },
       { itemId: 'ledger_seal',     price: 130 },
       { itemId: 'cinder_charm',    price: 85 }
+    ]
+  },
+  keeper_stall: {
+    keeperId: 'keeper_sable',
+    keeperName: 'Keeper Sable',
+    keeperLine: '"Down here we count to the thousandth, traveler. Everything has its exact worth. Tell me what you need — I\'ll quote you a fair price, to the penny."',
+    stock: [
+      { itemId: 'candied_fig',       price: 18 },
+      { itemId: 'oil_flask',         price: 40 },
+      { itemId: 'lamp_oil_draught',  price: 38 },
+      { itemId: 'vault_mail',        price: 120 },
+      { itemId: 'archivists_coat',   price: 135 }
+    ]
+  },
+  assayer_office: {
+    keeperId: 'assayer_fenn',
+    keeperName: 'Assayer Fenn',
+    keeperLine: '"I weigh things for a living — coins, ore, the worth of a soul on a slow day. Everything I sell is balanced exactly. No short measures."',
+    stock: [
+      { itemId: 'coinblade',       price: 130 },
+      { itemId: 'assayers_scale',  price: 130 },
+      { itemId: 'assayers_loupe',  price: 140 },
+      { itemId: 'decimal_abacus',  price: 140 },
+      { itemId: 'lucky_decicoin',  price: 95 }
     ]
   }
 };
@@ -591,6 +638,72 @@ const ENEMIES = {
     ],
     goldDrop: [120, 170], xpDrop: 420,
     guaranteedLoot: ['warmarch_medal']
+  },
+  // ---------- Act IV — The Deep Vaults ----------
+  coin_mite: {
+    id: 'coin_mite', name: 'Coin-Mite',
+    hp: 44, attack: 10, spriteId: 'coin_mite',
+    topic: 'compare_decimals', difficulty: 'easy',
+    goldDrop: [7, 12], xpDrop: 40
+  },
+  ledger_shade: {
+    id: 'ledger_shade', name: 'Ledger-Shade',
+    hp: 58, attack: 12, spriteId: 'ledger_shade',
+    topic: 'decimals_subtract', difficulty: 'medium',
+    goldDrop: [9, 15], xpDrop: 50
+  },
+  tarnish_ooze: {
+    id: 'tarnish_ooze', name: 'Tarnish-Ooze',
+    hp: 66, attack: 13, spriteId: 'tarnish_ooze',
+    topic: 'decimals_multiply_whole', difficulty: 'medium',
+    goldDrop: [11, 18], xpDrop: 60
+  },
+  vault_sentinel: {
+    id: 'vault_sentinel', name: 'Vault-Sentinel',
+    hp: 80, attack: 14, spriteId: 'vault_sentinel',
+    topic: 'decimals_divide_whole', difficulty: 'medium',
+    goldDrop: [13, 20], xpDrop: 70
+  },
+  // Mini-boss — AUDIT route (place value / rounding)
+  the_auditor: {
+    id: 'the_auditor', name: 'The Auditor',
+    hp: 205, attack: 15, spriteId: 'the_auditor',
+    isBoss: true,
+    phases: [
+      { topic: 'decimal_place_value', difficulty: 'medium', say: '"Every digit in its column. Including the ones you owe."' },
+      { topic: 'round_decimal',       difficulty: 'medium', say: '"I will round you. Down."' },
+      { topic: 'compare_decimals',    difficulty: 'hard',   say: '"You are worth less than you think. Provably."' }
+    ],
+    goldDrop: [60, 80], xpDrop: 160,
+    guaranteedLoot: ['keepers_ledger']
+  },
+  // Mini-boss — HOARD route (decimal mult/div)
+  coin_hoard: {
+    id: 'coin_hoard', name: 'The Coin-Hoard',
+    hp: 220, attack: 16, spriteId: 'coin_hoard',
+    isBoss: true,
+    phases: [
+      { topic: 'decimals_multiply_whole', difficulty: 'medium', say: '"More. More. Count it all. It is all mine."' },
+      { topic: 'decimals_multiply',       difficulty: 'medium', say: '"A piece of a piece of a coin. Still mine."' },
+      { topic: 'divide_by_decimal',       difficulty: 'hard',   say: '"How many of me? Endless. ENDLESS."' }
+    ],
+    goldDrop: [70, 95], xpDrop: 160,
+    guaranteedLoot: ['tithe_breaker']
+  },
+  // Act IV final boss
+  tithe_master: {
+    id: 'tithe_master', name: 'The Tithe-Master',
+    hp: 400, attack: 18, spriteId: 'tithe_master',
+    isBoss: true,
+    phases: [
+      { topic: 'compare_decimals',        difficulty: 'easy',   say: '"I take only a little. A tenth. A hundredth. You will not even feel it."' },
+      { topic: 'decimals_add',            difficulty: 'medium', say: '"Add up everything you own. Now subtract my share."' },
+      { topic: 'decimals_multiply_whole', difficulty: 'medium', say: '"Multiply your debt. It compounds, you see."' },
+      { topic: 'divide_by_decimal',       difficulty: 'hard',   say: '"Divide what little remains. Divide it among the dark."' },
+      { topic: 'decimals_subtract',       difficulty: 'hard',   say: '"One last withdrawal. All of it. Make the books balance."' }
+    ],
+    goldDrop: [140, 190], xpDrop: 480,
+    guaranteedLoot: ['deepvault_medal', 'hollow_coin']
   },
   // Act I final boss
   hollowed_one: {
