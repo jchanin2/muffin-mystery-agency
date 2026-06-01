@@ -156,11 +156,46 @@ const Creation = {
         '<div class="choice-stat"><strong>' + bonusBlurb + '</strong><br/>' + her.feat + '</div>';
       card.addEventListener('click', () => {
         this.draft.heritageId = her.id;
+        // default a fur color the first time Tabaxi is chosen
+        if (her.id === 'tabaxi' && !this.draft.furColor) {
+          this.draft.furColor = HERITAGES.tabaxi.defaultFur || 'tabby';
+        }
         this.render();
       });
       grid.appendChild(card);
     });
     body.appendChild(grid);
+
+    // Tabaxi fur-color sub-picker (only when Tabaxi is the selected heritage)
+    if (this.draft.heritageId === 'tabaxi') {
+      const furWrap = document.createElement('div');
+      furWrap.className = 'fur-picker';
+      furWrap.innerHTML = '<div class="fur-picker-label">Choose your coat</div>';
+      const furRow = document.createElement('div');
+      furRow.className = 'fur-row';
+      Object.values(FUR_COLORS).forEach(f => {
+        const swatch = document.createElement('button');
+        swatch.className = 'fur-swatch' + (this.draft.furColor === f.id ? ' selected' : '');
+        swatch.type = 'button';
+        const stripe = f.striped
+          ? '<line x1="20" y1="6" x2="20" y2="14" stroke="' + f.marking + '" stroke-width="3"/><line x1="13" y1="8" x2="12" y2="15" stroke="' + f.marking + '" stroke-width="2"/><line x1="27" y1="8" x2="28" y2="15" stroke="' + f.marking + '" stroke-width="2"/>'
+          : (f.patched ? '<path d="M 10 10 Q 18 4 24 14 Q 16 18 10 14 Z" fill="' + f.marking + '"/><path d="M 26 22 Q 32 18 32 26 Q 27 28 24 24 Z" fill="' + (f.patch || f.marking) + '"/>' : '');
+        swatch.innerHTML =
+          '<svg width="40" height="40" viewBox="0 0 40 40">' +
+            '<circle cx="20" cy="22" r="14" fill="' + f.base + '"/>' +
+            '<polygon points="12,12 8,2 18,9" fill="' + f.base + '"/>' +
+            '<polygon points="28,12 32,2 22,9" fill="' + f.base + '"/>' +
+            stripe +
+            '<ellipse cx="15" cy="22" rx="1.6" ry="2.4" fill="' + f.eye + '"/>' +
+            '<ellipse cx="25" cy="22" rx="1.6" ry="2.4" fill="' + f.eye + '"/>' +
+          '</svg>' +
+          '<span class="fur-name">' + f.name + '</span>';
+        swatch.addEventListener('click', () => { this.draft.furColor = f.id; this.render(); });
+        furRow.appendChild(swatch);
+      });
+      furWrap.appendChild(furRow);
+      body.appendChild(furWrap);
+    }
   },
 
   // ----------- STEP 4 — STATS -----------
@@ -280,7 +315,7 @@ const Creation = {
     body.innerHTML = '<div class="creation-step-title">Behold, your hero</div><div class="creation-step-blurb">Confirm to step into the world.</div>';
     const card = document.createElement('div');
     card.className = 'summary-card';
-    const portraitHtml = Art.heroPortrait({ classId: d.classId, heritageId: d.heritageId }, 'full');
+    const portraitHtml = Art.heroPortrait({ classId: d.classId, heritageId: d.heritageId, furColor: d.furColor }, 'full');
     const abilities = (cls.abilities || []).map(aid => ABILITIES[aid]).filter(Boolean).map(a => a.name).join(', ');
     // build effective stats preview
     const previewHero = { classId: d.classId, heritageId: d.heritageId, stats: d.stats, feat: d.feat, equipped: {} };
@@ -293,7 +328,7 @@ const Creation = {
       '<div class="summary-portrait">' + portraitHtml + '</div>' +
       '<div class="summary-text">' +
         '<h3>' + d.name + '</h3>' +
-        '<div class="subtitle">' + her.name + ' ' + cls.name + '</div>' +
+        '<div class="subtitle">' + (d.heritageId === 'tabaxi' && FUR_COLORS[d.furColor] ? FUR_COLORS[d.furColor].name + ' ' : '') + her.name + ' ' + cls.name + '</div>' +
         '<div class="summary-section">' + statsHtml + '</div>' +
         '<div class="summary-section">' +
           '<strong>HP:</strong> ' + der.maxHp + ' &nbsp; <strong>MP:</strong> ' + der.maxMp + ' &nbsp; <strong>Timer:</strong> ' + der.timerSec + 's &nbsp; <strong>Crit:</strong> ' + der.critPct + '% &nbsp; <strong>Hints:</strong> ' + der.hints +
@@ -314,6 +349,7 @@ const Creation = {
       name: d.name.trim(),
       classId: d.classId,
       heritageId: d.heritageId,
+      furColor: d.heritageId === 'tabaxi' ? (d.furColor || HERITAGES.tabaxi.defaultFur) : null,
       stats: Object.assign({}, d.stats),
       feat: d.feat,
       xp: 0,

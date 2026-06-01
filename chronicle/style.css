@@ -400,6 +400,49 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 14px;
 }
+
+/* Tabaxi fur-color picker */
+.fur-picker {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(212,166,36,0.25);
+  text-align: center;
+  animation: fur-fade 0.25s ease;
+}
+@keyframes fur-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.fur-picker-label {
+  font-family: 'Cinzel', serif;
+  color: var(--gold-light);
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.fur-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.fur-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0,0,0,0.3);
+  border: 2px solid var(--gold-deep);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.14s ease;
+  color: var(--parchment-2);
+  font-family: 'Cormorant Garamond', serif;
+}
+.fur-swatch:hover { border-color: var(--gold-light); transform: translateY(-2px); }
+.fur-swatch.selected {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold-light), 0 0 16px rgba(212,166,36,0.3);
+  background: linear-gradient(180deg, rgba(212,166,36,0.12), rgba(0,0,0,0.3));
+}
+.fur-name { font-size: 0.82rem; color: var(--gold-light); }
 .choice-card {
   background: linear-gradient(180deg, var(--ink-3), rgba(14,10,24,0.7));
   border: 2px solid var(--gold-deep);
@@ -1009,6 +1052,20 @@ body {
   padding: 20px;
   text-align: center;
 }
+.combat-topic-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  background: rgba(138,106,20,0.12);
+  border: 1px solid rgba(138,106,20,0.4);
+  border-radius: 999px;
+  padding: 3px 12px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.combat-topic-tag:empty { display: none; }
 .combat-problem-prompt {
   font-family: 'IM Fell English SC', 'Cinzel', serif;
   font-size: 1.4rem;

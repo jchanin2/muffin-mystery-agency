@@ -115,7 +115,31 @@ const HERITAGES = {
     feat: 'Lucky Penny (+10% gold from every source)',
     goldBonus: 0.10,
     skinTone: '#e0c4a0'
+  },
+  tabaxi: {
+    id: 'tabaxi',
+    name: 'Tabaxi',
+    flavor: 'Cat-folk: quick of paw, quicker of curiosity. Always land on their feet.',
+    statBonus: { speed: 1 },
+    feat: 'Nine Lives (once per battle, survive a fatal blow at 1 HP)',
+    surviveLethal: true,
+    isFelid: true,
+    defaultFur: 'tabby',
+    skinTone: '#d98a3a' // fallback if no fur chosen
   }
+};
+
+// ------------------------------------------------------
+// TABAXI FUR COLORS — chosen during creation
+// base = main coat, marking = stripes/patches, muzzle = lighter chin/cheeks,
+// eye = iris color
+// ------------------------------------------------------
+const FUR_COLORS = {
+  tabby: { id: 'tabby', name: 'Orange Tabby', base: '#d98a3a', marking: '#a85a1a', muzzle: '#f0d4a4', eye: '#7aa84a', striped: true },
+  black: { id: 'black', name: 'Black',        base: '#3a3038', marking: '#1a1820', muzzle: '#5a5058', eye: '#f0c040', striped: false },
+  snow:  { id: 'snow',  name: 'Snow',         base: '#ece6d8', marking: '#cfc6b2', muzzle: '#ffffff', eye: '#6ab0d8', striped: false },
+  gray:  { id: 'gray',  name: 'Gray',         base: '#8a8a94', marking: '#5a5a64', muzzle: '#b6b6c0', eye: '#d8a040', striped: true },
+  calico:{ id: 'calico',name: 'Calico',       base: '#f0e0c4', marking: '#d98a3a', patch: '#3a3038', muzzle: '#ffffff', eye: '#7aa84a', striped: false, patched: true }
 };
 
 // ------------------------------------------------------
@@ -368,7 +392,7 @@ const ENEMIES = {
   // Mini-boss
   quarry_foreman: {
     id: 'quarry_foreman', name: 'The Quarry Foreman',
-    hp: 90, attack: 12, spriteId: 'quarry_foreman',
+    hp: 150, attack: 12, spriteId: 'quarry_foreman',
     isBoss: true,
     phases: [
       { topic: 'volume_rect_prism',  difficulty: 'medium', say: '"Try my count, little ant."' },
@@ -406,7 +430,7 @@ const ENEMIES = {
   // Mini-bosses on each island
   halves_warden: {
     id: 'halves_warden', name: 'Warden of Halves',
-    hp: 110, attack: 13, spriteId: 'halves_warden',
+    hp: 185, attack: 13, spriteId: 'halves_warden',
     isBoss: true,
     phases: [
       { topic: 'fraction_times_whole',  difficulty: 'medium', say: '"Half of you. Half again. Until nothing."' },
@@ -418,7 +442,7 @@ const ENEMIES = {
   },
   thirds_seer: {
     id: 'thirds_seer', name: 'Seer of Thirds',
-    hp: 120, attack: 13, spriteId: 'thirds_seer',
+    hp: 200, attack: 13, spriteId: 'thirds_seer',
     isBoss: true,
     phases: [
       { topic: 'divide_unit_fraction_by_whole', difficulty: 'medium', say: '"A third of a third of a third. Do you still know yourself?"' },
@@ -430,7 +454,7 @@ const ENEMIES = {
   },
   pieces_collector: {
     id: 'pieces_collector', name: 'The Pieces-Collector',
-    hp: 130, attack: 14, spriteId: 'pieces_collector',
+    hp: 215, attack: 14, spriteId: 'pieces_collector',
     isBoss: true,
     phases: [
       { topic: 'divide_whole_by_unit_fraction', difficulty: 'medium', say: '"How many pieces of you are there? Tell me. I want them all."' },
@@ -443,7 +467,7 @@ const ENEMIES = {
   // Final Act II boss
   half_king: {
     id: 'half_king', name: 'The Half-King',
-    hp: 200, attack: 16, spriteId: 'half_king',
+    hp: 360, attack: 16, spriteId: 'half_king',
     isBoss: true,
     phases: [
       { topic: 'fraction_times_whole',  difficulty: 'easy',   say: '"You walked here on water. Now walk in halves."' },
@@ -496,6 +520,7 @@ if (typeof window !== 'undefined') {
   window.timerSecFor = timerSecFor; window.hintsFor = hintsFor;
   window.CLASSES = CLASSES; window.HERITAGES = HERITAGES;
   window.FEATS = FEATS; window.ABILITIES = ABILITIES;
+  window.FUR_COLORS = FUR_COLORS;
   window.ITEMS = ITEMS; window.TOPICS = TOPICS;
   window.SHOPS = SHOPS; window.ENEMIES = ENEMIES;
   window.XP_PER_LEVEL = XP_PER_LEVEL; window.levelFromXp = levelFromXp;

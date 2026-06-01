@@ -143,6 +143,8 @@ const Engine = {
       },
       cooldowns: {},
       firstCritResisted: false,
+      nineLivesUsed: false,
+      announcedPhase: -1,
       log: []
     };
     C.enemy.maxHp = C.enemy.hp;
@@ -198,7 +200,11 @@ const Engine = {
     if (C.enemy.phases) {
       const phase = C.enemy.phases[Math.min(C.phaseIndex, C.enemy.phases.length - 1)];
       topic = phase.topic; difficulty = phase.difficulty;
-      if (phase.say) this._addLog('enemy', C.enemy.name + ': ' + phase.say);
+      // Announce the phase line only once, when first entering that phase
+      if (phase.say && C.announcedPhase !== C.phaseIndex) {
+        C.announcedPhase = C.phaseIndex;
+        this._addLog('enemy', C.enemy.name + ': ' + phase.say);
+      }
     } else {
       topic = C.enemy.topic; difficulty = C.enemy.difficulty;
     }
@@ -210,7 +216,21 @@ const Engine = {
     this._refreshControls();
   },
 
+  // Recompute which phase a boss is in from its current HP (threshold bands)
+  _phaseFromHp() {
+    const C = Game.combat;
+    if (!C.enemy.phases) return 0;
+    const n = C.enemy.phases.length;
+    const frac = 1 - Math.max(0, C.enemy.hp) / C.enemy.maxHp; // 0 at full, 1 at dead
+    return Math.min(n - 1, Math.floor(frac * n));
+  },
+
   _renderProblem(problem) {
+    const tag = document.getElementById('combat-topic-tag');
+    if (tag) {
+      const tName = (TOPICS[problem.topic] || {}).name || '';
+      tag.textContent = tName ? ('✦ ' + tName) : '';
+    }
     document.getElementById('combat-problem-prompt').textContent = problem.question;
     const area = document.getElementById('combat-problem-area');
     area.innerHTML = '';
@@ -529,16 +549,18 @@ const Engine = {
     Engine._addLog('you', 'Correct! You strike for ' + totalDmg + (critHits ? ' (' + critHits + ' crit' + (critHits > 1 ? 's' : '') + '!)' : '') + '.');
     Engine._renderBars();
     if (enemy.hp <= 0) {
-      // advance phase or finish
-      if (enemy.phases && C.phaseIndex < enemy.phases.length - 1) {
-        C.phaseIndex++;
-        enemy.hp = Math.max(20, Math.floor(enemy.maxHp / enemy.phases.length));
-        Engine._addLog('system', 'The ' + enemy.name + ' shifts shape — Phase ' + (C.phaseIndex + 1) + ' begins.');
-        setTimeout(() => Engine._nextRound(), 900);
-      } else {
-        setTimeout(() => Engine._victory(), 900);
-      }
+      setTimeout(() => Engine._victory(), 900);
     } else {
+      // Threshold-band phases: the HP bar drains continuously; the topic
+      // advances when HP crosses a band boundary. No HP reset, no bar jump.
+      if (enemy.phases) {
+        const newPhase = Engine._phaseFromHp();
+        if (newPhase > C.phaseIndex) {
+          C.phaseIndex = newPhase;
+          Engine._addLog('system', 'The ' + enemy.name + ' shifts — its trial changes. (Phase ' + (C.phaseIndex + 1) + ' of ' + enemy.phases.length + ')');
+          Engine._renderBars();
+        }
+      }
       setTimeout(() => Engine._nextRound(), 900);
     }
     // tick cooldowns
@@ -579,13 +601,24 @@ const Engine = {
       }
       edmg *= 2;
     }
-    hero.hp = Math.max(0, hero.hp - edmg);
     Engine._popup('-' + edmg, isCrit ? 'crit' : 'dmg', 'hero');
     Engine._addLog('enemy', timeout ? 'Time runs out! The ' + enemy.name + ' strikes for ' + edmg + (isCrit ? ' (critical!)' : '') + '.' :
                                   'Wrong! The ' + enemy.name + ' strikes for ' + edmg + (isCrit ? ' (critical!)' : '') + '.');
     if (C.currentProblem) {
       Engine._addLog('system', 'The correct answer was ' + C.currentProblem.answer + '.');
     }
+    // Tabaxi "Nine Lives": once per battle, a lethal blow leaves you at 1 HP.
+    const her2 = HERITAGES[hero.heritageId];
+    if (hero.hp - edmg <= 0 && her2 && her2.surviveLethal && !C.nineLivesUsed) {
+      C.nineLivesUsed = true;
+      hero.hp = 1;
+      Engine._popup('Nine Lives!', 'heal', 'hero');
+      Engine._addLog('you', 'A blow that should have felled you — but you twist in the air, land on your feet, and cling on at 1 HP!');
+      Engine._renderBars();
+      setTimeout(() => Engine._nextRound(), 1100);
+      return;
+    }
+    hero.hp = Math.max(0, hero.hp - edmg);
     Engine._renderBars();
     if (hero.hp <= 0) {
       setTimeout(() => Engine._defeat(), 900);

@@ -75,13 +75,18 @@ const Art = {
     const earShape = her.id === 'elf' ? 'pointed' : (her.id === 'halfling' ? 'small' : 'round');
     const bodyHeight = her.id === 'dwarf' ? 'short' : (her.id === 'halfling' ? 'short' : 'tall');
 
-    const isMini = mode === 'mini';
-    const isCombat = mode === 'combat';
-    const w = isMini ? 60 : (isCombat ? 200 : 200);
-    const h = isMini ? 60 : (isCombat ? 250 : 250);
-    const vb = '0 0 200 250';
+    // Tabaxi (cat-folk) support
+    const isFelid = !!her.isFelid;
+    const fur = isFelid ? (FUR_COLORS[(hero && hero.furColor)] || FUR_COLORS[her.defaultFur] || FUR_COLORS.tabby) : null;
+    const coatTone = isFelid ? fur.base : skin;
 
-    // ear path
+    const isMini = mode === 'mini';
+    const w = isMini ? 64 : 200;
+    const h = isMini ? 64 : 250;
+    // mini avatars crop to head + shoulders so the circular frame shows the face
+    const vb = isMini ? '38 40 124 128' : '0 0 200 250';
+
+    // humanoid side-ears (unused for felids)
     let earL = '', earR = '';
     if (earShape === 'pointed') {
       earL = '<path d="M 76 110 Q 68 105 70 95 L 76 105 Z" fill="' + skin + '"/>';
@@ -141,19 +146,21 @@ const Art = {
                  '<circle cx="100" cy="168" r="3" fill="#d4a624" stroke="#3a2010" stroke-width="0.6"/>';
     }
 
-    // face
+    // face geometry
     const headY = bodyHeight === 'short' ? 112 : 105;
-    const eyeBrowMood = cls.id === 'warrior' ? 'fierce' : (cls.id === 'mage' ? 'wise' : (cls.id === 'rogue' ? 'sly' : 'calm'));
-    const browL = eyeBrowMood === 'fierce' ? '<line x1="86" y1="106" x2="98" y2="110" stroke="#1a1008" stroke-width="1.6"/>' :
-                  eyeBrowMood === 'wise' ?   '<line x1="86" y1="108" x2="98" y2="106" stroke="#1a1008" stroke-width="1.4"/>' :
-                  eyeBrowMood === 'sly' ?    '<line x1="86" y1="108" x2="98" y2="112" stroke="#1a1008" stroke-width="1.4"/>' :
-                                              '<line x1="86" y1="106" x2="98" y2="106" stroke="#1a1008" stroke-width="1.4"/>';
-    const browR = eyeBrowMood === 'fierce' ? '<line x1="114" y1="110" x2="126" y2="106" stroke="#1a1008" stroke-width="1.6"/>' :
-                  eyeBrowMood === 'wise' ?   '<line x1="114" y1="106" x2="126" y2="108" stroke="#1a1008" stroke-width="1.4"/>' :
-                  eyeBrowMood === 'sly' ?    '<line x1="114" y1="112" x2="126" y2="108" stroke="#1a1008" stroke-width="1.4"/>' :
-                                              '<line x1="114" y1="106" x2="126" y2="106" stroke="#1a1008" stroke-width="1.4"/>';
+    const eyeY = headY + 3;
+    const browY = headY - 8;
 
-    // hair (class-tinted)
+    // ---- humanoid brows (by class "mood") ----
+    const _brow = (x1, y1, x2, y2) => '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#1a1008" stroke-width="1.5" stroke-linecap="round"/>';
+    const mood = cls.id === 'warrior' ? 'fierce' : (cls.id === 'mage' ? 'wise' : (cls.id === 'rogue' ? 'sly' : 'calm'));
+    let browStr;
+    if (mood === 'fierce')      browStr = _brow(86, browY + 4, 98, browY)     + _brow(114, browY, 126, browY + 4);
+    else if (mood === 'wise')   browStr = _brow(86, browY, 98, browY - 2)     + _brow(114, browY - 2, 126, browY);
+    else if (mood === 'sly')    browStr = _brow(86, browY - 1, 98, browY + 3) + _brow(114, browY + 3, 126, browY - 1);
+    else                        browStr = _brow(86, browY, 98, browY)         + _brow(114, browY, 126, browY);
+
+    // ---- hair (class-tinted; humanoid only) ----
     let hairShape = '';
     if (cls.id === 'mage') {
       hairShape = '<path d="M 70 95 Q 100 65 130 95 L 132 124 Q 100 116 68 124 Z" fill="' + hair + '"/>' +
@@ -164,51 +171,98 @@ const Art = {
       hairShape = '<path d="M 72 100 Q 100 80 128 100 L 128 112 Q 100 108 72 112 Z" fill="' + hair + '"/>';
     } else {
       hairShape = '<path d="M 70 100 Q 100 76 130 100 L 130 130 Q 100 114 70 130 Z" fill="' + hair + '"/>' +
-                  // ranger braid
                   '<line x1="132" y1="124" x2="140" y2="158" stroke="' + hair + '" stroke-width="4" stroke-linecap="round"/>';
     }
 
-    // dwarf beard
+    // ---- dwarf beard ----
     let beard = '';
     if (her.id === 'dwarf') {
       beard = '<path d="M 84 130 Q 100 158 116 130 L 118 152 Q 100 166 82 152 Z" fill="' + hair + '"/>';
     }
 
+    // ---- HUMANOID face ----
+    const faceHumanoid =
+      '<ellipse cx="100" cy="' + headY + '" rx="28" ry="32" fill="' + coatTone + '" stroke="#3a2010" stroke-width="1.5"/>' +
+      earL + earR + hairShape + beard +
+      '<ellipse cx="92" cy="' + eyeY + '" rx="2.6" ry="3.2" fill="#1a1008"/>' +
+      '<ellipse cx="108" cy="' + eyeY + '" rx="2.6" ry="3.2" fill="#1a1008"/>' +
+      '<circle cx="92.7" cy="' + (eyeY - 1) + '" r="0.7" fill="#fff"/>' +
+      '<circle cx="108.7" cy="' + (eyeY - 1) + '" r="0.7" fill="#fff"/>' +
+      browStr +
+      '<line x1="100" y1="' + (eyeY + 2) + '" x2="100" y2="' + (eyeY + 8) + '" stroke="#3a2010" stroke-width="1" opacity="0.5"/>' +
+      '<path d="M 94 ' + (headY + 15) + ' Q 100 ' + (headY + 19) + ' 106 ' + (headY + 15) + '" stroke="#3a2010" stroke-width="1.3" fill="none"/>';
+
+    // ---- TABAXI (cat-folk) face ----
+    let faceFelid = '';
+    let tail = '';
+    if (isFelid) {
+      const earInner = '#e89aa8';
+      const catEars =
+        '<polygon points="78,' + (headY - 22) + ' 67,' + (headY - 52) + ' 93,' + (headY - 30) + '" fill="' + fur.base + '" stroke="#3a2010" stroke-width="1.2"/>' +
+        '<polygon points="80,' + (headY - 27) + ' 73,' + (headY - 45) + ' 89,' + (headY - 31) + '" fill="' + earInner + '"/>' +
+        '<polygon points="122,' + (headY - 22) + ' 133,' + (headY - 52) + ' 107,' + (headY - 30) + '" fill="' + fur.base + '" stroke="#3a2010" stroke-width="1.2"/>' +
+        '<polygon points="120,' + (headY - 27) + ' 127,' + (headY - 45) + ' 111,' + (headY - 31) + '" fill="' + earInner + '"/>';
+
+      // coat markings
+      let markings = '';
+      if (fur.striped) {
+        markings =
+          '<path d="M 100 ' + (headY - 26) + ' L 100 ' + (headY - 15) + '" stroke="' + fur.marking + '" stroke-width="2.2" stroke-linecap="round"/>' +
+          '<path d="M 92 ' + (headY - 24) + ' L 90 ' + (headY - 15) + '" stroke="' + fur.marking + '" stroke-width="1.7" stroke-linecap="round"/>' +
+          '<path d="M 108 ' + (headY - 24) + ' L 110 ' + (headY - 15) + '" stroke="' + fur.marking + '" stroke-width="1.7" stroke-linecap="round"/>' +
+          '<path d="M 72 ' + (headY) + ' Q 78 ' + (headY + 1) + ' 83 ' + (headY) + '" stroke="' + fur.marking + '" stroke-width="1.5" fill="none"/>' +
+          '<path d="M 128 ' + (headY) + ' Q 122 ' + (headY + 1) + ' 117 ' + (headY) + '" stroke="' + fur.marking + '" stroke-width="1.5" fill="none"/>';
+      } else if (fur.patched) {
+        markings =
+          '<path d="M 72 ' + (headY - 18) + ' Q 88 ' + (headY - 30) + ' 96 ' + (headY - 10) + ' Q 84 ' + (headY - 4) + ' 72 ' + (headY - 6) + ' Z" fill="' + fur.marking + '" opacity="0.9"/>' +
+          '<path d="M 112 ' + (headY + 2) + ' Q 126 ' + (headY - 6) + ' 128 ' + (headY + 10) + ' Q 118 ' + (headY + 14) + ' 110 ' + (headY + 8) + ' Z" fill="' + (fur.patch || fur.marking) + '" opacity="0.9"/>';
+      }
+
+      const muzzle = '<ellipse cx="100" cy="' + (headY + 13) + '" rx="15" ry="11" fill="' + fur.muzzle + '"/>';
+      const nose = '<polygon points="95,' + (headY + 7) + ' 105,' + (headY + 7) + ' 100,' + (headY + 13) + '" fill="#c86878" stroke="#9a4858" stroke-width="0.6"/>';
+      const mouth =
+        '<path d="M 100 ' + (headY + 13) + ' Q 95 ' + (headY + 19) + ' 90 ' + (headY + 16) + '" stroke="#5a3a2a" stroke-width="1.1" fill="none"/>' +
+        '<path d="M 100 ' + (headY + 13) + ' Q 105 ' + (headY + 19) + ' 110 ' + (headY + 16) + '" stroke="#5a3a2a" stroke-width="1.1" fill="none"/>';
+      const catEye = (cx) =>
+        '<path d="M ' + (cx - 6.5) + ' ' + eyeY + ' Q ' + cx + ' ' + (eyeY - 5.5) + ' ' + (cx + 6.5) + ' ' + eyeY + ' Q ' + cx + ' ' + (eyeY + 4) + ' ' + (cx - 6.5) + ' ' + eyeY + ' Z" fill="#f8f4e0" stroke="#3a2010" stroke-width="0.8"/>' +
+        '<ellipse cx="' + cx + '" cy="' + eyeY + '" rx="3.6" ry="4.4" fill="' + fur.eye + '"/>' +
+        '<ellipse cx="' + cx + '" cy="' + eyeY + '" rx="1.1" ry="3.8" fill="#140e08"/>' +
+        '<circle cx="' + (cx - 1.4) + '" cy="' + (eyeY - 1.8) + '" r="0.9" fill="#fff"/>';
+      const whiskers =
+        '<line x1="86" y1="' + (headY + 11) + '" x2="64" y2="' + (headY + 9) + '" stroke="#e8e0cc" stroke-width="0.8" opacity="0.8"/>' +
+        '<line x1="86" y1="' + (headY + 14) + '" x2="64" y2="' + (headY + 16) + '" stroke="#e8e0cc" stroke-width="0.8" opacity="0.8"/>' +
+        '<line x1="114" y1="' + (headY + 11) + '" x2="136" y2="' + (headY + 9) + '" stroke="#e8e0cc" stroke-width="0.8" opacity="0.8"/>' +
+        '<line x1="114" y1="' + (headY + 14) + '" x2="136" y2="' + (headY + 16) + '" stroke="#e8e0cc" stroke-width="0.8" opacity="0.8"/>';
+
+      faceFelid = catEars +
+        '<ellipse cx="100" cy="' + headY + '" rx="29" ry="31" fill="' + fur.base + '" stroke="#3a2010" stroke-width="1.5"/>' +
+        markings + muzzle + whiskers + catEye(90) + catEye(110) + nose + mouth;
+
+      // tail curling up behind the body
+      tail =
+        '<path d="M 150 248 Q 190 222 180 176 Q 176 156 162 156" fill="none" stroke="' + fur.base + '" stroke-width="13" stroke-linecap="round"/>' +
+        '<ellipse cx="162" cy="156" rx="8" ry="8" fill="' + fur.marking + '"/>' +
+        (fur.striped ? '<line x1="176" y1="196" x2="187" y2="193" stroke="' + fur.marking + '" stroke-width="3.5" stroke-linecap="round"/><line x1="173" y1="214" x2="184" y2="213" stroke="' + fur.marking + '" stroke-width="3.5" stroke-linecap="round"/>' : '');
+    }
+
     const portraitInner =
-      // bg gradient — class tinted
       '<defs>' +
         '<linearGradient id="hp-bg" x1="0" y1="0" x2="0" y2="1">' +
-          '<stop offset="0" stop-color="' + cls.iconColor + '" stop-opacity="0.45"/>' +
+          '<stop offset="0" stop-color="' + cls.iconColor + '" stop-opacity="0.5"/>' +
           '<stop offset="1" stop-color="#0e0a18"/>' +
         '</linearGradient>' +
+        '<radialGradient id="hp-glow" cx="0.5" cy="0.4" r="0.55">' +
+          '<stop offset="0" stop-color="#d4a624" stop-opacity="0.16"/>' +
+          '<stop offset="1" stop-color="#d4a624" stop-opacity="0"/>' +
+        '</radialGradient>' +
       '</defs>' +
       '<rect width="200" height="250" fill="url(#hp-bg)"/>' +
-      // distant aura / sigil
-      '<circle cx="100" cy="120" r="60" fill="rgba(212,166,36,0.06)"/>' +
-      // weapon (behind body)
+      '<rect width="200" height="250" fill="url(#hp-glow)"/>' +
+      tail +
       weaponElt +
-      // body / clothing
       clothing +
-      // neck
-      '<rect x="92" y="138" width="16" height="20" fill="' + skin + '"/>' +
-      // head
-      '<ellipse cx="100" cy="' + headY + '" rx="28" ry="32" fill="' + skin + '" stroke="#3a2010" stroke-width="1.5"/>' +
-      earL + earR +
-      // hair
-      hairShape +
-      beard +
-      // eyes
-      '<ellipse cx="92" cy="' + (headY + 5) + '" rx="2.5" ry="3" fill="#1a1008"/>' +
-      '<ellipse cx="108" cy="' + (headY + 5) + '" rx="2.5" ry="3" fill="#1a1008"/>' +
-      '<circle cx="92.5" cy="' + (headY + 4) + '" r="0.6" fill="#fff"/>' +
-      '<circle cx="108.5" cy="' + (headY + 4) + '" r="0.6" fill="#fff"/>' +
-      // brows
-      browL.replace(/y="106"/g, 'y="' + (headY + 1) + '"').replace(/y="108"/g, 'y="' + (headY + 3) + '"').replace(/y="110"/g, 'y="' + (headY + 5) + '"').replace(/y="112"/g, 'y="' + (headY + 7) + '"') +
-      browR.replace(/y="106"/g, 'y="' + (headY + 1) + '"').replace(/y="108"/g, 'y="' + (headY + 3) + '"').replace(/y="110"/g, 'y="' + (headY + 5) + '"').replace(/y="112"/g, 'y="' + (headY + 7) + '"') +
-      // mouth
-      '<path d="M 94 ' + (headY + 14) + ' Q 100 ' + (headY + 18) + ' 106 ' + (headY + 14) + '" stroke="#3a2010" stroke-width="1.2" fill="none"/>' +
-      // nose
-      '<line x1="100" y1="' + (headY + 6) + '" x2="100" y2="' + (headY + 13) + '" stroke="#3a2010" stroke-width="1" opacity="0.6"/>';
+      '<rect x="92" y="138" width="16" height="20" fill="' + coatTone + '"/>' +
+      (isFelid ? faceFelid : faceHumanoid);
 
     return '<svg width="' + w + '" height="' + h + '" viewBox="' + vb + '" xmlns="http://www.w3.org/2000/svg">' + portraitInner + '</svg>';
   },
@@ -281,9 +335,31 @@ const Art = {
       silhouette = '<ellipse cx="48" cy="38" rx="16" ry="18" fill="' + her.skinTone + '"/>' +
                    '<path d="M 36 50 Q 48 70 60 50 L 60 60 Q 48 76 36 60 Z" fill="#4a3010"/>' +
                    '<rect x="32" y="58" width="32" height="32" fill="' + her.skinTone + '"/>';
-    } else { // halfling
+    } else if (heritageId === 'halfling') {
       silhouette = '<ellipse cx="48" cy="40" rx="14" ry="15" fill="' + her.skinTone + '"/>' +
                    '<rect x="36" y="56" width="24" height="28" fill="' + her.skinTone + '"/>';
+    } else { // tabaxi
+      const f = (FUR_COLORS && FUR_COLORS[her.defaultFur]) || { base: '#d98a3a', marking: '#a85a1a', eye: '#7aa84a' };
+      silhouette =
+        // cat ears
+        '<polygon points="38,32 32,16 48,28" fill="' + f.base + '"/>' +
+        '<polygon points="58,32 64,16 48,28" fill="' + f.base + '"/>' +
+        // head
+        '<ellipse cx="48" cy="38" rx="16" ry="16" fill="' + f.base + '"/>' +
+        // stripes / markings
+        '<line x1="48" y1="24" x2="48" y2="32" stroke="' + f.marking + '" stroke-width="2"/>' +
+        // eyes
+        '<ellipse cx="42" cy="38" rx="2" ry="3" fill="' + f.eye + '"/>' +
+        '<ellipse cx="54" cy="38" rx="2" ry="3" fill="' + f.eye + '"/>' +
+        '<ellipse cx="42" cy="38" rx="0.7" ry="3" fill="#140e08"/>' +
+        '<ellipse cx="54" cy="38" rx="0.7" ry="3" fill="#140e08"/>' +
+        // muzzle + nose
+        '<ellipse cx="48" cy="46" rx="7" ry="5" fill="#f0d4a4"/>' +
+        '<polygon points="45,44 51,44 48,48" fill="#c86878"/>' +
+        // body
+        '<rect x="36" y="56" width="24" height="30" fill="' + f.base + '"/>' +
+        // tail
+        '<path d="M 60 84 Q 74 74 68 58" fill="none" stroke="' + f.base + '" stroke-width="5" stroke-linecap="round"/>';
     }
     return '<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">' +
       '<circle cx="48" cy="48" r="46" fill="rgba(212,166,36,0.12)" stroke="#8a6a14" stroke-width="1.5"/>' +
